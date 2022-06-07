@@ -1,0 +1,16 @@
+Package: guild.ai
+Type: Package
+Title: R interface to guild.ai
+Version: 0.1.0
+Authors@R: c(
+  person("Tomasz", "Kalinowski", role = c("aut", "cph", "cre"),
+         email = "tomasz.kalinowski@rstudio.com"))
+Description: R interface to guild.ai
+License: Apache License 2.0
+Imports:
+  jsonlite,
+  rappdirs,
+  tibble
+Encoding: UTF-8
+LazyData: true
+
