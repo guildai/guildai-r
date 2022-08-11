@@ -1,11 +1,11 @@
-Package: guild.ai
+Package: guildai
 Type: Package
-Title: R interface to guild.ai
+Title: R interface to guildai
 Version: 0.1.0
 Authors@R: c(
   person("Tomasz", "Kalinowski", role = c("aut", "cph", "cre"),
          email = "tomasz.kalinowski@rstudio.com"))
-Description: R interface to guild.ai
+Description: R interface to guildai
 License: Apache License 2.0
 Imports:
   jsonlite,
@@ -13,4 +13,3 @@ Imports:
   tibble
 Encoding: UTF-8
 LazyData: true
-
