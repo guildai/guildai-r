@@ -15,6 +15,8 @@ parse_yaml_hints <- function(x) {
   x
 }
 
+is_hashpipe <- function(x) startsWith(x, "#|")
+
 
 peek_r_script_guild_info <- function(r_script_path) {
 
@@ -109,7 +111,7 @@ peek_r_script_guild_info <- function(r_script_path) {
 run_with_global_flags <-
   function(file = "train.R",
            flags = parse_command_line(commandArgs(TRUE))) {
-    exprs <- parse(file)
+    exprs <- parse(file, keep.source = TRUE)
     exprs <- inject_global_flag_values(exprs, flags)
     source(exprs = exprs)
     invisible()
@@ -137,6 +139,12 @@ inject_global_flag_values <- function(exprs, flags) {
     if (!name %in% names(flags))
       next
 
+
+    if(identical(flags[[name]], e[[3L]])) # new value same as default
+      next
+
+    message(sprintf("Replacing flag '%s' on line %i with %s",
+                    name, getSrcLocation(exprs[i], "line"), flags[[name]]))
     # `e` is an assignment expression with a flag symbol on
     # the left hand side
     e[[3L]] <- flags[[name]] # replace the value in node
