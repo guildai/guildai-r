@@ -1,20 +1,20 @@
-#| output-scalars: (\step) | (\key): (\value)
-
-# library(foo)
-# library(bar)
+#!/usr/bin/env Rscript
 
 
-noise = 3
-layers <- 32L
+library(tensorflow)
 
-name = "foo-bar" # description of foo-foo
+x <- .1
 
-one_of <- c("a", "b", "c")[2]
+noise <- .3
 
-skip_connections = TRUE
+type <- "foo"
+
+init_phase <- 0+0i
 
 
+x <- readLines("file.txt")
 
-library(guildai)
 
-flags <- guild_flags()
+loss <- (sin(5 * x) * (1 - tanh(x^2)) + rnorm(1) * noise)
+
+cat("loss:", loss, "\n")

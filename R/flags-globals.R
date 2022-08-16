@@ -1,13 +1,38 @@
 
 
+#', #+, #- roxygen, knitr::spin
+#| quarto, rmarkdown
+#* plumbr
+#| guild
+#: ?    #= #+ #^ #) #} #]
+
+# r_script_path <- "tests/resources/example-r-script.R"
+
+parse_yaml_hints <- function(x) {
+  stopifnot(startsWith(x, "#|"))
+  x <- substr(x, 4L, .Machine$integer.max)
+  x <- yaml::yaml.load(x)
+  x
+}
 
 
-peek_r_script_global_flags <- function(r_script_path) {
+peek_r_script_guild_info <- function(r_script_path) {
 
-  exprs <- parse(r_script_path, keep.source = TRUE)
+  text <- readLines(r_script_path)
+  is_hint <- startsWith(text, "#|")
+
+  frontmatter <- NULL
+  if(is_hint[1])
+    frontmatter <- parse_yaml_hints(text[seq_len(which.min(is_hint)-1L)])
+  else if(startsWith(text[1], "#!/") && is_hint[2])
+    # allow frontmatter to start on 2nd line if first line is a shebang
+    frontmatter <- parse_yaml_hints(text[seq_len(which.min(is_hint)-1L)][-1])
+
+  exprs <- parse(text = text, keep.source = TRUE)
 
   flags <- list()
-  for(e in exprs) {
+  for(i in seq_along(exprs)) {
+    e <- exprs[[i]]
 
     if(!is.call(e))
       next
@@ -40,10 +65,39 @@ peek_r_script_global_flags <- function(r_script_path) {
       identical(length(default), 1L)
     )
 
-    flags[[name]] <- default
+
+    line_num <- getSrcLocation(exprs[i], "line")
+
+    flag <- list(name = name,
+                 default = default,
+                 type = switch(typeof(default),
+                               "double" = "float",
+                               "logical" = "bool",
+                               "character" = "string",
+                               "integer" = "int",
+                               "complex" = "complex"),
+                 "line-num" = line_num)
+
+    # look up and down for adjacent hints about this flag
+    if (is_hint[line_num - 1L]) {
+      hints_start <- hints_end <- line_num - 1L
+      while (is_hint[hints_start - 1L])
+        hints_start <- hints_start - 1L
+
+      hints <- parse_yaml_hints(text[hints_start:hints_end])
+      flag <- c(flag, hints)
+    }
+
+    flags[[name]] <- flag
+
   }
 
-  cat(unclass(jsonlite::toJSON(flags, auto_unbox = TRUE, digits = NA)))
+
+  cat(unclass(jsonlite::toJSON(
+    list(frontmatter = frontmatter,
+         "global-flags" = flags),
+    auto_unbox = TRUE,
+    digits = 16, pretty = interactive())))
 
   invisible()
 }
