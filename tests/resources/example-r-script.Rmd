@@ -1,0 +1,24 @@
+
+```{r }
+#| output-scalars: (\step) | (\key): (\value)
+
+# library(foo)
+# library(bar)
+
+
+noise = 3
+layers <- 32L
+
+name = "foo-bar" # description of foo-foo
+
+one_of <- c("a", "b", "c")[2]
+
+skip_connections = TRUE
+
+
+
+library(guildai)
+
+flags <- guild_flags()
+```
+
