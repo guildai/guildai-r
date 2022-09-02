@@ -19,31 +19,69 @@ parse_yaml_anno <- function(x) {
 
 is_hashpipe <- function(x) startsWith(x, "#|")
 
-peek_r_script_guild_info <- function(r_script_path) {
+#' @importFrom magrittr %<>%
+#' @importFrom rlang %||%
+#' @importFrom utils modifyList
+emit_r_script_guild_data <- function(r_script_path) {
 
   text <- readLines(r_script_path)
   is_anno <- startsWith(trimws(text, "left"), "#|")
 
-  frontmatter <- NULL
-  if(is_anno[1])
-    frontmatter <- parse_yaml_hints(text[seq_len(which.min(is_anno)-1L)])
-  else if(startsWith(text[1], "#!/") && is_anno[2])
+  # defaults
+  data <- list(
+    name = r_script_path,
+    exec = sprintf(
+      r"(Rscript -e 'guildai:::do_guild_run("%s")' ${flag_args})",
+      r_script_path),
+    `flags-dest` = "globals",
+    sourcecode = list(
+      dest = ".",
+      select = list(
+        list(exclude = list(dir = "renv")),
+        list(include = list(text = list("renv.lock", ".Rprofile", ".Renviron",
+                                   "**.[rR]")))
+      )))
+  # "flags-dest": 'globals',
+  # "flags": script_data['global-flags'],
+  # "output-scalars": self.output_scalars,
+  # "objective": self.objective,
+  # "plugins": self.plugins,
+
+  update_data <- function(x) {
+    data <<- modifyList(data, x)
+  }
+
+
+  if (is_anno[1]) {
+    update_data(parse_yaml_hints(text[seq_len(which.min(is_anno) - 1L)]))
+  } else if (startsWith(text[1], "#!/") && is_anno[2])
     # allow frontmatter to start on 2nd line if first line is a shebang
-    frontmatter <- parse_yaml_hints(text[seq_len(which.min(is_anno)-1L)][-1])
+    update_data(parse_yaml_hints(text[seq_len(which.min(is_anno) - 1L)][-1]))
 
-  params <- frontmatter$flags
-  if(is.null(params))
-    params <- infer_global_params(text, is_anno)
 
-  cat(unclass(jsonlite::toJSON(
-    list(frontmatter = frontmatter,
-         "global-flags" = params),
-    auto_unbox = TRUE,
-    digits = 16, pretty = interactive())))
+  if(data[["flags-dest"]] == "globals") {
+    flags <- infer_global_params(text, is_anno)
+    if(!is.null(data[["flags"]])) {
+      flags <- modifyList(flags, data[["flags"]])
+    }
+    data <- modifyList(list(flags = flags), data)
+    # frontmatter supplied data takes precedence.
+  }
 
-  invisible()
+  # op_name <- basename(r_script_path) |> tools::file_path_sans_ext()
+
+  # emit(list("model" = dirname(r_script_path),
+  #           operations = list(data)
+  emit(data)
 }
 
+
+emit <- function(x) {
+  out <- yaml::as.yaml(
+    x, precision = 16L, indent.mapping.sequence = TRUE)
+  cat(out)
+  invisible(out)
+}
 
 infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"), "#|")) {
 
@@ -81,21 +119,22 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
        !identical(length(default), 1L))
       next
 
-    line_num <- utils::getSrcLocation(exprs[i], "line")
 
-    param <- list(name = name,
-                  default = default,
+    param <- list(default = default,
                   type = switch(typeof(default),
                                 "double" = "float",
                                 "logical" = "bool",
                                 "character" = "string",
                                 "integer" = "int",
-                                "complex" = "complex"),
-                  line_num = line_num)
+                                "complex" = "complex")
+                  # , lineno = lineno
+                  )
 
+
+    lineno <- utils::getSrcLocation(exprs[i], "line")
     # look up and down for adjacent hints about this flag
-    if (is_anno[line_num - 1L]) {
-      anno_start <- anno_end <- line_num - 1L
+    if (is_anno[lineno - 1L]) {
+      anno_start <- anno_end <- lineno - 1L
       while (is_anno[anno_start - 1L])
         anno_start <- anno_start - 1L
 
@@ -188,6 +227,5 @@ inject_global_param_values <- function(exprs, params) {
 
 #' @export
 guild_log <- function(...) {
-  x <- rlang::dots_list(..., .named = TRUE)
-  print(jsonlite::toJSON(x, auto_unbox = TRUE, digits = 16))
+  emit(rlang::dots_list(..., .named = TRUE))
 }
