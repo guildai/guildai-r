@@ -1,6 +1,6 @@
 
 
-#', #+, #- roxygen, knitr::spin
+#  #', #+, #- roxygen, knitr::spin
 #| quarto, rmarkdown
 #* plumbr
 #| guild ?
@@ -229,3 +229,4 @@ inject_global_param_values <- function(exprs, params) {
 guild_log <- function(...) {
   emit(rlang::dots_list(..., .named = TRUE))
 }
+# does guild infer an incremented 'step' when encountering a duplicate key?
