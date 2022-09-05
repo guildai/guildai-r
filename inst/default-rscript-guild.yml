@@ -1,0 +1,43 @@
+
+
+flags-dest: globals
+sourcecode:
+  dest: '.'
+  select:
+  # - '*.[rR]'
+  - exclude: '*'
+  - exclude: {dir: [renv, venv, data]}
+  - include: {text: ['*.[rR]', '*.py', '*.(cpp|cc|c|h)"', '*.f90',
+                     '*.ya?ml', '*.(nd)?jsonl?',
+                     "renv.lock", ".Rprofile", ".Renviron",
+                     '*.(z|ba|fi|)sh', ".*rc"]}
+
+
+# name: r_script_path
+# exec: Rscript -e 'guildai:::do_guild_run("r_script_path")' ${flag_args}
+
+ # - exclude:
+ #      dir:
+ #        - renv
+ #        - venv
+ #        - env
+ #        - runs
+ #        - '*'
+  # - include:
+  #     text:
+  #     - renv.lock
+  #     - .Rprofile
+  #     - .Renviron
+  #     - '*.R'
+  #     - '*.py'
+  #     - '*.yml'
+  #     - '*.sh'
+  #     - "*"
+
+
+  # only include text files at the top level
+# sourcecode:
+#   dest: '.'
+#   select:
+#   - exclude: '*'
+#   - include: {text: '*'}

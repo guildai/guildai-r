@@ -8,55 +8,52 @@
 
 
 
+
 # r_script_path <- "tests/resources/example-r-script.R"
 
 parse_yaml_anno <- function(x) {
   stopifnot(startsWith(x, "#|"))
   x <- substr(x, 4L, .Machine$integer.max)
-  x <- yaml::yaml.load(x)
+  x <- parse_yaml(x)
   x
 }
 
-is_hashpipe <- function(x) startsWith(x, "#|")
 
 #' @importFrom magrittr %<>%
 #' @importFrom rlang %||%
 #' @importFrom utils modifyList
+
+r_script_path <- "../sample-proj/test2.R"
+
 emit_r_script_guild_data <- function(r_script_path) {
 
   text <- readLines(r_script_path)
   is_anno <- startsWith(trimws(text, "left"), "#|")
 
-  # defaults
-  data <- list(
+  data <- read_yaml(system.file("default-rscript-guild.yml",
+                                package = "guildai"))
+
+  update_data <- function(x) {
+    data <<- as_yaml(config::merge(data, x))
+    # data <<- merge_guild_data(data, x)
+    data
+  }
+
+  update_data(list(
     name = r_script_path,
     exec = sprintf(
       r"(Rscript -e 'guildai:::do_guild_run("%s")' ${flag_args})",
-      r_script_path),
-    `flags-dest` = "globals",
-    sourcecode = list(
-      dest = ".",
-      select = list(
-        list(exclude = list(dir = "renv")),
-        list(include = list(text = list("renv.lock", ".Rprofile", ".Renviron",
-                                   "**.[rR]")))
-      )))
-  # "flags-dest": 'globals',
-  # "flags": script_data['global-flags'],
-  # "output-scalars": self.output_scalars,
-  # "objective": self.objective,
-  # "plugins": self.plugins,
+      r_script_path
+    )
+  ))
 
-  update_data <- function(x) {
-    data <<- modifyList(data, x)
-  }
-
-
-  if (is_anno[1]) {
-    update_data(parse_yaml_hints(text[seq_len(which.min(is_anno) - 1L)]))
+  frontmatter <-  if (is_anno[1]) {
+    parse_yaml_anno(text[seq_len(which.min(is_anno) - 1L)])
   } else if (startsWith(text[1], "#!/") && is_anno[2])
     # allow frontmatter to start on 2nd line if first line is a shebang
-    update_data(parse_yaml_hints(text[seq_len(which.min(is_anno) - 1L)][-1]))
+    parse_yaml_anno(text[seq_len(which.min(is_anno) - 1L)][-1])
+
+  update_data(frontmatter)
 
 
   if(data[["flags-dest"]] == "globals") {
@@ -70,24 +67,18 @@ emit_r_script_guild_data <- function(r_script_path) {
 
   # op_name <- basename(r_script_path) |> tools::file_path_sans_ext()
 
-  # emit(list("model" = dirname(r_script_path),
-  #           operations = list(data)
-  emit(data)
+  # yaml::write_yaml(data, "emitted-data.yml")
+  print.yaml(data, c("", "emitted-data.yml"))
 }
 
-
-emit <- function(x) {
-  out <- yaml::as.yaml(
-    x, precision = 16L, indent.mapping.sequence = TRUE)
-  cat(out)
-  invisible(out)
-}
 
 infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"), "#|")) {
 
   exprs <- parse(text = text, keep.source = TRUE)
 
-  params <- list()
+  # 0-length names to force a yaml mapping if no flags.
+  params <- structure(list(), names = character())
+
   for(i in seq_along(exprs)) {
     e <- exprs[[i]]
 
@@ -165,65 +156,8 @@ SIMPLE_MATH_OPS <-
 
     ## Summary
     "sum", "prod", "min", "max"
-    )
+  )
 
-do_guild_run <-
-  function(file = "train.R",
-           params = parse_command_line(commandArgs(TRUE))) {
-    exprs <- parse(file, keep.source = TRUE)
-    exprs <- inject_global_param_values(exprs, params)
-    source(exprs = exprs)
-    invisible()
-  }
-
-
-inject_global_param_values <- function(exprs, params) {
-  if (!length(params))
-    return(exprs)
-
-  for (i in seq_along(exprs)) {
-    e <- exprs[[i]]
-
-    if (!is.call(e))
-      next
-
-    op <- e[[1L]]
-    if (op != quote(`=`) && op != quote(`<-`))
-      next
-
-    if (typeof(e[[2L]]) != "symbol")
-      next
-
-    name <- as.character(e[[2L]])
-    if (!name %in% names(params))
-      next
-
-    if(identical(params[[name]], e[[3L]])) { # new value same as default
-      params[[name]] <- NULL
-      next
-    }
-
-    old_e <- e
-
-    # `e` is an assignment expression with a flag symbol on
-    # the left hand side
-    e[[3L]] <- params[[name]] # replace the value in node
-    exprs[[i]] <- e           # update exprs w/ new node
-    params[[name]] <- NULL    # null out flag value; each flag is injected only once
-
-    message(sprintf("Replacing expression '%s' on line %i with '%s'",
-                    deparse1(old_e), utils::getSrcLocation(exprs[i], "line"),
-                    deparse1(e)))
-
-    if (!length(params))
-      break
-  }
-
-  if(length(params))
-    warning("Unused params received but not injected: ", unlist(params))
-
-  exprs
-}
 
 #' @export
 guild_log <- function(...) {
