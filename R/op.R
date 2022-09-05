@@ -163,4 +163,8 @@ SIMPLE_MATH_OPS <-
 guild_log <- function(...) {
   emit(rlang::dots_list(..., .named = TRUE))
 }
-# does guild infer an incremented 'step' when encountering a duplicate key?
+
+# - does guild infer an incremented 'step' when encountering a duplicate key?
+# - Can we have a nicer run_dir uuid ala timestamped sortable like tfruns::unique_run_dir()?
+# - Can we change default GUILD_HOME to be "./.guild"
+# - Can we change default runs dir to be "./runs" for a project?

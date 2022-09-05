@@ -1,12 +1,12 @@
 
 
 flags-dest: globals
+
 sourcecode:
   dest: '.'
   select:
-  # - '*.[rR]'
   - exclude: '*'
-  - exclude: {dir: [renv, venv, data]}
+  - exclude: {dir: [renv, venv, data, runs, .guild, .Rproj.user]}
   - include: {text: ['*.[rR]', '*.py', '*.(cpp|cc|c|h)"', '*.f90',
                      '*.ya?ml', '*.(nd)?jsonl?',
                      "renv.lock", ".Rprofile", ".Renviron",
