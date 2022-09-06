@@ -1,6 +1,7 @@
 
 
 find_python <- function() {
+  # consider using pipenv or similar to make a truly stand-alone installation
   if(file.exists(python <- Sys.which("python3")))
     return(as.vector(python))
   if(file.exists(python <- Sys.which("python")))
@@ -14,37 +15,44 @@ find_python <- function() {
 
 install_guild <- function() {
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai"), mustWork = FALSE)
-
+  unlink(venv, recursive = TRUE)
   system2(find_python(), c("-m", "venv", shQuote(venv)))
-  py <- file.path(venv, "bin", if(is_windows()) "python.exe" else "python")
+  py <- file.path(venv, "bin", if(xfun::is_windows()) "python.exe" else "python")
   system2(py, c("-m", "pip", "install", "--upgrade", "--no-user", "pip", "wheel", "setuptools"))
   system2(py, c("-m", "pip", "install", "--upgrade", "--no-user", "guildai"))
-  file.path(venv, "bin", "guild")
+  normalizePath(file.path(venv, "bin", "guild"))
 }
 
 find_guild <- function() {
   if(file.exists(guild <- Sys.which("guild")))
-    return(as.vector(guild))
+    return(normalizePath(as.vector(guild)))
   if(file.exists(guild <- file.path(rappdirs::user_data_dir("r-guildai"), "bin", "guild")))
-    return(as.vector(guild))
+    return(normalizePath(as.vector(guild)))
   install_guild()
 }
 
 
-guild <- function(cmd, ..., stdout = FALSE) {
-  system2(normalizePath(find_guild()), c(cmd, shQuote(c(...))), stdout = stdout)
+guild <- function(cmd, ..., stdout = "", stderr = "",
+                  home = Sys.getenv("GUILD_HOME", here::here(".guild")),
+                  wait = TRUE) {
+  args <- shQuote(c("-H", home, cmd, c(...)))
+  system2(find_guild(), args, stdout = stdout, stderr = stderr,
+          wait = wait)
 }
 
 
+#' @export
 ls_runs <- function() {
   x <- guild("runs", "--json", stdout = TRUE)
   x <- jsonlite::parse_json(x, simplifyVector = TRUE)
   tibble::as_tibble(x)
 }
 
-
-is_windows <- function() {
-  identical(.Platform$OS.type, "windows")
+#' @export
+guild_run <- function(file = "train.R", flags = NULL, echo = TRUE) {
+  if(!is.null(flags))
+    flags <- shQuote(sprintf("%s=%s", names(flags), as.character(flags)))
+  guild("run", "--yes",  file, if(echo) "--echo", flags)
 }
 
 
