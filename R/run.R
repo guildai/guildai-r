@@ -6,7 +6,7 @@ do_guild_run <-
            params = parse_command_line(commandArgs(TRUE))) {
     exprs <- parse(file, keep.source = TRUE)
     exprs <- inject_global_param_values(exprs, params)
-    source(exprs = exprs)
+    withAutoprint(exprs = exprs, evaluated = TRUE, local = .GlobalEnv)
     invisible()
   }
 
