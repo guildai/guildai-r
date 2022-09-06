@@ -56,10 +56,6 @@ guild_run <- function(file = "train.R", flags = NULL, echo = TRUE) {
 }
 
 
-training_run <- function(file = "train.R", flags = NULL) {
-  guild("run", "--yes", file)
-}
-
-view_runs <- function() {
-  guild("view")
+guild_view <- function() {
+  guild("view", wait = TRUE)
 }
