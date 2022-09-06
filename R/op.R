@@ -151,7 +151,6 @@ SIMPLE_MATH_OPS <-
     "trigamma", "cumsum", "cumprod", "cummax", "cummin",
 
     ## Ops
-
     "+", "-", "*", "/", "^", "%%", "%/%",
 
     ## Summary
@@ -168,3 +167,8 @@ guild_log <- function(...) {
 # - Can we have a nicer run_dir uuid ala timestamped sortable like tfruns::unique_run_dir()?
 # - Can we change default GUILD_HOME to be "./.guild"
 # - Can we change default runs dir to be "./runs" for a project?
+# - instead of 'sourcecode: dest: '.'', what if we kept the current dest, but
+#   symlinked all the sourcecode files from the rundir pointing to the .sourcecode dest?
+#   (would need to be a change in guild)
+# - related: sourcecode files should be copied with `chmod -w` settings
+# - can a plugin define additional guild options, like --echo or --no-echo?
