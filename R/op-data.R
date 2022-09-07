@@ -25,7 +25,13 @@ parse_yaml_anno <- function(x) {
 
 r_script_path <- "../sample-proj/test2.R"
 
-emit_r_script_guild_data <- function(r_script_path) {
+
+emit_r_script_guild_data <- function(r_script_path)
+  print.yaml(guild_data(r_script_path),
+             c("", "guild-op-data.yml"))
+
+
+guild_data <- function(r_script_path) {
 
   text <- readLines(r_script_path)
   is_anno <- startsWith(trimws(text, "left"), "#|")
@@ -57,19 +63,20 @@ emit_r_script_guild_data <- function(r_script_path) {
 
 
   if(data[["flags-dest"]] == "globals") {
+    # walk script ast looking for constants defined at top level
     flags <- infer_global_params(text, is_anno)
-    if(!is.null(data[["flags"]])) {
+
+    # if user supplied flags in anno frontmatter, merge w/ the found flags
+    if(!is.null(data[["flags"]]))
       flags <- modifyList(flags, data[["flags"]])
-    }
+
+    # merge flags into output data, frontmatter supplied data takes precedence.
     data <- modifyList(list(flags = flags), data)
-    # frontmatter supplied data takes precedence.
   }
 
-  # op_name <- basename(r_script_path) |> tools::file_path_sans_ext()
-
-  # yaml::write_yaml(data, "emitted-data.yml")
-  print.yaml(data, c("", "emitted-data.yml"))
+  data
 }
+
 
 
 infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"), "#|")) {
@@ -117,20 +124,18 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
                                 "logical" = "bool",
                                 "character" = "string",
                                 "integer" = "int",
-                                "complex" = "complex")
-                  # , lineno = lineno
-                  )
+                                "complex" = "complex"))
 
 
     lineno <- utils::getSrcLocation(exprs[i], "line")
-    # look up and down for adjacent hints about this flag
+    # look for adjacent anno hints about this flag
     if (is_anno[lineno - 1L]) {
       anno_start <- anno_end <- lineno - 1L
       while (is_anno[anno_start - 1L])
-        anno_start <- anno_start - 1L
+        subtract(anno_start) <- 1L
 
       anno <- parse_yaml_anno(text[anno_start:anno_end])
-      param <- c(param, anno)
+      append(param) <- anno
     }
 
     params[[name]] <- param
@@ -160,7 +165,7 @@ SIMPLE_MATH_OPS <-
 
 #' @export
 guild_log <- function(...) {
-  emit(rlang::dots_list(..., .named = TRUE))
+  emit()
 }
 
 # - does guild infer an incremented 'step' when encountering a duplicate key?
