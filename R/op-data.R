@@ -163,10 +163,6 @@ SIMPLE_MATH_OPS <-
   )
 
 
-#' @export
-guild_log <- function(...) {
-  emit()
-}
 
 # - does guild infer an incremented 'step' when encountering a duplicate key?
 # - Can we have a nicer run_dir uuid ala timestamped sortable like tfruns::unique_run_dir()?
