@@ -7,10 +7,12 @@ sourcecode:
   select:
   - exclude: '*'
   - exclude: {dir: [renv, venv, data, runs, .guild, .Rproj.user]}
-  - include: {text: ['*.[rR]', '*.py', '*.(cpp|cc|c|h)"', '*.f90',
-                     '*.ya?ml', '*.(nd)?jsonl?',
+  - include: {text: ['*.[rR]', '*.py',
+                     '*.cpp','*.cc', '*.c','*.h','*.f90',
+                     '*.yaml', '*.yml',
+                     '*.json', '*.ndjson','*.jsonl',
                      "renv.lock", ".Rprofile", ".Renviron",
-                     '*.(z|ba|fi|)sh', ".*rc"]}
+                     '*.sh', '*.bash', '*.zsh', ".*rc"]}
 
 
 # name: r_script_path
