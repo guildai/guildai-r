@@ -6,9 +6,15 @@ do_guild_run <-
            params = parse_command_line(commandArgs(TRUE))) {
     exprs <- parse(file, keep.source = TRUE)
     exprs <- inject_global_param_values(exprs, params)
+    # register_magic_hooks()
+    options(guildai.is_run_active = TRUE)
+    on.exit(options(guildai.is_run_active = NULL))
     withAutoprint(exprs = exprs, evaluated = TRUE, local = .GlobalEnv)
     invisible()
   }
+
+#' @export
+is_run_active <- function() getOption(guiltai.is_run_active, FALSE)
 
 
 inject_global_param_values <- function(exprs, params) {
@@ -59,3 +65,14 @@ inject_global_param_values <- function(exprs, params) {
   exprs
 }
 
+register_magic_hooks <- function() {
+
+#   setHook(packageEvent("keras", "onLoad"),
+#           function(pkgname, pkgpath) {
+#             # patch fit/evaluate to inject tensorboard callback?
+#             # modify guild-data mid/post run to change
+#             # to `output-scalars: off` if we detect user (or us w/ magic)
+#             # are using tensorboard?
+#           })
+
+}
