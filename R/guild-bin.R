@@ -33,9 +33,13 @@ find_guild <- function() {
 
 
 guild <- function(cmd, ..., stdout = "", stderr = "",
-                  home = Sys.getenv("GUILD_HOME", here::here(".guild")),
+                  home = NULL, #home = Sys.getenv("GUILD_HOME", here::here(".guild")),
                   wait = TRUE) {
-  args <- shQuote(c("-H", home, cmd, c(...)))
-  system2(find_guild(), args, stdout = stdout, stderr = stderr,
+
+  args <- shQuote(c(cmd, c(...)))
+  if(!is.null(home))
+    args <- c("-H", shQuote(home), args)
+  system2(find_guild(), args,
+          stdout = stdout, stderr = stderr,
           wait = wait)
 }
