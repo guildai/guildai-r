@@ -163,7 +163,7 @@ SIMPLE_MATH_OPS <-
   )
 
 
-
+## Q's for Garrett
 # - does guild infer an incremented 'step' when encountering a duplicate key?
 # - Can we have a nicer run_dir uuid ala timestamped sortable like tfruns::unique_run_dir()?
 # - Can we change default GUILD_HOME to be "./.guild"
@@ -173,3 +173,5 @@ SIMPLE_MATH_OPS <-
 #   (would need to be a change in guild)
 # - related: sourcecode files should be copied with `chmod -w` settings
 # - can a plugin define additional guild options, like --echo or --no-echo?
+# - Should guild provide a keras callback that writes additional
+#   guild run metadata, like model summary, metrics, etc.?
