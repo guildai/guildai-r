@@ -9,7 +9,12 @@ do_guild_run <-
     # register_magic_hooks()
     options(guildai.is_run_active = TRUE)
     on.exit(options(guildai.is_run_active = NULL))
-    withAutoprint(exprs = exprs, evaluated = TRUE, local = .GlobalEnv)
+    # if user supplied `guild_run(echo=FALSE)`, then we should just
+    # pass through echo here to source(echo = echo)
+    source(exprs = exprs,
+           max.deparse.length = Inf,
+           deparseCtrl = c("keepInteger", "showAttributes", "keepNA"))
+    # withAutoprint(exprs = exprs, evaluated = TRUE, local = .GlobalEnv)
     invisible()
   }
 
