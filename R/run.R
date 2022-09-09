@@ -35,10 +35,12 @@ is_run_active <- function() getOption(guiltai.is_run_active, FALSE)
 
 
 inject_global_param_values <- function(exprs, params) {
-  if (!length(params))
-    return(exprs)
+
 
   for (i in seq_along(exprs)) {
+    if (!length(params))
+      return(exprs)
+
     e <- exprs[[i]]
 
     if (!is.call(e))
@@ -72,8 +74,6 @@ inject_global_param_values <- function(exprs, params) {
                     deparse1(old_e), utils::getSrcLocation(exprs[i], "line"),
                     deparse1(e)))
 
-    if (!length(params))
-      break
   }
 
   if(length(params))
