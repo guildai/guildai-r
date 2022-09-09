@@ -27,6 +27,7 @@ parse_yaml <-  function(...) {
 #' @export
 as_yaml <- function(x) {
   if(is.null(x)) return(x)
+  x <- as.list(x)
   class(x) <- "yaml"
   x
 }
@@ -35,27 +36,36 @@ as_yaml <- function(x) {
 yaml <- function(...)
   as_yaml(rlang::dots_list(..., .named = TRUE))
 
+maybe_as_yaml <- function(x) {
+  if (is.null(x))
+    return(NULL)
 
+  if(length(x) > 1L)
+    x <- as.list(x)
+  if(is.list(x))
+    class(x) <- "yaml"
+  x
+}
 
 #' @export
 `$.yaml` <- function(x, name, ...) {
-  # no partial matching, preserve 'yaml' class
-  out <- unclass(x)[[name, ...]]
-  if (is.null(out)) NULL
-  else structure(out, class = "yaml")
+  # no partial matching, preserve 'yaml' class on sublists
+  maybe_as_yaml(unclass(x)[[name, ...]])
 }
 
 #' @export
 `[[.yaml` <- function(x, ...) {
-  out <- NextMethod()
-  if(!is.null(out))
-    class(out) <- "yaml"
-  out
+  maybe_as_yaml(NextMethod())
 }
 
 #' @export
 `[.yaml` <- `[[.yaml`
 
+#' @exportS3Method
+str.yaml <- function(x, ...) {
+  cat("YAML ")
+  str(unclass(x), ...)
+}
 
 # registerS3method("print", "yaml", print.yaml)
 # registerS3method("$", "yaml", `$.yaml`)
