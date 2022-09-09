@@ -23,7 +23,7 @@ parse_yaml_anno <- function(x) {
 #' @importFrom rlang %||%
 #' @importFrom utils modifyList
 
-r_script_path <- "../sample-proj/test2.R"
+# r_script_path <- "../sample-proj/test2.R"
 
 
 emit_r_script_guild_data <- function(r_script_path)
@@ -45,13 +45,7 @@ guild_data <- function(r_script_path) {
     data
   }
 
-  update_data(list(
-    name = r_script_path,
-    exec = sprintf(
-      r"(Rscript -e 'guildai:::do_guild_run("%s")' ${flag_args})",
-      r_script_path
-    )
-  ))
+  update_data(list(name = r_script_path))
 
   frontmatter <-  if (is_anno[1]) {
     parse_yaml_anno(text[seq_len(which.min(is_anno) - 1L)])
@@ -61,8 +55,8 @@ guild_data <- function(r_script_path) {
 
   update_data(frontmatter)
 
-
-  if(data[["flags-dest"]] == "globals") {
+  flags_dest <- data$`flags-dest`
+  if(flags_dest == "globals") {
     # walk script ast looking for constants defined at top level
     flags <- infer_global_params(text, is_anno)
 
@@ -72,7 +66,23 @@ guild_data <- function(r_script_path) {
 
     # merge flags into output data, frontmatter supplied data takes precedence.
     data <- modifyList(list(flags = flags), data)
+
+  } else if (startsWith(flags_dest, "config:")) {
+    flags <- read_yaml(substr(flags_dest, nchar("config:") + 1,
+                              nchar(flags_dest)))
+    data <- modifyList(list(flags = flags), data)
   }
+
+  echo <- data$echo %||% TRUE
+  data$echo <- NULL
+
+  cl <- call("do_guild_run",
+             r_script_path,
+             flags_dest = flags_dest,
+             echo = echo)
+
+
+  data$exec <- sprintf("Rscript -e guildai:::%s ${flag_args}", shQuote(deparse1(cl)))
 
   data
 }
@@ -145,6 +155,21 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
   params
 
 }
+#
+# as_flag_spec <- function(x) {
+#
+#
+#   param <- list(default = default,
+#                 type = switch(typeof(default),
+#                               "double" = "float",
+#                               "logical" = "bool",
+#                               "character" = "string",
+#                               "integer" = "int",
+#                               "complex" = "complex"))
+#
+#
+#
+# }
 
 
 SIMPLE_MATH_OPS <-

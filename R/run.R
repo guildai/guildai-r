@@ -1,15 +1,24 @@
 
 
+# TODO: rename throughout s/flag/param/g
 
 do_guild_run <-
 function(file = "train.R",
-         params = parse_command_line(commandArgs(TRUE))) {
+         flags_dest = "globals",
+         echo = TRUE,
+         flags = parse_command_line(commandArgs(TRUE))) {
 
   run_dir <- getwd()
   setup_info <- setup_run_dir()
 
   exprs <- parse(file, keep.source = TRUE)
-  exprs <- inject_global_param_values(exprs, params)
+  if(flags_dest == "globals")
+    exprs <- inject_global_param_values(exprs, flags)
+
+  # TODO: if flags_dest == "config:flags.yml", guild is not
+  # placing an updated "flags.yml" file in the run directory
+  # https://rstudio.slack.com/archives/C0366T2TBAL/p1662740546338429.
+
   # register_magic_hooks()
   options(guildai.is_run_active = TRUE,
           warn = 1L)
@@ -22,7 +31,7 @@ function(file = "train.R",
 
   source(
     exprs = exprs,
-    echo = TRUE,
+    echo = echo,
     max.deparse.length = Inf,
     deparseCtrl = c("keepInteger", "showAttributes", "keepNA")
   )
