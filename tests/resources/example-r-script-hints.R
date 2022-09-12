@@ -1,12 +1,14 @@
 #!/usr/bin/env Rscript
-#| guild:
-#|   requires:
-#|     - file: file.txt
-#|       description: File dependency
-#|   output-scalars:
-#|     step: 'step: (\value)'
-#|     loss: 'loss: (\value)'
-#|     accuracy: 'accuracy: (\value)'
+#| requires:
+#|   - file: file.txt
+#|     description: File dependency
+#| output-scalars:
+#|   step: 'step: (\value)'
+#|   loss: 'loss: (\value)'
+#|   accuracy: 'accuracy: (\value)'
+#| params:
+#|   x2: 3
+
 
 library(tensorflow)
 
@@ -16,15 +18,17 @@ x <- .1
 #| {max: 1, min: 0}
 noise <- .3
 
-#| choices: {foo, bar, baz}
+#| choices: {bar, baz, foo}
 type <- "foo"
+
+
 
 params <- list(
   xx_key = "xx_val", #| param
 
 
   #| param:
-  #|   description: "This is the yy_key. Y u ask?
+  #|   description: "This is the yy_key.
   yy_key = "yy_val"
 )
 
