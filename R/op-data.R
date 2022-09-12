@@ -200,3 +200,10 @@ SIMPLE_MATH_OPS <-
 # - can a plugin define additional guild options, like --echo or --no-echo?
 # - Should guild provide a keras callback that writes additional
 #   guild run metadata, like model summary, metrics, etc.?
+
+
+if(getRversion() < "4")
+  deparse1 <- function (expr, collapse = " ", width.cutoff = 500L, ...)
+  {
+    paste(deparse(expr, width.cutoff, ...), collapse = collapse)
+  }

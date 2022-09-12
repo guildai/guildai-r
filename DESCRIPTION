@@ -10,6 +10,9 @@ License: Apache License 2.0
 Imports:
   jsonlite,
   rappdirs,
+  yaml,
+  config,
+  xfun,
   fs,
   tibble
 Encoding: UTF-8
