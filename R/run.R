@@ -14,6 +14,12 @@ function(file = "train.R",
   exprs <- parse(file, keep.source = TRUE)
   if(flags_dest == "globals") # globalenv .Globalenv
     exprs <- inject_global_param_values(exprs, flags)
+  else if (startsWith(flags_dest, "config:")) {
+    # workaround around guild plugin precedence issue
+    # guild should prepare the yml file before start of the run, but
+    # currently doesn't.
+    write_yaml(flags, str_drop_prefix(flags_dest, "config:"))
+  }
 
   # TODO: if flags_dest == "config:flags.yml", guild is not
   # placing an updated "flags.yml" file in the run directory

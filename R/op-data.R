@@ -49,21 +49,22 @@ r_script_guild_data <- function(r_script_path) {
 
   update_data(frontmatter)
 
-  flags_dest <- data$`flags-dest`
-  flags <- data$flags
-  if(flags_dest == "globals") {
-    # if user supplied flags in frontmatter:
-    #   use that
-    # else:
-    #   walk script ast looking for symbols assigned
-    #   at top level values of length-1 atomic literals
-    if(is.null(data$flags))
-      data$flags <- infer_global_params(text, is_anno)
+  # if user supplied flags in frontmatter:
+  #   use that
+  # else:
+  #   walk script ast looking for symbols assigned
+  #   at top level values of length-1 atomic literals
+  if (is.null(data$flags)) {
+    flags_dest <- data$`flags-dest`
 
-  } else if (startsWith(flags_dest, "config:")) {
-    flags <- read_yaml(substr(flags_dest, nchar("config:") + 1,
-                              nchar(flags_dest)))
-    data <- modifyList(list(flags = flags), data)
+    data$flags <- if (flags_dest == "globals") {
+      infer_global_params(text, is_anno)
+
+    } else if (startsWith(flags_dest, "config:") &&
+               any(endsWith(flags_dest, c(".yml", ".yaml")))) {
+      read_yaml(str_drop_prefix(flags_dest, "config:"))
+
+    }
   }
 
   # intercept user supplied `echo` here
@@ -80,6 +81,17 @@ r_script_guild_data <- function(r_script_path) {
                        shQuote(deparse1(cl)))
 
   data
+}
+
+str_drop_prefix <- function(x, prefix) {
+
+  if (is.character(prefix)) {
+    if (!startsWith(x, prefix))
+      return(x)
+    prefix <- nchar(prefix)
+  }
+
+  substr(x, as.integer(prefix) + 1L, nchar(x))
 }
 
 rscript_bin <- function() {
@@ -138,7 +150,6 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
                                 "integer" = "int",
                                 "complex" = "complex"))
 
-
     lineno <- utils::getSrcLocation(exprs[i], "line")
     # look for adjacent anno hints about this flag
     if (is_anno[lineno - 1L]) {
@@ -157,7 +168,8 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
   params
 
 }
-#
+
+
 # as_flag_spec <- function(x) {
 #
 #
