@@ -8,9 +8,6 @@
 
 
 
-
-# r_script_path <- "tests/resources/example-r-script.R"
-
 parse_yaml_anno <- function(x) {
   stopifnot(startsWith(x, "#|"))
   x <- substr(x, 4L, .Machine$integer.max)
@@ -22,13 +19,11 @@ parse_yaml_anno <- function(x) {
 #' @importFrom magrittr %<>%
 #' @importFrom rlang %||%
 #' @importFrom utils modifyList
-
-# r_script_path <- "../sample-proj/test2.R"
-
 #' @importFrom xfun is_windows
+
+
 emit_r_script_guild_data <- function(r_script_path)
-  print.yaml(r_script_guild_data(r_script_path),
-             c("", "guild-op-data.yml"))
+  print.yaml(r_script_guild_data(r_script_path))
 
 
 r_script_guild_data <- function(r_script_path) {
@@ -57,8 +52,11 @@ r_script_guild_data <- function(r_script_path) {
   flags_dest <- data$`flags-dest`
   flags <- data$flags
   if(flags_dest == "globals") {
-    # if user supplied flags in frontmatter, use that
-    # else, walk script ast looking for constants defined at top level
+    # if user supplied flags in frontmatter:
+    #   use that
+    # else:
+    #   walk script ast looking for symbols assigned
+    #   at top level values of length-1 atomic literals
     if(is.null(data$flags))
       data$flags <- infer_global_params(text, is_anno)
 
