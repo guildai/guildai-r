@@ -4,7 +4,7 @@
 #| quarto, rmarkdown
 #* plumbr
 #| guild ?
-#: ?    #= #+ #^ #) #} #] #!
+#: or   #= #+ #^ #) #} #] #!
 
 
 
@@ -25,13 +25,13 @@ parse_yaml_anno <- function(x) {
 
 # r_script_path <- "../sample-proj/test2.R"
 
-
+#' @importFrom xfun is_windows
 emit_r_script_guild_data <- function(r_script_path)
-  print.yaml(guild_data(r_script_path),
+  print.yaml(r_script_guild_data(r_script_path),
              c("", "guild-op-data.yml"))
 
 
-guild_data <- function(r_script_path) {
+r_script_guild_data <- function(r_script_path) {
 
   text <- readLines(r_script_path)
   is_anno <- startsWith(trimws(text, "left"), "#|")
@@ -41,7 +41,6 @@ guild_data <- function(r_script_path) {
 
   update_data <- function(x) {
     data <<- as_yaml(config::merge(data, x))
-    # data <<- merge_guild_data(data, x)
     data
   }
 
@@ -56,16 +55,12 @@ guild_data <- function(r_script_path) {
   update_data(frontmatter)
 
   flags_dest <- data$`flags-dest`
+  flags <- data$flags
   if(flags_dest == "globals") {
-    # walk script ast looking for constants defined at top level
-    flags <- infer_global_params(text, is_anno)
-
-    # if user supplied flags in anno frontmatter, merge w/ the found flags
-    if(!is.null(data[["flags"]]))
-      flags <- modifyList(flags, data[["flags"]])
-
-    # merge flags into output data, frontmatter supplied data takes precedence.
-    data <- modifyList(list(flags = flags), data)
+    # if user supplied flags in frontmatter, use that
+    # else, walk script ast looking for constants defined at top level
+    if(is.null(data$flags))
+      data$flags <- infer_global_params(text, is_anno)
 
   } else if (startsWith(flags_dest, "config:")) {
     flags <- read_yaml(substr(flags_dest, nchar("config:") + 1,
@@ -73,6 +68,7 @@ guild_data <- function(r_script_path) {
     data <- modifyList(list(flags = flags), data)
   }
 
+  # intercept user supplied `echo` here
   echo <- data$echo %||% TRUE
   data$echo <- NULL
 
@@ -81,10 +77,18 @@ guild_data <- function(r_script_path) {
              flags_dest = flags_dest,
              echo = echo)
 
-
-  data$exec <- sprintf("Rscript -e guildai:::%s ${flag_args}", shQuote(deparse1(cl)))
+  data$exec <- sprintf("%s -e guildai:::%s ${flag_args}",
+                       rscript_bin(),
+                       shQuote(deparse1(cl)))
 
   data
+}
+
+rscript_bin <- function() {
+  # do we need arch in the file path on windows?
+  file.path(
+    R.home("bin"),
+    if(is_windows()) "Rterm.exe" else "Rscript")
 }
 
 
