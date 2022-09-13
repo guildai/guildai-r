@@ -9,10 +9,10 @@ function(file = "train.R",
          flags = parse_command_line(commandArgs(TRUE))) {
 
   run_dir <- getwd()
-  setup_info <- setup_run_dir()
+  # setup_info <- setup_run_dir()
 
   exprs <- parse(file, keep.source = TRUE)
-  if(flags_dest == "globals")
+  if(flags_dest == "globals") # globalenv .Globalenv
     exprs <- inject_global_param_values(exprs, flags)
 
   # TODO: if flags_dest == "config:flags.yml", guild is not
@@ -26,7 +26,7 @@ function(file = "train.R",
   on.exit({
     options(guildai.is_run_active = NULL)
     setwd(run_dir)
-    teardown_run_dir(setup_info)
+    # teardown_run_dir(setup_info)
   })
 
   source(

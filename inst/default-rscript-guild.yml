@@ -1,9 +1,8 @@
 
 
 flags-dest: globals
-#
-# sourcecode:
-#   dest: '.'
+sourcecode:
+  dest: '.'
 #   select:
 #   - exclude: '*'
 #   - exclude: {dir: [renv, venv, data, runs, .guild, .Rproj.user]}
