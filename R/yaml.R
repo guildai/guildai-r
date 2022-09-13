@@ -13,24 +13,17 @@ print.yaml <- function(x, file = "") {
 
 #' @export
 read_yaml <- function(...) {
-  x <- yaml::read_yaml(...)
-  class(x) <- "yaml"
-  x
+  maybe_as_yaml(yaml::read_yaml(...))
 }
 
 parse_yaml <-  function(...) {
-  x <- yaml::yaml.load(...)
-  class(x) <- "yaml"
-  x
+  maybe_as_yaml(yaml::yaml.load(...))
 }
 
 #' @export
-as_yaml <- function(x) {
-  if(is.null(x)) return(x)
-  x <- as.list(x)
-  class(x) <- "yaml"
-  x
-}
+as_yaml <- function(x)
+  maybe_as_yaml(as.list(x))
+
 
 #' @export
 yaml <- function(...)
@@ -40,7 +33,7 @@ maybe_as_yaml <- function(x) {
   if (is.null(x))
     return(NULL)
 
-  if(length(x) > 1L)
+  if(is.atomic(x) && length(x) != 1L)
     x <- as.list(x)
   if(is.list(x))
     class(x) <- "yaml"
@@ -48,15 +41,15 @@ maybe_as_yaml <- function(x) {
 }
 
 #' @export
-`$.yaml` <- function(x, name, ...) {
+`$.yaml` <- function(x, ...)
   # no partial matching, preserve 'yaml' class on sublists
-  maybe_as_yaml(unclass(x)[[name, ...]])
-}
+  maybe_as_yaml(unclass(x)[[...]])
+
 
 #' @export
-`[[.yaml` <- function(x, ...) {
+`[[.yaml` <- function(x, ...)
   maybe_as_yaml(NextMethod())
-}
+
 
 #' @export
 `[.yaml` <- `[[.yaml`
