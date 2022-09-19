@@ -20,8 +20,6 @@ parse_yaml_anno <- function(x) {
 #' @importFrom rlang %||%
 #' @importFrom utils modifyList
 #' @importFrom xfun is_windows
-
-
 emit_r_script_guild_data <- function(r_script_path)
   print.yaml(r_script_guild_data(r_script_path))
 
@@ -31,15 +29,17 @@ r_script_guild_data <- function(r_script_path) {
   text <- readLines(r_script_path)
   is_anno <- startsWith(trimws(text, "left"), "#|")
 
-  data <- read_yaml(system.file("default-rscript-guild.yml",
-                                package = "guildai"))
+  # data <- read_yaml(system.file("default-rscript-guild.yml",
+  #                               package = "guildai"))
+  data <- yaml("flags-dest" = "globals",
+               "sourcecode" = list("dest" = "."),
+               name = r_script_path)
 
-  update_data <- function(x) {
-    data <<- as_yaml(config::merge(data, x))
-    data
-  }
+  # accepts "param" for flag
+  names(data) <- sub("param", "flag", names(data))
 
-  update_data(list(name = r_script_path))
+  update_data <- function(x)
+    invisible(data <<- as_yaml(config::merge(data, x)))
 
   frontmatter <-  if (is_anno[1]) {
     parse_yaml_anno(text[seq_len(which.min(is_anno) - 1L)])
@@ -54,8 +54,16 @@ r_script_guild_data <- function(r_script_path) {
   # else:
   #   walk script ast looking for symbols assigned
   #   at top level values of length-1 atomic literals
+
+  if(flags)
+
   if (is.null(data$flags)) {
     flags_dest <- data$`flags-dest`
+
+    # rename "file:path/to/file.yml" -> "config:path/to/file.yml"
+    if(startsWith(data$`flags-dest`, "file:"))
+      data$`flags-dest` <-
+        paste0("config:", str_drop_prefix(data$`flags-dest`, "file:"))
 
     data$flags <- if (flags_dest == "globals") {
       infer_global_params(text, is_anno)
@@ -101,7 +109,15 @@ rscript_bin <- function() {
     if(is_windows()) "Rterm.exe" else "Rscript")
 }
 
+rename <- function(x, ...) {
+  n <- c(...)
+  browser()
+  nms <- names(x)
+  # i <- names(n) %in% x
+  # nms[which(nms %in%)]
 
+  names(...)
+}
 
 infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"), "#|")) {
 
@@ -219,3 +235,14 @@ SIMPLE_MATH_OPS <-
 if(getRversion() < "4")
 deparse1 <- function (expr, collapse = " ", width.cutoff = 500L, ...)
   paste(deparse(expr, width.cutoff, ...), collapse = collapse)
+
+
+replace_val <- function(x, old, new) {
+  if(!is_scalar(new))
+    stop("Unexpected length of replacement value in replace_val().\n",
+         "`new` must be length 1, not ", length(new))
+  x[x %in% old] <- new
+  x
+}
+
+is_scalar <- function(x) identical(length(x), 1L)

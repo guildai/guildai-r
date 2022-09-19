@@ -72,7 +72,8 @@ inject_global_param_values <- function(exprs, params) {
     if (!name %in% names(params))
       next
 
-    if(identical(params[[name]], e[[3L]])) { # new value same as default
+    if(identical(params[[name]], e[[3L]])) {
+      # new value same as default
       params[[name]] <- NULL
       next
     }
