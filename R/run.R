@@ -26,11 +26,9 @@ function(file = "train.R",
   # https://rstudio.slack.com/archives/C0366T2TBAL/p1662740546338429.
 
   # register_magic_hooks()
-  options(guildai.is_run_active = TRUE,
-          warn = 1L)
+  options(warn = 1L)
 
   on.exit({
-    options(guildai.is_run_active = NULL)
     setwd(run_dir)
     # teardown_run_dir(setup_info)
   })
@@ -46,7 +44,8 @@ function(file = "train.R",
 }
 
 #' @export
-is_run_active <- function() getOption(guiltai.is_run_active, FALSE)
+is_run_active <- function()
+  !is.na(Sys.getenv("RUN_DIR", NA_character_))
 
 
 inject_global_param_values <- function(exprs, params) {
