@@ -50,20 +50,19 @@ r_script_guild_data <- function(r_script_path) {
   update_data(frontmatter)
 
   # if user supplied flags in frontmatter:
-  #   use that
+  #   use that directly, don't do any inference
   # else:
   #   walk script ast looking for symbols assigned
   #   at top level values of length-1 atomic literals
-
-  if(flags)
 
   if (is.null(data$flags)) {
     flags_dest <- data$`flags-dest`
 
     # rename "file:path/to/file.yml" -> "config:path/to/file.yml"
     if(startsWith(data$`flags-dest`, "file:"))
-      data$`flags-dest` <-
-        paste0("config:", str_drop_prefix(data$`flags-dest`, "file:"))
+      data$`flags-dest` <- sub("file:", "config:", data$`flags-dest`,
+                               fixed = TRUE)
+        # paste0("config:", str_drop_prefix(data$`flags-dest`, "file:"))
 
     data$flags <- if (flags_dest == "globals") {
       infer_global_params(text, is_anno)
