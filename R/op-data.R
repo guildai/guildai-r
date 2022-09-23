@@ -21,8 +21,11 @@ parse_yaml_anno <- function(x) {
 #' @importFrom utils modifyList
 #' @importFrom xfun is_windows
 emit_r_script_guild_data <- function(r_script_path)
-  print.yaml(r_script_guild_data(r_script_path))
+  print.yaml(r_script_guild_data(r_script_path),
+             c("", if(Sys.getenv("DEBUG") == "1") "emitted-script-guild-op-data.yml"))
 
+
+# Rscript -e 'remotes::install_github("t-kalinowski/guildai-r")'
 
 r_script_guild_data <- function(r_script_path) {
 
