@@ -86,7 +86,9 @@ r_script_guild_data <- function(r_script_path) {
              flags_dest = flags_dest,
              echo = echo)
 
-  data$exec <- sprintf("%s -e guildai:::%s ${flag_args}",
+  cl <- call(":::", quote(guildai), cl)
+
+  data$exec <- sprintf("%s  -e 'getwd()' -e 'list.files()' -e %s ${flag_args}",
                        rscript_bin(),
                        shQuote(deparse1(cl)))
 
