@@ -108,6 +108,7 @@ str_drop_prefix <- function(x, prefix) {
 
 rscript_bin <- function() {
   # do we need arch in the file path on windows?
+  # TODO: build the R call directly instead of going through Rscript?
   file.path(
     R.home("bin"),
     if(is_windows()) "Rterm.exe" else "Rscript")
@@ -189,6 +190,20 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
 
 }
 
+
+## TODO:
+## if user has flags-dest: file:foo.yml
+## then give a very clean exec cmd:
+##   R (if echo:false --no-echo) --file=file.R
+##
+## Q: do we default to --no-restore?
+##   Rscript expands to:
+##   /opt/R/4.2.1/lib/R/bin/exec/R --no-echo --no-restore --file=train-basic.R
+
+## add a yaml option:
+##   save: true, false, or list of symbols like [x, y, model]
+##   determines if `save.image()` is called at the end of the R run
+##   or passed --save to the command line opts
 
 # as_flag_spec <- function(x) {
 #
