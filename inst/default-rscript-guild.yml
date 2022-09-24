@@ -3,15 +3,15 @@
 flags-dest: globals
 sourcecode:
   dest: '.'
-#   select:
-#   - exclude: '*'
-#   - exclude: {dir: [renv, venv, data, runs, .guild, .Rproj.user]}
-#   - include: {text: ['*.[rR]', '*.py',
-#                      '*.cpp','*.cc', '*.c','*.h','*.f90',
-#                      '*.yaml', '*.yml',
-#                      '*.json', '*.ndjson','*.jsonl',
-#                      "renv.lock", ".Rprofile", ".Renviron",
-#                      '*.sh', '*.bash', '*.zsh', ".*rc"]}
+  select:
+  # - exclude: '*'
+  - exclude: {dir: [renv, venv, .env, env, data, logs, runs, .guild, .Rproj.user]}
+  - include: {text: ['*.[rR]', '*.py',
+                     '*.cpp','*.cc', '*.c','*.h','*.f90',
+                     '*.yaml', '*.yml',
+                     '*.json', '*.ndjson','*.jsonl',
+                     "renv.lock", ".Rprofile", ".Renviron",
+                     '*.sh', '*.bash', '*.zsh', ".*rc"]}
 
 
 # name: r_script_path

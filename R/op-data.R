@@ -32,11 +32,16 @@ r_script_guild_data <- function(r_script_path) {
   text <- readLines(r_script_path)
   is_anno <- startsWith(trimws(text, "left"), "#|")
 
-  # data <- read_yaml(system.file("default-rscript-guild.yml",
-  #                               package = "guildai"))
-  data <- yaml("flags-dest" = "globals",
-               "sourcecode" = list("dest" = "."),
-               name = r_script_path)
+  data <- read_yaml(system.file("default-rscript-guild.yml",
+                                package = "guildai"))
+  # data <- yaml(
+  #   "flags-dest" = "globals",
+  #   "sourcecode" = list("dest" = ".",
+  #                       "select" = list(
+  #                         "include" = list("text" = '*.[rR]'),
+  #                         "exclude" = list("dir" = ""))),
+  #   name = r_script_path
+  # )
 
   # accepts "param" for flag
   names(data) <- sub("param", "flag", names(data))
@@ -44,13 +49,19 @@ r_script_guild_data <- function(r_script_path) {
   update_data <- function(x)
     invisible(data <<- as_yaml(config::merge(data, x)))
 
+  update_data(list(name = r_script_path))
+
   frontmatter <-  if (is_anno[1]) {
     parse_yaml_anno(text[seq_len(which.min(is_anno) - 1L)])
   } else if (startsWith(text[1], "#!/") && is_anno[2])
     # allow frontmatter to start on 2nd line if first line is a shebang
     parse_yaml_anno(text[seq_len(which.min(is_anno) - 1L)][-1])
 
+  sourcecode_select <- frontmatter$sourcecode$select
+
   update_data(frontmatter)
+
+  data$sourcecode$select <- c(data$sourcecode$select, sourcecode_select)
 
   # if user supplied flags in frontmatter:
   #   use that directly, don't do any inference
@@ -88,6 +99,7 @@ r_script_guild_data <- function(r_script_path) {
 
   cl <- call(":::", quote(guildai), cl)
 
+
   data$exec <- sprintf("%s  -e 'getwd()' -e 'list.files()' -e %s ${flag_args}",
                        rscript_bin(),
                        shQuote(deparse1(cl)))
@@ -112,6 +124,21 @@ rscript_bin <- function() {
   file.path(
     R.home("bin"),
     if(is_windows()) "Rterm.exe" else "Rscript")
+}
+
+
+r_bin <- function() {
+  # do we need arch in the file path on windows?
+  # TODO: build the R call directly instead of going through Rscript?
+  file.path(
+    R.home("bin"),
+    if(is_windows()) "Rterm.exe" else "R")
+}
+
+r_bin_exec <- function(restore = FALSE, echo = FALSE) {
+  paste0(c(shQuote(r_bin),
+           if(!restore) "--no-restore",
+           if(!echo) "--no-echo"))
 }
 
 rename <- function(x, ...) {
