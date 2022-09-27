@@ -1,10 +1,7 @@
 test_that("guild run", {
 
   local_project(test_files("basic.R"))
-
-  guild_run("basic.R")
-
-  expect(nrow(ls_runs()) == 1)
+  guild_run("basic.R", echo = FALSE, wait = TRUE)
   expect_equal(nrow(ls_runs()), 1L)
 
 })
