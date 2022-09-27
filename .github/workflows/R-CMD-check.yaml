@@ -33,5 +33,6 @@ jobs:
 
       - name: install dev guild
         run: guildai::install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
+        shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2
