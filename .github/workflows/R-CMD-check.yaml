@@ -20,6 +20,8 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+          cache: 'pip'
+          cache-dependency-path: https://raw.githubusercontent.com/guildai/guildai/main/requirements.txt
 
       - uses: r-lib/actions/setup-r@v2
         with:
