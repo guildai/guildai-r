@@ -60,7 +60,7 @@ guild <- function(cmd, ..., stdout = "", stderr = "",
   args <- shQuote(c(cmd, c(...)))
   if(!is.null(home))
     args <- c("-H", shQuote(home), args)
-  system2(find_guild(), args,
+  system2t(find_guild(), args,
           stdout = stdout, stderr = stderr,
           wait = wait)
 }
