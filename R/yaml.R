@@ -4,7 +4,8 @@
 print.yaml <- function(x, file = "") {
   out <- yaml::as.yaml(
     x, precision = 16L,
-    indent.mapping.sequence = FALSE)
+    indent.mapping.sequence = FALSE,
+    handlers = list(complex = as.character))
   for(f in file)
     cat(out, file = f)
   invisible(out)
