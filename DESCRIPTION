@@ -14,6 +14,8 @@ Imports:
   config,
   xfun,
   fs,
+  magrittr,
+  rlang,
   tibble
 Encoding: UTF-8
 LazyData: true

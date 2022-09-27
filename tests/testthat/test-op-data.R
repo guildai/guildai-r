@@ -5,6 +5,7 @@ test_that("guild run", {
   guild_run("basic.R")
 
   expect(nrow(ls_runs()) == 1)
+  expect_equal(nrow(ls_runs()), 1L)
 
 })
 
