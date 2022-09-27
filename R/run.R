@@ -36,6 +36,7 @@ function(file = "train.R",
   source(
     exprs = exprs,
     echo = echo,
+    spaced = TRUE,
     max.deparse.length = Inf,
     deparseCtrl = c("keepInteger", "showAttributes", "keepNA")
   )
