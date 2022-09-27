@@ -18,21 +18,30 @@ find_python <- function() {
   -  ensure it is on your PATH")
 }
 
+system2t <- function (command, args, ...) {
+  message(paste("+", shQuote(command), paste0(args, collapse = " ")))
+  system2(command, args, ...)
+}
+
+
 
 #' @export
-install_guild <- function(python = NULL, guildai = NULL) {
+install_guild <- function(guildai = "guildai", python = find_python()) {
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai"), mustWork = FALSE)
   unlink(venv, recursive = TRUE)
   system2(python %||% find_python(), c("-m", "venv", shQuote(venv)))
-  py <- file.path(venv, "bin", if(xfun::is_windows()) "python.exe" else "python")
+  python <- file.path(venv, "bin", if(xfun::is_windows()) "python.exe" else "python")
   pip_install <- function(...)
-    system2(py, c("-m", "pip", "install", "--upgrade", "--no-user", ...))
+    system2t(python, c("-m", "pip", "install", "--upgrade", "--no-user", ...))
   pip_install("pip", "wheel", "setuptools")
-  pip_install(if(is.null(guildai)) "guildai" else c('-e', guildai))
+  pip_install(guildai)
   normalizePath(file.path(venv, "bin", "guild"))
 }
 
-# install_guild("/usr/bin/python3", "~/guild/guildai")
+# install_guild(c("-e", "~/guild/guildai"))
+# install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
+
+
 
 
 find_guild <- function() {
