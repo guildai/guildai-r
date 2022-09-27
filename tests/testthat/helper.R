@@ -6,7 +6,7 @@ pkg_files <- function(...) {
          "", USE.NAMES = FALSE) |> fs::path_rel()
 }
 
-test_files <-  function(...) {
+test_resource <-  function(...) {
   vapply(list(...), function(p)
     system.file(file.path("tests", "testthat", "resources", p),
                 package = "guildai"),
