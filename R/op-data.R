@@ -30,6 +30,9 @@ emit_r_script_guild_data <- function(r_script_path)
 r_script_guild_data <- function(r_script_path) {
 
   text <- readLines(r_script_path)
+  # handle case of empty file
+  if(!length(text))
+    text <- ""
   is_anno <- startsWith(trimws(text, "left"), "#|")
 
   data <- read_yaml(system.file("default-rscript-guild.yml",
@@ -153,6 +156,8 @@ rename <- function(x, ...) {
 
 infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"), "#|")) {
 
+  # TODO: figure out how to present a nice error message in case of parse errors
+  # from python plugin / guild
   exprs <- parse(text = text, keep.source = TRUE)
 
   # 0-length names to force a yaml mapping if no flags.
