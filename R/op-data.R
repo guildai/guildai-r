@@ -38,17 +38,7 @@ r_script_guild_data <- function(r_script_path) {
   data <- read_yaml(system.file("default-rscript-guild.yml",
                                 package = "guildai"))
 
-  # data <- yaml(
-  #   "flags-dest" = "globals",
-  #   "sourcecode" = list("dest" = ".",
-  #                       "select" = list(
-  #                         "include" = list("text" = '*.[rR]'),
-  #                         "exclude" = list("dir" = ""))),
-  #   name = r_script_path
-  # )
 
-  # accepts "param" for flag
-  names(data) <- sub("param", "flag", names(data))
 
   update_data <- function(x)
     invisible(data <<- as_yaml(config::merge(data, x)))
