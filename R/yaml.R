@@ -45,21 +45,21 @@ maybe_as_yaml <- function(x) {
   x
 }
 
-# @export
+#' @export
 `$.yaml` <- function(x, ...)
-  # no partial matching, preserve 'yaml' class on sublists
   maybe_as_yaml(unclass(x)[[...]])
+  # no partial matching, preserve 'yaml' class on sublists
 
 
-# @export
+#' @export
 `[[.yaml` <- function(x, ...)
   maybe_as_yaml(NextMethod())
 
 
-# @export
+#' @export
 `[.yaml` <- `[[.yaml`
 
-# @exportS3Method
+#' @exportS3Method
 #' @importFrom utils str
 str.yaml <- function(x, ...) {
   cat("YAML ")
