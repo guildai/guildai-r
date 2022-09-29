@@ -44,6 +44,11 @@ function(file = "train.R",
   invisible()
 }
 
+
+
+#' Is code executing in the context of a guild run?
+#'
+#' @return Boolean
 #' @export
 is_run_active <- function()
   !is.na(Sys.getenv("RUN_DIR", NA_character_))

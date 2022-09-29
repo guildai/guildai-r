@@ -25,7 +25,17 @@ system2t <- function (command, args, ...) {
 
 
 
+#' Install guildai core
+#'
+#' @param guildai character vector passed directly to `pip install`.
+#' @param python path to python binary, used to create a private venv.
+#'
+#' @return path to the guild binary
 #' @export
+#'
+#' @examples
+#' # install_guild(c("-e", "~/guild/guildai"))
+#  # install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
 install_guild <- function(guildai = "guildai", python = find_python()) {
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai"), mustWork = FALSE)
   unlink(venv, recursive = TRUE)
@@ -38,8 +48,7 @@ install_guild <- function(guildai = "guildai", python = find_python()) {
   normalizePath(file.path(venv, "bin", "guild"))
 }
 
-# install_guild(c("-e", "~/guild/guildai"))
-# install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
+
 
 
 
