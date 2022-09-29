@@ -1,6 +1,6 @@
 
 
-#' @export
+# @export
 print.yaml <- function(x, file = "", ...) {
   as_yaml_args <- utils::modifyList(list(
     precision = 16L,
@@ -45,28 +45,29 @@ maybe_as_yaml <- function(x) {
   x
 }
 
-#' @export
+# @export
 `$.yaml` <- function(x, ...)
   maybe_as_yaml(unclass(x)[[...]])
   # no partial matching, preserve 'yaml' class on sublists
 
 
-#' @export
+# @export
 `[[.yaml` <- function(x, ...)
   maybe_as_yaml(NextMethod())
 
 
-#' @export
+# @export
 `[.yaml` <- `[[.yaml`
 
-#' @exportS3Method
+# @exportS3Method
 #' @importFrom utils str
 str.yaml <- function(x, ...) {
   cat("YAML ")
   str(unclass(x), ...)
 }
 
-# registerS3method("print", "yaml", print.yaml)
-# registerS3method("$", "yaml", `$.yaml`)
-# registerS3method("[[", "yaml", `[[.yaml`)
-# registerS3method("[", "yaml", `[.yaml`)
+registerS3method("print", "yaml", print.yaml)
+registerS3method("$", "yaml", `$.yaml`)
+registerS3method("[[", "yaml", `[[.yaml`)
+registerS3method("[", "yaml", `[.yaml`)
+registerS3method("str", "yaml", str.yaml)
