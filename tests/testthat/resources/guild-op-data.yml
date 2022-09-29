@@ -1,0 +1,13 @@
+flags-dest: globals
+sourcecode:
+  dest: '.'
+name: train-basic.R
+flags:
+  x:
+    default: 0.1
+    type: float
+  noise:
+    default: 0.2
+    type: float
+exec: /opt/R/4.2.1/lib/R/bin/Rscript  -e 'getwd()' -e 'list.files()' -e 'guildai:::do_guild_run("train-basic.R",
+  flags_dest = "globals", echo = TRUE)' ${flag_args}
