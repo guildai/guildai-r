@@ -35,15 +35,20 @@ r_script_guild_data <- function(r_script_path) {
     text <- ""
   is_anno <- startsWith(trimws(text, "left"), "#|")
 
-  data <- read_yaml(system.file("default-rscript-guild.yml",
-                                package = "guildai"))
+  # data <- read_yaml(system.file("default-rscript-guild.yml",
+  #                               package = "guildai"))
 
+  data <- yaml(
+    "flags-dest" = "globals",
+    "sourcecode" = list("dest" = "."),
+    "name" = r_script_path
+  )
 
 
   update_data <- function(x)
     invisible(data <<- as_yaml(config::merge(data, x)))
 
-  update_data(list(name = r_script_path))
+  # update_data(list(name = r_script_path))
 
   frontmatter <-
     if (is_anno[1] || startsWith(text[1], "#!/") && is_anno[2]) {
