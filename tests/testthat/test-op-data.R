@@ -27,7 +27,7 @@ test_that("rscript op data inference", {
   expect_setequal(names(op$flags), c("x", "noise"))
   expect_equal(basename(op$name), "basic.R")
 
-  op <- r_script_guild_data(test_resource("flags-anno.R"))
+  op <- r_script_guild_data(test_resource("hash-pipe-anno.R"))
   class(op) <- NULL # drop yaml class, keep tests simple
   expect_setequal(names(op$flags), c("x", "noise", "type", "init_phase"))
   expect_equal(op$flags$x$description, "`x` by any other name would smell as sweet.")
@@ -35,5 +35,28 @@ test_that("rscript op data inference", {
   expect_equal(op$flags$noise$min, 0)
   expect_equal(op$flags$noise$max, 1)
   expect_equal(op$flags$init_phase$type, "complex")
+
+  # frontmatter is passed through
+  expect_equal(op$requires,
+               list(list(file = "file.txt",
+                         description = "File dependency")))
+
+  expect_equal(op$requires,
+               list(list(file = "file.txt",
+                         description = "File dependency")))
+
+  expect_equal(op$`output-scalars`,
+               list(step = "step: (\\value)",
+                    loss = "loss: (\\value)",
+                    accuracy = "accuracy: (\\value)"))
+
+  # test frontmatter parsing works the same w/o shebang
+  writeLines(readLines(test_resource("hash-pipe-anno.R"))[-1],
+             w_o_shebang <- tempfile(fileext = ".R"))
+  op2 <- r_script_guild_data(w_o_shebang)
+  class(op2) <- NULL
+  op $exec <- op $name <-
+  op2$exec <- op2$name <- NULL
+  expect_identical(op, op2)
 
 })

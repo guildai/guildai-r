@@ -37,6 +37,7 @@ r_script_guild_data <- function(r_script_path) {
 
   data <- read_yaml(system.file("default-rscript-guild.yml",
                                 package = "guildai"))
+
   # data <- yaml(
   #   "flags-dest" = "globals",
   #   "sourcecode" = list("dest" = ".",
@@ -54,11 +55,16 @@ r_script_guild_data <- function(r_script_path) {
 
   update_data(list(name = r_script_path))
 
-  frontmatter <-  if (is_anno[1]) {
-    parse_yaml_anno(text[seq_len(which.min(is_anno) - 1L)])
-  } else if (startsWith(text[1], "#!/") && is_anno[2])
+  frontmatter <-
+    if (is_anno[1] || startsWith(text[1], "#!/") && is_anno[2]) {
     # allow frontmatter to start on 2nd line if first line is a shebang
-    parse_yaml_anno(text[seq_len(which.min(is_anno) - 1L)][-1])
+
+    anno_start <- which.max(is_anno)
+    anno_end <- which.min(c(TRUE, is_anno[-1L])) -1L
+
+    parse_yaml_anno(text[anno_start:anno_end])
+  }
+
 
   sourcecode_select <- frontmatter$sourcecode$select
 

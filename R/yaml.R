@@ -1,6 +1,6 @@
 
 
-# @export
+#' @export
 print.yaml <- function(x, file = "", ...) {
   as_yaml_args <- utils::modifyList(list(
     precision = 16L,
