@@ -69,6 +69,8 @@ guild <- function(cmd, ..., stdout = "", stderr = "",
   args <- shQuote(c(cmd, c(...)))
   if(!is.null(home))
     args <- c("-H", shQuote(home), args)
+  if(Sys.getenv("DEBUG") == "1")
+    args <- c("-D", "5678", args)
   system2t(find_guild(), args,
           stdout = stdout, stderr = stderr,
           wait = wait)
