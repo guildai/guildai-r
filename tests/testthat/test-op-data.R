@@ -1,7 +1,6 @@
 test_that("guild run", {
 
   local_project(test_resource("basic.R"))
-  # browser()
   guild_run("basic.R", echo = FALSE, wait = TRUE)
   # g = find_guild()
   # processx::run(g, c("run", "basic.R"))
@@ -13,7 +12,7 @@ test_that("guild run", {
 test_that("rscript op data inference", {
 
   # blanket check that each file can be poked w/o error
-  for(f in list.files(test_resource(""), pattern = "\\.R$", full.names = TRUE)) {
+  for(f in list.files(test_resource(), pattern = "\\.R$", full.names = TRUE)) {
     op <- capture.output(guildai:::emit_r_script_guild_data(f))
     expect_no_error(yaml::yaml.load(op))
   }
@@ -38,5 +37,3 @@ test_that("rscript op data inference", {
   expect_equal(op$flags$init_phase$type, "complex")
 
 })
-
-

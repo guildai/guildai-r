@@ -1,16 +1,14 @@
 
 
-pkg_files <- function(...) {
-  vapply(list(...),
+pkg_file <- function(...) {
+  out <- vapply(list(...),
          function(p) system.file(p, package = "guildai"),
-         "", USE.NAMES = FALSE) |> fs::path_rel()
+         "", USE.NAMES = FALSE)
+  paste0(".", str_drop_prefix(out, getwd()))
 }
 
 test_resource <-  function(...) {
-  vapply(list(...), function(p)
-    system.file(file.path("tests", "testthat", "resources", p),
-                package = "guildai"),
-    "", USE.NAMES = FALSE) |> fs::path_rel()
+  test_path("resources", ...)
 }
 
 
@@ -20,7 +18,7 @@ formals(expect_no_error)$regexp <- NA
 
 
 
-cat("Using guild:", guildai:::find_guild(), "\n")
+# cat("Using guild:", guildai:::find_guild(), "\n")
 
 
 local_project <- function(files, envir = parent.frame(), name = NULL) {
@@ -29,16 +27,8 @@ local_project <- function(files, envir = parent.frame(), name = NULL) {
   # requested files present. Exiting the `envir` scope switches back to the old working directory.
   # The directory is automatically cleaned up when the R session terminates.
   files <- normalizePath(files)
-  # if(Sys.getenv("DEBUG") == "1")
-    message("Copying files:", paste0("\n- ", files))
   dir.create(nwd <- tempfile(paste0(
     c("guildai-test-project", name, ""), collapse = "-")))
-  owd <- setwd(nwd)
-  # if(Sys.getenv("DEBUG") == "1")
-    message("wd: ", getwd())
-  file.copy(files, ".", recursive = TRUE)
-  old_guild_home <- Sys.getenv("GUILD_HOME", NA_character_)
-  Sys.setenv("GUILD_HOME" = file.path(getwd(), ".guild"))
 
   withr::defer_parent({
     setwd(owd)
@@ -48,6 +38,13 @@ local_project <- function(files, envir = parent.frame(), name = NULL) {
     else
       Sys.setenv("GUILD_HOME" = old_guild_home)
   })
+
+  owd <- setwd(nwd)
+  file.copy(files, basename(files))
+
+  old_guild_home <- Sys.getenv("GUILD_HOME", NA_character_)
+  Sys.setenv("GUILD_HOME" = file.path(getwd(), ".guild"))
+  invisible()
 }
 
 
