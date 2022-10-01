@@ -42,8 +42,10 @@ guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait
   }
 
   if (!is.null(names(flags))) {
+    # browser()
     # flags <- lapply(flags, function(x) if(length(x) > 1))
-    flags <- shQuote(sprintf("%s=%s", names(flags), as.character(flags)))
+    flags <- lapply(flags, encode_yaml)
+    flags <- sprintf("%s=%s", names(flags), unname(flags))
   }
 
   cl <- quote(guild("run", "--yes", opspec, flags, wait = wait))

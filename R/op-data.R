@@ -20,9 +20,20 @@ parse_yaml_anno <- function(x) {
 #' @importFrom rlang %||%
 #' @importFrom utils modifyList
 #' @importFrom xfun is_windows
-emit_r_script_guild_data <- function(r_script_path)
-  print.yaml(r_script_guild_data(r_script_path),
-             c("", if(Sys.getenv("DEBUG") == "1") "emitted-script-guild-op-data.yml"))
+emit_r_script_guild_data <- function(r_script_path) {
+
+  print.yaml(out <- r_script_guild_data(r_script_path),
+             c("", if(Sys.getenv("DEBUGR") == "1")
+               "emitted-script-guild-op-data.yml"))
+             # , stdout()
+             # )
+  # if(Sys.getenv("DEBUGR") == "1") {
+  #     cat(out, file = "emitted-script-guild-op-data.yml")
+  #     system("cat", input = c("--- start r_script plugin guild data returned ---",
+  #                             out,
+  #                             "--- end r_script plugin guild data returned ---"))
+  # }
+}
 
 
 # Rscript -e 'remotes::install_github("t-kalinowski/guildai-r")'
@@ -82,12 +93,13 @@ r_script_guild_data <- function(r_script_path) {
                                fixed = TRUE)
         # paste0("config:", str_drop_prefix(data$`flags-dest`, "file:"))
 
-    data$flags <- if (flags_dest == "globals") {
-      infer_global_params(text, is_anno)
+    if (flags_dest == "globals") {
+      data$flags <- infer_global_params(text, is_anno)
 
     } else if (startsWith(flags_dest, "config:") &&
                any(endsWith(flags_dest, c(".yml", ".yaml")))) {
-      read_yaml(str_drop_prefix(flags_dest, "config:"))
+      # TODO: this file read should be done by guild core
+      data$flags <- read_yaml(str_drop_prefix(flags_dest, "config:"))
 
     }
   }
@@ -103,8 +115,8 @@ r_script_guild_data <- function(r_script_path) {
 
   cl <- call(":::", quote(guildai), cl)
 
-
-  data$exec <- sprintf("%s  -e 'getwd()' -e 'list.files()' -e %s ${flag_args}",
+# -e 'getwd()' -e 'list.files()'
+  data$exec <- sprintf("%s -e %s ${flag_args}",
                        rscript_bin(),
                        shQuote(deparse1(cl)))
 

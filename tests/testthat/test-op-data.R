@@ -62,3 +62,51 @@ test_that("rscript op data inference", {
   expect_identical(op, op2)
 
 })
+
+
+test_that("guild run w/ flags-dest: config:flags.yml", {
+
+  # only while debugging
+  if(interactive())
+    formals(guild_run)$echo <- TRUE
+
+  local_project(test_resource("flags-from-yml.R", "flags.yml"))
+
+  # sort_by_names <- function(x) x[order(names(x))]
+
+  # confirm the defaults are in the run dir, flags.yml is resolved
+  default_flags <- read_yaml("flags.yml")
+  guild_run("flags-from-yml.R", wait = TRUE)
+  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  expect_mapequal(default_flags, run_observed_flags)
+
+  # confirm passing non-default flag b=TRUE
+  # resolves a modified flags.yml in the rundir
+  guild_run("flags-from-yml.R", flags = c(b = !default_flags$b), wait = TRUE)
+  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  expect_mapequal(modifyList(default_flags, list(b = !default_flags$b)),
+                  run_observed_flags)
+
+  # because boolean flags are tricky, test the inverse default too
+  default_flags$b <- TRUE
+  print(default_flags, file = "flags.yml")
+  # sanity check print.yaml()
+  expect_identical(read_yaml("flags.yml"), default_flags)
+
+  # test default
+  guild_run("flags-from-yml.R", wait = TRUE)
+  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  expect_mapequal(default_flags, run_observed_flags)
+
+  # test non-default
+  guild_run("flags-from-yml.R", flags = c(b = !default_flags$b), wait = TRUE)
+  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  expect_mapequal(modifyList(default_flags, list(b = !default_flags$b)),
+                  run_observed_flags)
+
+
+  # TODO: Warning in readLines(file, warn = readLines.warn) :
+  # incomplete final line found on 'flags.yml'
+
+
+})

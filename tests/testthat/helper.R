@@ -8,7 +8,9 @@ pkg_file <- function(...) {
 }
 
 test_resource <-  function(...) {
-  test_path("resources", ...)
+  vapply(list(...), function(p)  test_path("resources", p), "",
+         USE.NAMES = FALSE)
+
 }
 
 

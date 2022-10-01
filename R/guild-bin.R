@@ -75,3 +75,10 @@ guild <- function(cmd, ..., stdout = "", stderr = "",
           stdout = stdout, stderr = stderr,
           wait = wait)
 }
+
+
+.guild <- function(line, ...) {
+  # convenience version that accepts all args on a single line
+  args <- strsplit(line, " ", fixed = TRUE)[[1]]
+  do.call(guild, c(as.list(args), ...))
+}

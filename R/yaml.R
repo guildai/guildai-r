@@ -1,16 +1,11 @@
 
 
 # @export
-print.yaml <- function(x, file = "", ...) {
-  as_yaml_args <- utils::modifyList(list(
-    precision = 16L,
-    indent.mapping.sequence = FALSE,
-    handlers = list(complex = as.character)
-  ),
-  list(...))
-  out <- do.call(yaml::as.yaml, c(list(x), as_yaml_args))
+print.yaml <- function(x, file = "", ..., append = FALSE) {
+  out <- encode_yaml(x, ...)
   for (f in file)
-    cat(out, file = f)
+    cat(out, file = f, sep = "\n", append = append)
+
   invisible(out)
 }
 
@@ -29,6 +24,20 @@ parse_yaml <-  function(...) {
 as_yaml <- function(x)
   maybe_as_yaml(as.list(x))
 
+encode_yaml <- function(x, ...) {
+  as_yaml_args <- utils::modifyList(
+    list(
+      precision = 16L,
+      # indent.mapping.sequence = FALSE,
+      handlers = list(complex = as.character)
+    ),
+    list(...))
+  out <- do.call(yaml::as.yaml, c(list(x), as_yaml_args))
+  out <- strsplit(out, "\n", fixed = TRUE)[[1L]]
+  out
+}
+
+
 
 # @export
 yaml <- function(...)
@@ -44,6 +53,8 @@ maybe_as_yaml <- function(x) {
     class(x) <- "yaml"
   x
 }
+
+
 
 # @export
 `$.yaml` <- function(x, ...)
