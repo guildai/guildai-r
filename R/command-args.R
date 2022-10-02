@@ -35,10 +35,9 @@ parse_command_line <- function(arguments) {
     # convert '-' to '_' in key
     key <- gsub("-", "_", key)
 
-    if(nzchar(val))
-      val <- 'false'
     # update our map of argument values
-    values[[key]] <- yaml::yaml.load(val)
+    # val can be NULL
+    values[key] <- list(yaml::yaml.load(val))
   }
 
   values

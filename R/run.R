@@ -53,12 +53,13 @@ is_run_active <- function()
   !is.na(Sys.getenv("RUN_DIR", NA_character_))
 
 
-inject_global_param_values <- function(exprs, params) {
+inject_global_param_values <- function(exprs, flags) {
 
+  srcrefs <- attr(exprs, "srcref", TRUE)
 
   for (i in seq_along(exprs)) {
-    if (!length(params))
-      return(exprs)
+    if (!length(flags))
+      break
 
     e <- exprs[[i]]
 
@@ -73,12 +74,24 @@ inject_global_param_values <- function(exprs, params) {
       next
 
     name <- as.character(e[[2L]])
-    if (!name %in% names(params))
+    if (!name %in% names(flags))
       next
 
-    if(identical(params[[name]], e[[3L]])) {
+    # workaround guild's accommodating python's odd behavior that requires
+    # guild to pass '' or "1" for bool cmd line flags.
+    if(typeof(e[[3L]]) == "logical" && !typeof(flags[[name]]) == "logical")  {
+      # python's `bool()` only returns False on an empty string '', so that's
+      # what guild gives it. Guild arbitrarily gives "1" for True.
+      # Our yaml parser converts an empty string to NULL, 1 to an int.
+       if(is.null(flags[[name]]))
+         flags[[name]] <- FALSE
+      else if(identical(flags[[name]], 1L))
+        flags[[name]] <- TRUE
+    }
+
+    if(identical(flags[[name]], e[[3L]])) {
       # new value same as default
-      params[[name]] <- NULL
+      flags[[name]] <- NULL
       next
     }
 
@@ -86,19 +99,27 @@ inject_global_param_values <- function(exprs, params) {
 
     # `e` is an assignment expression with a flag symbol on
     # the left hand side
-    e[[3L]] <- params[[name]] # replace the value in node
-    exprs[[i]] <- e           # update exprs w/ new node
-    params[[name]] <- NULL    # null out flag value; each flag is injected only once
+    e[[3L]] <- flags[[name]] # replace the value in node
+    exprs[[i]] <- e          # update exprs w/ new node
+    flags[[name]] <- NULL    # null out flag value; each flag is injected only once
+
+    # zap out srcref for the expression, so that source(echo=TRUE)
+    # actually deparses it
+    # srcrefs[i] <- list(NULL)
+    # alternative approach: parse(text = c("#line {nn} {filename}", flag_assignment_expr))
 
     message(sprintf("Replacing expression '%s' on line %i with '%s'",
                     deparse1(old_e), utils::getSrcLocation(exprs[i], "line"),
                     deparse1(e)))
 
+
   }
 
-  if(length(params))
-    warning("Unused params received but not injected: ", unlist(params))
+  if(length(flags))
+    warning("Unused params received but not injected: ", unlist(flags))
 
+  attr(exprs, "srcref") <- srcrefs
+  attr(exprs, "wholeSrcref") <- NULL
   exprs
 }
 
@@ -142,7 +163,7 @@ teardown_run_dir <- function(setup_info) {
   copied_files <- setup_info$copied_files
 
   # filter for existing files, in case user deleted files in run
-  copied_files <- copied_files[file.exists(rownames(copied_files)), ]
+  copied_files <- copied_files[file.exists(oownames(copied_files)), ]
   if(!nrow(copied_files)) return(invisible())
 
   pre_run <- copied_files
