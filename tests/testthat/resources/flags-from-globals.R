@@ -3,7 +3,17 @@
 i <- 123L
 f <- 1.123
 s <- "Howdy Guild"
-b <- FALSE
-cx <- 1+1i
+  b <-
+  # a comment in the middle
+  FALSE # a trailing comment
+# a comment after
+#
+#
+    s2 <- r"(foo)"
+      s3 <- r"(
+    foobarbaz
+    )"
+cx <- 1 +
+      1i
 
-print(guildai:::as_yaml(as.list(environment())))
+print(guildai:::as_yaml(environment()))

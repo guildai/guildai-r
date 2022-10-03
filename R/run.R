@@ -43,6 +43,176 @@ function(file = "train.R",
   invisible()
 }
 
+if(FALSE) {
+  globals <- list()
+  while(nrow(df)) {
+    # df <- df[-(1:which.max(df$token == "SYMBOL"),]
+  }
+  df <- getParseData(exprs)
+  symbols <- df$id[df$token == "SYMBOL"]
+  df$id[df$parent %in% symbols]
+  df[df$id %in% assigned_symobls,]
+}
+
+update_source_w_global_flags <- function(filename, flags, overwrite = FALSE) {
+
+  text <- readLines(filename, warn = FALSE) #, encoding = encoding)
+  if (!length(text))
+    text <- ""
+  srcfile <- srcfilecopy(filename, text, file.mtime(filename),
+                         isFile = TRUE)
+  exprs <- parse(text = text, srcfile = srcfile, keep.source = TRUE)
+  srcrefs <- attr(exprs, "srcref", TRUE)
+  parse_data <- getParseData(exprs)
+
+  for (i in seq_along(exprs)) {
+    if (!length(flags))
+      break
+
+    # e == expression(); l == lang (call, sym, literal, etc)
+    l <- exprs[[i]]
+
+    if (!is.call(l))
+      next
+
+    op <- l[[1L]]
+    if (op != quote(`=`) && op != quote(`<-`))
+      next
+
+    if (typeof(l[[2L]]) != "symbol")
+      next
+
+    name <- as.character(l[[2L]])
+    if (!name %in% names(flags))
+      next
+
+    # workaround guild's accommodating python's odd behavior that requires
+    # guild to pass '' or "1" for bool cmd line flags.
+    if(typeof(l[[3L]]) == "logical" && !typeof(flags[[name]]) == "logical")  {
+      # python's `bool()` only returns False on an empty string '', so that's
+      # what guild gives it. Guild arbitrarily gives "1" for True.
+      # Our yaml parser converts an empty string to NULL, 1 to an int.
+      if(is.null(flags[[name]]))
+        flags[[name]] <- FALSE
+      else if(identical(flags[[name]], 1L))
+        flags[[name]] <- TRUE
+    }
+
+    if(identical(flags[[name]], l[[3L]])) {
+      # new value same as default
+      flags[[name]] <- NULL
+      next
+    }
+
+
+    # we're at an expression we want to modify.
+    old_l <- l
+
+    # `l` is an assignment expression with a flag symbol on
+    # the left hand side
+    l[[3L]] <- flags[[name]] # replace the value in node
+    new_l <- deparse1(l)
+
+    # get precise coordinates in the source:
+    # Now we need to update it in the source text
+    # [.expression will slice out the srcref specific to this expression
+    old_e <- exprs[i]
+    line_start <- getSrcLocation(old_e, "line", first = TRUE)
+    line_end   <- getSrcLocation(old_e, "line", first = FALSE)
+    # col_start  <- getSrcLocation(old_e, "column", first = TRUE)
+    # col_end    <- getSrcLocation(old_e, "column", first = FALSE)
+
+    browser()
+
+    if(is.complex(flags[[name]])) {
+      ## complex numbers are parsed as two NUM_CONST tokens and a '+' token,
+      ## so we special case them. (they may be split across multiple lines)
+      ## Otherwise, all other flags are always parsed as one token
+
+      .NotYetImplemented()
+
+      # slice out the lines w /this expression
+      df <- parse_data[parse_data$line2 <= line_end & parse_data$line1 >= line_start, ]
+
+      # slice away the symbol + assignment expression
+      df <- df[-seq(which.max(df$token == "LEFT_ASSIGN")),]
+
+    }
+
+    df <- parse_data[parse_data$line2 = line_end, ]
+    const_parse_data <- df[which.max(df$token %in% c("NUM_CONST", "STR_CONST", "NULL_CONST")),]
+    # replace just the text for the literal
+
+
+    const_text_lines <- text[const_parse_data$line1:const_parse_data$line2]
+    pre_const_text <- substring(first(const_text_lines), 0, const_parse_data$col1 - 1)
+    post_const_text <- substring(last(const_text_lines), const_parse_data$col2 + 1,
+                                 .Machine$integer.max)
+    new_const_text <- deparse1(flags[[name]], collapse = "\n", width.cutoff = 80L)
+    new_const_text <- paste0(pre_const_text, new_const_text, post_const_text)
+    new_const_text <- c(new_const_text, character(max(0, length(const_text_lines)-1L)))
+    text[const_parse_data$line1:const_parse_data$line2] <- new_const_text
+
+    last_line <- const_text_lines[length(const_text_lines)]
+#     old_e_lines <- text[line_start:line_end]
+#     post_e_text <- substring(last_line, col_end+1, nchar(last_line))
+#
+#     getParseText()
+#
+#     browser()
+
+
+    # browser()
+    exprs[[i]] <- l          # update exprs w/ new node
+    flags[[name]] <- NULL    # null out flag value; each flag is injected only once
+
+    # zap out srcref for the expression, so that source(echo=TRUE)
+    # actually deparses it
+    # srcrefs[i] <- list(NULL)
+    # alternative approach: parse(text = c("#line {nn} {filename}", flag_assignment_expr))
+
+    message(sprintf("Replacing expression '%s' on line %i with '%s'",
+                    deparse1(old_e), utils::getSrcLocation(exprs[i], "line"),
+                    deparse1(l)))
+
+
+  }
+
+  if(length(flags))
+    warning("Unused params received but not injected: ", unlist(flags))
+#
+#   attr(exprs, "srcref") <- srcrefs
+#   attr(exprs, "wholeSrcref") <- NULL
+  # exprs
+  text
+}
+
+
+first <- function(x) x[1L]
+last <- function(x) x[length(x)]
+
+replace_text <- function(full_text, new_string, line1, col1, line2, col2) {
+  # splices out the text in the given coordinates, splices in `new_string`
+  # at the cut location. if the coordinates span multiple lines, new_string will always
+  # occupy just the first line, and the remaining lines will be "".
+  # The total length of lines in the returned `full_text` is guaranteed to be the same.
+  lines <- full_text[line1:line2]
+  pre <-  substring(first(lines), 0L, col1 - 1L)
+  post <- substring(last(lines), col2 + 1L, .Machine$integer.max)
+  stopifnot(length(new_string) == 1L)
+  x <- paste0(pre, new_string, post)
+  if(length(lines) > 1L)
+    x <- c(x, character(length(lines) - 1L))
+
+  nlines_in <- length(full_text)
+  full_text[line1:line2] <- x
+
+  # guarantee
+  stopifnot(nlines_in == length(full_text))
+
+  full_text
+}
+
 
 
 #' Is code executing in the context of a guild run?
@@ -61,25 +231,26 @@ inject_global_param_values <- function(exprs, flags) {
     if (!length(flags))
       break
 
-    e <- exprs[[i]]
+    # e: expression(), l: lang (call, sym, literal, etc)
+    l <- exprs[[i]]
 
-    if (!is.call(e))
+    if (!is.call(l))
       next
 
-    op <- e[[1L]]
+    op <- l[[1L]]
     if (op != quote(`=`) && op != quote(`<-`))
       next
 
-    if (typeof(e[[2L]]) != "symbol")
+    if (typeof(l[[2L]]) != "symbol")
       next
 
-    name <- as.character(e[[2L]])
+    name <- as.character(l[[2L]])
     if (!name %in% names(flags))
       next
 
     # workaround guild's accommodating python's odd behavior that requires
     # guild to pass '' or "1" for bool cmd line flags.
-    if(typeof(e[[3L]]) == "logical" && !typeof(flags[[name]]) == "logical")  {
+    if(typeof(l[[3L]]) == "logical" && !typeof(flags[[name]]) == "logical")  {
       # python's `bool()` only returns False on an empty string '', so that's
       # what guild gives it. Guild arbitrarily gives "1" for True.
       # Our yaml parser converts an empty string to NULL, 1 to an int.
@@ -89,19 +260,38 @@ inject_global_param_values <- function(exprs, flags) {
         flags[[name]] <- TRUE
     }
 
-    if(identical(flags[[name]], e[[3L]])) {
+    if(identical(flags[[name]], l[[3L]])) {
       # new value same as default
       flags[[name]] <- NULL
       next
     }
 
-    old_e <- e
+    old_l <- l
+    old_e <- exprs[i] # full expression() w/ srcref attr
 
     # `e` is an assignment expression with a flag symbol on
     # the left hand side
-    e[[3L]] <- flags[[name]] # replace the value in node
-    exprs[[i]] <- e          # update exprs w/ new node
+    l[[3L]] <- flags[[name]] # replace the value in node
+    exprs[[i]] <- l          # update exprs w/ new node
     flags[[name]] <- NULL    # null out flag value; each flag is injected only once
+
+    # spoof a new srcref, so source(echo = TRUE) gives correct output
+    # reparsed <- parse(
+    #   text = c(sprintf("#line %i %s",
+    #                    getSrcLocation(old_e, "line", TRUE),
+    #                    getSrcFilename(old_e)),
+    #            deparse1(l))
+    # )
+    #
+    # new_srcref <- attr(reparsed, "srcref")[[1L]]
+    # attr(new_srcref, "srcfile") <- attr(srcrefs[[i]], "srcfile")
+    # srcrefs[[i]] <- new_srcref
+
+    # ,
+    # srcfile = "tests/testthat/resources/flags-from-globals.R")
+    # srcfile = attr(srcrefs[[i]], "srcfile"))
+    # srcrefs[[i]] <- [[1L]]
+    # srcrefs[[i]] <- attr(reparsed, "srcref")[[1L]]
 
     # zap out srcref for the expression, so that source(echo=TRUE)
     # actually deparses it
@@ -109,8 +299,8 @@ inject_global_param_values <- function(exprs, flags) {
     # alternative approach: parse(text = c("#line {nn} {filename}", flag_assignment_expr))
 
     message(sprintf("Replacing expression '%s' on line %i with '%s'",
-                    deparse1(old_e), utils::getSrcLocation(exprs[i], "line"),
-                    deparse1(e)))
+                    deparse1(old_l), utils::getSrcLocation(exprs[i], "line"),
+                    deparse1(l)))
 
 
   }
