@@ -70,3 +70,15 @@ local_project <- function(files, envir = parent.frame(), name = NULL) {
 #   cat("getwd(): ", getwd(), "\n")
 #   Sys.unsetenv("GUILD_HOME")
 # }, envir = .(frame))))
+
+
+# only while debugging
+if(interactive())
+  formals(guild_run)$echo <- TRUE
+
+# need these methods in tests, but don't export them for users
+registerS3method("print", "yaml", print.yaml)
+registerS3method("$", "yaml", `$.yaml`)
+registerS3method("[[", "yaml", `[[.yaml`)
+registerS3method("[", "yaml", `[.yaml`)
+registerS3method("str", "yaml", str.yaml)

@@ -11,14 +11,18 @@ function(file = "train.R",
   run_dir <- getwd()
   # setup_info <- setup_run_dir()
 
-  exprs <- parse(file, keep.source = TRUE)
   if(flags_dest == "globals") # globalenv .Globalenv
-    exprs <- inject_global_param_values(exprs, flags)
-  else if (startsWith(flags_dest, "config:")) {
-    # workaround around guild bug
-    # boolean flags don't make it into the yaml file that guild provides
-    # yaml::write_yaml(flags, str_drop_prefix(flags_dest, "config:"))
-  }
+    update_source_w_global_flags(exprs, flags, overwrite = TRUE)
+
+#
+#   exprs <- parse(file, keep.source = TRUE)
+#   if(flags_dest == "globals") # globalenv .Globalenv
+#     exprs <- inject_global_param_values(exprs, flags)
+#   else if (startsWith(flags_dest, "config:")) {
+#     # workaround around guild bug
+#     # boolean flags don't make it into the yaml file that guild provides
+#     # yaml::write_yaml(flags, str_drop_prefix(flags_dest, "config:"))
+#   }
 
   # TODO: if flags_dest == "config:flags.yml", guild is not
   # placing an updated "flags.yml" file in the run directory
@@ -33,9 +37,10 @@ function(file = "train.R",
   })
 
   source(
-    exprs = exprs,
+    file = file,
+    # exprs = exprs,
     echo = echo,
-    spaced = TRUE,
+    # spaced = TRUE,
     max.deparse.length = Inf,
     deparseCtrl = c("keepInteger", "showAttributes", "keepNA")
   )
@@ -43,16 +48,16 @@ function(file = "train.R",
   invisible()
 }
 
-if(FALSE) {
-  globals <- list()
-  while(nrow(df)) {
-    # df <- df[-(1:which.max(df$token == "SYMBOL"),]
-  }
-  df <- getParseData(exprs)
-  symbols <- df$id[df$token == "SYMBOL"]
-  df$id[df$parent %in% symbols]
-  df[df$id %in% assigned_symobls,]
-}
+# if(FALSE) {
+#   globals <- list()
+#   while(nrow(df)) {
+#     # df <- df[-(1:which.max(df$token == "SYMBOL"),]
+#   }
+#   df <- getParseData(exprs)
+#   symbols <- df$id[df$token == "SYMBOL"]
+#   df$id[df$parent %in% symbols]
+#   df[df$id %in% assigned_symobls,]
+# }
 
 update_source_w_global_flags <- function(filename, flags, overwrite = FALSE) {
 
@@ -64,6 +69,9 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE) {
   exprs <- parse(text = text, srcfile = srcfile, keep.source = TRUE)
   srcrefs <- attr(exprs, "srcref", TRUE)
   parse_data <- getParseData(exprs)
+
+  .replace_token <- function(...)
+    text <<- replace_token(text, ...)
 
   for (i in seq_along(exprs)) {
     if (!length(flags))
@@ -119,41 +127,56 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE) {
     old_e <- exprs[i]
     line_start <- getSrcLocation(old_e, "line", first = TRUE)
     line_end   <- getSrcLocation(old_e, "line", first = FALSE)
-    # col_start  <- getSrcLocation(old_e, "column", first = TRUE)
-    # col_end    <- getSrcLocation(old_e, "column", first = FALSE)
-
-    browser()
+    col_start  <- getSrcLocation(old_e, "column", first = TRUE)
+    col_end    <- getSrcLocation(old_e, "column", first = FALSE)
 
     if(is.complex(flags[[name]])) {
       ## complex numbers are parsed as two NUM_CONST tokens and a '+' token,
       ## so we special case them. (they may be split across multiple lines)
-      ## Otherwise, all other flags are always parsed as one token
+      ## Otherwise, all other flags are scalar literals always parsed as one token
 
-      .NotYetImplemented()
+      # .NotYetImplemented()
 
       # slice out the lines w /this expression
-      df <- parse_data[parse_data$line2 <= line_end & parse_data$line1 >= line_start, ]
+      df <- parse_data
+      df <- df[df$line2 <= line_end, ]
+      df <- df[df$line1 >= line_start, ]
 
-      # slice away the symbol + assignment expression
-      df <- df[-seq(which.max(df$token == "LEFT_ASSIGN")),]
+      # slice out just the two numeric constants
+      df <- df[df$token == "NUM_CONST", ]
+      stopifnot(nrow(df) %in% c(1, 2))
+      # handle case of missing real part, '1i' is valid syntax too
+      re_token <- df[1, ]
+      im_token <- df[2, ]
 
+      .replace_token(re_token, Re(flags[[name]]))
+      .replace_token(im_token, Im(flags[[name]]))
+    } else {
+      # find the token that ends on the same position as the expression
+      df <- parse_data
+      df <- df[df$line2 == line_end, ]
+      df <- df[df$col2 == col_end, ]
+      df <- df[df$token %in% c("NUM_CONST", "STR_CONST", "NULL_CONST"), ]
+      stopifnot(nrow(df) == 1)
+      token <- df
+      .replace_token(token, flags[[name]])
     }
 
-    df <- parse_data[parse_data$line2 = line_end, ]
-    const_parse_data <- df[which.max(df$token %in% c("NUM_CONST", "STR_CONST", "NULL_CONST")),]
-    # replace just the text for the literal
-
-
-    const_text_lines <- text[const_parse_data$line1:const_parse_data$line2]
-    pre_const_text <- substring(first(const_text_lines), 0, const_parse_data$col1 - 1)
-    post_const_text <- substring(last(const_text_lines), const_parse_data$col2 + 1,
-                                 .Machine$integer.max)
-    new_const_text <- deparse1(flags[[name]], collapse = "\n", width.cutoff = 80L)
-    new_const_text <- paste0(pre_const_text, new_const_text, post_const_text)
-    new_const_text <- c(new_const_text, character(max(0, length(const_text_lines)-1L)))
-    text[const_parse_data$line1:const_parse_data$line2] <- new_const_text
-
-    last_line <- const_text_lines[length(const_text_lines)]
+    # df <- parse_data[parse_data$line2 = line_end, ]
+    # const_parse_data <- df[which.max(df$token %in% c("NUM_CONST", "STR_CONST", "NULL_CONST")),]
+    # # replace just the text for the literal
+    #
+    #
+    # const_text_lines <- text[const_parse_data$line1:const_parse_data$line2]
+    # pre_const_text <- substring(first(const_text_lines), 0, const_parse_data$col1 - 1)
+    # post_const_text <- substring(last(const_text_lines), const_parse_data$col2 + 1,
+    #                              .Machine$integer.max)
+    # new_const_text <- deparse1(flags[[name]], collapse = "\n", width.cutoff = 80L)
+    # new_const_text <- paste0(pre_const_text, new_const_text, post_const_text)
+    # new_const_text <- c(new_const_text, character(max(0, length(const_text_lines)-1L)))
+    # text[const_parse_data$line1:const_parse_data$line2] <- new_const_text
+    #
+    # last_line <- const_text_lines[length(const_text_lines)]
 #     old_e_lines <- text[line_start:line_end]
 #     post_e_text <- substring(last_line, col_end+1, nchar(last_line))
 #
@@ -184,14 +207,55 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE) {
 #   attr(exprs, "srcref") <- srcrefs
 #   attr(exprs, "wholeSrcref") <- NULL
   # exprs
-  text
+  if(isTRUE(overwrite))
+    writeLines(text, filename)
+  invisible(text)
 }
+
+## this new replace_token() approach introduces two new limitations to the
+## `flags-dest: globals` interface.
+## 1. expression must be a left assign
+## 2. simple math expressions like 2^8 no longer allowed, only literals.
+
 
 
 first <- function(x) x[1L]
 last <- function(x) x[length(x)]
 
-replace_text <- function(full_text, new_string, line1, col1, line2, col2) {
+
+
+replace_token <- function(source_full_text, token_parse_data, new_literal_val) {
+  # splices out the text in the given coordinates, splices in `new_string`
+  # at the cut location. if the coordinates span multiple lines, new_string will always
+  # occupy just the first line, and the remaining lines will be "".
+  # The total length of lines in the returned `full_text` is guaranteed to be the same.
+  stopifnot(
+    nrow(token_parse_data) == 1,
+    c("line1", "col1", "line2", "col2") %in% names(token_parse_data)
+  )
+  tk <- token_parse_data
+  new_string <- deparse1(new_literal_val)
+  lines <- source_full_text[tk$line1:tk$line2]
+
+  pre <-  substring(first(lines), 0L, tk$col1 - 1L)
+  post <- substring(last(lines), tk$col2 + 1L, .Machine$integer.max)
+  stopifnot(length(new_string) == 1L)
+
+  x <- paste0(pre, new_string, post)
+  if(length(lines) > 1L)
+    x <- c(x, character(length(lines) - 1L))
+
+  nlines_in <- length(source_full_text)
+  source_full_text[tk$line1:tk$line2] <- x
+
+  # guarantee
+  stopifnot(nlines_in == length(source_full_text))
+
+  source_full_text
+}
+
+
+replace_text <- function(full_text, line1, col1, line2, col2, new_string) {
   # splices out the text in the given coordinates, splices in `new_string`
   # at the cut location. if the coordinates span multiple lines, new_string will always
   # occupy just the first line, and the remaining lines will be "".
