@@ -1,10 +1,12 @@
 # guild run w/ flags-dest: globals
 
-    list(b = FALSE, cx = 0+0i, cx1 = 1+1i, f = 1.123, i = 123L, s = "Howdy Guild", 
-        s2 = "foo", s3 = "\n    foobarbaz\n    ")
+    list(b = FALSE, cx = 0+0i, cx1 = 1+1i, cx2 = 2+2i, cx3 = 3+3i, 
+        f = 1.123, i = 123L, s = "Howdy Guild", s2 = "foo", s3 = "\n    foobarbaz\n    ")
     b: no
     cx: 0+0i
     cx1: 1+1i
+    cx2: 2+2i
+    cx3: 3+3i
     f: 1.123
     i: 123
     s: Howdy Guild
@@ -21,11 +23,15 @@
     Replacing expression 's3 <- "\n    foobarbaz\n    "' on line 13 with 's3 <- "def"'
     Replacing expression 'cx <- 0+0i' on line 16 with 'cx <- 1+1i'
     Replacing expression 'cx1 <- 1+1i' on line 20 with 'cx1 <- 2+2i'
-    list(b = TRUE, cx = 2, cx1 = 4, f = 4.56, i = 456L, s = "Howdy Back", 
-        s2 = "abc", s3 = "def")
+    Replacing expression 'cx2 <- 2+2i' on line 24 with 'cx2 <- 22+22i'
+    Replacing expression 'cx3 <- 3+3i' on line 25 with 'cx3 <- 33+33i'
+    list(b = TRUE, cx = 1+1i, cx1 = 2+2i, cx2 = 22+22i, cx3 = 33+33i, 
+        f = 4.56, i = 456L, s = "Howdy Back", s2 = "abc", s3 = "def")
     b: yes
-    cx: 2.0
-    cx1: 4.0
+    cx: 1+1i
+    cx1: 2+2i
+    cx2: 22+22i
+    cx3: 33+33i
     f: 4.5599999999999996
     i: 456
     s: Howdy Back
@@ -35,11 +41,13 @@
 ---
 
     Replacing expression 's <- "Howdy Guild"' on line 5 with 's <- "foo\nbar\nbaz"'
-    list(b = FALSE, cx = 0+0i, cx1 = 1+1i, f = 1.123, i = 123L, s = "foo\nbar\nbaz", 
-        s2 = "foo", s3 = "\n    foobarbaz\n    ")
+    list(b = FALSE, cx = 0+0i, cx1 = 1+1i, cx2 = 2+2i, cx3 = 3+3i, 
+        f = 1.123, i = 123L, s = "foo\nbar\nbaz", s2 = "foo", s3 = "\n    foobarbaz\n    ")
     b: no
     cx: 0+0i
     cx1: 1+1i
+    cx2: 2+2i
+    cx3: 3+3i
     f: 1.123
     i: 123
     s: |-

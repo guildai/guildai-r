@@ -78,9 +78,20 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
   exprs <- parse(text = text, srcfile = srcfile, keep.source = TRUE)
   srcrefs <- attr(exprs, "srcref", TRUE)
   parse_data <- getParseData(exprs)
+  last_line_modified <- 0L
 
-  .replace_token <- function(...)
-    text <<- replace_token(text, ...)
+  # .replace_token <- function(...) {
+  #   res <- replace_token(text, ...)
+  #   text <<- rex$text
+  #   parse_data <<- res$parse_data
+  #   invisible()
+  # }
+
+  .replace_token <- function(token_parse_data, ...) {
+    text <<- replace_token(text, token_parse_data, ...)
+    last_line_modified <<- token_parse_data$line2
+  }
+
 
   for (i in seq_along(exprs)) {
     if (!length(flags))
@@ -162,13 +173,32 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
 
       # slice out just the two numeric constants
       df <- df[df$token == "NUM_CONST", ]
+      # if(name == "cx2") {
+      #   browser()
+      #   .replace_token(df, flags[[name]])
+      # }
       stopifnot(nrow(df) %in% c(1, 2))
+      stopifnot(df$line1 > last_line_modified)
+      # check that col1/col2 info is not stale,
+      # if user assigned multiple globals on one line separated by ;
       # TODO: handle case of missing real part, '1i' is valid syntax too
-      re_token <- df[1, ]
-      im_token <- df[2, ]
 
-      .replace_token(re_token, Re(flags[[name]]))
-      .replace_token(im_token, Im(flags[[name]])) # need to add a i prefix
+      if (length(unique(c(df$line1, df$line2))) == 1) {
+        # the complex is two num consts and `+` on one line.
+        # just collapse it and treat as one pseudo token
+        # (whitespace around + is lost but whatever)
+        token <- data.frame(
+          line1 = first(df$line1[1]), col1 = first(df$col1),
+          line2 = last(df$line2[1]), col2 = last(df$col2))
+        .replace_token(token, flags[[name]])
+
+      } else {
+        re_token <- df[1,]
+        im_token <- df[2,]
+
+        .replace_token(re_token, Re(flags[[name]]))
+        .replace_token(im_token, complex(imaginary = Im(flags[[name]]))) # need to add a i prefix
+      }
     } else {
       # find the token that ends on the same position as the expression
       df <- parse_data
@@ -176,6 +206,9 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
       df <- df[df$col2 == col_end, ]
       df <- df[df$token %in% c("NUM_CONST", "STR_CONST", "NULL_CONST"), ]
       stopifnot(nrow(df) == 1)
+      # check that col1/col2 info is not stale,
+      # if user assigned multiple globals on one line separated by ;
+      stopifnot(df$line1 > last_line_modified)
       token <- df
       .replace_token(token, flags[[name]])
     }
@@ -255,6 +288,57 @@ first <- function(x) x[1L]
 last <- function(x) x[length(x)]
 
 
+# replace_token <- function(source_full_text, token_parse_data, new_literal_val) {
+#   # splices out the text in the given coordinates, splices in `new_string`
+#   # at the cut location. if the coordinates span multiple lines, new_string will always
+#   # occupy just the first line, and the remaining lines will be "".
+#   # The total length of lines in the returned `full_text` is guaranteed to be the same.
+#
+#   stopifnot(is.data.frame(token_parse_data),
+#             hasName(token_parse_data, c("line1", "col1", "line2", "col2")))
+#   if (is.complex(new_literal_val)) {
+#     stopifnot(nrow(token_parse_data) %in% c(1, 2))
+#   } else {
+#     stopifnot(nrow(token_parse_data) == 1)
+#   }
+#
+#   nlines_in <- length(source_full_text)
+#
+#   new_string <- deparse1(new_literal_val)
+#   # browser()
+#   if(is.complex(new_literal_val)) {
+#     new_string <- str_drop_prefix("0+", new_string)
+#     new_string <- paste0(new_string, "i")
+#     # browser()
+#   }
+#
+#   # a cursor concept would be real nice here...
+#   for(r in seq_len(nrow(token_parse_data))) {
+#     tk <- token_parse_data[r,]
+#
+#     lines <- source_full_text[tk$line1:tk$line2]
+#
+#     pre <-  substring(first(lines), 0L, tk$col1 - 1L)
+#     post <- substring(last(lines), tk$col2 + 1L, .Machine$integer.max)
+#
+#     stopifnot(length(new_string) == 1L)
+#
+#     x <- paste0(pre, new_string, post)
+#     if(length(lines) > 1L)
+#       x <- c(x, character(length(lines) - 1L))
+#
+#     # message(sprintf("Replacing lines '%s' with '%s'",
+#     #                 paste(lines, collapse = "\n"), x))
+#
+#     source_full_text[tk$line1:tk$line2] <- x
+#   }
+#
+#   # guarantee
+#   stopifnot(nlines_in == length(source_full_text))
+#
+#   source_full_text
+# }
+
 
 replace_token <- function(source_full_text, token_parse_data, new_literal_val) {
   # splices out the text in the given coordinates, splices in `new_string`
@@ -265,13 +349,15 @@ replace_token <- function(source_full_text, token_parse_data, new_literal_val) {
     nrow(token_parse_data) == 1,
     c("line1", "col1", "line2", "col2") %in% names(token_parse_data)
   )
-
+  nlines_in <- length(source_full_text)
 
   tk <- token_parse_data
   new_string <- deparse1(new_literal_val)
+  # browser()
   if(is.complex(new_literal_val)) {
-    new_string <- str_drop_prefix("0+", new_string)
-    new_string <- paste0(new_string, "i")
+    # browser()
+    new_string <- str_drop_prefix(new_string, "0+")
+    # new_string <- paste0(new_string, "i")
   }
 
   lines <- source_full_text[tk$line1:tk$line2]
@@ -288,7 +374,6 @@ replace_token <- function(source_full_text, token_parse_data, new_literal_val) {
   # message(sprintf("Replacing lines '%s' with '%s'",
   #                 paste(lines, collapse = "\n"), x))
 
-  nlines_in <- length(source_full_text)
   source_full_text[tk$line1:tk$line2] <- x
 
   # guarantee
@@ -296,6 +381,9 @@ replace_token <- function(source_full_text, token_parse_data, new_literal_val) {
 
   source_full_text
 }
+
+
+
 
 
 replace_text <- function(full_text, line1, col1, line2, col2, new_string) {

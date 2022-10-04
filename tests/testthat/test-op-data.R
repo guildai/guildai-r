@@ -133,7 +133,7 @@ test_that("guild run w/ flags-dest: globals", {
     b = TRUE,
     i = 456L, f = 4.56,
     s = "Howdy Back",  s2 = "abc", s3 = "def",
-    cx = 1+1i, cx1 = 2+2i, cx3 = 33+33i, cx2 = 22+22i
+    cx = 1+1i, cx1 = 2+2i, cx2 = 22+22i, cx3 = 33+33i
   )
 
   guild_run(file, flags = flags, wait = TRUE)
