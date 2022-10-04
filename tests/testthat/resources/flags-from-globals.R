@@ -21,6 +21,8 @@ cx1 <- 1 + # comment
       1i   # comment
 # comment
 
+cx2 <- 2+2i
+cx3 <- 3 + 3i
 
 globals <- mget(ls())
 
