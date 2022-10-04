@@ -159,7 +159,7 @@ r_bin_exec <- function(restore = FALSE, echo = FALSE) {
 
 rename <- function(x, ...) {
   n <- c(...)
-  browser()
+  # browser()
   nms <- names(x)
   # i <- names(n) %in% x
   # nms[which(nms %in%)]
@@ -211,10 +211,11 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
     param <- list(default = default,
                   type = switch(typeof(default),
                                 "double" = "float",
-                                "logical" = "bool",
+                                "logical" = "boolean",
                                 "character" = "string",
                                 "integer" = "int",
-                                "complex" = "complex"))
+                                "complex" = "string"))
+    # yaml has no native support for complex
 
     lineno <- utils::getSrcLocation(exprs[i], "line")
     # look for adjacent anno hints about this flag

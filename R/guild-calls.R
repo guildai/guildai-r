@@ -36,7 +36,7 @@ guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait
   if (is.data.frame(flags)) {
     for (r in seq_len(nrow(flags)))
       guild_run(opspec, unclass(flags[r, ]), echo = echo, wait = wait)
-    return()
+    return(invisible())
     # TODO: writeout flags to tempfile csv/json/yaml, supply to
     # guild call like: `guild run '@/path/to/tmpdir/tmpfile.json`
   }
@@ -44,7 +44,8 @@ guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait
   if (!is.null(names(flags))) {
     # browser()
     # flags <- lapply(flags, function(x) if(length(x) > 1))
-    flags <- lapply(flags, encode_yaml)
+    flags <- lapply(flags, function(x)
+      if(is.character(x)) x else encode_yaml(x))
     flags <- sprintf("%s=%s", names(flags), unname(flags))
   }
 

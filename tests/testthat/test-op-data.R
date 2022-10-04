@@ -36,7 +36,11 @@ test_that("rscript op data inference", {
   expect_equal(op$flags$type$choices, c("bar", "baz", "foo"))
   expect_equal(op$flags$noise$min, 0)
   expect_equal(op$flags$noise$max, 1)
-  expect_equal(op$flags$init_phase$type, "complex")
+
+  # TODO: guild does not support a "complex" type, so we have to lie
+  #       here and tell guild it's a string.
+  # expect_equal(op$flags$init_phase$type, "complex")
+  expect_equal(op$flags$init_phase$type, "string")
 
   # frontmatter is passed through
   expect_equal(op$requires,
@@ -66,11 +70,8 @@ test_that("rscript op data inference", {
 
 test_that("guild run w/ flags-dest: config:flags.yml", {
 
-  # only while debugging
-  if(interactive())
-    formals(guild_run)$echo <- TRUE
-
   local_project(test_resource("flags-from-yml.R", "flags.yml"))
+
 
   # sort_by_names <- function(x) x[order(names(x))]
 
@@ -104,9 +105,70 @@ test_that("guild run w/ flags-dest: config:flags.yml", {
   expect_mapequal(modifyList(default_flags, list(b = !default_flags$b)),
                   run_observed_flags)
 
-
   # TODO: Warning in readLines(file, warn = readLines.warn) :
   # incomplete final line found on 'flags.yml'
 
+})
+
+
+test_that("guild run w/ flags-dest: globals", {
+
+  file <- "flags-from-globals.R"
+  local_project(test_resource(file))
+
+
+  guild_run(file, wait = TRUE)
+  output <- expect_snapshot_guild_cat_last_output()
+
+  invisible(capture.output(source(file, default_flags <- new.env())))
+  default_flags <- as.list(default_flags)
+
+  guild_run(file, flags = default_flags, wait = TRUE)
+  output2 <-.guild("cat --output", stdout = TRUE)
+  expect_identical(output, output2)
+
+  flags <- list(
+    i = 456L, f = 4.56, s = "Howdy Back", b = TRUE,
+    s2 = "abc", s3 = "def", cx = 1+1i, cx1 = 2+2i
+  )
+
+  guild_run(file, flags = flags, wait = TRUE)
+  expect_snapshot_guild_cat_last_output()
+
+  guild_run(file, flags = list(s = "foo\nbar\nbaz"), wait = TRUE)
+  expect_snapshot_guild_cat_last_output()
 
 })
+
+
+# sort_by_names <- function(x) x[order(names(x))]
+#
+#
+#   args <- c(
+#     # "/home/tomasz/opt/R-4.2.1/lib/R/bin/exec/R",
+#     # "--quiet",
+#     # "--no-save",
+#     # "--no-restore-data",
+#     # "--no-echo",
+#     # "--no-restore",
+#     # "-e",
+#     # "guildai:::do_guild_run(\"./flags-from-globals.R\",~+~flags_dest~+~=~+~\"globals\",~+~echo~+~=~+~FALSE)",
+#     # "--args",
+#     "--b",
+#     "false",
+#     "--cx",
+#     "0+0i",
+#     "--cx1",
+#     "1+1i",
+#     "--f",
+#     "1.123",
+#     "--i",
+#     "123",
+#     "--s",
+#     "Howdy Guild",
+#     "--s2",
+#     "foo",
+#     "--s3",
+#     "\"\\n    foobarbaz\\n    \""
+#   )
+#   browser()

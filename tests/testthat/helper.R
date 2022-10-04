@@ -76,6 +76,19 @@ local_project <- function(files, envir = parent.frame(), name = NULL) {
 if(interactive())
   formals(guild_run)$echo <- TRUE
 
+
+expect_snapshot_guild_cat_last_output <- function() {
+  output <- .guild("cat --output", stdout = TRUE)
+  expect_snapshot_output(writeLines(output))
+  invisible(output)
+}
+
+
+
+# TODO: does guild have away to distinguish between stdout and stderr output?
+
+
+
 # need these methods in tests, but don't export them for users
 registerS3method("print", "yaml", print.yaml)
 registerS3method("$", "yaml", `$.yaml`)
