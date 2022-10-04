@@ -21,22 +21,11 @@ parse_yaml_anno <- function(x) {
 #' @importFrom utils modifyList
 #' @importFrom xfun is_windows
 emit_r_script_guild_data <- function(r_script_path) {
-
   print.yaml(out <- r_script_guild_data(r_script_path),
              c("", if(Sys.getenv("DEBUGR") == "1")
                "emitted-script-guild-op-data.yml"))
-             # , stdout()
-             # )
-  # if(Sys.getenv("DEBUGR") == "1") {
-  #     cat(out, file = "emitted-script-guild-op-data.yml")
-  #     system("cat", input = c("--- start r_script plugin guild data returned ---",
-  #                             out,
-  #                             "--- end r_script plugin guild data returned ---"))
-  # }
 }
 
-
-# Rscript -e 'remotes::install_github("t-kalinowski/guildai-r")'
 
 r_script_guild_data <- function(r_script_path) {
 
@@ -45,9 +34,6 @@ r_script_guild_data <- function(r_script_path) {
   if(!length(text))
     text <- ""
   is_anno <- startsWith(trimws(text, "left"), "#|")
-
-  # data <- read_yaml(system.file("default-rscript-guild.yml",
-  #                               package = "guildai"))
 
   data <- yaml(
     "flags-dest" = "globals",
@@ -58,8 +44,6 @@ r_script_guild_data <- function(r_script_path) {
 
   update_data <- function(x)
     invisible(data <<- as_yaml(config::merge(data, x)))
-
-  # update_data(list(name = r_script_path))
 
   frontmatter <-
     if (is_anno[1] || startsWith(text[1], "#!/") && is_anno[2]) {
@@ -91,7 +75,6 @@ r_script_guild_data <- function(r_script_path) {
     if(startsWith(data$`flags-dest`, "file:"))
       data$`flags-dest` <- sub("file:", "config:", data$`flags-dest`,
                                fixed = TRUE)
-        # paste0("config:", str_drop_prefix(data$`flags-dest`, "file:"))
 
     if (flags_dest == "globals") {
       data$flags <- infer_global_params(text, is_anno)
@@ -115,7 +98,6 @@ r_script_guild_data <- function(r_script_path) {
 
   cl <- call(":::", quote(guildai), cl)
 
-# -e 'getwd()' -e 'list.files()'
   data$exec <- sprintf("%s -e %s ${flag_args}",
                        rscript_bin(),
                        shQuote(deparse1(cl)))
@@ -157,15 +139,6 @@ r_bin_exec <- function(restore = FALSE, echo = FALSE) {
            if(!echo) "--no-echo"))
 }
 
-rename <- function(x, ...) {
-  n <- c(...)
-  # browser()
-  nms <- names(x)
-  # i <- names(n) %in% x
-  # nms[which(nms %in%)]
-
-  names(...)
-}
 
 infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"), "#|")) {
 

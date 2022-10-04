@@ -19,7 +19,6 @@ formals(expect_no_error)$regexp <- NA
 
 
 
-
 # cat("Using guild:", guildai:::find_guild(), "\n")
 
 
@@ -48,28 +47,6 @@ local_project <- function(files, envir = parent.frame(), name = NULL) {
   Sys.setenv("GUILD_HOME" = file.path(getwd(), ".guild"))
   invisible()
 }
-
-
-# frame <- parent.frame()
-# if(identical(frame, globalenv()))
-#   reg.finalizer(globalenv(), #withr::deferred_run, TRUE)
-# function(e) {
-#    rstudioapi::sendToConsole(sprintf("setwd('%s')", owd),
-#                              execute = FALSE)
-#     withr::deferred_run(e)
-#   })
-
-# restore <- function() {
-#
-# }
-# browser()
-
-# eval(bquote(withr::defer({
-#   cat("Running finalizer!")
-#   setwd(.(owd))
-#   cat("getwd(): ", getwd(), "\n")
-#   Sys.unsetenv("GUILD_HOME")
-# }, envir = .(frame))))
 
 
 # only while debugging

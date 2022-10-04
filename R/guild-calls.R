@@ -1,7 +1,5 @@
 
 
-
-
 #' list guild runs
 #'
 #' @return a dataframe of runs
@@ -42,7 +40,7 @@ guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait
   }
 
   if (!is.null(names(flags))) {
-    # browser()
+    # TODO: convert flags of length > 1 to a grid expansion
     # flags <- lapply(flags, function(x) if(length(x) > 1))
     flags <- lapply(flags, function(x)
       if(is.character(x)) x else encode_yaml(x))
@@ -59,6 +57,6 @@ guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait
 
 
 guild_view <- function() {
-  # use processx here?
+  # TODO: use processx here?
   guild("view", wait = FALSE)
 }

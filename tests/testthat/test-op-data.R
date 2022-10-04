@@ -72,9 +72,6 @@ test_that("guild run w/ flags-dest: config:flags.yml", {
 
   local_project(test_resource("flags-from-yml.R", "flags.yml"))
 
-
-  # sort_by_names <- function(x) x[order(names(x))]
-
   # confirm the defaults are in the run dir, flags.yml is resolved
   default_flags <- read_yaml("flags.yml")
   guild_run("flags-from-yml.R", wait = TRUE)
@@ -116,8 +113,6 @@ test_that("guild run w/ flags-dest: globals", {
   file <- "flags-from-globals.R"
   local_project(test_resource(file))
 
-  # browser()
-
   guild_run(file, wait = TRUE)
   output <- expect_snapshot_guild_cat_last_output()
 
@@ -143,36 +138,3 @@ test_that("guild run w/ flags-dest: globals", {
   expect_snapshot_guild_cat_last_output()
 
 })
-
-
-# sort_by_names <- function(x) x[order(names(x))]
-#
-#
-#   args <- c(
-#     # "/home/tomasz/opt/R-4.2.1/lib/R/bin/exec/R",
-#     # "--quiet",
-#     # "--no-save",
-#     # "--no-restore-data",
-#     # "--no-echo",
-#     # "--no-restore",
-#     # "-e",
-#     # "guildai:::do_guild_run(\"./flags-from-globals.R\",~+~flags_dest~+~=~+~\"globals\",~+~echo~+~=~+~FALSE)",
-#     # "--args",
-#     "--b",
-#     "false",
-#     "--cx",
-#     "0+0i",
-#     "--cx1",
-#     "1+1i",
-#     "--f",
-#     "1.123",
-#     "--i",
-#     "123",
-#     "--s",
-#     "Howdy Guild",
-#     "--s2",
-#     "foo",
-#     "--s3",
-#     "\"\\n    foobarbaz\\n    \""
-#   )
-#   browser()
