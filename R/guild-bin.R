@@ -40,7 +40,7 @@ install_guild <- function(guildai = "guildai", python = find_python()) {
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai"), mustWork = FALSE)
   unlink(venv, recursive = TRUE)
   system2(python %||% find_python(), c("-m", "venv", shQuote(venv)))
-  python <- file.path(venv, "bin", if(xfun::is_windows()) "python.exe" else "python")
+  python <- file.path(venv, "bin", if(is_windows()) "python.exe" else "python")
   pip_install <- function(...)
     system2t(python, c("-m", "pip", "install", "--upgrade", "--no-user", ...))
   pip_install("pip", "wheel", "setuptools")

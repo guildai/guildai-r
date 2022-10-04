@@ -16,10 +16,8 @@ parse_yaml_anno <- function(x) {
 }
 
 
-#' @importFrom magrittr %<>%
 #' @importFrom rlang %||%
 #' @importFrom utils modifyList
-#' @importFrom xfun is_windows
 emit_r_script_guild_data <- function(r_script_path) {
   print.yaml(out <- r_script_guild_data(r_script_path),
              c("", if(Sys.getenv("DEBUGR") == "1")

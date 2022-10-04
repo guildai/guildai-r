@@ -28,7 +28,7 @@ function(file = "train.R",
   invisible()
 }
 
-
+#' @importFrom utils getParseData getSrcLocation
 update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
                                          text = readLines(filename)) {
 

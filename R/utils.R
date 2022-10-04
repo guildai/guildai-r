@@ -14,3 +14,5 @@ is_hashpipe <- function(x) startsWith(x, "#|")
 `subtract<-` <- function(x, value) x - value
 
 `append<-` <- function(x, value) c(x, value)
+
+is_windows <- function ()  .Platform$OS.type == "windows"
