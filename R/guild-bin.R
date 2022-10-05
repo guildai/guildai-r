@@ -7,6 +7,7 @@ find_python <- function() {
     "/usr/bin/python3",
     Sys.which("python3"),
     Sys.which("python")
+
   ))
   )
     if(file.exists(python))
@@ -35,17 +36,24 @@ system2t <- function (command, args, ...) {
 #'
 #' @examples
 #' # install_guild(c("-e", "~/guild/guildai"))
-#  # install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
+#' # install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
+#' # install_guild(python = "~/../AppData/Local/Programs/Python/Python310/python.exe",
+#' #               guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD")
 install_guild <- function(guildai = "guildai", python = find_python()) {
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai"), mustWork = FALSE)
   unlink(venv, recursive = TRUE)
-  system2(python %||% find_python(), c("-m", "venv", shQuote(venv)))
-  python <- file.path(venv, "bin", if(is_windows()) "python.exe" else "python")
+  python <- normalizePath(python %||% find_python())
+  system2(python, c("-m", "venv", shQuote(venv)))
+  python <- if(is_windows())
+   file.path(venv, "Scripts", "python.exe", fsep = "\\") else
+   file.path(venv, "bin", "python")
   pip_install <- function(...)
     system2t(python, c("-m", "pip", "install", "--upgrade", "--no-user", ...))
   pip_install("pip", "wheel", "setuptools")
   pip_install(guildai)
-  normalizePath(file.path(venv, "bin", "guild"))
+  if(is_windows())
+    file.path(venv, "Scripts", "guild.exe", fsep = "\\") else
+    file.path(venv, "bin", "guild")
 }
 
 
@@ -54,9 +62,14 @@ install_guild <- function(guildai = "guildai", python = find_python()) {
 
 
 find_guild <- function() {
-  if(file.exists(guild <- file.path(rappdirs::user_data_dir("r-guildai"), "bin", "guild")))
+  if (is_windows())
+    if (file.exists(guild <-
+                    file.path(rappdirs::user_data_dir("r-guildai"), "Scripts", "guild.exe")))
+      return(normalizePath(as.vector(guild)))
+  if (file.exists(guild <-
+                  file.path(rappdirs::user_data_dir("r-guildai"), "bin", "guild")))
     return(normalizePath(as.vector(guild)))
-  if(file.exists(guild <- Sys.which("guild")))
+  if (file.exists(guild <- Sys.which("guild")))
     return(normalizePath(as.vector(guild)))
   install_guild()
 }
