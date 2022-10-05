@@ -1,24 +1,18 @@
 
 
-# TODO: rename throughout s/flag/param/g
-
 do_guild_run <-
 function(file = "train.R",
          flags_dest = "globals",
          echo = TRUE,
          flags = parse_command_line(commandArgs(TRUE))) {
 
-  if(flags_dest == "globals") # globalenv .Globalenv
-    # update_source_w_global_flags(file, flags, overwrite = TRUE)
+  if(flags_dest == "globals")
     text <- update_source_w_global_flags(file, flags, overwrite = FALSE)
   else
     text <- readLines(file)
 
-
-  exprs <- parse(text = text, keep.source = TRUE)
-
   source(
-    exprs = exprs,
+    exprs = parse(text = text, keep.source = TRUE),
     echo = echo,
     spaced = TRUE,
     max.deparse.length = Inf,
@@ -101,14 +95,25 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
     # `l` is an assignment call with a flag symbol on
     # the left hand side and a literal on the right hand side.
 
+
     # Now we need to update the source text
     # first get precise location of the expression in the source
     # [.expression will slice out the srcref specific to this expression
-    old_e <- exprs[i]
-    line_start <- getSrcLocation(old_e, "line", first = TRUE)
-    line_end   <- getSrcLocation(old_e, "line", first = FALSE)
-    col_start  <- getSrcLocation(old_e, "column", first = TRUE)
-    col_end    <- getSrcLocation(old_e, "column", first = FALSE)
+    e <- exprs[i]
+
+    # if the user defined multiple globals one one line,
+    # parse_data$col1/col2 might be incorrect.
+    # Just reparse the full text in it's partially modified current state.
+    if(last_line_modified >= getSrcLocation(e, "line")) {
+      exprs <- parse(text = text, keep.source = TRUE)
+      parse_data <- getParseData(exprs)
+      e <- exprs[i]
+    }
+
+    line_start <- getSrcLocation(e, "line", first = TRUE)
+    line_end   <- getSrcLocation(e, "line", first = FALSE)
+    col_start  <- getSrcLocation(e, "column", first = TRUE)
+    col_end    <- getSrcLocation(e, "column", first = FALSE)
 
     if(is.complex(flags[[name]])) {
       ## complex numbers are parsed as two NUM_CONST tokens and a '+' token,
@@ -122,18 +127,8 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
 
       # slice out just the two numeric constants
       df <- df[df$token == "NUM_CONST", ]
-      stopifnot(exprs = {
-        # either user wrote "1+1i" or "1i"
-        nrow(df) %in% c(1, 2)
-
-        # check that col1/col2 parse data info is not stale from a previous
-        # token update,
-        # e.g. if user assigned multiple globals on one line separated by ;
-        df$line1 > last_line_modified
-        # TODO: we can easily just refresh `parse_data` if needed here
-        # on this rare code path
-        # with something like: parse_data <<- getParseData(parse(text = text))
-      })
+      # either user wrote "1+1i" or "1i"
+      stopifnot(nrow(df) %in% c(1L, 2L))
 
       if (length(unique(c(df$line1, df$line2))) == 1) {
         # both NUM_CONSTS of the complex are on the same line.
@@ -145,8 +140,8 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
         .replace_token(token, flags[[name]])
 
       } else {
-        # the NUM_CONSTS are on separate lines, potentially with trailing
-        # user comments around or inbetween.
+        # the NUM_CONSTS are on separate lines, potentially with
+        # user meaningful whitespace and comments around or in between.
         re_token <- df[1,]
         im_token <- df[2,]
 
@@ -155,25 +150,23 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
       }
     } else {
       # just a regular, non-complex, literal token
-
       # find the CONST token that ends on the same position as our expression
       df <- parse_data
       df <- df[df$line2 == line_end, ]
       df <- df[df$col2 == col_end, ]
       df <- df[df$token %in% c("NUM_CONST", "STR_CONST", "NULL_CONST"), ]
       stopifnot(nrow(df) == 1)
-      # check that col1/col2 info is not stale,
-      # if user assigned multiple globals on one line separated by ;
-      stopifnot(df$line1 > last_line_modified)
       token <- df
       .replace_token(token, flags[[name]])
     }
+
+    # TODO: support for injecting flags for expressions like `foo <- get_foo()`?
 
 
     # emit message about the magic we just did
     old_l <- l
     l[[3L]] <- flags[[name]] # replace the value in node
-    message(sprintf("Replacing expression '%s' on line %i with '%s'",
+    message(sprintf("Replaced expression '%s' on line %i with '%s'",
                     deparse1(old_l), line_start, deparse1(l)))
 
     flags[[name]] <- NULL # null out flag value; each flag is injected only once

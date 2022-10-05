@@ -118,7 +118,10 @@ test_that("guild run w/ flags-dest: globals", {
 
   invisible(capture.output(source(file, default_flags <- new.env())))
   default_flags <- as.list(default_flags)
-  default_flags$globals <- NULL
+  default_flags$globals      <- NULL
+  default_flags$nm           <- NULL
+  default_flags$not_a_global <- NULL
+  default_flags$duplicated_flag <- 1L
 
   guild_run(file, flags = default_flags, wait = TRUE)
   output2 <-.guild("cat --output", stdout = TRUE)
@@ -128,13 +131,16 @@ test_that("guild run w/ flags-dest: globals", {
     b = TRUE,
     i = 456L, f = 4.56,
     s = "Howdy Back",  s2 = "abc", s3 = "def",
-    cx = 1+1i, cx1 = 2+2i, cx2 = 22+22i, cx3 = 33+33i
+    s4 = "A loooooooonger string",
+    s5 = "a different string",
+    cx = 1+1i, cx1 = 2+2i, cx2 = 22+22i, cx3 = 33+33i,
+    duplicated_flag = 99L
   )
 
   guild_run(file, flags = flags, wait = TRUE)
   expect_snapshot_guild_cat_last_output()
 
-  guild_run(file, flags = list(s = "foo\nbar\nbaz"), wait = TRUE)
+  guild_run(file, flags = list(s = "foo\nbar\nbaz", s4 = "s"), wait = TRUE)
   expect_snapshot_guild_cat_last_output()
 
 })
