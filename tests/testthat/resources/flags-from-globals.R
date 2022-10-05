@@ -44,6 +44,6 @@ globals <- mget(ls())
 
 cat("R exprs:\n")
 for (nm in names(globals))
-  cat("  ", nm, ": ", deparse1(get(nm)), "\n", sep = "")
+  cat("  ", nm, " = ", deparse1(get(nm)), "\n", sep = "")
 
 guildai:::print.yaml(guildai:::as_yaml(list(YAML = globals)))
