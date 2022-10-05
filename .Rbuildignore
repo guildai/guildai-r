@@ -5,3 +5,6 @@
 ^scratch$
 ^python$
 ^core$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
