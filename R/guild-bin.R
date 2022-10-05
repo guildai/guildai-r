@@ -37,8 +37,10 @@ system2t <- function (command, args, ...) {
 #' @examples
 #' # install_guild(c("-e", "~/guild/guildai"))
 #' # install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
-#' # install_guild(python = "~/../AppData/Local/Programs/Python/Python310/python.exe",
-#' #               guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD")
+#' # install_guild(
+#' #   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
+#' #   python = reticulate::install_python())
+#' #
 install_guild <- function(guildai = "guildai", python = find_python()) {
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai"), mustWork = FALSE)
   unlink(venv, recursive = TRUE)
