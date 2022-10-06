@@ -10,9 +10,9 @@ name: R-CMD-check
 
 jobs:
   R-CMD-check:
-    name: ${{ matrix.os }}, tf-${{ matrix.tf }}, R-${{ matrix.r }}
-    timeout-minutes: 15
+    name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
