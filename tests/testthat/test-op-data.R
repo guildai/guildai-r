@@ -1,9 +1,10 @@
+
+
+
 test_that("guild run", {
-
   local_project(test_resource("basic.R"))
-  guild_run("basic.R", echo = FALSE, wait = TRUE)
+  guild_run("basic.R")
   expect_equal(nrow(ls_runs()), 1L)
-
 })
 
 
@@ -74,16 +75,19 @@ test_that("guild run w/ flags-dest: config:flags.yml", {
 
   # confirm the defaults are in the run dir, flags.yml is resolved
   default_flags <- read_yaml("flags.yml")
-  guild_run("flags-from-yml.R", wait = TRUE)
+  guild_run("flags-from-yml.R")
   run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
   expect_mapequal(default_flags, run_observed_flags)
 
-  # confirm passing non-default flag b=TRUE
+  # # confirm passing non-default flag b=TRUE
   # resolves a modified flags.yml in the rundir
-  guild_run("flags-from-yml.R", flags = c(b = !default_flags$b), wait = TRUE)
+  guild_run("flags-from-yml.R", flags = c(b = !default_flags$b))
   run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
   expect_mapequal(modifyList(default_flags, list(b = !default_flags$b)),
                   run_observed_flags)
+
+  ## add tests to support for promotion of `_` to `-`
+  ## do we do the inverse on the way out too?
 
   # because boolean flags are tricky, test the inverse default too
   default_flags$b <- TRUE
@@ -92,12 +96,12 @@ test_that("guild run w/ flags-dest: config:flags.yml", {
   expect_identical(read_yaml("flags.yml"), default_flags)
 
   # test default
-  guild_run("flags-from-yml.R", wait = TRUE)
+  guild_run("flags-from-yml.R")
   run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
   expect_mapequal(default_flags, run_observed_flags)
 
   # test non-default
-  guild_run("flags-from-yml.R", flags = c(b = !default_flags$b), wait = TRUE)
+  guild_run("flags-from-yml.R", flags = c(b = !default_flags$b))
   run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
   expect_mapequal(modifyList(default_flags, list(b = !default_flags$b)),
                   run_observed_flags)
@@ -113,7 +117,7 @@ test_that("guild run w/ flags-dest: globals", {
   file <- "flags-from-globals.R"
   local_project(test_resource(file))
 
-  guild_run(file, wait = TRUE)
+  guild_run(file)
   output <- expect_snapshot_guild_cat_last_output()
 
   invisible(capture.output(source(file, default_flags <- new.env())))
@@ -123,7 +127,7 @@ test_that("guild run w/ flags-dest: globals", {
   default_flags$not_a_global <- NULL
   default_flags$duplicated_flag <- 1L
 
-  guild_run(file, flags = default_flags, wait = TRUE)
+  guild_run(file, flags = default_flags)
   output2 <-.guild("cat --output", stdout = TRUE)
   expect_identical(output, output2)
 
@@ -137,10 +141,10 @@ test_that("guild run w/ flags-dest: globals", {
     duplicated_flag = 99L
   )
 
-  guild_run(file, flags = flags, wait = TRUE)
+  guild_run(file, flags = flags)
   expect_snapshot_guild_cat_last_output()
 
-  guild_run(file, flags = list(s = "foo\nbar\nbaz", s4 = "s"), wait = TRUE)
+  guild_run(file, flags = list(s = "foo\nbar\nbaz", s4 = "s"))
   expect_snapshot_guild_cat_last_output()
 
 })

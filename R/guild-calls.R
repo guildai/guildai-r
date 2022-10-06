@@ -48,8 +48,11 @@ guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait
   }
 
   cl <- quote(guild("run", "--yes", opspec, flags, wait = wait, ...))
+  cl <- call("guild", "run", "--yes", opspec, flags, wait = wait, quote(...))
   if (!echo)
     cl$stdout <- cl$stderr <- FALSE
+  if(Sys.getenv("DEBUGR") == "1")
+    message("R> ", deparse1(cl))
   eval(cl)
   invisible()
 }

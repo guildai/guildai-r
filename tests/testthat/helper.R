@@ -48,11 +48,9 @@ local_project <- function(files, envir = parent.frame(), name = NULL) {
 }
 
 
-# only while debugging
-if(interactive()) {
-  formals(guild_run)$echo <- TRUE
-}
-
+# don't echo during tests unless interactively
+if(!interactive())
+  formals(guild_run)$echo <- FALSE
 
 expect_snapshot_guild_cat_last_output <- function() {
   output <- .guild("cat --output", stdout = TRUE)
