@@ -4,7 +4,7 @@
 \alias{guild_run}
 \title{Launch a guild run}
 \usage{
-guild_run(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait)
+guild_run(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait, ...)
 }
 \arguments{
 \item{opspec}{typically path to an R script, but could be an scalar

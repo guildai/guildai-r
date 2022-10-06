@@ -30,7 +30,7 @@ ls_runs <- function() {
 #'
 #' @return NULL, invisibly. This function is called for its side effect.
 #' @export
-guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait) {
+guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait, ...) {
   if (is.data.frame(flags)) {
     for (r in seq_len(nrow(flags)))
       guild_run(opspec, unclass(flags[r, ]), echo = echo, wait = wait)
@@ -47,7 +47,7 @@ guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait
     flags <- sprintf("%s=%s", names(flags), unname(flags))
   }
 
-  cl <- quote(guild("run", "--yes", opspec, flags, wait = wait))
+  cl <- quote(guild("run", "--yes", opspec, flags, wait = wait, ...))
   if (!echo)
     cl$stdout <- cl$stderr <- FALSE
   eval(cl)
