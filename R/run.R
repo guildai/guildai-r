@@ -81,7 +81,7 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
       l[[3L]] <- eval(l[[3L]], baseenv())
       flags[[name]] <-
         as.complex(eval(str2lang(flags[[name]]), baseenv()))
-      # eval(str2land()) first because as.complex("1i") fails, returns NA
+        # eval(str2lang()) first because as.complex("1i") fails, returns NA
     }
 
     if (identical(flags[[name]], l[[3L]])) {
@@ -95,7 +95,6 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
     # `l` is an assignment call with a flag symbol on
     # the left hand side and a literal on the right hand side.
 
-
     # Now we need to update the source text
     # first get precise location of the expression in the source
     # [.expression will slice out the srcref specific to this expression
@@ -103,7 +102,7 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
 
     # if the user defined multiple globals one one line,
     # parse_data$col1/col2 might be incorrect.
-    # Just reparse the full text in it's partially modified current state.
+    # Just reparse the full text in its partially modified current state.
     if(last_line_modified >= getSrcLocation(e, "line")) {
       exprs <- parse(text = text, keep.source = TRUE)
       parse_data <- getParseData(exprs)
@@ -135,15 +134,15 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
         # just collapse the parse_data rows and treat as one pseudo token
         # (user whitespace around + is lost, but whatever)
         token <- data.frame(
-          line1 = first(df$line1[1]), col1 = first(df$col1),
-          line2 = last(df$line2[1]), col2 = last(df$col2))
+          line1 = first(df$line1), col1 = first(df$col1),
+          line2 =  last(df$line2), col2 =  last(df$col2))
         .replace_token(token, flags[[name]])
 
       } else {
         # the NUM_CONSTS are on separate lines, potentially with
         # user meaningful whitespace and comments around or in between.
-        re_token <- df[1,]
-        im_token <- df[2,]
+        re_token <- df[1, ]
+        im_token <- df[2, ]
 
         .replace_token(re_token, Re(flags[[name]]))
         .replace_token(im_token, complex(imaginary = Im(flags[[name]])))
@@ -161,7 +160,7 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
     }
 
     # TODO: support for injecting flags for expressions like `foo <- get_foo()`?
-
+    # TODO: ensure/force type-stable flag injections? NULLable flag values?
 
     # emit message about the magic we just did
     old_l <- l

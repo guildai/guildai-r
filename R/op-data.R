@@ -24,6 +24,8 @@ emit_r_script_guild_data <- function(r_script_path) {
                "emitted-script-guild-op-data.yml"))
 }
 
+# TODO?: for flags w/ underscores in the name
+#   supply `arg-name: gsub("_", "-", name)` ?
 
 r_script_guild_data <- function(r_script_path) {
 
