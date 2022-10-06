@@ -20,9 +20,12 @@ find_python <- function() {
 }
 
 system2t <- function (command, args, ...) {
-  message(paste("+", shQuote(command), paste0(args, collapse = " ")))
+  if(Sys.getenv("DEBUGR") == "1")
+    message(paste("+", shQuote(command), paste0(args, collapse = " ")))
   system2(command, args, ...)
 }
+
+
 
 
 

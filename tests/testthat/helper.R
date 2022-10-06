@@ -33,7 +33,6 @@ local_project <- function(files, envir = parent.frame(), name = NULL) {
 
   withr::defer_parent({
     setwd(owd)
-    cat("wd:", getwd(), "\n")
     if(is.na(old_guild_home))
       Sys.unsetenv("GUILD_HOME")
     else
@@ -50,8 +49,9 @@ local_project <- function(files, envir = parent.frame(), name = NULL) {
 
 
 # only while debugging
-if(interactive())
+if(interactive()) {
   formals(guild_run)$echo <- TRUE
+}
 
 
 expect_snapshot_guild_cat_last_output <- function() {

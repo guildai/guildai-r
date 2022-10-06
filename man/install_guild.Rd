@@ -19,4 +19,9 @@ Install guildai core
 }
 \examples{
 # install_guild(c("-e", "~/guild/guildai"))
+# install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
+# install_guild(
+#   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
+#   python = reticulate::install_python())
+#
 }
