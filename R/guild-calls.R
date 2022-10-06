@@ -40,10 +40,16 @@ guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait
   }
 
   if (!is.null(names(flags))) {
-    # TODO: convert flags of length > 1 to a grid expansion
-    # flags <- lapply(flags, function(x) if(length(x) > 1))
-    flags <- lapply(flags, function(x)
-      if(is.character(x)) x else encode_yaml(x))
+    # A scalar string for flags is passed through
+    # otherwise, do some prep to build the command line arg
+    flags <- lapply(flags, function(f) {
+      x <- vapply(f,
+                  function(fv) if(is.character(fv)) fv else encode_yaml(fv),
+                  "", USE.NAMES = FALSE)
+      if(length(x) > 1)
+        x <- sprintf("[%s]", paste0(x, collapse = ","))
+      x
+    })
     flags <- sprintf("%s=%s", names(flags), unname(flags))
   }
 

@@ -8,6 +8,15 @@ test_that("guild run", {
 })
 
 
+test_that("guild run", {
+  local_project(test_resource("basic.R"))
+  guild_run("basic.R", flags = list(
+    x = c(.1, .2),
+    noise = c(.4, .5)
+  ))
+  expect_equal(nrow(ls_runs()), 4L)
+})
+
 test_that("rscript op data inference", {
 
   # blanket check that each file can be poked w/o error
