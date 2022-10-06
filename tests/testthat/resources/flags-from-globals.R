@@ -1,4 +1,4 @@
-#| echo: false
+#| echo: true
 
 i <- 123L
 f <- 1.123
@@ -45,5 +45,9 @@ globals <- mget(ls())
 cat("R exprs:\n")
 for (nm in names(globals))
   cat("  ", nm, " = ", deparse1(get(nm)), "\n", sep = "")
+
+# echo can be turned off mid-run
+# supports the same behavior as `R -f file.R` at the command line
+options(echo = FALSE)
 
 guildai:::print.yaml(guildai:::as_yaml(list(YAML = globals)))

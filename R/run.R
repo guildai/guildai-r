@@ -11,7 +11,7 @@ function(file = "train.R",
   else
     text <- readLines(file)
 
-  source(
+  source2(
     exprs = parse(text = text, keep.source = TRUE),
     echo = echo,
     spaced = TRUE,
@@ -21,6 +21,19 @@ function(file = "train.R",
 
   invisible()
 }
+
+source2 <- source
+body(source2) <- substitute({
+  options(echo = echo)
+  rm(echo)
+  makeActiveBinding("echo", function(x) {
+    if (missing(x)) getOption("echo")
+    else options(echo = x)
+  }, environment())
+  SOURCE_BODY
+}, env = list(SOURCE_BODY = body(source)))
+
+
 
 #' @importFrom utils getParseData getSrcLocation
 update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
