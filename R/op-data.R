@@ -96,7 +96,7 @@ r_script_guild_data <- function(r_script_path) {
 
   cl <- call(":::", quote(guildai), cl)
 
-  data$exec <- sprintf("%s -e %s ${flag_args}",
+  data$exec <- sprintf("%s -e %s --args ${flag_args}",
                        rscript_bin(),
                        shQuote(deparse1(cl)))
 
