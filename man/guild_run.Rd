@@ -21,6 +21,8 @@ string that guild recognizes as a valid opspec.}
 \item{echo}{whether output from the run is shown in the current R
 console. Note, this has no effect on whether expressions are echoed in
 the guild run stdout.}
+
+\item{...}{passed through to [base::system2]}
 }
 \value{
 NULL, invisibly. This function is called for its side effect.

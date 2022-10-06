@@ -11,6 +11,8 @@ function(file = "train.R",
   else
     text <- readLines(file)
 
+
+  source2 <- new_source_w_active_echo()
   source2(
     exprs = parse(text = text, keep.source = TRUE),
     echo = echo,
@@ -22,17 +24,23 @@ function(file = "train.R",
   invisible()
 }
 
-source2 <- source
-body(source2) <- substitute({
-  options(echo = echo)
-  rm(echo)
-  makeActiveBinding("echo", function(x) {
-    if (missing(x)) getOption("echo")
-    else options(echo = x)
-  }, environment())
-  SOURCE_BODY
-}, env = list(SOURCE_BODY = body(source)))
 
+new_source_w_active_echo <- function() {
+  # R CMD check complains if a copy of base::source lives in the
+  # namespace because of forbidden .Internal() calls, so we
+  # have to do this patch at runtime.
+  source2 <- source
+  body(source2) <- substitute({
+    options(echo = echo)
+    rm(echo)
+    makeActiveBinding("echo", function(x) {
+      if (missing(x)) getOption("echo")
+      else options(echo = x)
+    }, environment())
+    SOURCE_BODY
+  }, env = list(SOURCE_BODY = body(source)))
+  source2
+}
 
 
 #' @importFrom utils getParseData getSrcLocation

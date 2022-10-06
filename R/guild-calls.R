@@ -28,6 +28,8 @@ ls_runs <- function() {
 #'   console. Note, this has no effect on whether expressions are echoed in
 #'   the guild run stdout.
 #'
+#' @param ... passed through to [base::system2]
+#'
 #' @return NULL, invisibly. This function is called for its side effect.
 #' @export
 guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait, ...) {
