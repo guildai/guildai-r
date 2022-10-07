@@ -11,12 +11,11 @@ function(file = "train.R",
   else
     text <- readLines(file)
 
-
   source2 <- new_source_w_active_echo()
   source2(
     exprs = parse(text = text, keep.source = TRUE),
     echo = echo,
-    spaced = TRUE,
+    spaced = FALSE,
     max.deparse.length = Inf,
     deparseCtrl = c("keepInteger", "showAttributes", "keepNA")
   )

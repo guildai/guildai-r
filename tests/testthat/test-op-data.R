@@ -56,8 +56,8 @@ test_that("rscript op data inference", {
   expect_equal(basename(op$name), "empty.R")
 
   op <- r_script_guild_data(test_resource("basic.R"))
-  expect_length(op$flags, 2)
-  expect_setequal(names(op$flags), c("x", "noise"))
+  expect_length(op$flags, 3)
+  expect_setequal(names(op$flags), c("x", "noise", "bool"))
   expect_equal(basename(op$name), "basic.R")
 
   op <- r_script_guild_data(test_resource("hash-pipe-anno.R"))

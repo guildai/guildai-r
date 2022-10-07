@@ -42,9 +42,11 @@ cx3 <- 3 + 3i
 
 globals <- mget(ls())
 
-cat("R exprs:\n")
-for (nm in names(globals))
-  cat("  ", nm, " = ", deparse1(get(nm)), "\n", sep = "")
+{
+  cat("R exprs:\n")
+  for (nm in names(globals))
+    cat("  ", nm, " = ", deparse1(get(nm)), "\n", sep = "")
+}
 
 # echo can be turned off mid-run
 # supports the same behavior as `R -f file.R` at the command line
