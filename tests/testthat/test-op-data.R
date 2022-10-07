@@ -9,13 +9,34 @@ test_that("guild run", {
 
 
 test_that("guild run", {
+  # flags an be passed in as a bare R list, gets auto grid expanded,
+  # one run per combination
   local_project(test_resource("basic.R"))
   guild_run("basic.R", flags = list(
     x = c(.1, .2),
-    noise = c(.4, .5)
+    noise = c(.4, .5),
+    bool = c(TRUE, FALSE)
   ))
-  expect_equal(nrow(ls_runs()), 4L)
+  runs <- ls_runs()
+
+  expect_s3_class(runs, "data.frame")
+  expect_equal(nrow(runs), 8L)
 })
+
+test_that("guild run", {
+  # flags an be passed in as a data.frame, one run per row
+  local_project(test_resource("basic.R"))
+  guild_run("basic.R", flags = data.frame(
+    x = c(.1, .2),
+    noise = c(.4, .5),
+    bool = c(TRUE, FALSE)
+  ))
+  runs <- ls_runs()
+
+  expect_s3_class(runs, "data.frame")
+  expect_equal(nrow(runs), 2L)
+})
+
 
 test_that("rscript op data inference", {
 
