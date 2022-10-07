@@ -98,5 +98,5 @@ guild <- function(cmd, ..., stdout = "", stderr = "",
 
 .guild <- function(args, ...) {
   # convenience version that accepts args as a single string
-  guild(unlist(strsplit(line, "\\s+", perl = TRUE)), ...)
+  guild(unlist(strsplit(args, "\\s+", perl = TRUE)), ...)
 }
