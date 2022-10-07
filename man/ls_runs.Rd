@@ -4,7 +4,11 @@
 \alias{ls_runs}
 \title{list guild runs}
 \usage{
-ls_runs(..., deleted = FALSE, archive_path = NULL)
+ls_runs(...)
+}
+\arguments{
+\item{...}{additional arguments passed to `guild api runs`. Try
+`"--help"` to see options.}
 }
 \value{
 a dataframe of runs

@@ -2,18 +2,17 @@
 
 #' list guild runs
 #'
+#' @param ... additional arguments passed to `guild api runs`. Try
+#'   `"--help"` to see options.
+#'
 #' @return a dataframe of runs
 #' @export
 #' @importFrom jsonlite parse_json
-ls_runs <- function(...,
-                    deleted = FALSE,
-                    archive_path = NULL) {
-
+ls_runs <- function(...) {
+  if ("--help" %in% c(...))
+    return(guild("api", "runs", "--help"))
   # --json option always shows all runs
-  x <- guild("api", "runs",
-             if(is.character(archive_path)) c("--archive", archive_path),
-             if(isTRUE(deleted)) "--deleted",
-             ..., stdout = TRUE)
+  x <- guild("api", "runs", ..., stdout = TRUE)
   df <- parse_json(x, simplifyVector = TRUE)
 
   # TODO: guild should return something that's tz aware,
