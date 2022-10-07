@@ -4,12 +4,42 @@
 #'
 #' @return a dataframe of runs
 #' @export
-ls_runs <- function() {
-  x <- guild("runs", "--json", stdout = TRUE)
-  x <- jsonlite::parse_json(x, simplifyVector = TRUE)
-  tibble::as_tibble(x)
+#' @importFrom jsonlite parse_json
+ls_runs <- function(...,
+                    deleted = FALSE,
+                    archive_path = NULL) {
+
+  # --json option always shows all runs
+  x <- guild("api", "runs",
+             if(is.character(archive_path)) c("--archive", archive_path),
+             if(isTRUE(deleted)) "--deleted",
+             ..., stdout = TRUE)
+  df <- parse_json(x, simplifyVector = TRUE)
+
+  # TODO: guild should return something that's tz aware,
+  #   This approach the best we can do is assume the dt string is
+  #   in the user locale
+  for(dt_name in c("started", "stopped"))
+    df[[dt_name]] <- as.POSIXct(df[[dt_name]],
+                                  format = "%Y-%m-%d %H:%M:%OS")
+  df$time <- as.difftime(df$time, units = "secs")
+
+  if("tibble" %in% loadedNamespaces())
+    df <- tibble::as_tibble(df)
+
+  df$comments <- lapply(df$comments, as.character)
+
+  df
 }
 
+
+
+
+latest_run <- function() {
+
+}
+
+# TODO: support for globals injection of `!expr foo` flags
 
 #' Launch a guild run
 #'
@@ -71,3 +101,4 @@ guild_view <- function() {
   # TODO: use processx here?
   guild("view", wait = FALSE)
 }
+

@@ -4,7 +4,7 @@
 \alias{ls_runs}
 \title{list guild runs}
 \usage{
-ls_runs()
+ls_runs(..., deleted = FALSE, archive_path = NULL)
 }
 \value{
 a dataframe of runs
