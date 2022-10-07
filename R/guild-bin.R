@@ -7,9 +7,10 @@ find_python <- function() {
     "/usr/bin/python3",
     Sys.which("python3"),
     Sys.which("python")
-
-  ))
-  )
+    # TODO: search also in default python locations on windows
+    # TODO: do we really want to use system python on mac?
+    #       Maybe look in /usr/bin/local first?
+  )))
     if(file.exists(python))
       return(python)
 
@@ -47,16 +48,16 @@ system2t <- function (command, args, ...) {
 install_guild <- function(guildai = "guildai", python = find_python()) {
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai"), mustWork = FALSE)
   unlink(venv, recursive = TRUE)
-  python <- normalizePath(python %||% find_python())
+  python <- normalizePath(python)
   system2(python, c("-m", "venv", shQuote(venv)))
-  python <- if(is_windows())
+  python <- if (is_windows())
    file.path(venv, "Scripts", "python.exe", fsep = "\\") else
    file.path(venv, "bin", "python")
   pip_install <- function(...)
     system2t(python, c("-m", "pip", "install", "--upgrade", "--no-user", ...))
   pip_install("pip", "wheel", "setuptools")
   pip_install(guildai)
-  if(is_windows())
+  if (is_windows())
     file.path(venv, "Scripts", "guild.exe", fsep = "\\") else
     file.path(venv, "bin", "guild")
 }
@@ -95,8 +96,7 @@ guild <- function(cmd, ..., stdout = "", stderr = "",
 }
 
 
-.guild <- function(line, ...) {
-  # convenience version that accepts all args on a single line
-  args <- strsplit(line, " ", fixed = TRUE)[[1]]
-  do.call(guild, c(as.list(args), ...))
+.guild <- function(args, ...) {
+  # convenience version that accepts args as a single string
+  guild(unlist(strsplit(line, "\\s+", perl = TRUE)), ...)
 }
