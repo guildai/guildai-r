@@ -81,11 +81,24 @@ find_guild <- function() {
 }
 
 
-guild <- function(cmd, ..., stdout = "", stderr = "",
+
+guild <- function(...,
+                  stdout = "", stderr = "",
                   home = NULL, #home = Sys.getenv("GUILD_HOME", here::here(".guild")),
                   wait = TRUE) {
 
-  args <- shQuote(c(cmd, c(...)))
+  args <- list(...)
+  stopifnot(is.null(names(args)))
+  AsIs <- vapply(args, inherits, TRUE, "AsIs")
+  args[!AsIs] <- shQuote(args[!AsIs])
+
+  ##? allow args like guild("--path" = r_sym)
+  # for(nm in names(args))
+  #   if(isTRUE(nzchar(nm)))
+  #     args[[nm]] <- sprintf("%s=%s", nm, args[[nm]])
+
+  args <- as.character(unlist(args))
+
   if(!is.null(home))
     args <- c("-H", shQuote(home), args)
   if(Sys.getenv("DEBUG") == "1")
