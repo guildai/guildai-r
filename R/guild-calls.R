@@ -61,7 +61,10 @@ latest_run <- function() {
 #'
 #' @return NULL, invisibly. This function is called for its side effect.
 #' @export
-guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait, ...) {
+guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE,
+                      label = NULL,
+                      tags = NULL,
+                      echo = wait, ...) {
   if (is.data.frame(flags)) {
     cl <- match.call()
     for (r in seq_len(nrow(flags))) {
@@ -87,8 +90,15 @@ guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait
     flags <- sprintf("%s=%s", names(flags), unname(flags))
   }
 
-  cl <- quote(guild("run", "--yes", opspec, flags, wait = wait, ...))
-  cl <- call("guild", "run", "--yes", opspec, flags, wait = wait, quote(...))
+  args <- c("--yes")
+  if(is.character(label))
+    append(args) <- c("--label", label)
+  if(is.character(tags))
+    append(args) <- as.vector(rbind("--tag", tags))
+
+  cl <- call("guild", "run", args,
+             opspec, flags, wait = wait,
+             quote(...))
   if (!echo)
     cl$stdout <- cl$stderr <- FALSE
   if(Sys.getenv("DEBUGR") == "1")
