@@ -113,4 +113,3 @@ guild_view <- function() {
   # TODO: use processx here?
   guild("view", wait = FALSE)
 }
-

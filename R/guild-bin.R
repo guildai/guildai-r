@@ -88,9 +88,15 @@ guild <- function(...,
                   wait = TRUE) {
 
   args <- list(...)
+  args <- rapply(args, function(x) {
+    if (inherits(x, "AsIs") || all(grepl("^[[:alpha:]-]+$", x)))
+      x
+    else
+      shQuote(x)
+  })
   stopifnot(is.null(names(args)))
-  AsIs <- vapply(args, inherits, TRUE, "AsIs")
-  args[!AsIs] <- shQuote(args[!AsIs])
+  # AsIs <- vapply(args, inherits, TRUE, "AsIs")
+  # args[!AsIs] <- shQuote(args[!AsIs])
 
   ##? allow args like guild("--path" = r_sym)
   # for(nm in names(args))
