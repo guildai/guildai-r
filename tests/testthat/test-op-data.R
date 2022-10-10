@@ -12,6 +12,7 @@ test_that("guild run", {
   # flags an be passed in as a bare R list, gets auto grid expanded,
   # one run per combination
   local_project(test_resource("basic.R"))
+  # Sys.setenv("DEBUGR" = 1); browser()
   guild_run("basic.R", flags = list(
     x = c(.1, .2),
     noise = c(.4, .5),

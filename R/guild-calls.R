@@ -57,7 +57,11 @@ latest_run <- function() {
 #'   console. Note, this has no effect on whether expressions are echoed in
 #'   the guild run stdout.
 #'
-#' @param ... passed through to [base::system2]
+#' @param label,tag optional strings used to label or tag experiments.
+#'
+#' @param ... passed through to the guild executable via [base::system2].
+#'   Arguments are automatically quoted with `shQuote()`, unless they are
+#'   protected with `I()`
 #'
 #' @return NULL, invisibly. This function is called for its side effect.
 #' @export

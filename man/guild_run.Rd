@@ -4,7 +4,15 @@
 \alias{guild_run}
 \title{Launch a guild run}
 \usage{
-guild_run(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait, ...)
+guild_run(
+  opspec = "train.R",
+  flags = NULL,
+  wait = TRUE,
+  label = NULL,
+  tags = NULL,
+  echo = wait,
+  ...
+)
 }
 \arguments{
 \item{opspec}{typically path to an R script, but could be an scalar
@@ -18,11 +26,15 @@ string that guild recognizes as a valid opspec.}
 
 \item{wait}{whether to wait for the run to finish}
 
+\item{label, tag}{optional strings used to label or tag experiments.}
+
 \item{echo}{whether output from the run is shown in the current R
 console. Note, this has no effect on whether expressions are echoed in
 the guild run stdout.}
 
-\item{...}{passed through to [base::system2]}
+\item{...}{passed through to the guild executable via [base::system2].
+Arguments are automatically quoted with `shQuote()`, unless they are
+protected with `I()`}
 }
 \value{
 NULL, invisibly. This function is called for its side effect.
