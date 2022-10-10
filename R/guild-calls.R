@@ -63,8 +63,11 @@ latest_run <- function() {
 #' @export
 guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE, echo = wait, ...) {
   if (is.data.frame(flags)) {
-    for (r in seq_len(nrow(flags)))
-      guild_run(opspec, unclass(flags[r, ]), echo = echo, wait = wait)
+    cl <- match.call()
+    for (r in seq_len(nrow(flags))) {
+      cl$flags <- unclass(flags[r, ])
+      eval(cl)
+    }
     return(invisible())
     # TODO: writeout flags to tempfile csv/json/yaml, supply to
     # guild call like: `guild run '@/path/to/tmpdir/tmpfile.json`
