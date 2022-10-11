@@ -60,13 +60,16 @@ latest_run <- function() {
 #'   console. Note, this has no effect on whether expressions are echoed in
 #'   the guild run stdout.
 #'
-#' @param label,tag optional strings used to label or tag experiments.
+#' @param label,tags optional strings used to label or tag experiments.
 #'
-#' @param ... passed through to the guild executable via [base::system2].
-#'   Arguments are automatically quoted with `shQuote()`, unless they are
-#'   protected with `I()`
+#' @param ... passed through to [base::system2()]. Unnamed arguments are
+#'   passed through to the guild executable. Arguments are automatically
+#'   quoted with `shQuote()`, unless they are protected with `I()`. Additionally,
+#'   named arguments to `system2()` can be supplied.
+#' @inheritDotParams base::system2
 #'
-#' @return NULL, invisibly. This function is called for its side effect.
+#' @return the return value from `system2()`, invisibly. This function is
+#'   primarily called for its side effect.
 #' @export
 guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE,
                       label = NULL,
