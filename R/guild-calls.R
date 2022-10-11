@@ -114,7 +114,7 @@ guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE,
 
 
 
-guild_view <- function() {
+guild_view <- function(..., wait = FALSE) {
   # TODO: use processx here?
-  guild("view", wait = FALSE)
+  guild("view", ..., wait = wait)
 }
