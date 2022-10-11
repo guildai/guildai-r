@@ -26,10 +26,10 @@ ls_runs <- function(...) {
                                   format = "%Y-%m-%d %H:%M:%OS")
   df$time <- as.difftime(df$time, units = "secs")
 
-  if("tibble" %in% loadedNamespaces())
-    df <- tibble::as_tibble(df)
-
   df$comments <- lapply(df$comments, as.character)
+
+  df <- tibble::as_tibble(df)
+
 
   df
 }
