@@ -15,6 +15,9 @@ ls_runs <- function(...) {
   x <- guild("api", "runs", ..., stdout = TRUE)
   df <- parse_json(x, simplifyVector = TRUE)
 
+  if(identical(df, list()))
+    return()
+
   # TODO: guild should return something that's tz aware,
   #   This approach the best we can do is assume the dt string is
   #   in the user locale
