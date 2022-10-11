@@ -7,9 +7,22 @@ function(file = "train.R",
          flags = parse_command_line(commandArgs(TRUE))) {
 
   if(flags_dest == "globals")
-    text <- update_source_w_global_flags(file, flags, overwrite = FALSE)
-  else
-    text <- readLines(file)
+  # setup default plot device.
+  # the default viewers work better w/ pngs than pdf.
+  options(
+    "device" = function() {
+      plots_dir <- file.path(Sys.getenv("RUN_DIR", "."), "plots")
+      if (!dir.exists(plots_dir))
+        dir.create(plots_dir, recursive = TRUE)
+
+      # if (is_windows() && capabilities("cairo"))  # required to prevent empty plot
+      #   png_args$type <- "cairo"                  # emitted when type = "windows"
+      png(
+        file.path(plots_dir, "Rplot%03d.png"),
+        width = 1200, height = 715, res = 192 # ~ golden ratio @ highdpi
+      )
+    }
+  )
 
   source2 <- new_source_w_active_echo()
   source2(
