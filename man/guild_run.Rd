@@ -26,18 +26,40 @@ string that guild recognizes as a valid opspec.}
 
 \item{wait}{whether to wait for the run to finish}
 
-\item{label, tag}{optional strings used to label or tag experiments.}
+\item{label, tags}{optional strings used to label or tag experiments.}
 
 \item{echo}{whether output from the run is shown in the current R
 console. Note, this has no effect on whether expressions are echoed in
 the guild run stdout.}
 
-\item{...}{passed through to the guild executable via [base::system2].
-Arguments are automatically quoted with `shQuote()`, unless they are
-protected with `I()`}
+\item{...}{
+  Arguments passed on to \code{\link[base:system2]{base::system2}}
+  \describe{
+    \item{\code{command}}{the system command to be invoked, as a character string.}
+    \item{\code{args}}{a character vector of arguments to \command{command}.}
+    \item{\code{stdout,stderr}}{where output to \file{stdout} or
+    \file{stderr} should be sent.  Possible values are \code{""}, to the \R
+    console (the default), \code{NULL} or \code{FALSE} (discard output),
+    \code{TRUE} (capture the output in a character vector) or a
+    character string naming a file.}
+    \item{\code{stdin}}{should input be diverted?  \code{""} means the default,
+    alternatively a character string naming a file.  Ignored
+    if \code{input} is supplied.}
+    \item{\code{input}}{if a character vector is supplied, this is copied one
+    string per line to a temporary file, and the standard input of
+    \code{command} is redirected to the file.}
+    \item{\code{env}}{character vector of name=value strings to set environment
+    variables.}
+    \item{\code{timeout}}{timeout in seconds, ignored if 0.  This is a limit for the
+    elapsed time running \code{command} in a separate process.   Fractions
+    of seconds are ignored.}
+    \item{\code{minimized,invisible}}{arguments that are accepted on Windows but
+    ignored on this platform, with a warning.}
+  }}
 }
 \value{
-NULL, invisibly. This function is called for its side effect.
+the return value from `system2()`, invisibly. This function is
+  primarily called for its side effect.
 }
 \description{
 Launch a guild run

@@ -70,10 +70,10 @@ guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE,
                       tags = NULL,
                       echo = wait, ...) {
   if (is.data.frame(flags)) {
-    cl <- match.call()
+    args <- c(as.list(environment()), ...)
     for (r in seq_len(nrow(flags))) {
-      cl$flags <- unclass(flags[r, ])
-      eval(cl)
+      args$flags <- unclass(flags[r, ])
+      do.call(guild_run, args)
     }
     return(invisible())
     # TODO: writeout flags to tempfile csv/json/yaml, supply to
@@ -101,14 +101,12 @@ guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE,
     append(args) <- as.vector(rbind("--tag", tags))
 
   cl <- call("guild", "run", args,
-             opspec, flags, wait = wait,
-             quote(...))
+             opspec, quote(...), flags, wait = wait)
   if (!echo)
     cl$stdout <- cl$stderr <- FALSE
   if(Sys.getenv("DEBUGR") == "1")
     message("R> ", deparse1(cl))
-  eval(cl)
-  invisible()
+  invisible(eval(cl))
 }
 
 
