@@ -7,6 +7,8 @@ function(file = "train.R",
          flags = parse_command_line(commandArgs(TRUE))) {
 
   if(flags_dest == "globals")
+      update_source_w_global_flags(file, flags, overwrite = TRUE)
+
   # setup default plot device.
   # the default viewers work better w/ pngs than pdf.
   options(
@@ -26,10 +28,11 @@ function(file = "train.R",
 
   source2 <- new_source_w_active_echo()
   source2(
-    exprs = parse(text = text, keep.source = TRUE),
+    file = file,
     echo = echo,
     spaced = FALSE,
     max.deparse.length = Inf,
+    keep.source = TRUE,
     deparseCtrl = c("keepInteger", "showAttributes", "keepNA")
   )
 
@@ -41,7 +44,7 @@ new_source_w_active_echo <- function() {
   # R CMD check complains if a copy of base::source lives in the
   # namespace because of forbidden .Internal() calls, so we
   # have to do this patch at runtime.
-  source2 <- source
+  source2 <- base::source
   body(source2) <- substitute({
     options(echo = echo)
     rm(echo)
