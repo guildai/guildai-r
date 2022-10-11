@@ -76,7 +76,7 @@ string that guild recognizes as a valid opspec.</p></dd>
 <dd><p>whether to wait for the run to finish</p></dd>
 
 
-<dt>label, tag</dt>
+<dt>label, tags</dt>
 <dd><p>optional strings used to label or tag experiments.</p></dd>
 
 
@@ -87,16 +87,52 @@ the guild run stdout.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>passed through to the guild executable via [base::system2].
-Arguments are automatically quoted with `shQuote()`, unless they are
-protected with `I()`</p></dd>
+<dd><p>Arguments passed on to <code><a href="https://rdrr.io/r/base/system2.html" class="external-link">base::system2</a></code></p><dl><dt><code>command</code></dt>
+<dd><p>the system command to be invoked, as a character string.</p></dd>
+
+    <dt><code>args</code></dt>
+<dd><p>a character vector of arguments to <code class="command">command</code>.</p></dd>
+
+    <dt><code>stdout,stderr</code></dt>
+<dd><p>where output to <code class="file">stdout</code> or
+    <code class="file">stderr</code> should be sent.  Possible values are <code>""</code>, to the <span style="R">R</span>
+    console (the default), <code>NULL</code> or <code>FALSE</code> (discard output),
+    <code>TRUE</code> (capture the output in a character vector) or a
+    character string naming a file.</p></dd>
+
+    <dt><code>stdin</code></dt>
+<dd><p>should input be diverted?  <code>""</code> means the default,
+    alternatively a character string naming a file.  Ignored
+    if <code>input</code> is supplied.</p></dd>
+
+    <dt><code>input</code></dt>
+<dd><p>if a character vector is supplied, this is copied one
+    string per line to a temporary file, and the standard input of
+    <code>command</code> is redirected to the file.</p></dd>
+
+    <dt><code>env</code></dt>
+<dd><p>character vector of name=value strings to set environment
+    variables.</p></dd>
+
+    <dt><code>timeout</code></dt>
+<dd><p>timeout in seconds, ignored if 0.  This is a limit for the
+    elapsed time running <code>command</code> in a separate process.   Fractions
+    of seconds are ignored.</p></dd>
+
+    <dt><code>minimized,invisible</code></dt>
+<dd><p>arguments that are accepted on Windows but
+    ignored on this platform, with a warning.</p></dd>
+
+  
+</dl></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>NULL, invisibly. This function is called for its side effect.</p>
+<p>the return value from `system2()`, invisibly. This function is
+  primarily called for its side effect.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
