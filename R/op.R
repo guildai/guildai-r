@@ -37,7 +37,6 @@ r_script_guild_data <- function(r_script_path) {
 
   data <- yaml(
     "flags-dest" = "globals",
-    "sourcecode" = list("dest" = "."),
     "name" = r_script_path
   )
 
