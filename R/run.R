@@ -365,8 +365,8 @@ teardown_run_dir <- function(setup_info) {
       ".guild/sourcecode", rownames(copied_files)[not_accessed]))
 
   # while we have it convenient, update access_time for files captured in .guild/sourcecode
-  accessed <- post_run[!not_accessed,]
-  fs::file_touch(rownames(accessed), access_time = accessed$atime)
+  # accessed <- post_run[!not_accessed,]
+  # fs::file_touch(rownames(accessed), access_time = accessed$atime)
 
   # delete directories we created that are empty
   for(d in rev(rownames(setup_info$created_dirs)))
