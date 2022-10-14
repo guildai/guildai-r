@@ -38,6 +38,8 @@
     > cx2 <- 2+2i
     > cx3 <- 3 + 3i
     > globals <- mget(ls())
+    > i2 <- - 123L # test token substitution on literals that
+    > i3 <- + 123L # are really unary calls of `-` or `+`
     > {
     +   cat("R exprs:\n")
     +   for (nm in names(globals))
@@ -94,6 +96,8 @@
     Replaced expression 'duplicated_flag = 1L' on line 35 with 'duplicated_flag = 99L'
     Replaced expression 'cx2 <- 2+2i' on line 40 with 'cx2 <- 22+22i'
     Replaced expression 'cx3 <- 3+3i' on line 41 with 'cx3 <- 33+33i'
+    Replaced expression 'i2 <- -123L' on line 45 with 'i2 <- 123L'
+    Replaced expression 'i3 <- 123L' on line 46 with 'i3 <- -123L'
     > #| echo: true
     > 
     > i <- 456L
@@ -130,6 +134,8 @@
     > cx2 <- 22+22i
     > cx3 <- 33+33i
     > globals <- mget(ls())
+    > i2 <- + 123L # test token substitution on literals that
+    > i3 <- - 123L # are really unary calls of `-` or `+`
     > {
     +   cat("R exprs:\n")
     +   for (nm in names(globals))
@@ -213,6 +219,8 @@
     > cx2 <- 2+2i
     > cx3 <- 3 + 3i
     > globals <- mget(ls())
+    > i2 <- - 123L # test token substitution on literals that
+    > i3 <- + 123L # are really unary calls of `-` or `+`
     > {
     +   cat("R exprs:\n")
     +   for (nm in names(globals))

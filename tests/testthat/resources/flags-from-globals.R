@@ -42,6 +42,9 @@ cx3 <- 3 + 3i
 
 globals <- mget(ls())
 
+i2 <- - 123L # test token substitution on literals that
+i3 <- + 123L # are really unary calls of `-` or `+`
+
 {
   cat("R exprs:\n")
   for (nm in names(globals))

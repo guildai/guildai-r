@@ -16,3 +16,22 @@ is_hashpipe <- function(x) startsWith(x, "#|")
 `append<-` <- function(x, value) c(x, value)
 
 is_windows <- function ()  .Platform$OS.type == "windows"
+
+
+
+new_source_w_active_echo <- function() {
+  # R CMD check complains if a copy of base::source lives in the
+  # namespace because of forbidden .Internal() calls, so we
+  # have to do this patch at runtime.
+  source2 <- base::source
+  body(source2) <- substitute({
+    options(echo = echo)
+    rm(echo)
+    makeActiveBinding("echo", function(x) {
+      if (missing(x)) getOption("echo")
+      else options(echo = x)
+    }, environment())
+    SOURCE_BODY
+  }, env = list(SOURCE_BODY = body(source)))
+  source2
+}

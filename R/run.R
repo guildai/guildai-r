@@ -40,24 +40,6 @@ function(file = "train.R",
 }
 
 
-new_source_w_active_echo <- function() {
-  # R CMD check complains if a copy of base::source lives in the
-  # namespace because of forbidden .Internal() calls, so we
-  # have to do this patch at runtime.
-  source2 <- base::source
-  body(source2) <- substitute({
-    options(echo = echo)
-    rm(echo)
-    makeActiveBinding("echo", function(x) {
-      if (missing(x)) getOption("echo")
-      else options(echo = x)
-    }, environment())
-    SOURCE_BODY
-  }, env = list(SOURCE_BODY = body(source)))
-  source2
-}
-
-
 #' @importFrom utils getParseData getSrcLocation
 update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
                                          text = readLines(filename)) {
@@ -69,8 +51,8 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
   parse_data <- getParseData(exprs)
   last_line_modified <- 0L
 
-  .replace_token <- function(token_parse_data, ...) {
-    text <<- replace_token(text, token_parse_data, ...)
+  .replace_token <- function(token_parse_data, new_literal_val) {
+    text <<- replace_token(text, token_parse_data, new_literal_val)
     last_line_modified <<- token_parse_data$line2
     invisible()
   }
@@ -112,12 +94,25 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
     # yaml::yaml.load()/parse_command_line() leaves complex literals as strings
     # meanwhile, `parse()` returns complex literals as `+` calls
     # resolve the actual complex value for both
+
     if(is_complex_literal(l[[3L]]) &&
        typeof(flags[[name]]) != "complex") {
       l[[3L]] <- eval(l[[3L]], baseenv())
       flags[[name]] <-
         as.complex(eval(str2lang(flags[[name]]), baseenv()))
         # eval(str2lang()) first because as.complex("1i") fails, returns NA
+    }
+
+    if(is.call(l[[3L]])) {
+      cl <- l[[3L]][[1L]]
+      if (identical(cl, quote(`+`)) || identical(cl, quote(`-`)) &&
+          length(l[[3L]]) == 2L &&
+          is.numeric(l[[3L]][[2L]])) {
+        # it's a literal numeric with a unary + or - call
+        # this is the way negative literals are parsed.
+        # eval it so we can do comparisons on the actual val.
+        l[[3L]] <- eval(l[[3L]], baseenv())
+      }
     }
 
     if (identical(flags[[name]], l[[3L]])) {
@@ -162,8 +157,12 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
 
       # slice out just the two numeric constants
       df <- df[df$token == "NUM_CONST", ]
-      # either user wrote "1+1i" or "1i"
       stopifnot(nrow(df) %in% c(1L, 2L))
+
+      ### TODO:
+      ## either user wrote "1i", "-1i", "1+1i" "-1+1i"
+      # df <- df[df$token %in% c("NUM_CONST", "'+'", "'-'"), ]
+      # stopifnot(nrow(df) %in% c(1L, 2L, 3L, 4L))
 
       if (length(unique(c(df$line1, df$line2))) == 1) {
         # both NUM_CONSTS of the complex are on the same line.
@@ -186,13 +185,29 @@ update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
     } else {
       # just a regular, non-complex, literal token
       # find the CONST token that ends on the same position as our expression
+      # One edge case is negative number literals, like complex literals,
+      # are actually parsed as calls.
       df <- parse_data
       df <- df[df$line2 == line_end, ]
-      df <- df[df$col2 == col_end, ]
-      df <- df[df$token %in% c("NUM_CONST", "STR_CONST", "NULL_CONST"), ]
-      stopifnot(nrow(df) == 1)
-      token <- df
-      .replace_token(token, flags[[name]])
+      df <- df[df$col2 <= col_end, ]
+      df <- df[df$col1 >= col_start, ]
+      if (sum(df$token %in% c("LEFT_ASSIGN", "EQ_ASSIGN")) >= 1) {
+        stopifnot(sum(df$token %in% c("LEFT_ASSIGN", "EQ_ASSIGN")) == 1)
+        df <- df[-(seq(which(df$token %in% c("LEFT_ASSIGN", "EQ_ASSIGN")))),]
+      }
+      df <- df[df$token != "expr",]
+      stopifnot(nrow(df) %in%  c(1, 2))
+
+      if (nrow(df) == 2) {
+        stopifnot(df$token[1] %in% c("'+'", "'-'"),
+                  df$token[2] == "NUM_CONST")
+        sign <- if (flags[[name]] >= 0) quote(`+`) else quote(`-`)
+        .replace_token(df[1, ], sign)
+        .replace_token(df[2, ], abs(flags[[name]]))
+      } else {
+        stopifnot(df$token %in% c("NUM_CONST", "STR_CONST", "NULL_CONST"))
+        .replace_token(df, flags[[name]])
+      }
     }
 
     # TODO: support for injecting flags for expressions like `foo <- get_foo()`?
@@ -226,6 +241,7 @@ is_complex_literal <- function(x) {
   if(is.complex(x)) return(TRUE)
 
   typeof(x) == "language" &&
+    length(x) == 3L &&
     identical(x[[1L]], quote(`+`)) &&
     is.numeric(x[[2L]]) &&
     is.complex(x[[3L]])

@@ -169,7 +169,8 @@ test_that("guild run w/ flags-dest: globals", {
     s4 = "A loooooooonger string",
     s5 = "a different string",
     cx = 1+1i, cx1 = 2+2i, cx2 = 22+22i, cx3 = 33+33i,
-    duplicated_flag = 99L
+    duplicated_flag = 99L,
+    i2 = 123L, i3 = -123L
   )
 
   guild_run(file, flags = flags)
