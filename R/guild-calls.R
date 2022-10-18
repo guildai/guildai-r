@@ -38,13 +38,15 @@ guild <- function(...,
 
 #' list guild runs
 #'
+#' @param full Whether to include all the available run info.
+#'
 #' @param ... additional arguments passed to `guild api runs`. Try
 #'   `"--help"` to see options.
 #'
 #' @return a dataframe of runs
 #' @export
 #' @importFrom jsonlite parse_json
-ls_runs <- function(...) {
+ls_runs <- function(..., full = FALSE) {
   if ("--help" %in% c(...))
     return(guild("api", "runs", "--help"))
   # --json option always shows all runs
@@ -60,12 +62,47 @@ ls_runs <- function(...) {
   for(dt_name in c("started", "stopped"))
     df[[dt_name]] <- as.POSIXct(df[[dt_name]],
                                   format = "%Y-%m-%d %H:%M:%OS")
-  df$time <- as.difftime(df$time, units = "secs")
+  # df$time <- as.difftime(df$time, units = "secs")
 
   df$comments <- lapply(df$comments, as.character)
 
+  # reorder columns for nicer printing.
+  nms <- unique(c("shortId", "label", "flags", "scalars", names(df)))
+  nms <- unique(c(nms, "env", "id"), fromLast = TRUE)
+  df <- df[nms]
+
+  df$scalars <- lapply(df$scalars, tibble::as_tibble)
+
+  if (isFALSE(full)) {
+    # delete not useful columns
+    df$opRef <- NULL
+    df$command <- NULL
+    df$env <- NULL
+
+    # pluck just the relevant info
+    # df$sourcecode <- df$sourcecode$files
+    df$sourcecode <- NULL
+  }
+
+  # these columna are dataframes
+  for(nm in c("flags"))
+    df[[nm]] <- tibble::as_tibble(df[[nm]])
+
+  # these columns are lists of dataframes
+  for(nm in c("scalars", "files"))
+    df[[nm]] <- lapply(df[[nm]], tibble::as_tibble)
+
+
+  # df <- rapply(list(df), tibble::as_tibble,
+  #              classes = "data.frame", how = "replace")[[1L]]
+
   df <- tibble::as_tibble(df)
 
+  # df$scalars[[1]]
+  #   $prefix
+  #     observed ".guild" for stdout, "logs/train" "logs/validate" for tfevents
+  #   $tag
+  #     observed "loss",  "epoch_accuracy", etc.
 
   df
 }
