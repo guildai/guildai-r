@@ -17,6 +17,11 @@ run_report(
 \item{output_dir}{directory where to place the rendered document}
 
 \item{template}{path to a paramaterized quarto document}
+
+\item{...}{passed on to `quarto::quarto_render()`}
+}
+\value{
+path to the generated html, invisibly
 }
 \description{
 Render a Run Summary Report

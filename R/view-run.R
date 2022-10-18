@@ -6,6 +6,7 @@
 #' @param id run id
 #' @param output_dir directory where to place the rendered document
 #' @param template path to a paramaterized quarto document
+#' @param ... passed on to `quarto::quarto_render()`
 #'
 #' @return path to the generated html, invisibly
 #' @export

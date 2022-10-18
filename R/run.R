@@ -24,7 +24,7 @@ function(file = "train.R",
 
       # if (is_windows() && capabilities("cairo"))  # required to prevent empty plot
       #   png_args$type <- "cairo"                  # emitted when type = "windows"
-      png(
+      grDevices::png(
         file.path(plots_dir, "Rplot%03d.png"),
         width = 1200, height = 715, res = 192 # ~ golden ratio @ highdpi
       )
