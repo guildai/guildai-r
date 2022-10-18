@@ -21,6 +21,7 @@ RoxygenNote: 7.2.1
 Suggests: 
     fs,
     rmarkdown,
+    quarto,
     testthat (>= 3.0.0),
     withr
 Config/testthat/edition: 3

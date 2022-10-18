@@ -1,0 +1,158 @@
+---
+title: "Run report"
+editor: visual
+# execute:
+#   keep-md: true
+format:
+  html:
+    anchor-sections: false
+    # standalone: true
+params:
+  run_id: ~
+---
+
+```{r, echo = FALSE}
+library(guildai)
+library(envir)
+attach_eval({
+  import_from(tibble, as_tibble)
+  import_from(guildai, str_drop_prefix)
+})
+
+run <- guildai::ls_runs(params$run_id)
+
+langs <- system2(quarto::quarto_path(),
+                 c("pandoc", "--list-highlight-languages"),
+                 stderr = TRUE, stdout = TRUE)
+
+run <- lapply(run, function(x) {
+  if(is.list(x) && length(x) == 1L && is.null(names(x)))
+     x <- x[[1L]]
+  if(is.data.frame(x))
+    x <- tibble::as_tibble(x)
+  x
+})
+
+read_as_utf8 <- function(x) {
+  x <- readBin(x, "raw", n = file.info(x)$size)
+  x <- rawToChar(x)
+  Encoding(x) <- "UTF-8"
+  x <- gsub("\r", "", x, fixed = TRUE)
+  x
+}
+
+reorder <- function(x, head = NULL, tail = NULL) {
+  x <- unique(c(head, x))
+  x <- unique(c(x, tail), fromLast = TRUE)
+  x
+}
+
+
+run$env <- NULL
+run_files <- list.files(run$dir, recursive = TRUE, all.files = TRUE)
+
+.guild_files <- grep("^\\.guild/", run_files, value = TRUE)
+.guild_attrs <- grep("^\\.guild/attrs/", .guild_files, value = TRUE)
+.sourcecode <- grep("^\\.guild/sourcecode/", .guild_files, value = TRUE)
+
+run_files <- setdiff(run_files, c(.guild_files, .guild_attrs, ".guild/output"))
+.guild_files <- setdiff(.guild_files, c(.guild_attrs, ".guild/output", .sourcecode))
+
+# reorder
+.guild_attrs <- reorder(
+  basename(.guild_attrs),
+  c("id", "flags", "exit_status", "label", "started", "stopped",
+    "op", "run_params"),
+  c("env"))
+.guild_attrs <- file.path(".guild/attrs", .guild_attrs)
+
+.sourcecode <- reorder(.sourcecode,
+                       grep("\\.R$", .sourcecode, value = TRUE))
+
+
+# helpers to display ----
+
+files_as_chunk <- function(files, show_filename = TRUE) {
+  chunks <- lapply(unlist(files), function(file) {
+
+
+
+    ext <- tools::file_ext(basename(file))
+    if(ext %in% c("png", "jpeg")) {
+      pth <- normalizePath(file.path(run$dir, file))
+      return(sprintf("\n![](%s)\n", pth))
+    }
+
+        # special handlers for some attrs
+    if(endsWith(file, ".guild/attrs/started") ||
+       endsWith(file, ".guild/attrs/stopped")) {
+      text <- readLines(file.path(run$dir, file))
+      text <- format(.POSIXct(as.double(text)/1000000),
+                     usetz = TRUE)
+    } else {
+
+
+      text <- tryCatch(
+        # readLines(file.path(run$dir, file)),
+        read_as_utf8(file.path(run$dir, file)),
+        warning = function(e) NULL,
+        error = function(e) NULL
+      )
+    }
+    if (is.null(text))
+      text <- "<binary file>"
+      # return("") # embedded nulls are a problem...
+
+    highlight_type <- switch(ext,
+      r = , R = "r",
+      py = "python",
+      yml = , yaml = "yaml",
+      if (nzchar(ext) && ext %in% langs)
+        ext
+      else
+        "default"
+    )
+
+    if(is.function(show_filename))
+      show_filename <- show_filename(file)
+    if(isTRUE(show_filename))
+      show_filename <- file
+
+    if(is.character(show_filename) && nzchar(show_filename)) {
+
+    chunk_header <- sprintf("\n```{.%s filename=%s}",
+                            highlight_type, show_filename)
+    } else
+      chunk_header <- sprintf("\n```{.%s}", highlight_type)
+
+    c(chunk_header, text, "```\n")
+  })
+  unlist(chunks)
+}
+```
+
+```{r}
+#| results: asis
+#| echo: false
+#| column: page
+writeLines(do.call(c, lapply(quote({
+  "::: {.panel-tabset}\n\n"
+
+  "## Source Code"
+  files_as_chunk(.sourcecode,
+                 \(x) guildai:::str_drop_prefix(x, ".guild/sourcecode/"))
+
+  "## Output\n\n"
+  files_as_chunk(".guild/output", FALSE)
+
+  "## Generated Files\n"
+  files_as_chunk(run_files)
+
+  "## Run Metadata\n"
+  files_as_chunk(unique(c(.guild_attrs, .guild_files)),
+                 basename)
+
+  ":::"
+
+})[-1], eval)))
+```
