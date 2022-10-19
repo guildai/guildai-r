@@ -90,7 +90,52 @@ browser_viewer <- function(viewer_dir, browser = utils::browseURL) {
 
 
 
+#' compare runs
+#'
+#' @param id1,id2 run ids
+#' @param id2
+#' @param output_dir where to place the rendered html
+#' @param template report template
+#' @param viewer Viewer to display training run information within (default
+#'   to an internal page viewer if available, otherwise to the R session
+#'   default web browser, `utils::browseURL()`).
+#' @param ... passed on to `quarto::quarto_render()`
+#'
+#' @return path to the generated html, invisibly
+#' @export
+compare_runs <- function(
+    id1, id2,
+    output_dir = file.path(tempdir(), sprintf("%s-%s", id1, id2)),
+    template = system.file("templates/compare-runs.qmd", package = "guildai"),
+    viewer = getOption("guildai.viewer"),
+    ...)
+{
+  if(!dir.exists(output_dir))
+    dir.create(output_dir, recursive = TRUE)
+
+  withr::local_dir(output_dir)
+
+  if(!file.exists(basename(template)))
+    file.copy(template, ".")
+
+  if(!requireNamespace("quarto", quietly = TRUE))
+    stop("Please install the {quarto} R package.")
+
+  quarto::quarto_render(
+    input = basename(template),
+    execute_params = list(run_id_1 = id1, run_id_2 = id2),
+    ...)
+
+  html <- sprintf("%s.html", tools::file_path_sans_ext(basename(template)))
+  view_page(normalizePath(html), getOption("guildai.viewer"))
+  invisible(html)
+}
+
+
 if(FALSE) {
   Sys.setenv("GUILD_HOME" = "~/guild/fashion-mnist/.guild")
-  run_report("61f6b7c3bc9d47dab2e6ef6632dc8797")
+  view_run_report("61f6b7c3bc9d47dab2e6ef6632dc8797")
+  compare_runs("61f6b7c3bc9d47dab2e6ef6632dc8797",
+               "a9da9f78c5374b7289500458dab0d3e7")
 }
+

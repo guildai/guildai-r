@@ -1,0 +1,53 @@
+---
+title: "Run report"
+editor: visual
+execute:
+  keep-md: true
+format:
+  html:
+    anchor-sections: false
+    # standalone: true
+params:
+  run_id_1: ~
+  run_id_2: ~
+---
+
+```{r, echo = FALSE}
+library(guildai)
+library(envir)
+attach_eval({
+  import_from(tibble, as_tibble)
+  import_from(guildai, str_drop_prefix)
+})
+
+
+run1 <- guildai::ls_runs(params$run_id_1)
+run2 <- guildai::ls_runs(params$run_id_2)
+
+langs <- system2(quarto::quarto_path(),
+                 c("pandoc", "--list-highlight-languages"),
+                 stderr = TRUE, stdout = TRUE)
+
+
+all_files <- unique(unlist(
+  lapply(c(run1$dir, run2$dir), list.files,
+    recursive = TRUE, all.files = TRUE, no.. = TRUE)
+))
+```
+
+```{r}
+#| results: asis
+#| echo: false
+#| column: page
+writeLines(unlist(lapply(all_files, function(file) {
+    file1 <- file.path(run1$dir, file)
+    file2 <- file.path(run2$dir, file)
+    
+    text <- knitr::knit_child(text = c(
+      "```{r, error = TRUE, echo = FALSE}",
+      sprintf("diffviewer::visual_diff('%s', '%s')",
+              file1, file2),
+      "```"), quiet = TRUE)
+    text
+  })))
+```
