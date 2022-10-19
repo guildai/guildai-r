@@ -3,17 +3,23 @@
 
 #' Render a Run Summary Report
 #'
-#' @param id run id
-#' @param output_dir directory where to place the rendered document
-#' @param template path to a paramaterized quarto document
+#' @param id run id.
+#' @param output_dir directory where to place the rendered document.
+#' @param template path to a parameterized quarto document.
+#' @param viewer Viewer to display training run information within (default
+#'   to an internal page viewer if available, otherwise to the R session
+#'   default web browser, `utils::browseURL()`).
+
+
 #' @param ... passed on to `quarto::quarto_render()`
 #'
 #' @return path to the generated html, invisibly
 #' @export
-run_report <- function(
+view_run_report <- function(
   id,
   output_dir = file.path(tempdir(), id),
   template = system.file("templates/view-run.qmd", package = "guildai"),
+  viewer = getOption("guildai.viewer"),
   ...)
 {
   if(!dir.exists(output_dir))
