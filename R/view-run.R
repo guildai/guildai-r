@@ -10,11 +10,12 @@
 #'
 #' @return path to the generated html, invisibly
 #' @export
-run_report <- function(id,
-                       output_dir = file.path(tempdir(), id),
-                       template = system.file("templates/run-summary.qmd", package = "guildai"),
-                       ...
-                       ) {
+run_report <- function(
+  id,
+  output_dir = file.path(tempdir(), id),
+  template = system.file("templates/view-run.qmd", package = "guildai"),
+  ...)
+{
   if(!dir.exists(output_dir))
     dir.create(output_dir, recursive = TRUE)
 
