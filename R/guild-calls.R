@@ -151,14 +151,10 @@ guild_run <- function(opspec = "train.R", flags = NULL, ...,
                       tags = NULL,
                       echo = wait) {
   if (is.data.frame(flags)) {
-    args <- c(as.list(environment()), ...)
-    for (r in seq_len(nrow(flags))) {
-      args$flags <- unclass(flags[r, ])
-      do.call(guild_run, args)
-    }
-    return(invisible())
-    # TODO: writeout flags to tempfile csv/json/yaml, supply to
-    # guild call like: `guild run '@/path/to/tmpdir/tmpfile.json`
+    fi <- tempfile("guild-batch-flags-", fileext = ".yml")
+    on.exit(unlink(fi))
+    print.yaml(flags, fi, column.major = FALSE)
+    flags <- paste0("@", fi)
   }
 
   if (!is.null(names(flags))) {
