@@ -3,7 +3,7 @@
 
 #' Render a Run Summary Report
 #'
-#' @param id run id.
+#' @param id run id. Defaults to the latest run.
 #' @param output_dir directory where to place the rendered document.
 #' @param template path to a parameterized quarto document.
 #' @param viewer Viewer to display training run information within (default
@@ -16,7 +16,7 @@
 #' @return path to the generated html, invisibly
 #' @export
 view_run_report <- function(
-  id,
+  id = ls_runs("1")$id,
   output_dir = file.path(tempdir(), id),
   template = system.file("templates/view-run.qmd", package = "guildai"),
   viewer = getOption("guildai.viewer"),

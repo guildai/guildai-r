@@ -5,7 +5,7 @@
 \title{Render a Run Summary Report}
 \usage{
 view_run_report(
-  id,
+  id = ls_runs("1")$id,
   output_dir = file.path(tempdir(), id),
   template = system.file("templates/view-run.qmd", package = "guildai"),
   viewer = getOption("guildai.viewer"),
@@ -13,7 +13,7 @@ view_run_report(
 )
 }
 \arguments{
-\item{id}{run id.}
+\item{id}{run id. Defaults to the latest run.}
 
 \item{output_dir}{directory where to place the rendered document.}
 
