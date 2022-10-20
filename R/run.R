@@ -1,20 +1,5 @@
 
 
-#
-# update_yaml_file_w_global_flags <- function(file, flags) {
-#   og <- read_yaml(file)
-#   # need special handling for bools, specifying 'arg-encoding' doesn't work
-#   for(nm in names(og)) {
-#     if(isTRUE(og[[nm]]) || isFALSE((og[[nm]]))) {
-#       if(identical(flags[[nm]], ""))
-#         flags[[nm]] <- FALSE
-#       else if(identical(flags[[nm]], 1L))
-#         flags[[nm]] <- TRUE
-#     }
-#   }
-#   new <- modifyList(og, flags)
-#   print.yaml(new, file)
-# }
 
 do_guild_run <-
 function(file = "train.R",
@@ -30,11 +15,6 @@ function(file = "train.R",
   else if (is_yml_file(flags_dest) &&
            !startsWith(flags_dest, "config:")) {
     file.copy(".guild/attrs/flags", flags_dest)
-    # update_yaml_file_w_global_flags(file.path(".guild/sourcecode/", flags_dest),
-    #                                 flags)
-    # og <- read_yaml(file.path(".guild/sourcecode/", flags_dest))
-    # new <- modifyList(og, flags)
-    # print.yaml(new, file.path(".guild/sourcecode/", flags_dest))
   }
 
   setup_info <- setup_run_dir()
@@ -110,18 +90,6 @@ modify_r_file_flags <- function(filename, flags, overwrite = FALSE,
     name <- as.character(l[[2L]])
     if (!name %in% names(flags))
       next
-
-    # workaround guild's accommodating python's odd behavior that requires
-    # guild to pass '' or "1" for bool cmd line flags.
-    if(typeof(l[[3L]]) == "logical" && !typeof(flags[[name]]) == "logical")  {
-      # python's `bool()` only returns False on an empty string '', so that's
-      # what guild gives it. Guild arbitrarily gives "1" for True.
-      # Our yaml parser converts an empty string to NULL, 1 to an int.
-      if(is.null(flags[[name]]))
-        flags[[name]] <- FALSE
-      else if(identical(flags[[name]], 1L))
-        flags[[name]] <- TRUE
-    }
 
     # yaml::yaml.load()/parse_command_line() leaves complex literals as strings
     # meanwhile, `parse()` returns complex literals as `+` calls

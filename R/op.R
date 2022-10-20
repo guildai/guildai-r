@@ -70,38 +70,15 @@ r_script_guild_data <- function(r_script_path) {
   if (is.null(data$flags)) {
     flags_dest <- data$`flags-dest`
 
-    # rename "file:path/to/file.yml" -> "config:path/to/file.yml"
-    # if(startsWith(data$`flags-dest`, "file:"))
-    #   data$`flags-dest` <- sub("file:", "config:", data$`flags-dest`,
-    #                            fixed = TRUE)
-
     if (is_r_file(flags_dest)) {
       data$flags <- infer_global_params(text, is_anno)
 
     } else if (is_yml_file(flags_dest)) {
       # TODO: this file read should be done by guild core
       data$flags <- read_yaml(str_drop_prefix(flags_dest, "config:"))
-
-      # if(!startsWith(flags_dest, "config:"))
-      #   data$`flags-dest` <- sprintf("config:%s", flags_dest)
     }
   }
 
-  # special case bool type flags
-  data$flags <- lapply(data$flags, function(f) {
-    if(isTRUE(f) || isFALSE(f))
-      return(list("default" = f,
-                  "type" = "boolean",
-                  "arg-encoding" = list(
-                    "yes" = "yes",
-                    "no" = "no"
-                  )))
-    if(is.list(f) &&
-       identical(f$type, "boolean") &&
-       !utils::hasName(f, "arg-encoding"))
-      f[["arg-encoding"]] <- list("yes" = "yes", "no" = "no")
-    f
-  })
 
   # intercept user supplied `echo` here
   echo <- data$echo %||% TRUE
@@ -205,10 +182,6 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
                                 "integer" = "int",
                                 "complex" = "string"))
     # yaml has no native support for complex
-
-    # needed to get bools passed back via command line in a sensible way
-    if(param$type == "boolean")
-      param[["arg-encoding"]] <- list("yes" = "yes", "no" = "no")
 
     lineno <- utils::getSrcLocation(exprs[i], "line")
     # look for adjacent anno hints about this flag
