@@ -18,7 +18,7 @@ parse_yaml_anno <- function(x) {
 
 #' @importFrom rlang %||%
 #' @importFrom utils modifyList
-emit_r_script_guild_data <- function(r_script_path) {
+emit_r_script_guild_data <- function(r_script_path = commandArgs(TRUE)[1]) {
   print.yaml(out <- r_script_guild_data(r_script_path),
              c("", if(Sys.getenv("DEBUGR") == "1")
                "emitted-script-guild-op-data.yml"))
@@ -28,6 +28,7 @@ emit_r_script_guild_data <- function(r_script_path) {
 #   supply `arg-name: gsub("_", "-", name)` ?
 
 r_script_guild_data <- function(r_script_path) {
+  r_script_path <- gsub("\\", "/", r_script_path, fixed = TRUE)
 
   text <- readLines(r_script_path)
   # handle case of empty file
@@ -114,7 +115,7 @@ rscript_bin <- function() {
   # TODO: build the R call directly instead of going through Rscript?
   file.path(
     R.home("bin"),
-    if(is_windows()) "Rterm.exe" else "Rscript")
+    if(is_windows()) "Rscript.exe" else "Rscript")
 }
 
 

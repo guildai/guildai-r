@@ -351,7 +351,7 @@ teardown_run_dir <- function(setup_info) {
   # remove anything that we setup.
   not_modified <- pre_run$mtime == post_run$mtime
   if(any(not_modified))
-    file.remove(rownames(copied_files)[not_modified])
+    unlink(rownames(copied_files)[not_modified])
 
   # prune never-accessed captured sourcecode
   not_accessed <- pre_run$atime == post_run$atime

@@ -49,6 +49,7 @@ ls_runs <- function(..., full = FALSE) {
     return(guild("api", "runs", "--help"))
   # --json option always shows all runs
   x <- guild("api", "runs", ..., stdout = TRUE)
+  x <- paste0(x, collapse = '')
   df <- parse_json(x, simplifyVector = TRUE)
 
   if(identical(df, list()))
