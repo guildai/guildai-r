@@ -51,11 +51,11 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">guild_run</span><span class="op">(</span></span>
 <span>  opspec <span class="op">=</span> <span class="st">"train.R"</span>,</span>
 <span>  flags <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
 <span>  wait <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  tags <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  echo <span class="op">=</span> <span class="va">wait</span>,</span>
-<span>  <span class="va">...</span></span>
+<span>  echo <span class="op">=</span> <span class="va">wait</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -70,20 +70,6 @@ string that guild recognizes as a valid opspec.</p></dd>
 <dd><p>- a named list or vector like `c(noise = .3, dropout = .4)`</p>
 <p>- a scalar string like `"noise=.3 dropout=.4"`</p>
 <p>- a dataframe of flags for a batch of runs</p></dd>
-
-
-<dt>wait</dt>
-<dd><p>whether to wait for the run to finish</p></dd>
-
-
-<dt>label, tags</dt>
-<dd><p>optional strings used to label or tag experiments.</p></dd>
-
-
-<dt>echo</dt>
-<dd><p>whether output from the run is shown in the current R
-console. Note, this has no effect on whether expressions are echoed in
-the guild run stdout.</p></dd>
 
 
 <dt>...</dt>
@@ -125,6 +111,20 @@ the guild run stdout.</p></dd>
 
   
 </dl></dd>
+
+
+<dt>wait</dt>
+<dd><p>whether to wait for the run to finish</p></dd>
+
+
+<dt>label, tags</dt>
+<dd><p>optional strings used to label or tag experiments.</p></dd>
+
+
+<dt>echo</dt>
+<dd><p>whether output from the run is shown in the current R
+console. Note, this has no effect on whether expressions are echoed in
+the guild run stdout.</p></dd>
 
 </dl></div>
     <div class="section level2">
