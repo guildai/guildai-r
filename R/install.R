@@ -43,13 +43,14 @@ system2t <- function (command, args, ...) {
 #'
 #' @examples
 #' # install_guild(c("-e", "~/guild/guildai"))
+#' # install_guild("~/guildai", reticulate::install_python())
 #' # install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
 #' # install_guild(
 #' #   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
 #' #   python = reticulate::install_python())
 #' #
 install_guild <- function(guildai = "guildai", python = find_python()) {
-  venv <- normalizePath(rappdirs::user_data_dir("r-guildai"), mustWork = FALSE)
+  venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL), mustWork = FALSE)
   unlink(venv, recursive = TRUE)
   python <- normalizePath(python)
   system2(python, c("-m", "venv", shQuote(venv)))
@@ -70,10 +71,10 @@ install_guild <- function(guildai = "guildai", python = find_python()) {
 find_guild <- function() {
   if (is_windows())
     if (file.exists(guild <-
-                    file.path(rappdirs::user_data_dir("r-guildai"), "Scripts", "guild.exe")))
+                    file.path(rappdirs::user_data_dir("r-guildai", NULL), "Scripts", "guild.exe")))
       return(normalizePath(as.vector(guild)))
   if (file.exists(guild <-
-                  file.path(rappdirs::user_data_dir("r-guildai"), "bin", "guild")))
+                  file.path(rappdirs::user_data_dir("r-guildai", NULL), "bin", "guild")))
     return(normalizePath(as.vector(guild)))
   if (file.exists(guild <- Sys.which("guild")))
     return(normalizePath(as.vector(guild)))
