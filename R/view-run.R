@@ -93,7 +93,6 @@ browser_viewer <- function(viewer_dir, browser = utils::browseURL) {
 #' compare runs
 #'
 #' @param id1,id2 run ids
-#' @param id2
 #' @param output_dir where to place the rendered html
 #' @param template report template
 #' @param viewer Viewer to display training run information within (default

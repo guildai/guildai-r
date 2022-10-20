@@ -194,7 +194,7 @@ guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE,
 #' Launch Guild Viewer
 #'
 #' @param ... passed on to the `guild` binary
-#' @param wait
+#' @param wait whether to block the R console while the application is active.
 #'
 #' @export
 guild_view <- function(..., wait = FALSE) {

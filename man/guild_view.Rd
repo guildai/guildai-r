@@ -9,7 +9,7 @@ guild_view(..., wait = FALSE)
 \arguments{
 \item{...}{passed on to the `guild` binary}
 
-\item{wait}{}
+\item{wait}{whether to block the R console while the application is active.}
 }
 \description{
 Launch Guild Viewer

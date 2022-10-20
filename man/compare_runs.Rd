@@ -7,7 +7,7 @@
 compare_runs(
   id1,
   id2,
-  output_dir = file.path(tempdir(), id),
+  output_dir = file.path(tempdir(), sprintf("\%s-\%s", id1, id2)),
   template = system.file("templates/compare-runs.qmd", package = "guildai"),
   viewer = getOption("guildai.viewer"),
   ...
