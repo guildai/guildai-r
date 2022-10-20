@@ -37,6 +37,7 @@ guild <- function(...,
 #' list guild runs
 #'
 #' @param full Whether to include all the available run info.
+#' @param scalars Wheter to export all scalars for the requested runs instead.
 #'
 #' @param ... additional arguments passed to `guild api runs`. Try
 #'   `"--help"` to see options.
@@ -44,9 +45,17 @@ guild <- function(...,
 #' @return a dataframe of runs
 #' @export
 #' @importFrom jsonlite parse_json
-ls_runs <- function(..., full = FALSE) {
+ls_runs <- function(..., full = FALSE, scalars = FALSE) {
   if ("--help" %in% c(...))
     return(guild("api", "runs", "--help"))
+
+  if(isTRUE(scalars)) {
+    # TODO think on this interface. separate function? Augment main df? Different name?
+    text <- guild("tensorboard", "--export-scalars", "-", stdout = TRUE)
+    return(tibble::as_tibble(read.csv(text = text)))
+  }
+
+
   # --json option always shows all runs
   x <- guild("api", "runs", ..., stdout = TRUE)
   x <- paste0(x, collapse = '')
@@ -109,11 +118,6 @@ ls_runs <- function(..., full = FALSE) {
 }
 
 
-
-
-latest_run <- function() {
-
-}
 
 # TODO: support for globals injection of `!expr foo` flags
 

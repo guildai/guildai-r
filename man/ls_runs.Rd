@@ -4,13 +4,15 @@
 \alias{ls_runs}
 \title{list guild runs}
 \usage{
-ls_runs(..., full = FALSE)
+ls_runs(..., full = FALSE, scalars = FALSE)
 }
 \arguments{
 \item{...}{additional arguments passed to `guild api runs`. Try
 `"--help"` to see options.}
 
 \item{full}{Whether to include all the available run info.}
+
+\item{scalars}{Wheter to export all scalars for the requested runs instead.}
 }
 \value{
 a dataframe of runs
