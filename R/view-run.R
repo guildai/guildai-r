@@ -102,7 +102,7 @@ browser_viewer <- function(viewer_dir, browser = utils::browseURL) {
 #'
 #' @return path to the generated html, invisibly
 #' @export
-compare_runs <- function(
+view_runs_diff <- function(
     ids = ls_runs("1:2")$id,
     output_dir = file.path(tempdir(), paste(ids, collapse = "-")),
     template = system.file("templates/compare-runs.qmd", package = "guildai"),

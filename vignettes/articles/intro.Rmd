@@ -173,18 +173,18 @@ guild_run("fashion-mnist.R")
 
 This will also show us a report summarizing the results of the run, but
 what we are really interested in is a comparison between this run and
-the previous one. We can view a comparison via the `compare_runs()`
+the previous one. We can view a comparison via the `view_runs_diff()`
 function:
 
 ```{r, eval = FALSE}
-compare_runs()
+view_runs_diff()
 ```
 
 The comparison report shows the model attributes and metrics
 side-by-side, as well as differences in the source code and output of
 the training script.
 
-Note that `compare_runs()` will by default compare the last two runs,
+Note that `view_runs_diff()` will by default compare the last two runs,
 however you can pass any two run ids you like to be compared.
 
 ## Analyzing Runs
@@ -218,7 +218,7 @@ guild_run("fashion-mnist.R",
                        units = 256))
 ```
 
-Now, when we inspect the output with `compare_runs()`, we see that the
+Now, when we inspect the output with `view_runs_diff()`, we see that the
 source files associated with the run have the updated flag values, as if
 we had modified them manually.
 
