@@ -1,14 +1,498 @@
 ---
 title: "Introduction"
+execute:
+  freeze: true
+editor:
+  markdown:
+    wrap: 72
+output:
+  html_document:
+    df_print: tibble
 ---
 
-```{r, include = FALSE}
+```{r setup, include=FALSE, paged.print=TRUE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  paged.print=FALSE # this seemingly doesn't do anything
 )
+library(dplyr, warn.conflicts = FALSE)
+library(guildai)
+
+
+Sys.setenv(PATH = paste0(R.home("bin"), ":", Sys.getenv("PATH")))
+for(v in c("VIRTUAL_ENV", "PYTHONHOME", "PYTHONPATH")) Sys.unsetenv(v)
+Sys.setenv("RETICULATE_PYTHON" = "~/.virtualenvs/r-tensorflow/bin/python")
+Sys.setenv("TF_CPP_MIN_LOG_LEVEL" = "2")
+# Sys.
+
+if(!interactive())
+  unlink(".guild", recursive = TRUE)
+
+# help knitr capture stdout 
+guild_run <- function(..., flags = NULL, echo = TRUE) {
+  stdout <- stderr <- echo
+  flags$.fast <- TRUE#  interactive()
+  out <- guildai::guild_run(..., flags = flags, stdout = stdout, stderr = stderr)
+  try(writeLines(out))
+  invisible(out)
+}
+Sys.setenv("GUILD_HOME" = normalizePath(file.path(getwd(), ".guild"),
+                                        mustWork = FALSE))
+
 ```
 
-```{r setup}
-library(guildai)
+<!-- a nice screenshot image here-->
+
+*guildai* provides a suite of tools for tracking, visualizing, and
+managing training runs and experiments. The {guildai} R package is a
+successor to the {tfruns} package.
+
+-   Track the hyperparameters, metrics, output, and source code of every
+    training run.
+
+-   Compare hyperparmaeters and metrics across runs to find the best
+    performing model.
+
+-   Automatically generate reports to visualize individual training runs
+    or comparisons between runs.
+
+-   No changes to source code required.
+
+## Installation
+
+The R package provides an interface to (guildai
+core)[<https://guild.ai/>]. The R package will install guildai core on
+first use, or you can call `install_guild()` to customize the
+installation. You can install the **guildai** package from CRAN as
+follows:
+
+```{r, eval = FALSE}
+install.packages("guildai")
+guildai::install_guild()
+```
+
+{guildai} can be used with any machine learning framework, or even no
+framework at all. For this introductory example, we'll start with a
+Keras model applied to the fashion mnist dataset.
+
+If you've not used Keras from R before and you want to follow along on
+your machine, you can install it like this:
+
+```{r, eval = FALSE}
+install.packages("keras")
+library(keras)
+install_keras()
+```
+
+## Training
+
+To start, we'll setup a sample project folder with one script.
+
+```{r}
+file.copy(system.file("examples/fashion-mnist.R", package = "guildai"),
+          ".", overwrite = TRUE)
+```
+
+Here is what the training script looks like:
+
+```{r}
+#| file: !expr "'fashion-mnist.R'"
+#| eval: false
+```
+
+To train a model with **guildai**, just use the `guild_run()` function
+in place of the `source()` function to execute your R script. For
+example:
+
+We can source this script at the R console with
+`source("fashion-mnist.R")`, or run it at the Terminal with
+`Rscript fashion-mnist.R`. Or we can run it using `guild_run()`:
+
+```{r}
+guild_run("fashion-mnist.R")
+```
+
+By default, the output stream of the run will be shown at the R console.
+After launching a run, you can launch an application to view your runs
+with `guild_view()`. From the Guild View application, you can also
+launch tensorboard.
+
+```{r, eval = FALSE}
+guild_view()
+```
+
+<!-- Include a screenshot here -->
+
+You can also retrieve a data frame with information about the run with
+`ls_runs()`:
+
+```{r}
+run <- ls_runs()
+str(run)
+```
+
+`ls_runs()` returns a data.frame with information about runs. In our
+sample project, we've launched one run, so `ls_runs()` returns a 1-row
+dataframe.
+
+Importantly, all the information about the run is stored as plain files
+on the filesystem.
+
+```{r}
+fs::dir_tree(run$dir, all=TRUE)
+```
+
+`guild_view()` and `ls_runs()` provide two convenient ways to gather and
+present information about runs.
+
+A run can also be used to generate a summary report, a paramaterized
+quarto document:
+
+```{r eval=FALSE}
+view_run_report(run$id)
+```
+
+## Comparing Runs
+
+Let's make a couple of changes to our training script to see if we can
+improve model performance. We'll change the number of units in our first
+dense layer to 128, change the `learning_rate` from 0.001 to 0.003 and
+run 30 rather than 20 `epochs`. After making these changes to the source
+code we re-run the script using `training_run()` as before:
+
+```{r, echo = FALSE}
+guildai:::modify_r_file_flags("fashion-mnist.R", 
+  list(units = 128, learning_rate = 0.003, epochs = 30),
+  overwrite = TRUE)
+```
+
+```{r}
+guild_run("fashion-mnist.R")
+```
+
+This will also show us a report summarizing the results of the run, but
+what we are really interested in is a comparison between this run and
+the previous one. We can view a comparison via the `compare_runs()`
+function:
+
+```{r, eval = FALSE}
+compare_runs()
+```
+
+The comparison report shows the model attributes and metrics
+side-by-side, as well as differences in the source code and output of
+the training script.
+
+Note that `compare_runs()` will by default compare the last two runs,
+however you can pass any two run ids you like to be compared.
+
+## Analyzing Runs
+
+We've demonstrated visualizing and comparing one or two runs, however as
+you accumulate more runs you'll generally want to analyze and compare
+runs many runs. You can use the `ls_runs()` function to yield a data
+frame with summary information on all of the runs you've conducted.
+
+## Flags
+
+Flags are a form of run inputs, or paramaterization. The action we just
+did, of modifying `learning_rate`, `epochs` and `units` values in the
+script before launching the second run, can be handled for us by
+`guild_run()` using the *flags* interface.
+
+By default, top-level assignments of scalar literals in an R script are
+identified by guild as run flags, that can be modified per-run. You can
+quickly see what flags are available in an R script by passing
+`--help-op` (more on this later).
+
+```{r}
+guild_run("fashion-mnist.R", "--help-op")
+```
+
+To launch a run with different flag values, we can do this:
+
+```{r, include=FALSE}
+guild_run("fashion-mnist.R", 
+          flags = list(learning_rate = 0.001, 
+                       units = 256))
+```
+
+Now, when we inspect the output with `compare_runs()`, we see that the
+source files associated with the run have the updated flag values, as if
+we had modified them manually.
+
+The flags interface is useful for hyperparamater optimization.
+
+At it's simplest, we can pass multiple values for each flag, and guild
+will automatically expand the combinations to a grid search. For
+example, this will launch 4 training runs, with each combination of flag
+values:
+
+```{r}
+guild_run("fashion-mnist.R", 
+          flags = list(learning_rate = c(0.001, 0.003),
+                       units = c(128, 256)))
+```
+
+For more precision, we can pass a dataframe of flags values, with each
+row corresponding to a run.
+
+```{r, eval = TRUE}
+flags_df <- expand.grid(learning_rate = c(0.001, 0.003),
+                        units = c(128, 256))
+flags_df
+```
+
+```{r, eval = FALSE}
+guild_run("fashion-mnist.R", flags = flags_df)
+```
+
+Finally, we can optionally supply additional metadata about individual
+flags by placing hashpipe yaml annotations above the flag expression.
+For example:
+
+    #| description: size of first layer.
+    #| min: 16
+    #| max: 256
+    units <- 32
+
+    #| description: Activation function to use.
+    #| choices: [relu, sigmoid, tanh]
+    activation <- "relu"
+
+Now, the `description`s and constraints will appear in `--help-op` and
+related locations.
+
+As a project grows, it's helpful to be able to move flag definitions out
+of the main file. To do so, you can include a `flags-dest` in the
+frontmatter of the R script, specifying the file path (relative to the
+project directory) of the file where guild should place the flag values.
+
+    #| flags-dest: ./flags.R
+
+    FLAGS <- envir::include("flags.R", new.env())
+
+YAML files are also supported as a flags destination:
+
+    #| flags-dest: ./flags.yml
+
+    FLAGS <- yaml::read_yaml("flags.yml")
+
+The flags and flag values associated with individual runs are returned
+by `ls_runs()`.
+
+Guild runs *operations*. In this simple instance, the full R script is
+the operation. To get information about a specified operation, you can
+add "--help-op" to the arguments.
+
+```{r}
+guild_run("fashion-mnist.R", "--help-op")
+```
+
+Note that guild automatically recognized some Flags for the operation.
+Flags allow for easily allows for running machine learning experiments
+with guild. By default, any symbols defined at the top level of an R
+scripted with scalar literal constants are identified as flags that
+guild can adjust when launching a run. For example, we can ask guild to
+run "fashion-mnist-1.R" with a larger batch size:
+
+```{r}
+guild_run("fashion-mnist.R", flags = c(batch_size = 16))
+```
+
+Now, `ls_runs()` returns a two-row data frame. We can inspect `flags`,
+to see the change:
+
+```{r paged.print=FALSE}
+runs <- ls_runs()
+runs %>%
+  select(shortId, flags) #%>% tidyr::unnest(flags, names_sep = "_")
+```
+
+## Scalars
+
+The counterpart to run `flags` are run `scalars`. Where as `flags` are a
+type of run input, scalars are run outputs identified by guild as
+meaningful to track.
+
+```{r paged.print=FALSE}
+runs %>%
+  select(shortId, scalars)
+
+glimpse(runs$scalars[[1]])
+```
+
+```{r eval=FALSE, include=FALSE}
+guild_view()
+view_run_report()
+```
+
+Here we see that guild has automatically identified `test_accuracy` and
+`test_loss` as run scalar outputs. By default, any lines printed to
+standard output by the run with the form `"key: value"` are recorded by
+guild as `scalars`. If the same scalar `key` is output multiple times
+during a run (e.g, loss during a training loop), then be sure to also
+print a `step` scalar, to enable guild to track history (and enable
+visualization of the run with tensorboard).
+
+Alternatively, if your run process produces tensorboard logs directly
+(e.g., `keras::callback_tensorboard()`), then those logs are also
+identified as run scalars.
+
+`ls_runs()` by default only returns a summary of run scalars, but the
+full scalar history can also be accessed from R directly:
+
+```{r}
+ls_runs(scalars = TRUE)
+```
+
+### Hyperparamater Tuning
+
+We can investigate what impact flag values had on `test_accuracy`.
+
+```{r paged.print=FALSE}
+runs <- ls_runs()
+
+df <- runs %>%
+  select(flags, scalars) %>%
+  mutate(scalars = lapply(
+    scalars,
+    function(sc_df) sc_df %>%
+      select(tag, last_val) %>%
+      tidyr::pivot_wider(names_from = tag,
+                         values_from = last_val)
+  )) %>%
+  tidyr::unnest(c(flags, scalars)) %>%
+  arrange(units)
+
+df
+```
+
+```{r}
+library(ggplot2)
+ggplot(df, aes(x = units, y = test_accuracy, 
+               color = factor(learning_rate))) +
+  geom_point() + geom_smooth()
+# df %>%
+#   # arrange(batch_size) %>%
+#   plot(test_accuracy ~ units, data = ., type = 'p')
+```
+
+```{r}
+knitr::knit_exit()
+```
+
+When training is completed, a summary of the run will automatically be
+displayed if you are within an interactive R session:
+
+<!-- screenshot -->
+
+The metrics and output of each run are automatically captured within a
+*run directory* which is unique for each run that you initiate. Note
+that for Keras and TF Estimator models this data is captured
+automatically (no changes to your source code are required).
+
+You can call the `ls_runs(1)` function to view the results of the last
+run:
+
+```{r}
+ls_runs(1)
+```
+
+The run directory managed by guild, and by default placed under the
+".guild" subdirectory in the project. You can easily inspect the full
+contents of a run directory:
+
+```{r}
+run <- ls_runs(1)
+
+fs::dir_tree(run$dir, all=TRUE)
+```
+
+You can also render a sortable, filterable version all of the columns
+within RStudio using the `View()` function:
+
+```{r}
+View(ls_runs())
+```
+
+### Addin
+
+The **guildai** package installs an RStudio IDE addin which provides
+quick access to frequently used functions from the Addins menu:
+
+Note that you can use **Tools** -\> **Modify Keyboard Shortcuts** within
+RStudio to assign a keyboard shortcut to one or more of the addin
+commands.
+
+### Background Training
+
+RStudio v1.1 includes a Terminal pane alongside the Console pane. Since
+training runs can become quite lengthy, it's often useful to run them in
+the background in order to keep the R console free for other work. You
+can launch a guild run without blocking the R console by specifying
+`guild_run(wait = FALSE)` in the call. You can then view real-time
+outputs from your run(s) using `guild_view()`.
+
+Alternatively, you can launch training runs in the terminal pane:
+
+    Rscript -e 'guildai::guild_run("train.R")'
+
+can do this from a Terminal as follows:
+
+If you are not running within RStudio then you can of course use a
+system terminal window for background training.
+
+### Publishing Reports
+
+Training run views and comparisons are HTML documents which can be saved
+and shared with others. When viewing a report within RStudio v1.1 you
+can save a copy of the report or publish it to RPubs or RStudio Connect:
+
+<kbd><img src="images/rstudio_publish.png" style="border: 1px solid #CCCCCC;" width="675/"/></kbd>
+
+If you are not running within RStudio then you can use the
+`save_run_view()` and `save_run_comparison()` functions to create
+standalone HTML versions of run reports.
+
+## Hyperparameter Tuning
+
+Tuning a model often requires exploring the impact of changes to many
+hyperparameters. The best way to approach this is generally to
+systematically train over the combinations of those parameters to
+determine which combination yields the best model. See the
+[Hyperparmeter Tuning]() article for details on how to accomplish this
+with tfruns.
+
+## Managing Runs
+
+There are a variety of tools available for managing training run output,
+including:
+
+1)  Exporting run artifacts (e.g. saved models).
+
+2)  Copying and purging run directories.
+
+3)  Using a custom run directory for an experiment or other set of
+    related runs.
+
+The [Managing Runs]() article provides additional details on using these
+features.
+
+The R package uses the guildai functionality as the engine that powers
+run tracking. A
+
+The combination of guild flags and scalars can be used to do
+hyperparamater optimization.
+
+The simplest form of hyperparamater optimization is to do a grid search.
+For example, if we want to test across a set of `batch_size`s, we can do
+this:
+
+```{r}
+guild_run("fashion-mnist.R", flags = list(
+  units = c(32, 64, 128),
+  batch_size = c(16, 32, 64)
+), echo = FALSE)
 ```
