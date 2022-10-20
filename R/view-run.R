@@ -92,7 +92,7 @@ browser_viewer <- function(viewer_dir, browser = utils::browseURL) {
 
 #' compare runs
 #'
-#' @param id1,id2 run ids
+#' @param ids, a length 2 character vector or run ids
 #' @param output_dir where to place the rendered html
 #' @param template report template
 #' @param viewer Viewer to display training run information within (default
@@ -103,12 +103,14 @@ browser_viewer <- function(viewer_dir, browser = utils::browseURL) {
 #' @return path to the generated html, invisibly
 #' @export
 compare_runs <- function(
-    id1, id2,
-    output_dir = file.path(tempdir(), sprintf("%s-%s", id1, id2)),
+    ids = ls_runs("1:2")$id,
+    output_dir = file.path(tempdir(), paste(ids, collapse = "-")),
     template = system.file("templates/compare-runs.qmd", package = "guildai"),
     viewer = getOption("guildai.viewer"),
     ...)
 {
+  stopifnot(length(ids) == 2)
+
   if(!dir.exists(output_dir))
     dir.create(output_dir, recursive = TRUE)
 
@@ -122,7 +124,7 @@ compare_runs <- function(
 
   quarto::quarto_render(
     input = basename(template),
-    execute_params = list(run_id_1 = id1, run_id_2 = id2),
+    execute_params = list(run_id_1 = ids[1], run_id_2 = ids[2]),
     ...)
 
   html <- sprintf("%s.html", tools::file_path_sans_ext(basename(template)))

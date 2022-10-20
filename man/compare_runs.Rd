@@ -5,16 +5,15 @@
 \title{compare runs}
 \usage{
 compare_runs(
-  id1,
-  id2,
-  output_dir = file.path(tempdir(), sprintf("\%s-\%s", id1, id2)),
+  ids = ls_runs("1:2")$id,
+  output_dir = file.path(tempdir(), paste(ids, collapse = "-")),
   template = system.file("templates/compare-runs.qmd", package = "guildai"),
   viewer = getOption("guildai.viewer"),
   ...
 )
 }
 \arguments{
-\item{id1, id2}{run ids}
+\item{ids, }{a length 2 character vector or run ids}
 
 \item{output_dir}{where to place the rendered html}
 
