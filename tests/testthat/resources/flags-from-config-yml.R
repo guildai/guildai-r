@@ -1,4 +1,4 @@
-#| flags-dest: flags.yml
+#| flags-dest: config:flags.yml
 #| echo: false
 
 # dput(commandArgs())

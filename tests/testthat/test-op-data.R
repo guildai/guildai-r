@@ -63,9 +63,10 @@ test_that("rscript op data inference", {
 
   op <- r_script_guild_data(test_resource("hash-pipe-anno.R"))
   class(op) <- NULL # drop yaml class, keep tests simple
+  op <- rapply(op, unclass, classes = "yaml", how = "replace")
   expect_setequal(names(op$flags), c("x", "noise", "type", "init_phase"))
   expect_equal(op$flags$x$description, "`x` by any other name would smell as sweet.")
-  expect_equal(op$flags$type$choices, c("bar", "baz", "foo"))
+  expect_equal(unclass(op$flags$type$choices), list("bar", "baz", "foo"))
   expect_equal(op$flags$noise$min, 0)
   expect_equal(op$flags$noise$max, 1)
 
@@ -93,8 +94,9 @@ test_that("rscript op data inference", {
              w_o_shebang <- tempfile(fileext = ".R"))
   op2 <- r_script_guild_data(w_o_shebang)
   class(op2) <- NULL
-  op $exec <- op $name <-
-  op2$exec <- op2$name <- NULL
+  op $exec <- op $name <- op $`flags-dest` <-
+  op2$exec <- op2$name <- op2$`flags-dest` <-
+    NULL
   expect_identical(op, op2)
 
 })
@@ -102,17 +104,18 @@ test_that("rscript op data inference", {
 
 test_that("guild run w/ flags-dest: config:flags.yml", {
 
-  local_project(test_resource("flags-from-yml.R", "flags.yml"))
+  local_project(test_resource("flags-from-config-yml.R", "flags.yml"))
 
+  file <- "flags-from-config-yml.R"
   # confirm the defaults are in the run dir, flags.yml is resolved
   default_flags <- read_yaml("flags.yml")
-  guild_run("flags-from-yml.R")
+  guild_run(file)
   run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
   expect_mapequal(default_flags, run_observed_flags)
 
   # # confirm passing non-default flag b=TRUE
   # resolves a modified flags.yml in the rundir
-  guild_run("flags-from-yml.R", flags = c(b = !default_flags$b))
+  guild_run(file, flags = c(b = !default_flags$b))
   run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
   expect_mapequal(modifyList(default_flags, list(b = !default_flags$b)),
                   run_observed_flags)
@@ -127,12 +130,56 @@ test_that("guild run w/ flags-dest: config:flags.yml", {
   expect_identical(read_yaml("flags.yml"), default_flags)
 
   # test default
-  guild_run("flags-from-yml.R")
+  guild_run(file)
   run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
   expect_mapequal(default_flags, run_observed_flags)
 
   # test non-default
-  guild_run("flags-from-yml.R", flags = c(b = !default_flags$b))
+  guild_run(file, flags = c(b = !default_flags$b))
+  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  expect_mapequal(modifyList(default_flags, list(b = !default_flags$b)),
+                  run_observed_flags)
+
+  # TODO: Warning in readLines(file, warn = readLines.warn) :
+  # incomplete final line found on 'flags.yml'
+
+})
+
+
+test_that("guild run w/ flags-dest: flags.yml", {
+
+  local_project(test_resource("flags-from-yml.R", "flags.yml"))
+
+  file <- "flags-from-yml.R"
+  # confirm the defaults are in the run dir, flags.yml is resolved
+  default_flags <- read_yaml("flags.yml")
+  guild_run(file)
+  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  expect_mapequal(default_flags, run_observed_flags)
+
+  # # confirm passing non-default flag b=TRUE
+  # resolves a modified flags.yml in the rundir
+  guild_run(file, flags = c(b = !default_flags$b))
+  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  expect_mapequal(modifyList(default_flags, list(b = !default_flags$b)),
+                  run_observed_flags)
+
+  ## add tests to support for promotion of `_` to `-`
+  ## do we do the inverse on the way out too?
+
+  # because boolean flags are tricky, test the inverse default too
+  default_flags$b <- TRUE
+  print(default_flags, file = "flags.yml")
+  # sanity check print.yaml()
+  expect_identical(read_yaml("flags.yml"), default_flags)
+
+  # test default
+  guild_run(file)
+  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  expect_mapequal(default_flags, run_observed_flags)
+
+  # test non-default
+  guild_run(file, flags = c(b = !default_flags$b))
   run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
   expect_mapequal(modifyList(default_flags, list(b = !default_flags$b)),
                   run_observed_flags)

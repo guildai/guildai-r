@@ -1,14 +1,41 @@
 
 
+#
+# update_yaml_file_w_global_flags <- function(file, flags) {
+#   og <- read_yaml(file)
+#   # need special handling for bools, specifying 'arg-encoding' doesn't work
+#   for(nm in names(og)) {
+#     if(isTRUE(og[[nm]]) || isFALSE((og[[nm]]))) {
+#       if(identical(flags[[nm]], ""))
+#         flags[[nm]] <- FALSE
+#       else if(identical(flags[[nm]], 1L))
+#         flags[[nm]] <- TRUE
+#     }
+#   }
+#   new <- modifyList(og, flags)
+#   print.yaml(new, file)
+# }
+
 do_guild_run <-
 function(file = "train.R",
-         flags_dest = "globals",
-         echo = TRUE,
-         flags = parse_command_line(commandArgs(TRUE))) {
+         flags_dest = "train.R",
+         echo = TRUE
+         # flags = parse_command_line(commandArgs(TRUE))
+         ) {
 
-  if(flags_dest == "globals")
-      update_source_w_global_flags(file.path(".guild/sourcecode/", file),
-                                   flags, overwrite = TRUE)
+
+  if(is_r_file(flags_dest))
+    modify_r_file_flags(file.path(".guild/sourcecode/", flags_dest),
+                                   read_yaml(".guild/attrs/flags"), overwrite = TRUE)
+  else if (is_yml_file(flags_dest) &&
+           !startsWith(flags_dest, "config:")) {
+    file.copy(".guild/attrs/flags", flags_dest)
+    # update_yaml_file_w_global_flags(file.path(".guild/sourcecode/", flags_dest),
+    #                                 flags)
+    # og <- read_yaml(file.path(".guild/sourcecode/", flags_dest))
+    # new <- modifyList(og, flags)
+    # print.yaml(new, file.path(".guild/sourcecode/", flags_dest))
+  }
 
   setup_info <- setup_run_dir()
   on.exit(teardown_run_dir(setup_info))
@@ -46,8 +73,8 @@ function(file = "train.R",
 
 
 #' @importFrom utils getParseData getSrcLocation
-update_source_w_global_flags <- function(filename, flags, overwrite = FALSE,
-                                         text = readLines(filename)) {
+modify_r_file_flags <- function(filename, flags, overwrite = FALSE,
+                                text = readLines(filename)) {
 
   if (!length(text))
     text <- ""
