@@ -66,7 +66,7 @@ test_that("rscript op data inference", {
   op <- rapply(op, unclass, classes = "yaml", how = "replace")
   expect_setequal(names(op$flags), c("x", "noise", "type", "init_phase"))
   expect_equal(op$flags$x$description, "`x` by any other name would smell as sweet.")
-  expect_equal(unclass(op$flags$type$choices), list("bar", "baz", "foo"))
+  expect_equal(unlist(op$flags$type$choices), c("bar", "baz", "foo"))
   expect_equal(op$flags$noise$min, 0)
   expect_equal(op$flags$noise$max, 1)
 
