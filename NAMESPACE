@@ -2,6 +2,7 @@
 
 export(compare_runs)
 export(guild_run)
+export(guild_view)
 export(install_guild)
 export(is_run_active)
 export(ls_runs)

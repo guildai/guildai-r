@@ -73,17 +73,6 @@ ls_runs <- function(..., full = FALSE) {
 
   df$scalars <- lapply(df$scalars, tibble::as_tibble)
 
-  if (isFALSE(full)) {
-    # delete not useful columns
-    df$opRef <- NULL
-    df$command <- NULL
-    df$env <- NULL
-
-    # pluck just the relevant info
-    # df$sourcecode <- df$sourcecode$files
-    df$sourcecode <- NULL
-  }
-
   # these columna are dataframes
   for(nm in c("flags"))
     df[[nm]] <- tibble::as_tibble(df[[nm]])
@@ -95,6 +84,19 @@ ls_runs <- function(..., full = FALSE) {
 
   # df <- rapply(list(df), tibble::as_tibble,
   #              classes = "data.frame", how = "replace")[[1L]]
+
+
+  if (isFALSE(full)) {
+    # delete not useful columns
+    df$opRef <- NULL
+    df$command <- NULL
+    df$env <- NULL
+    df$files <- NULL
+
+    # pluck just the relevant info
+    # df$sourcecode <- df$sourcecode$files
+    df$sourcecode <- NULL
+  }
 
   df <- tibble::as_tibble(df)
 
@@ -189,7 +191,12 @@ guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE,
 }
 
 
-
+#' Launch Guild Viewer
+#'
+#' @param ... passed on to the `guild` binary
+#' @param wait
+#'
+#' @export
 guild_view <- function(..., wait = FALSE) {
   # TODO: use processx here?
   guild("view", ..., wait = wait)
