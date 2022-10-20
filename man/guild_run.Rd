@@ -7,11 +7,11 @@
 guild_run(
   opspec = "train.R",
   flags = NULL,
+  ...,
   wait = TRUE,
   label = NULL,
   tags = NULL,
-  echo = wait,
-  ...
+  echo = wait
 )
 }
 \arguments{
@@ -23,14 +23,6 @@ string that guild recognizes as a valid opspec.}
   - a scalar string like `"noise=.3 dropout=.4"`
 
   - a dataframe of flags for a batch of runs}
-
-\item{wait}{whether to wait for the run to finish}
-
-\item{label, tags}{optional strings used to label or tag experiments.}
-
-\item{echo}{whether output from the run is shown in the current R
-console. Note, this has no effect on whether expressions are echoed in
-the guild run stdout.}
 
 \item{...}{
   Arguments passed on to \code{\link[base:system2]{base::system2}}
@@ -56,6 +48,14 @@ the guild run stdout.}
     \item{\code{minimized,invisible}}{arguments that are accepted on Windows but
     ignored on this platform, with a warning.}
   }}
+
+\item{wait}{whether to wait for the run to finish}
+
+\item{label, tags}{optional strings used to label or tag experiments.}
+
+\item{echo}{whether output from the run is shown in the current R
+console. Note, this has no effect on whether expressions are echoed in
+the guild run stdout.}
 }
 \value{
 the return value from `system2()`, invisibly. This function is

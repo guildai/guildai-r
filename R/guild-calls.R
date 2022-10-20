@@ -145,10 +145,11 @@ latest_run <- function() {
 #' @return the return value from `system2()`, invisibly. This function is
 #'   primarily called for its side effect.
 #' @export
-guild_run <- function(opspec = "train.R", flags = NULL, wait = TRUE,
+guild_run <- function(opspec = "train.R", flags = NULL, ...,
+                      wait = TRUE,
                       label = NULL,
                       tags = NULL,
-                      echo = wait, ...) {
+                      echo = wait) {
   if (is.data.frame(flags)) {
     args <- c(as.list(environment()), ...)
     for (r in seq_len(nrow(flags))) {
