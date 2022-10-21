@@ -24,7 +24,6 @@ Sys.setenv(PATH = paste0(R.home("bin"), ":", Sys.getenv("PATH")))
 for(v in c("VIRTUAL_ENV", "PYTHONHOME", "PYTHONPATH")) Sys.unsetenv(v)
 Sys.setenv("RETICULATE_PYTHON" = "~/.virtualenvs/r-tensorflow/bin/python")
 Sys.setenv("TF_CPP_MIN_LOG_LEVEL" = "2")
-# Sys.
 
 if(!interactive())
   unlink(".guild", recursive = TRUE)
@@ -32,7 +31,7 @@ if(!interactive())
 # help knitr capture stdout 
 guild_run <- function(..., flags = NULL, echo = TRUE) {
   stdout <- stderr <- echo
-  flags$.fast <- TRUE#  interactive()
+  flags$.fast <- interactive()
   out <- guildai::guild_run(..., flags = flags, stdout = stdout, stderr = stderr)
   try(writeLines(out))
   invisible(out)
@@ -61,8 +60,8 @@ successor to the {tfruns} package.
 
 ## Installation
 
-The R package provides an interface to (guildai
-core)[<https://guild.ai/>]. The R package will install guildai core on
+The R package provides an interface to [guildai
+core](https://guild.ai/). The R package will install guildai core on
 first use, or you can call `install_guild()` to customize the
 installation. You can install the **guildai** package from CRAN as
 follows:
@@ -85,7 +84,7 @@ library(keras)
 install_keras()
 ```
 
-## Training
+## Hello World
 
 To start, we'll setup a sample project folder with one script.
 
@@ -105,10 +104,6 @@ To train a model with **guildai**, just use the `guild_run()` function
 in place of the `source()` function to execute your R script. For
 example:
 
-We can source this script at the R console with
-`source("fashion-mnist.R")`, or run it at the Terminal with
-`Rscript fashion-mnist.R`. Or we can run it using `guild_run()`:
-
 ```{r}
 guild_run("fashion-mnist.R")
 ```
@@ -116,7 +111,7 @@ guild_run("fashion-mnist.R")
 By default, the output stream of the run will be shown at the R console.
 After launching a run, you can launch an application to view your runs
 with `guild_view()`. From the Guild View application, you can also
-launch tensorboard.
+visualize run results using tensorboard.
 
 ```{r, eval = FALSE}
 guild_view()
@@ -132,19 +127,17 @@ run <- ls_runs()
 str(run)
 ```
 
-`ls_runs()` returns a data.frame with information about runs. In our
+`ls_runs()` returns a data frame with information about runs. In our
 sample project, we've launched one run, so `ls_runs()` returns a 1-row
-dataframe.
+data frame.
 
-Importantly, all the information about the run is stored as plain files
-on the filesystem.
+`guild_view()` and `ls_runs()` provide two convenient ways to gather and
+present the information from runs. Importantly however, all the
+information about the run is stored as plain files.
 
 ```{r}
 fs::dir_tree(run$dir, all=TRUE)
 ```
-
-`guild_view()` and `ls_runs()` provide two convenient ways to gather and
-present information about runs.
 
 A run can also be used to generate a summary report, a paramaterized
 quarto document:
@@ -153,13 +146,13 @@ quarto document:
 view_run_report(run$id)
 ```
 
-## Comparing Runs
+### Comparing Runs
 
 Let's make a couple of changes to our training script to see if we can
 improve model performance. We'll change the number of units in our first
 dense layer to 128, change the `learning_rate` from 0.001 to 0.003 and
 run 30 rather than 20 `epochs`. After making these changes to the source
-code we re-run the script using `training_run()` as before:
+code we re-run the script using `guild_run()` as before:
 
 ```{r, echo = FALSE}
 guildai:::modify_r_file_flags("fashion-mnist.R", 
@@ -173,8 +166,11 @@ guild_run("fashion-mnist.R")
 
 This will also show us a report summarizing the results of the run, but
 what we are really interested in is a comparison between this run and
-the previous one. We can view a comparison via the `view_runs_diff()`
-function:
+the previous one.
+
+The individual metrics `test_loss` and `test_accuracy` are visible in
+the comparison table in the Guild View application, as well as in the We
+can view a comparison via the `view_runs_diff()` function:
 
 ```{r, eval = FALSE}
 view_runs_diff()
@@ -187,13 +183,6 @@ the training script.
 Note that `view_runs_diff()` will by default compare the last two runs,
 however you can pass any two run ids you like to be compared.
 
-## Analyzing Runs
-
-We've demonstrated visualizing and comparing one or two runs, however as
-you accumulate more runs you'll generally want to analyze and compare
-runs many runs. You can use the `ls_runs()` function to yield a data
-frame with summary information on all of the runs you've conducted.
-
 ## Flags
 
 Flags are a form of run inputs, or paramaterization. The action we just
@@ -202,7 +191,7 @@ script before launching the second run, can be handled for us by
 `guild_run()` using the *flags* interface.
 
 By default, top-level assignments of scalar literals in an R script are
-identified by guild as run flags, that can be modified per-run. You can
+identified by guild as run flags that can be modified per-run. You can
 quickly see what flags are available in an R script by passing
 `--help-op` (more on this later).
 
@@ -218,16 +207,28 @@ guild_run("fashion-mnist.R",
                        units = 256))
 ```
 
-Now, when we inspect the output with `view_runs_diff()`, we see that the
-source files associated with the run have the updated flag values, as if
-we had modified them manually.
+Now, when we inspect the run sources with `view_runs_diff()`, we see
+that the source files associated with the run have the updated flag
+values, as if we had modified them manually.
 
-The flags interface is useful for hyperparamater optimization.
+The flags interface is useful for hyperparamater optimization. At it's
+simplest, we can just iterate over the set of flag values we want:
 
-At it's simplest, we can pass multiple values for each flag, and guild
-will automatically expand the combinations to a grid search. For
-example, this will launch 4 training runs, with each combination of flag
-values:
+```{r, eval = FALSE}
+for (learning_rate in c(0.001, 0.003))
+  guild_run("fashion-mnist.R", c(learning_rate = learning_rate),
+            wait = FALSE)
+```
+
+Here `wait = FALSE` means that the `guild_run()` call launches the run
+process and returns immediately. This is an easy way to launch multiple
+training runs in parallel. We can view the progress and real-time
+outputs of our runs with `guild_view()`, where their status ("training"
+or "completed").
+
+Alternatively, we can pass multiple values for each flag, and guild will
+automatically expand the combinations to a grid search. For example,
+this will launch 4 training runs, with each combination of flag values:
 
 ```{r}
 guild_run("fashion-mnist.R", 
@@ -248,9 +249,12 @@ flags_df
 guild_run("fashion-mnist.R", flags = flags_df)
 ```
 
-Finally, we can optionally supply additional metadata about individual
-flags by placing hashpipe yaml annotations above the flag expression.
-For example:
+### Flag annotations
+
+We can optionally supply additional metadata about individual flags by
+placing hashpipe yaml annotations above the flag expression. For
+example, we can update our "fashion-mnist.R" script with the following
+lines:
 
     #| description: size of first layer.
     #| min: 16
@@ -264,10 +268,13 @@ For example:
 Now, the `description`s and constraints will appear in `--help-op` and
 related locations.
 
+### Flag destinations
+
 As a project grows, it's helpful to be able to move flag definitions out
-of the main file. To do so, you can include a `flags-dest` in the
+of the main R script. To do so, you can include a `flags-dest` in the
 frontmatter of the R script, specifying the file path (relative to the
 project directory) of the file where guild should place the flag values.
+Then you can read in the flags using `source()` or similar.
 
     #| flags-dest: ./flags.R
 
@@ -279,30 +286,10 @@ YAML files are also supported as a flags destination:
 
     FLAGS <- yaml::read_yaml("flags.yml")
 
-The flags and flag values associated with individual runs are returned
-by `ls_runs()`.
+### Retreiving Run Flags
 
-Guild runs *operations*. In this simple instance, the full R script is
-the operation. To get information about a specified operation, you can
-add "--help-op" to the arguments.
-
-```{r}
-guild_run("fashion-mnist.R", "--help-op")
-```
-
-Note that guild automatically recognized some Flags for the operation.
-Flags allow for easily allows for running machine learning experiments
-with guild. By default, any symbols defined at the top level of an R
-scripted with scalar literal constants are identified as flags that
-guild can adjust when launching a run. For example, we can ask guild to
-run "fashion-mnist-1.R" with a larger batch size:
-
-```{r}
-guild_run("fashion-mnist.R", flags = c(batch_size = 16))
-```
-
-Now, `ls_runs()` returns a two-row data frame. We can inspect `flags`,
-to see the change:
+The flags and flag values associated with each runs are returned by
+`ls_runs()` as a nested dataframe under `flags`.
 
 ```{r paged.print=FALSE}
 runs <- ls_runs()
@@ -313,7 +300,7 @@ runs %>%
 ## Scalars
 
 The counterpart to run `flags` are run `scalars`. Where as `flags` are a
-type of run input, scalars are run outputs identified by guild as
+type of run input, scalars are run outputs identified by Guild as
 meaningful to track.
 
 ```{r paged.print=FALSE}
@@ -330,15 +317,17 @@ view_run_report()
 
 Here we see that guild has automatically identified `test_accuracy` and
 `test_loss` as run scalar outputs. By default, any lines printed to
-standard output by the run with the form `"key: value"` are recorded by
-guild as `scalars`. If the same scalar `key` is output multiple times
-during a run (e.g, loss during a training loop), then be sure to also
-print a `step` scalar, to enable guild to track history (and enable
-visualization of the run with tensorboard).
+standard output during the run with the patten `"key: numeric-value"`
+are recorded by guild as `scalars`. If you are printing values for the
+same scalar `key` multiple times during a run (e.g, `loss` during a
+training loop), then be sure to also print a `step` scalar in between,
+to enable guild to track history (and enable visualization of the run
+metrics with tensorboard).
 
-Alternatively, if your run process produces tensorboard logs directly
-(e.g., `keras::callback_tensorboard()`), then those logs are also
-identified as run scalars.
+Alternatively, if your run process produces tfevent records directly
+(e.g., `keras::callback_tensorboard("./logs")`), then those
+automatically identified by guild a run scalars, and included in
+`ls_runs()` (and `guild_view()`, and tensorboard and other run views).
 
 `ls_runs()` by default only returns a summary of run scalars, but the
 full scalar history can also be accessed from R directly:
@@ -347,74 +336,42 @@ full scalar history can also be accessed from R directly:
 ls_runs(scalars = TRUE)
 ```
 
-### Hyperparamater Tuning
+## Using Flags and Scalars Together
 
-We can investigate what impact flag values had on `test_accuracy`.
+We can use guild to explore what impact `units` has on `test_accuracy`.
+
+```{r}
+units <- (2 ^ (4:11)) %>% c(diff(., 2)) %>% sort()
+units 
+guild_run("fashion-mnist.R", 
+          flags = list(units = units),
+          echo = FALSE)
+```
+
+We can see compare run flags and run scalars from R:
 
 ```{r paged.print=FALSE}
-runs <- ls_runs()
+runs <- ls_runs(paste0("1:", length(units))) # last 8 runs
 
 df <- runs %>%
   select(flags, scalars) %>%
-  mutate(scalars = lapply(
-    scalars,
-    function(sc_df) sc_df %>%
+  rowwise() %>%
+  mutate(across(scalars, function(run_scalars_df) {
+    run_scalars_df %>%
       select(tag, last_val) %>%
       tidyr::pivot_wider(names_from = tag,
                          values_from = last_val)
-  )) %>%
+  })) %>%
   tidyr::unnest(c(flags, scalars)) %>%
   arrange(units)
 
 df
 ```
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 library(ggplot2)
-ggplot(df, aes(x = units, y = test_accuracy, 
-               color = factor(learning_rate))) +
+ggplot(df, aes(x = units, y = test_accuracy)) +
   geom_point() + geom_smooth()
-# df %>%
-#   # arrange(batch_size) %>%
-#   plot(test_accuracy ~ units, data = ., type = 'p')
-```
-
-```{r}
-knitr::knit_exit()
-```
-
-When training is completed, a summary of the run will automatically be
-displayed if you are within an interactive R session:
-
-<!-- screenshot -->
-
-The metrics and output of each run are automatically captured within a
-*run directory* which is unique for each run that you initiate. Note
-that for Keras and TF Estimator models this data is captured
-automatically (no changes to your source code are required).
-
-You can call the `ls_runs(1)` function to view the results of the last
-run:
-
-```{r}
-ls_runs(1)
-```
-
-The run directory managed by guild, and by default placed under the
-".guild" subdirectory in the project. You can easily inspect the full
-contents of a run directory:
-
-```{r}
-run <- ls_runs(1)
-
-fs::dir_tree(run$dir, all=TRUE)
-```
-
-You can also render a sortable, filterable version all of the columns
-within RStudio using the `View()` function:
-
-```{r}
-View(ls_runs())
 ```
 
 ### Addin
@@ -428,71 +385,15 @@ commands.
 
 ### Background Training
 
-RStudio v1.1 includes a Terminal pane alongside the Console pane. Since
-training runs can become quite lengthy, it's often useful to run them in
-the background in order to keep the R console free for other work. You
-can launch a guild run without blocking the R console by specifying
-`guild_run(wait = FALSE)` in the call. You can then view real-time
-outputs from your run(s) using `guild_view()`.
+Since training runs can become quite lengthy, it's often useful to run
+them in the background in order to keep the R console free for other
+work. You can launch a guild run without blocking the R console by
+specifying `guild_run(wait = FALSE)` in the call. You can then view
+real-time outputs from your run(s) using `guild_view()`.
 
 Alternatively, you can launch training runs in the terminal pane:
 
     Rscript -e 'guildai::guild_run("train.R")'
 
-can do this from a Terminal as follows:
-
 If you are not running within RStudio then you can of course use a
 system terminal window for background training.
-
-### Publishing Reports
-
-Training run views and comparisons are HTML documents which can be saved
-and shared with others. When viewing a report within RStudio v1.1 you
-can save a copy of the report or publish it to RPubs or RStudio Connect:
-
-<kbd><img src="images/rstudio_publish.png" style="border: 1px solid #CCCCCC;" width="675/"/></kbd>
-
-If you are not running within RStudio then you can use the
-`save_run_view()` and `save_run_comparison()` functions to create
-standalone HTML versions of run reports.
-
-## Hyperparameter Tuning
-
-Tuning a model often requires exploring the impact of changes to many
-hyperparameters. The best way to approach this is generally to
-systematically train over the combinations of those parameters to
-determine which combination yields the best model. See the
-[Hyperparmeter Tuning]() article for details on how to accomplish this
-with tfruns.
-
-## Managing Runs
-
-There are a variety of tools available for managing training run output,
-including:
-
-1)  Exporting run artifacts (e.g. saved models).
-
-2)  Copying and purging run directories.
-
-3)  Using a custom run directory for an experiment or other set of
-    related runs.
-
-The [Managing Runs]() article provides additional details on using these
-features.
-
-The R package uses the guildai functionality as the engine that powers
-run tracking. A
-
-The combination of guild flags and scalars can be used to do
-hyperparamater optimization.
-
-The simplest form of hyperparamater optimization is to do a grid search.
-For example, if we want to test across a set of `batch_size`s, we can do
-this:
-
-```{r}
-guild_run("fashion-mnist.R", flags = list(
-  units = c(32, 64, 128),
-  batch_size = c(16, 32, 64)
-), echo = FALSE)
-```
