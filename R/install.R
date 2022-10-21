@@ -86,8 +86,3 @@ find_guild <- function() {
   install_guild()
 }
 
-
-.guild <- function(args, ...) {
-  # convenience version that accepts args as a single string
-  guild(unlist(strsplit(args, "\\s+", perl = TRUE)), ...)
-}

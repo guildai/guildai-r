@@ -9,7 +9,7 @@ guild <- function(...,
 
   args <- list(...)
   args <- rapply(args, function(x) {
-    if (inherits(x, "AsIs") || all(grepl("^[[:alpha:]-]+$", x)))
+    if (inherits(x, "AsIs") || all(grepl("^[[:alpha:]_-]+$", x)))
       x
     else
       shQuote(x)
@@ -32,6 +32,11 @@ guild <- function(...,
            wait = wait)
 }
 
+
+.guild <- function(args, ...) {
+  # convenience version that accepts args as a single string
+  guild(unlist(strsplit(args, "\\s+", perl = TRUE)), ...)
+}
 
 
 #' list guild runs
