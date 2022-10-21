@@ -35,7 +35,10 @@ system2t <- function (command, args, ...) {
 
 #' Install guildai core
 #'
-#' @param guildai character vector passed directly to `pip install`.
+#' This installs the `guild` executable for use by the package.
+#'
+#' @param guildai character vector passed directly to `pip install`. To
+#'   install the release version of guildai, this can be `"guildai"`.
 #' @param python path to python binary, used to create a private venv.
 #'
 #' @return path to the guild binary
@@ -49,7 +52,9 @@ system2t <- function (command, args, ...) {
 #' #   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
 #' #   python = reticulate::install_python())
 #' #
-install_guild <- function(guildai = "guildai", python = find_python()) {
+install_guild <-
+  function(guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
+           python = find_python()) {
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL), mustWork = FALSE)
   unlink(venv, recursive = TRUE)
   python <- normalizePath(python)

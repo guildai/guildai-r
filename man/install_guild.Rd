@@ -4,10 +4,14 @@
 \alias{install_guild}
 \title{Install guildai core}
 \usage{
-install_guild(guildai = "guildai", python = find_python())
+install_guild(
+  guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
+  python = find_python()
+)
 }
 \arguments{
-\item{guildai}{character vector passed directly to `pip install`.}
+\item{guildai}{character vector passed directly to `pip install`. To
+install the release version of guildai, this can be `"guildai"`.}
 
 \item{python}{path to python binary, used to create a private venv.}
 }
@@ -15,7 +19,7 @@ install_guild(guildai = "guildai", python = find_python())
 path to the guild binary
 }
 \description{
-Install guildai core
+This installs the `guild` executable for use by the package.
 }
 \examples{
 # install_guild(c("-e", "~/guild/guildai"))
