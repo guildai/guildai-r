@@ -88,7 +88,7 @@ install_keras()
 
 To start, we'll setup a sample project folder with one script.
 
-```{r}
+```{r copy-fashion-mnist}
 file.copy(system.file("examples/fashion-mnist.R", package = "guildai"),
           ".", overwrite = TRUE)
 ```
@@ -182,6 +182,11 @@ the training script.
 
 Note that `view_runs_diff()` will by default compare the last two runs,
 however you can pass any two run ids you like to be compared.
+
+```{r restore-fashion-mnist, echo = FALSE}
+file.copy(system.file("examples/fashion-mnist.R", package = "guildai"),
+          ".", overwrite = TRUE)
+```
 
 ## Flags
 
@@ -363,7 +368,7 @@ df <- runs %>%
                          values_from = last_val)
   })) %>%
   tidyr::unnest(c(flags, scalars)) %>%
-  arrange(units)
+  arrange(units) 
 
 df
 ```
