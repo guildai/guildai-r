@@ -11,7 +11,7 @@
 #' @return a dataframe of runs
 #' @export
 #' @importFrom jsonlite parse_json
-ls_runs <- function(..., full = FALSE, scalars = FALSE) {
+runs_info <- function(..., full = FALSE, scalars = FALSE) {
   if ("--help" %in% c(...))
     return(guild("api", "runs", "--help"))
 
