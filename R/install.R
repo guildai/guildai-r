@@ -20,15 +20,6 @@ find_python <- function() {
   -  ensure it is on your PATH")
 }
 
-system2t <- function (command, args, ...) {
-  if(Sys.getenv("DEBUGR") == "1") {
-    cl <- as.call(c(list(quote(system2t), command, args, ...)))
-    message(paste("R>", deparse1(cl)))
-    message(paste("sys+", shQuote(command), paste0(args, collapse = " ")))
-  }
-  system2(command, args, ...)
-}
-
 
 
 
@@ -86,3 +77,46 @@ find_guild <- function() {
   install_guild()
 }
 
+
+#' Export guild for usage in the Terminal
+#'
+#' @param dest Where to place the `guild` executable. This should be a location on the PATH.
+#' @param completions Whether to also install shell completion helpers.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+export_guild_cli <- function(dest = "~/bin", completions = TRUE) {
+  if(!dir.exists(dest))
+    dir.create(dest)
+
+  g <- find_guild()
+  dest <- file.path(dest, basename(g))
+  file.symlink(g <- find_guild(), dest)
+  message("Created symlink: '", dest, "' -> '", g, "'")
+  if(completions)
+    guild("completion --install", "--shell" = basename(Sys.getenv("SHELL")))
+  invisible(g)
+}
+
+
+#
+#   function(destination = switch(basename(Sys.getenv("SHELL")),
+#                                 bash = "~/.bashrc",
+#                                 zsh = "~/.zprofile",
+#                                 ".profile"))
+#     ,
+# completions = TRUE) {
+#
+#
+#   g <- find_guild()
+#   # if(!is_windows()) {
+#   #   if(startsWith(g, path.expand("~")))
+#   #     g <- paste0("~", str_drop_prefix(g, path.expand("~")))
+  # }
+#   cat(sprintf('export PATH="%s:$PATH"', g))
+#   "[ -s ~/.guild/bash_completion ] && . ~/.guild/bash_completion"  # Enable completion for guild
+#
+#
+# }

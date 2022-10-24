@@ -35,3 +35,13 @@ new_source_w_active_echo <- function() {
   }, env = list(SOURCE_BODY = body(source)))
   source2
 }
+
+
+system2t <- function (command, args, ...) {
+  if(Sys.getenv("DEBUGR") == "1") {
+    cl <- as.call(c(list(quote(system2t), command, args, ...)))
+    message(paste("R>", deparse1(cl)))
+    message(paste("sys+", shQuote(command), paste0(args, collapse = " ")))
+  }
+  system2(command, args, ...)
+}

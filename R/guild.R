@@ -19,7 +19,7 @@ guild <- function(...,
   # if called w/ named arg like: guild("--path" = val)
   for(nm in names(args))
     if(nzchar(nm) && startsWith(nm, "-"))
-      args[nm] <- c(nm, args[[nm]])
+      args[nm] <- list(c(nm, args[[nm]]))
 
   args <- unlist(args, use.names = FALSE)
 
@@ -115,4 +115,11 @@ guild_run <- function(opspec = "train.R", flags = NULL, ...,
 guild_view <- function(..., wait = FALSE) {
   # TODO: use processx here?
   guild("view", ..., wait = wait)
+}
+
+# dummy place holder, because R CMD check otherwise complains:
+#   Namespace in Imports field not imported from: ‘here’
+#     All declared Imports should be used.
+if(FALSE) {
+  here::here()
 }
