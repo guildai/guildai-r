@@ -1,6 +1,7 @@
 
 
 
+
 do_guild_run <-
 function(file = "train.R",
          flags_dest = "train.R",
@@ -9,11 +10,11 @@ function(file = "train.R",
          ) {
 
 
-  if(is_r_file(flags_dest))
+  if (is_r_file(flags_dest)) {
     modify_r_file_flags(file.path(".guild/sourcecode/", flags_dest),
-                                   read_yaml(".guild/attrs/flags"), overwrite = TRUE)
-  else if (is_yml_file(flags_dest) &&
-           !startsWith(flags_dest, "config:")) {
+                        read_yaml(".guild/attrs/flags"),
+                        overwrite = TRUE)
+  } else if (is_yml_file(flags_dest)) {
     file.copy(".guild/attrs/flags", flags_dest)
   }
 

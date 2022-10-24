@@ -85,12 +85,16 @@ r_script_guild_data <- function(r_script_path) {
   echo <- data$echo %||% TRUE
   data$echo <- NULL
 
-  cl <- call("do_guild_run",
-             r_script_path,
-             flags_dest = flags_dest,
-             echo = echo)
+  # don't pass through flags_dest to do_guild_run(),
+  # because guild core will materialize the yml file.
+  if(startsWith(flags_dest, "config:"))
+    flags_dest <- NULL
 
-  cl <- call(":::", quote(guildai), cl)
+  cl <- call(":::", quote(guildai), call("do_guild_run",
+    r_script_path,
+    flags_dest = flags_dest,
+    echo = echo
+  ))
 
   data$exec <- sprintf("%s -e %s ${flag_args}",
                        rscript_bin(),
