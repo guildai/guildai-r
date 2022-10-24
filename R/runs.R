@@ -3,7 +3,6 @@
 #' list guild runs
 #'
 #' @param full Whether to include all the available run info.
-#' @param scalars Wheter to export all scalars for the requested runs instead.
 #'
 #' @param ... additional arguments passed to `guild api runs`. Try
 #'   `"--help"` to see options.
@@ -11,15 +10,11 @@
 #' @return a dataframe of runs
 #' @export
 #' @importFrom jsonlite parse_json
-runs_info <- function(..., full = FALSE, scalars = FALSE) {
+runs_info <- function(..., full = FALSE) {
   if ("--help" %in% c(...))
-    return(guild("api", "runs", "--help"))
+    return(guild("api runs --help"))
 
-  if(isTRUE(scalars)) {
-    # TODO think on this interface. separate function? Augment main df? Different name?
-    text <- guild("tensorboard", "--export-scalars", "-", stdout = TRUE)
-    return(tibble::as_tibble(read.csv(text = text)))
-  }
+
 
 
   # --json option always shows all runs
@@ -81,5 +76,17 @@ runs_info <- function(..., full = FALSE, scalars = FALSE) {
   #     observed "loss",  "epoch_accuracy", etc.
 
   df
+}
+
+
+#' Get Full set of runs scalars
+#'
+#' @param ... passed on go `guild()`
+#'
+#' @return a tibble with runs scalars
+#' @export
+runs_scalars <- function(...) {
+  text <- guild("tensorboard --export-scalars -", ..., stdout = TRUE)
+  readr::read_csv(I(text), col_types = "cccdd")
 }
 
