@@ -14,11 +14,8 @@ runs_info <- function(..., full = FALSE) {
   if ("--help" %in% c(...))
     return(guild("api runs --help"))
 
-
-
-
   # --json option always shows all runs
-  x <- guild("api", "runs", ..., stdout = TRUE)
+  x <- guild("api runs", ..., stdout = TRUE)
   x <- paste0(x, collapse = '')
   df <- parse_json(x, simplifyVector = TRUE)
 
@@ -79,14 +76,35 @@ runs_info <- function(..., full = FALSE) {
 }
 
 
-#' Get Full set of runs scalars
-#'
+as_runs_selection <- function(...) {
+  if(...length() == 1 && is.data.frame(..1) && hasName(..1, "id"))
+    ..1[["id"]]
+  else
+    list(...)
+}
+
+#' Get full set of runs scalars
+#' @param runs
 #' @param ... passed on go `guild()`
 #'
 #' @return a tibble with runs scalars
 #' @export
-runs_scalars <- function(...) {
-  text <- guild("tensorboard --export-scalars -", ..., stdout = TRUE)
-  readr::read_csv(I(text), col_types = "cccdd")
+#' @examples
+#' \dontrun{
+#' runs_scalars(1) # scalars from most recent run
+#' runs_scalars(1:2) # scalars form two most recent runs
+#'
+#' # pass in a dataframe of runs
+#' runs_info() %>%
+#'   filter(flags$epochs > 5) %>%
+#'   runs_scalars()
+#' }
+runs_scalars <- function(runs = NULL, ...) {
+
+  csv <- tempfile(fileext = ".csv")
+  text <- guild("tensorboard --export-scalars", csv,
+                as_runs_selection(runs, ...), stdout = TRUE)
+  readr::read_csv(csv, col_types = "cccdd")
+}
 }
 

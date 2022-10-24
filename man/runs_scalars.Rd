@@ -2,9 +2,9 @@
 % Please edit documentation in R/runs.R
 \name{runs_scalars}
 \alias{runs_scalars}
-\title{Get Full set of runs scalars}
+\title{Get full set of runs scalars}
 \usage{
-runs_scalars(...)
+runs_scalars(runs = NULL, ...)
 }
 \arguments{
 \item{...}{passed on go `guild()`}
@@ -13,5 +13,16 @@ runs_scalars(...)
 a tibble with runs scalars
 }
 \description{
-Get Full set of runs scalars
+Get full set of runs scalars
+}
+\examples{
+\dontrun{
+runs_scalars(1) # scalars from most recent run
+runs_scalars(1:2) # scalars form two most recent runs
+
+# pass in a dataframe of runs
+runs_info() \%>\%
+  filter(flags$epochs > 5) \%>\%
+  runs_scalars()
+}
 }
