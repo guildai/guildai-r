@@ -1,9 +1,9 @@
 
-
+#' @importFrom here here
 #' @importFrom rlang is_string
 guild <- function(...,
                   stdout = "", stderr = "",
-                  home = Sys.getenv("GUILD_HOME", here::here(".guild")),
+                  home = Sys.getenv("GUILD_HOME", here(".guild")),
                   wait = TRUE) {
 
   args <- list(...)
