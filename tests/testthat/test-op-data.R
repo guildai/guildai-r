@@ -110,13 +110,13 @@ test_that("guild run w/ flags-dest: config:flags.yml", {
   # confirm the defaults are in the run dir, flags.yml is resolved
   default_flags <- read_yaml("flags.yml")
   guild_run(file)
-  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  run_observed_flags <- parse_yaml(guild("cat --output", stdout = TRUE))
   expect_mapequal(default_flags, run_observed_flags)
 
   # # confirm passing non-default flag b=TRUE
   # resolves a modified flags.yml in the rundir
   guild_run(file, flags = c(b = !default_flags$b))
-  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  run_observed_flags <- parse_yaml(guild("cat --output", stdout = TRUE))
   expect_mapequal(modifyList(default_flags, list(b = !default_flags$b)),
                   run_observed_flags)
 
@@ -131,12 +131,12 @@ test_that("guild run w/ flags-dest: config:flags.yml", {
 
   # test default
   guild_run(file)
-  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  run_observed_flags <- parse_yaml(guild("cat --output", stdout = TRUE))
   expect_mapequal(default_flags, run_observed_flags)
 
   # test non-default
   guild_run(file, flags = c(b = !default_flags$b))
-  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  run_observed_flags <- parse_yaml(guild("cat --output", stdout = TRUE))
   expect_mapequal(modifyList(default_flags, list(b = !default_flags$b)),
                   run_observed_flags)
 
@@ -154,13 +154,13 @@ test_that("guild run w/ flags-dest: flags.yml", {
   # confirm the defaults are in the run dir, flags.yml is resolved
   default_flags <- read_yaml("flags.yml")
   guild_run(file)
-  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  run_observed_flags <- parse_yaml(guild("cat --output", stdout = TRUE))
   expect_mapequal(default_flags, run_observed_flags)
 
   # # confirm passing non-default flag b=TRUE
   # resolves a modified flags.yml in the rundir
   guild_run(file, flags = c(b = !default_flags$b))
-  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  run_observed_flags <- parse_yaml(guild("cat --output", stdout = TRUE))
   expect_mapequal(modifyList(default_flags, list(b = !default_flags$b)),
                   run_observed_flags)
 
@@ -175,12 +175,12 @@ test_that("guild run w/ flags-dest: flags.yml", {
 
   # test default
   guild_run(file)
-  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  run_observed_flags <- parse_yaml(guild("cat --output", stdout = TRUE))
   expect_mapequal(default_flags, run_observed_flags)
 
   # test non-default
   guild_run(file, flags = c(b = !default_flags$b))
-  run_observed_flags <- parse_yaml(.guild("cat --output", stdout = TRUE))
+  run_observed_flags <- parse_yaml(guild("cat --output", stdout = TRUE))
   expect_mapequal(modifyList(default_flags, list(b = !default_flags$b)),
                   run_observed_flags)
 
@@ -206,7 +206,7 @@ test_that("guild run w/ flags-dest: globals", {
   default_flags$duplicated_flag <- 1L
 
   guild_run(file, flags = default_flags)
-  output2 <-.guild("cat --output", stdout = TRUE)
+  output2 <-guild("cat --output", stdout = TRUE)
   expect_identical(output, output2)
 
   flags <- list(

@@ -1,26 +1,27 @@
 
 
-
+#' @importFrom rlang is_string
 guild <- function(...,
                   stdout = "", stderr = "",
                   home = Sys.getenv("GUILD_HOME", here::here(".guild")),
                   wait = TRUE) {
 
   args <- list(...)
+  if(is_string(args[[1L]]))
+    args[[1L]] <- I(args[[1L]])
   args <- rapply(args, function(x) {
     if (inherits(x, "AsIs") || all(grepl("^[[:alpha:]_-]+$", x)))
-      x
+      as.character(x)
     else
       shQuote(x)
   })
-  stopifnot(is.null(names(args)))
 
-  ##? allow args like guild("--path" = r_sym)
-  # for(nm in names(args))
-  #   if(isTRUE(nzchar(nm)))
-  #     args[[nm]] <- sprintf("%s=%s", nm, args[[nm]])
+  # if called w/ named arg like: guild("--path" = val)
+  for(nm in names(args))
+    if(nzchar(nm) && startsWith(nm, "-"))
+      args[nm] <- c(nm, args[[nm]])
 
-  args <- as.character(unlist(args))
+  args <- unlist(args, use.names = FALSE)
 
   if(!is.null(home))
     args <- c("-H", shQuote(home), args)
@@ -29,12 +30,6 @@ guild <- function(...,
   system2t(find_guild(), args,
            stdout = stdout, stderr = stderr,
            wait = wait)
-}
-
-
-.guild <- function(args, ...) {
-  # convenience version that accepts args as a single string
-  guild(unlist(strsplit(args, "\\s+", perl = TRUE)), ...)
 }
 
 

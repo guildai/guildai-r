@@ -53,7 +53,7 @@ if(!interactive())
   formals(guild_run)$echo <- FALSE
 
 expect_snapshot_guild_cat_last_output <- function() {
-  output <- .guild("cat --output", stdout = TRUE)
+  output <- guild("cat --output", stdout = TRUE)
   expect_snapshot_output(writeLines(output))
   invisible(output)
 }
