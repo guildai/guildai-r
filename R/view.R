@@ -16,7 +16,7 @@
 #' @return path to the generated html, invisibly
 #' @export
 view_run_report <- function(
-  id = ls_runs("1")$id,
+  id = runs_info("1")$id,
   output_dir = file.path(tempdir(), id),
   template = system.file("templates/view-run.qmd", package = "guildai"),
   viewer = getOption("guildai.viewer"),
@@ -103,7 +103,7 @@ browser_viewer <- function(viewer_dir, browser = utils::browseURL) {
 #' @return path to the generated html, invisibly
 #' @export
 view_runs_diff <- function(
-    ids = ls_runs("1:2")$id,
+    ids = runs_info("1:2")$id,
     output_dir = file.path(tempdir(), paste(ids, collapse = "-")),
     template = system.file("templates/compare-runs.qmd", package = "guildai"),
     viewer = getOption("guildai.viewer"),
