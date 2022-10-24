@@ -5,7 +5,7 @@
 \title{Render a Run Summary Report}
 \usage{
 view_run_report(
-  id = ls_runs("1")$id,
+  id = runs_info("1")$id,
   output_dir = file.path(tempdir(), id),
   template = system.file("templates/view-run.qmd", package = "guildai"),
   viewer = getOption("guildai.viewer"),
