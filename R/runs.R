@@ -75,13 +75,15 @@ runs_info <- function(..., full = FALSE) {
   df
 }
 
-
+# https://my.guild.ai/t/command-select/115
 as_runs_selection <- function(x) {
+  # Any reason to explicitly resolve ids at this stage using
+  # `guild("select", x, stdout = TRUE)` here?
   if (is.data.frame(x)) x$id else x
 }
 
 #' Get full set of runs scalars
-#' @param runs
+#' @param runs a runs selection
 #' @param ... passed on go `guild()`
 #'
 #' @return a tibble with runs scalars
@@ -99,8 +101,8 @@ as_runs_selection <- function(x) {
 runs_scalars <- function(runs = NULL, ...) {
 
   csv <- tempfile(fileext = ".csv")
-  text <- guild("tensorboard --export-scalars", csv,
-                as_runs_selection(runs), ..., stdout = TRUE)
+  guild("tensorboard --export-scalars", csv,
+        ..., as_runs_selection(runs))
   readr::read_csv(csv, col_types = "cccdd")
 }
 
