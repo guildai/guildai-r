@@ -76,11 +76,8 @@ runs_info <- function(..., full = FALSE) {
 }
 
 
-as_runs_selection <- function(...) {
-  if(...length() == 1 && is.data.frame(..1) && hasName(..1, "id"))
-    ..1[["id"]]
-  else
-    list(...)
+as_runs_selection <- function(x) {
+  if (is.data.frame(x)) x$id else x
 }
 
 #' Get full set of runs scalars
@@ -103,8 +100,37 @@ runs_scalars <- function(runs = NULL, ...) {
 
   csv <- tempfile(fileext = ".csv")
   text <- guild("tensorboard --export-scalars", csv,
-                as_runs_selection(runs, ...), stdout = TRUE)
+                as_runs_selection(runs), ..., stdout = TRUE)
   readr::read_csv(csv, col_types = "cccdd")
 }
+
+
+
+#' Move or copy runs
+#'
+#' @param runs A runs selection
+#' @param location A directory where to place the runs
+#' @param ... passed on to guild
+#' @param copy_resources whether run resources should be also copied. If
+#'   FALSE, (the default), run resources in the run directory will be
+#'   symlinks to a guild managed storage location.
+#'
+#' @return NULL, invisibly
+#' @export
+runs_copy <- function(runs = NULL, location, ..., copy_resources = FALSE) {
+  fs::dir_create(location)
+  guild("export --yes", if (copy_resources) "--copy-resources",
+        ..., location, as_runs_selection(runs))
 }
+
+
+#' @rdname runs_copy
+#' @export
+runs_move <- function(runs = NULL, location, ..., copy_resources = FALSE) {
+  runs_copy(runs, location, "--move", ..., copy_resources = copy_resources)
+}
+
+# TODO: runs_copy() and runs_move() should returne the created paths invisibly, or the
+# resolved run id's invisibly.
+
 

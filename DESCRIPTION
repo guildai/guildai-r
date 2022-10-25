@@ -15,6 +15,7 @@ Imports:
   rlang,
   rstudioapi,
   here,
+  readr,
   tibble
 Encoding: UTF-8
 LazyData: true
