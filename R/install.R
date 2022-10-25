@@ -80,13 +80,12 @@ find_guild <- function() {
 
 #' Export guild for usage in the Terminal
 #'
-#' @param dest Where to place the `guild` executable. This should be a location on the PATH.
+#' @param dest Where to place the `guild` executable.
+#'   This should be a location on the PATH.
 #' @param completions Whether to also install shell completion helpers.
 #'
-#' @return
+#' @return path to the guild executable, invisibly
 #' @export
-#'
-#' @examples
 export_guild_cli <- function(dest = "~/bin", completions = TRUE) {
   if(!dir.exists(dest))
     dir.create(dest)
@@ -97,6 +96,13 @@ export_guild_cli <- function(dest = "~/bin", completions = TRUE) {
   message("Created symlink: '", dest, "' -> '", g, "'")
   if(completions)
     guild("completion --install", "--shell" = basename(Sys.getenv("SHELL")))
+
+  paths <- normalizePath(
+    strsplit(Sys.getenv("PATH"), .Platform$path.sep, fixed = TRUE)[[1]],
+    mustWork = FALSE)
+  if(!normalizePath(dest) %in% paths)
+    warning(sprintf("'%s' is not on the PATH.", dest))
+
   invisible(g)
 }
 
