@@ -157,4 +157,38 @@ runs_purge <- function(runs = NULL, ...) {
 }
 
 
+#' @export
+runs_label <- function(runs = NULL, label, ..., action = c("prepend", "append", "set", "remove", "clear")) {
+  action <- match.arg(action)
+  if (is.null(label) || action == "clear")
+    guild("label --yes --clear", ..., as_runs_selection(runs))
+  else
+    guild("label --yes", paste0("--", action), label, ...,
+          as_runs_selection(runs))
+}
+
+#' @export
+runs_tag <- function(runs = NULL, tag, ..., action = c("add", "remove", "clear"), sync_labels = FALSE) {
+  action <- match.arg(action, choices = c("add", "remove", "delete", "clear"))
+  # remove is alias for delete; use terminology consistent with runs_label()
+  if(action == "remove")
+    action <- "delete"
+  runs <-  as_runs_selection(runs)
+
+  if (!missing(tag)) {
+    if (is.null(tag) || action == "clear")
+      guild("tag --yes", ..., "--clear", runs)
+    else
+      guild("tag --yes", ..., paste0("--", action), label, runs)
+  }
+  if(sync_labels)
+    guild("tag --yes", ..., "--sync-labels", runs)
+}
+
+#' @export
+runs_mark <- function(runs = NULL, ..., clear = FALSE) {
+  guild("mark --yes", if(clear) "--clear", ..., as_runs_selection(runs))
+}
+
+
 

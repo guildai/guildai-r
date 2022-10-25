@@ -5,9 +5,9 @@
 \alias{runs_purge}
 \title{Delete runs}
 \usage{
-runs_delete()
+runs_delete(runs = NULL, ...)
 
-runs_purge()
+runs_purge(runs = NULL, ...)
 }
 \arguments{
 \item{runs}{a runs selection}
