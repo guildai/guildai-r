@@ -157,6 +157,14 @@ runs_purge <- function(runs = NULL, ...) {
 }
 
 
+
+#' Annotate runs
+#'
+#' @param runs a runs selection
+#' @param label,tag string
+#' @param ...  passed on to `guild()`
+#' @param action what action to take w/ existing labels/tags
+#'
 #' @export
 runs_label <- function(runs = NULL, label, ..., action = c("prepend", "append", "set", "remove", "clear")) {
   action <- match.arg(action)
@@ -168,6 +176,7 @@ runs_label <- function(runs = NULL, label, ..., action = c("prepend", "append", 
 }
 
 #' @export
+#' @rdname runs_label
 runs_tag <- function(runs = NULL, tag, ..., action = c("add", "remove", "clear"), sync_labels = FALSE) {
   action <- match.arg(action, choices = c("add", "remove", "delete", "clear"))
   # remove is alias for delete; use terminology consistent with runs_label()
@@ -186,6 +195,7 @@ runs_tag <- function(runs = NULL, tag, ..., action = c("add", "remove", "clear")
 }
 
 #' @export
+#' @rdname runs_label
 runs_mark <- function(runs = NULL, ..., clear = FALSE) {
   guild("mark --yes", if(clear) "--clear", ..., as_runs_selection(runs))
 }
