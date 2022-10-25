@@ -7,6 +7,8 @@
 runs_scalars(runs = NULL, ...)
 }
 \arguments{
+\item{runs}{a runs selection}
+
 \item{...}{passed on go `guild()`}
 }
 \value{

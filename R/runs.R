@@ -130,7 +130,31 @@ runs_move <- function(runs = NULL, location, ..., copy_resources = FALSE) {
   runs_copy(runs, location, "--move", ..., copy_resources = copy_resources)
 }
 
-# TODO: runs_copy() and runs_move() should returne the created paths invisibly, or the
-# resolved run id's invisibly.
+# TODO: runs_copy() and runs_move() should return the created paths
+# invisibly, or the resolved run id's invisibly.
+
+
+
+
+
+#' Delete runs
+#'
+#' `runs_delete()` moves runs into a guild managed "trash" directory.
+#' `runs_purge()` permanently delete runs from "trash" directory.
+#'   Only deleted runs can be purged.
+#' @param runs a runs selection
+#' @param ... passed on to `guild()`
+#'
+#' @export
+runs_delete <- function(runs = NULL, ...) {
+  guild("delete --yes", ..., as_runs_selection(runs))
+}
+
+#' @export
+#' @rdname runs_delete
+runs_purge <- function(runs = NULL, ...) {
+  guild("purge --yes", ..., as_runs_selection(runs))
+}
+
 
 
