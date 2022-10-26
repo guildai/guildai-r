@@ -20,5 +20,5 @@ add_in_view_runs <- function() {
 }
 
 add_in_view_run_history <- function() {
-  rstudioapi::sendToConsole("View(guildai::runs_info())")
+  rstudioapi::sendToConsole("View(guildai::ls_runs())")
 }

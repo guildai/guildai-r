@@ -120,18 +120,18 @@ guild_view()
 <!-- Include a screenshot here -->
 
 You can also retrieve a data frame with information about the run with
-`runs_info()`:
+`ls_runs()`:
 
 ```{r}
-run <- runs_info()
+run <- ls_runs()
 str(run)
 ```
 
-`runs_info()` returns a data frame with information about runs. In our
-sample project, we've launched one run, so `runs_info()` returns a 1-row
+`ls_runs()` returns a data frame with information about runs. In our
+sample project, we've launched one run, so `ls_runs()` returns a 1-row
 data frame.
 
-`guild_view()` and `runs_info()` provide two convenient ways to gather and
+`guild_view()` and `ls_runs()` provide two convenient ways to gather and
 present the information from runs. Importantly however, all the
 information about the run is stored as plain files.
 
@@ -294,10 +294,10 @@ YAML files are also supported as a flags destination:
 ### Retreiving Run Flags
 
 The flags and flag values associated with each runs are returned by
-`runs_info()` as a nested dataframe under `flags`.
+`ls_runs()` as a nested dataframe under `flags`.
 
 ```{r paged.print=FALSE}
-runs <- runs_info()
+runs <- ls_runs()
 runs %>%
   select(shortId, flags) #%>% tidyr::unnest(flags, names_sep = "_")
 ```
@@ -332,13 +332,13 @@ metrics with tensorboard).
 Alternatively, if your run process produces tfevent records directly
 (e.g., `keras::callback_tensorboard("./logs")`), then those
 automatically identified by guild a run scalars, and included in
-`runs_info()` (and `guild_view()`, and tensorboard and other run views).
+`ls_runs()` (and `guild_view()`, and tensorboard and other run views).
 
-`runs_info()` by default only returns a summary of run scalars, but the
+`ls_runs()` by default only returns a summary of run scalars, but the
 full scalar history can also be accessed from R directly:
 
 ```{r}
-runs_info(scalars = TRUE)
+ls_runs(scalars = TRUE)
 ```
 
 ## Using Flags and Scalars Together
@@ -356,7 +356,7 @@ guild_run("fashion-mnist.R",
 We can see compare run flags and run scalars from R:
 
 ```{r paged.print=FALSE}
-runs <- runs_info(paste0("1:", length(units))) # last 8 runs
+runs <- ls_runs(paste0("1:", length(units))) # last 8 runs
 
 df <- runs %>%
   select(flags, scalars) %>%

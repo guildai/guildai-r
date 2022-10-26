@@ -10,7 +10,7 @@
 #' @return a dataframe of runs
 #' @export
 #' @importFrom jsonlite parse_json
-runs_info <- function(..., full = FALSE) {
+ls_runs <- function(..., full = FALSE) {
   if ("--help" %in% c(...))
     return(guild("api runs --help"))
 
@@ -94,7 +94,7 @@ as_runs_selection <- function(x) {
 #' runs_scalars(1:2) # scalars form two most recent runs
 #'
 #' # pass in a dataframe of runs
-#' runs_info() %>%
+#' ls_runs() %>%
 #'   filter(flags$epochs > 5) %>%
 #'   runs_scalars()
 #' }
