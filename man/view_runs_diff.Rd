@@ -5,7 +5,7 @@
 \title{compare runs}
 \usage{
 view_runs_diff(
-  ids = runs_info("1:2")$id,
+  ids = ls_runs("1:2")$id,
   output_dir = file.path(tempdir(), paste(ids, collapse = "-")),
   template = system.file("templates/compare-runs.qmd", package = "guildai"),
   viewer = getOption("guildai.viewer"),

@@ -90,15 +90,15 @@ as_runs_selection <- function(x) {
 #' @export
 #' @examples
 #' \dontrun{
-#' runs_scalars(1) # scalars from most recent run
-#' runs_scalars(1:2) # scalars form two most recent runs
+#' ls_scalars(1) # scalars from most recent run
+#' ls_scalars(1:2) # scalars form two most recent runs
 #'
 #' # pass in a dataframe of runs
 #' ls_runs() %>%
 #'   filter(flags$epochs > 5) %>%
-#'   runs_scalars()
+#'   ls_scalars()
 #' }
-runs_scalars <- function(runs = NULL, ...) {
+ls_scalars <- function(runs = NULL, ...) {
 
   csv <- tempfile(fileext = ".csv")
   guild("tensorboard --export-scalars", csv,
