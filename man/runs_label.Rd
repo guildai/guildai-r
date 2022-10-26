@@ -17,7 +17,7 @@ runs_mark()
 
 \item{...}{passed on to `guild()`}
 
-\item{action}{what action to take w/ existing labels/tags}
+\item{action}{what action to take respective to existing tags}
 
 \item{label, tag}{string}
 }

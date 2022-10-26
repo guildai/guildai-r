@@ -42,8 +42,6 @@ ls_runs <- function(...) {
 
   stopifnot(identical(df$id, df2$id))
 
-  browser()
-
   # use epoch for timestamps
   df$started <- .POSIXct(df2$started/1000000)
   df$stopped <- .POSIXct(df2$stopped/1000000)
@@ -156,15 +154,14 @@ runs_purge <- function(runs = NULL, ...) {
 #' @param runs a runs selection
 #' @param label,tag string
 #' @param ...  passed on to `guild()`
-#' @param action what action to take w/ existing labels/tags
+#' @param action what action to take respective to existing tags
 #'
 #' @export
-runs_label <- function(runs = NULL, label, ..., action = c("prepend", "append", "set", "remove", "clear")) {
-  action <- match.arg(action)
-  if (is.null(label) || action == "clear")
+runs_label <- function(runs = NULL, label, ...) {
+  if (is.null(label))
     guild("label --yes --clear", ..., as_runs_selection(runs))
   else
-    guild("label --yes", paste0("--", action), label, ...,
+    guild("label --yes", "--set" = label, ...,
           as_runs_selection(runs))
 }
 
@@ -173,19 +170,16 @@ runs_label <- function(runs = NULL, label, ..., action = c("prepend", "append", 
 runs_tag <- function(runs = NULL, tag, ..., action = c("add", "remove", "clear"), sync_labels = FALSE) {
   action <- match.arg(action, choices = c("add", "remove", "delete", "clear"))
   # remove is alias for delete; use terminology consistent with runs_label()
-  if(action == "remove")
+  if (action == "remove")
     action <- "delete"
   runs <-  as_runs_selection(runs)
 
-  if (!missing(tag)) {
-    if (is.null(tag) || action == "clear")
-      guild("tag --yes", ..., "--clear", runs)
-    else
-      guild("tag --yes", ..., paste0("--", action), label, runs)
-  }
-  if(sync_labels)
-    guild("tag --yes", ..., "--sync-labels", runs)
+  if ((missing(tag) || is.null(tag)) && action == "clear")
+    guild("tag --yes", ..., "--clear", runs)
+  else
+    guild("tag --yes", ..., paste0("--", action), tag, runs)
 }
+
 
 #' @export
 #' @rdname runs_label
