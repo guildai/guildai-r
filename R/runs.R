@@ -52,8 +52,9 @@ ls_runs <- function(...) {
   df[c("shortId", "time", "command", "files",
        "env", "sourcecode", "opRef")] <- NULL
 
-  # additional coersion
+  # additional coercion
   df$comments <- lapply(df$comments, as.character)
+  df$tags     <- lapply(df$tags, as.character)
 
 
   ## `guild api runs` is missing some info, mainly a portable timestamp
@@ -201,9 +202,24 @@ runs_restore <- function(runs = NULL, ...) {
 #' @param runs a runs selection
 #' @param label,tag string
 #' @param ...  passed on to `guild()`
-#' @param action what action to take respective to existing tags
+#' @param action what action to take respective to existing tags. "delete" is an alias
 #'
 #' @export
+#' @examples
+#' if(FALSE) {
+#'
+#' ls_runs(1) %>% runs_tag("foo")
+#' ls_runs(1)$tags
+#' ls_runs(1) %>% runs_tag("bar")
+#' ls_runs(1)$tags
+#' ls_runs(1) %>% runs_tag("foo", action = "remove")
+#' ls_runs(1) %>% runs_tag(action = "clear")
+#'
+#' ## pass through options to `guild tag` cli subcommand
+#' ls_runs(1) %>% runs_tag("--help")
+#' ls_runs(1) %>% runs_tag("--add" = "foo", "--delete" = "bar")
+#'
+#' }
 runs_label <- function(runs = NULL, label, ...) {
   if (is.null(label))
     guild("label --yes --clear", ..., as_runs_selection(runs))
@@ -216,18 +232,29 @@ runs_label <- function(runs = NULL, label, ...) {
 
 #' @export
 #' @rdname runs_label
-runs_tag <- function(runs = NULL, tag, ..., action = c("add", "remove", "clear"), sync_labels = FALSE) {
-  action <- match.arg(action, choices = c("add", "remove", "delete", "clear"))
-  # remove is alias for delete; use terminology consistent with runs_label()
+runs_tag <- function(runs = NULL, tags, ..., action = c("add", "set", "remove", "clear", "delete")) {
+  action <- match.arg(action)
+  # "remove" is alias for "delete"; use terminology consistent with runs_label()
   if (action == "remove")
     action <- "delete"
-  runs <-  as_runs_selection(runs)
 
-  if ((missing(tag) || is.null(tag)) && action == "clear")
-    guild("tag --yes", ..., "--clear", runs)
-  else
-    guild("tag --yes", ..., paste0("--", action), tag, runs)
-  invisible(runs)
+  runs_selection <-  as_runs_selection(runs)
+
+  if(action %in% c("clear", "set"))
+    guild("tag --yes", ..., "--clear", runs_selection)
+
+  if (action == "clear")
+    return(invisible(runs_selection))
+
+  if (missing(tags))
+    tags <- NULL
+
+  if(!is.null(tags)) {
+    tags <- as.list(tags)
+    names(tags) <- rep(paste0("--", action), length(tags))
+  }
+  guild("tag --yes", ..., tags, runs_selection)
+  invisible(runs_selection)
 }
 
 

@@ -9,17 +9,19 @@ guild <- function(...,
   args <- list(...)
   if(is_string(args[[1L]]))
     args[[1L]] <- I(args[[1L]])
-  args <- rapply(args, function(x) {
-    if (inherits(x, "AsIs") || all(grepl("^[[:alpha:]_-]+$", x)))
+  args <- as.list(rapply(args, function(x) {
+    if (inherits(x, "AsIs") || all(grepl("^[[:alnum:]_-]+$", x)))
       as.character(x)
     else
       shQuote(x)
-  })
+  }))
 
   # if called w/ named arg like: guild("--path" = val)
-  for(nm in names(args))
-    if(nzchar(nm) && startsWith(nm, "-"))
-      args[nm] <- list(c(nm, args[[nm]]))
+  if (!is.null(nms <- names(args)))
+    for (i in seq_along(args))
+      if (isTRUE(nzchar(nm <- nms[[i]]) && startsWith(nm, "-")))
+        args[i] <- list(c(nm, args[[i]]))
+
 
   args <- unlist(args, use.names = FALSE)
 
