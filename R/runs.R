@@ -274,7 +274,6 @@ runs_mark <- function(runs = NULL, ..., clear = FALSE) {
   invisible(runs)
 }
 
-}
 
 
 
