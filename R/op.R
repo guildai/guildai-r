@@ -105,11 +105,8 @@ r_script_guild_data <- function(r_script_path) {
 
 str_drop_prefix <- function(x, prefix) {
 
-  if (is.character(prefix)) {
-    if (!startsWith(x, prefix))
-      return(x)
-    prefix <- nchar(prefix)
-  }
+  if (is_string(prefix))
+    prefix <- ifelse(startsWith(x, prefix), nchar(prefix), 0L)
 
   substr(x, as.integer(prefix) + 1L, nchar(x))
 }
