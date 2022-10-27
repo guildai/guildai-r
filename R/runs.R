@@ -159,22 +159,38 @@ runs_move <- function(runs = NULL, location, ..., copy_resources = FALSE) {
 
 #' Delete runs
 #'
-#' `runs_delete()` moves runs into a guild managed "trash" directory.
-#' `runs_purge()` permanently delete runs from "trash" directory.
-#'   Only deleted runs can be purged.
+#' @details
+#' - `runs_delete()` moves runs into a guild managed "trash" directory.
+#'
+#' - `runs_restore()` moves runs back into the main guild managed "runs"
+#' directory.
+#'
+#' - `runs_purge()` permanently delete runs from "trash" directory. Only
+#' deleted runs can be purged.
+#'
 #' @param runs a runs selection
 #' @param ... passed on to `guild()`
 #'
+#' @note To see deleted runs, do `guildai:::guild("runs list --deleted")`
+#'   or `fs::dir_info(Sys.getenv(`
+#'
 #' @export
 runs_delete <- function(runs = NULL, ...) {
-  guild("delete --yes", ..., as_runs_selection(runs))
+  guild("runs delete --yes", ..., as_runs_selection(runs))
   invisible(runs)
 }
 
 #' @export
 #' @rdname runs_delete
 runs_purge <- function(runs = NULL, ...) {
-  guild("purge --yes", ..., as_runs_selection(runs))
+  guild("runs purge --yes", ..., as_runs_selection(runs))
+  invisible(runs)
+}
+
+#' @export
+#' @rdname runs_delete
+runs_restore <- function(runs = NULL, ...) {
+  guild("runs restore", ..., as_runs_selection(runs))
   invisible(runs)
 }
 
