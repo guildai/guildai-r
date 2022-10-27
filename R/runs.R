@@ -141,7 +141,8 @@ ls_scalars <- function(runs = NULL, ...) {
 #'
 #' @return NULL, invisibly
 #' @export
-runs_export <- function(runs = NULL, location, ..., move = FALSE, copy_resources = FALSE) {
+runs_export <- function(runs = NULL, location, ...,
+                        move = FALSE, copy_resources = FALSE) {
   guild("export --yes",
         if (move) "--move",
         if (copy_resources) "--copy-resources",
@@ -209,7 +210,7 @@ runs_restore <- function(runs = NULL, ...) {
 #' Annotate runs
 #'
 #' @param runs a runs selection
-#' @param label,tag string
+#' @param label,tag,comment string
 #' @param ...  passed on to `guild()`
 #' @param action what action to take respective to existing tags. "delete" is an alias
 #'
@@ -270,10 +271,21 @@ runs_tag <- function(runs = NULL, tags, ..., action = c("add", "set", "remove", 
 #' @export
 #' @rdname runs_label
 runs_mark <- function(runs = NULL, ..., clear = FALSE) {
-  guild("mark --yes", if(clear) "--clear", ..., as_runs_selection(runs))
+  guild("mark --yes", if (clear) "--clear", ..., as_runs_selection(runs))
   invisible(runs)
 }
 
+#' @export
+#' @rdname runs_label
+runs_comment   <- function(runs = NULL, comment = NULL, ..., clear = FALSE) {
+  runs_selection <- as_runs_selection(runs)
+  if(clear)
+    guild("runs comment --clear", ..., runs_selection)
+
+  if(length(comment))
+    guild("runs comment", "--add" = paste0(comment, collapse = "\n"),
+          ..., runs_selection)
+  invisible(runs)
 }
 
 

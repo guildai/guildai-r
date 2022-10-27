@@ -4,6 +4,7 @@
 \alias{runs_label}
 \alias{runs_tag}
 \alias{runs_mark}
+\alias{runs_comment}
 \title{Annotate runs}
 \usage{
 runs_label(runs = NULL, label, ...)
@@ -16,11 +17,13 @@ runs_tag(
 )
 
 runs_mark()
+
+runs_comment(runs = NULL, comment = NULL, ..., clear = FALSE)
 }
 \arguments{
 \item{runs}{a runs selection}
 
-\item{label, tag}{string}
+\item{label, tag, comment}{string}
 
 \item{...}{passed on to \code{guild()}}
 
