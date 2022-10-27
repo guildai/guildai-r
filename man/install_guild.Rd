@@ -10,8 +10,8 @@ install_guild(
 )
 }
 \arguments{
-\item{guildai}{character vector passed directly to `pip install`. To
-install the release version of guildai, this can be `"guildai"`.}
+\item{guildai}{character vector passed directly to \verb{pip install}. To
+install the release version of guildai, this can be \code{"guildai"}.}
 
 \item{python}{path to python binary, used to create a private venv.}
 }
@@ -19,7 +19,7 @@ install the release version of guildai, this can be `"guildai"`.}
 path to the guild binary
 }
 \description{
-This installs the `guild` executable for use by the package.
+This installs the \code{guild} executable for use by the package.
 }
 \examples{
 # install_guild(c("-e", "~/guild/guildai"))

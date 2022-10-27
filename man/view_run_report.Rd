@@ -21,9 +21,9 @@ view_run_report(
 
 \item{viewer}{Viewer to display training run information within (default
 to an internal page viewer if available, otherwise to the R session
-default web browser, `utils::browseURL()`).}
+default web browser, \code{utils::browseURL()}).}
 
-\item{...}{passed on to `quarto::quarto_render()`}
+\item{...}{passed on to \code{quarto::quarto_render()}}
 }
 \value{
 path to the generated html, invisibly

@@ -18,11 +18,13 @@ guild_run(
 \item{opspec}{typically path to an R script, but could be an scalar
 string that guild recognizes as a valid opspec.}
 
-\item{flags}{- a named list or vector like `c(noise = .3, dropout = .4)`
-
-  - a scalar string like `"noise=.3 dropout=.4"`
-
-  - a dataframe of flags for a batch of runs}
+\item{flags}{\itemize{
+\item a named list or vector like \code{c(noise = .3, dropout = .4)}
+\itemize{
+\item a scalar string like \code{"noise=.3 dropout=.4"}
+\item a dataframe of flags for a batch of runs
+}
+}}
 
 \item{...}{
   Arguments passed on to \code{\link[base:system2]{base::system2}}
@@ -58,8 +60,8 @@ console. Note, this has no effect on whether expressions are echoed in
 the guild run stdout.}
 }
 \value{
-the return value from `system2()`, invisibly. This function is
-  primarily called for its side effect.
+the return value from \code{system2()}, invisibly. This function is
+primarily called for its side effect.
 }
 \description{
 Launch a guild run

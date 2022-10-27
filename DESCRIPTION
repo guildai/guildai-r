@@ -28,3 +28,4 @@ Suggests:
     withr
 Config/testthat/edition: 3
 URL: https://t-kalinowski.github.io/guildai-r/
+Roxygen: list(markdown = TRUE)

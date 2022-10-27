@@ -6,20 +6,26 @@
 \alias{runs_mark}
 \title{Annotate runs}
 \usage{
-runs_label(runs, ..., action = c("append", "prepend", "set", "remove"))
+runs_label(runs = NULL, label, ...)
 
-runs_tag()
+runs_tag(
+  runs = NULL,
+  tag,
+  ...,
+  action = c("add", "remove", "clear"),
+  sync_labels = FALSE
+)
 
 runs_mark()
 }
 \arguments{
 \item{runs}{a runs selection}
 
-\item{...}{passed on to `guild()`}
+\item{label, tag}{string}
+
+\item{...}{passed on to \code{guild()}}
 
 \item{action}{what action to take respective to existing tags}
-
-\item{label, tag}{string}
 }
 \description{
 Annotate runs

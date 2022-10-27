@@ -3,19 +3,33 @@
 \name{runs_delete}
 \alias{runs_delete}
 \alias{runs_purge}
+\alias{runs_restore}
 \title{Delete runs}
 \usage{
 runs_delete(runs = NULL, ...)
 
 runs_purge(runs = NULL, ...)
+
+runs_restore(runs = NULL, ...)
 }
 \arguments{
 \item{runs}{a runs selection}
 
-\item{...}{passed on to `guild()`}
+\item{...}{passed on to \code{guild()}}
 }
 \description{
-`runs_delete()` moves runs into a guild managed "trash" directory.
-`runs_purge()` permanently delete runs from "trash" directory.
-  Only deleted runs can be purged.
+Delete runs
+}
+\details{
+\itemize{
+\item \code{runs_delete()} moves runs into a guild managed "trash" directory.
+\item \code{runs_restore()} moves runs back into the main guild managed "runs"
+directory.
+\item \code{runs_purge()} permanently delete runs from "trash" directory. Only
+deleted runs can be purged.
+}
+}
+\note{
+To see deleted runs, do \code{guildai:::guild("runs list --deleted")}
+or \verb{fs::dir_info(Sys.getenv(}
 }

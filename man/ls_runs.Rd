@@ -7,8 +7,8 @@
 ls_runs(...)
 }
 \arguments{
-\item{...}{additional arguments passed to `guild api runs`. Try
-`"--help"` to see options.}
+\item{...}{additional arguments passed to \verb{guild api runs}. Try
+\code{"--help"} to see options.}
 }
 \value{
 a dataframe of runs

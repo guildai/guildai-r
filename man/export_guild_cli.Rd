@@ -7,7 +7,7 @@
 export_guild_cli(dest = "~/bin", completions = TRUE)
 }
 \arguments{
-\item{dest}{Where to place the `guild` executable.
+\item{dest}{Where to place the \code{guild} executable.
 This should be a location on the PATH.}
 
 \item{completions}{Whether to also install shell completion helpers.}
