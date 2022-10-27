@@ -132,30 +132,36 @@ ls_scalars <- function(runs = NULL, ...) {
 #' Move or copy runs
 #'
 #' @param runs A runs selection
-#' @param location A directory where to place the runs
+#' @param location A directory where to place the runs, or find the runs.
 #' @param ... passed on to guild
+#' @param move bool, whether the runs should be moved or copied by the import or export operation.
 #' @param copy_resources whether run resources should be also copied. If
-#'   FALSE, (the default), run resources in the run directory will be
+#'   `FALSE`, (the default), run resources in the run directory will be
 #'   symlinks to a guild managed storage location.
 #'
 #' @return NULL, invisibly
 #' @export
-runs_copy <- function(runs = NULL, location, ..., copy_resources = FALSE) {
-  fs::dir_create(location)
-  guild("export --yes", if (copy_resources) "--copy-resources",
+runs_export <- function(runs = NULL, location, ..., move = FALSE, copy_resources = FALSE) {
+  guild("export --yes",
+        if (move) "--move",
+        if (copy_resources) "--copy-resources",
         ..., location, as_runs_selection(runs))
   invisible(runs)
 }
 
 
-#' @rdname runs_copy
+#' @rdname runs_export
 #' @export
-runs_move <- function(runs = NULL, location, ..., copy_resources = FALSE) {
-  runs_copy(runs, location, "--move", ..., copy_resources = copy_resources)
+runs_import <- function(runs = NULL, location, ...,
+                        move = FALSE, copy_resources = FALSE) {
+  guild("import --yes",
+        if (move) "--move",
+        if (copy_resources) "--copy-resources",
+        ..., location, as_runs_selection(runs))
 }
 
-# TODO: runs_copy() and runs_move() should return the created paths
-# invisibly, or the resolved run id's invisibly.
+# TODO: runs_export() and runs_import() should return something useful
+# for composition with %>%.
 
 
 
