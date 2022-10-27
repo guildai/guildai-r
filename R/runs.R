@@ -92,11 +92,16 @@ ls_runs <- function(...) {
 
 
 # https://my.guild.ai/t/command-select/115
-as_runs_selection <- function(x) {
+# ## TODO: think about how best to export `the resolve=TRUE` version of this.
+# ## As a user-facing func it needs a better name/interface, probably should be a generic.
+as_runs_selection <- function(x, resolve = FALSE) {
   # Any reason to explicitly resolve ids at this stage using
   # `guild("select", x, stdout = TRUE)` here?
   # `guild select` only returns 1 run at a time
-  if (is.data.frame(x)) (x[["id"]] %||% x[["run"]]) else x
+  x <- if (is.data.frame(x)) (x[["id"]] %||% x[["run"]]) else x
+  if(resolve)
+    x <- guild("select --all", x, stdout = TRUE)
+  x
 }
 
 #' Get full set of runs scalars
@@ -116,7 +121,6 @@ as_runs_selection <- function(x) {
 #'   ls_scalars()
 #' }
 ls_scalars <- function(runs = NULL, ...) {
-
   csv <- tempfile(fileext = ".csv")
   guild("tensorboard --export-scalars", csv,
         ..., as_runs_selection(runs))
@@ -148,7 +152,6 @@ runs_copy <- function(runs = NULL, location, ..., copy_resources = FALSE) {
 #' @export
 runs_move <- function(runs = NULL, location, ..., copy_resources = FALSE) {
   runs_copy(runs, location, "--move", ..., copy_resources = copy_resources)
-  invisible(runs)
 }
 
 # TODO: runs_copy() and runs_move() should return the created paths
