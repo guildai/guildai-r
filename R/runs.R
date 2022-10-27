@@ -112,6 +112,7 @@ runs_copy <- function(runs = NULL, location, ..., copy_resources = FALSE) {
   fs::dir_create(location)
   guild("export --yes", if (copy_resources) "--copy-resources",
         ..., location, as_runs_selection(runs))
+  invisible(runs)
 }
 
 
@@ -119,6 +120,7 @@ runs_copy <- function(runs = NULL, location, ..., copy_resources = FALSE) {
 #' @export
 runs_move <- function(runs = NULL, location, ..., copy_resources = FALSE) {
   runs_copy(runs, location, "--move", ..., copy_resources = copy_resources)
+  invisible(runs)
 }
 
 # TODO: runs_copy() and runs_move() should return the created paths
@@ -139,12 +141,14 @@ runs_move <- function(runs = NULL, location, ..., copy_resources = FALSE) {
 #' @export
 runs_delete <- function(runs = NULL, ...) {
   guild("delete --yes", ..., as_runs_selection(runs))
+  invisible(runs)
 }
 
 #' @export
 #' @rdname runs_delete
 runs_purge <- function(runs = NULL, ...) {
   guild("purge --yes", ..., as_runs_selection(runs))
+  invisible(runs)
 }
 
 
@@ -163,6 +167,8 @@ runs_label <- function(runs = NULL, label, ...) {
   else
     guild("label --yes", "--set" = label, ...,
           as_runs_selection(runs))
+  # TODO: update label if `runs` is a df
+  invisible(runs)
 }
 
 #' @export
@@ -178,6 +184,7 @@ runs_tag <- function(runs = NULL, tag, ..., action = c("add", "remove", "clear")
     guild("tag --yes", ..., "--clear", runs)
   else
     guild("tag --yes", ..., paste0("--", action), tag, runs)
+  invisible(runs)
 }
 
 
@@ -185,6 +192,9 @@ runs_tag <- function(runs = NULL, tag, ..., action = c("add", "remove", "clear")
 #' @rdname runs_label
 runs_mark <- function(runs = NULL, ..., clear = FALSE) {
   guild("mark --yes", if(clear) "--clear", ..., as_runs_selection(runs))
+  invisible(runs)
+}
+
 }
 
 
