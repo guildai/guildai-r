@@ -62,7 +62,9 @@ expect_snapshot_guild_cat_last_output <- function() {
 
 # TODO: does guild have away to distinguish between stdout and stderr output?
 
-
+ll <- function(..., all.files = TRUE, recursive = TRUE, no.. = TRUE) {
+  list.files(..., all.files = all.files, recursive = recursive, no.. = no..)
+}
 
 # need these methods in tests, but don't export them for users
 registerS3method("print", "yaml", print.yaml)

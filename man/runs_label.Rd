@@ -16,7 +16,7 @@ runs_tag(
   action = c("add", "set", "remove", "clear", "delete")
 )
 
-runs_mark()
+runs_mark(runs = NULL, ..., clear = FALSE)
 
 runs_comment(runs = NULL, comment = NULL, ..., clear = FALSE)
 }

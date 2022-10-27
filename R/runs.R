@@ -287,6 +287,3 @@ runs_comment   <- function(runs = NULL, comment = NULL, ..., clear = FALSE) {
           ..., runs_selection)
   invisible(runs)
 }
-
-
-
