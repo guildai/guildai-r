@@ -9,6 +9,33 @@
 #' @export
 #' @importFrom jsonlite parse_json
 #' @importFrom rlang %|%
+#' @examples
+#' \dontrun{
+#' withr::with_package("dplyr", {
+#'
+#' ## sort and filter using scalars
+#' pluck_scalar <- function(scalar_summary_df, val, tag, prefix = ".guild") {
+#'   if(!length(scalar_summary_df)) return(NA)
+#'   out <- scalar_summary_df %>%
+#'     filter(tag == {{ tag }}, prefix == {{ prefix }}) %>%
+#'     pull({{ val }})
+#'   if(length(out) < 1)
+#'     out <- NA
+#'   out
+#' }
+#'
+#' runs <- ls_runs()
+#' runs %>%
+#'   rowwise() %>%
+#'   mutate(
+#'     min_val_loss =
+#'       pluck_scalar(scalars, min_val, "epoch_loss", "logs/validation"),
+#'     .after = label) %>%
+#'   ungroup() %>%
+#'   slice_min(min_val_loss, n = 5)
+#'
+#' })
+#' }
 ls_runs <- function(...) {
   if ("--help" %in% c(...))
     return(guild("api runs --help"))
@@ -20,10 +47,8 @@ ls_runs <- function(...) {
   if(identical(df, list()))
     return()
 
-
   # drop some overly verbose info. All this
   # is easily accessible in run_dir/.guild/attrs users that need it.
-  #
   df[c("shortId", "time", "command", "files",
        "env", "sourcecode", "opRef")] <- NULL
 
