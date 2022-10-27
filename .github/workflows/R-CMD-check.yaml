@@ -44,7 +44,7 @@ jobs:
           # which is incompatible w/ CRAN binaries.
           install-r: ${{ startsWith(matrix.os, 'macOS') }}
 
-      - uses: r-lib/actions/setup-r-dependencies@v2
+      - uses: r-lib/actions/setup-r-dependencies@v2-branch
         with:
           cache-version: 2
           extra-packages: any::rcmdcheck, local::.
