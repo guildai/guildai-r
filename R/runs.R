@@ -89,11 +89,13 @@ ls_runs <- function(...) {
   df
 }
 
+
 # https://my.guild.ai/t/command-select/115
 as_runs_selection <- function(x) {
   # Any reason to explicitly resolve ids at this stage using
   # `guild("select", x, stdout = TRUE)` here?
-  if (is.data.frame(x)) x$id else x
+  # `guild select` only returns 1 run at a time
+  if (is.data.frame(x)) (x[["id"]] %||% x[["run"]]) else x
 }
 
 #' Get full set of runs scalars
