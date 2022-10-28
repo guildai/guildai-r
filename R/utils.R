@@ -45,3 +45,20 @@ system2t <- function (command, args, ...) {
   }
   system2(command, args, ...)
 }
+
+
+
+maybe_extract_run_ids <- function(x) {
+  if (is.list(x))
+    if(!is.null(id <- x[["id"]] %||% x[["run"]]))
+      return(id)
+  x
+}
+
+
+resolve_run_ids <- function(runs = NULL, ...) {
+  selection <- maybe_extract_run_ids(runs)
+  if(...length() || identical(selection, runs))
+    selection <- guild("select --all", selection, ...)
+  selection
+}

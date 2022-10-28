@@ -91,18 +91,6 @@ ls_runs <- function(...) {
 }
 
 
-# https://my.guild.ai/t/command-select/115
-# ## TODO: think about how best to export `the resolve=TRUE` version of this.
-# ## As a user-facing func it needs a better name/interface, probably should be a generic.
-as_runs_selection <- function(x, resolve = FALSE) {
-  # Any reason to explicitly resolve ids at this stage using
-  # `guild("select", x, stdout = TRUE)` here?
-  # `guild select` only returns 1 run at a time
-  x <- if (is.data.frame(x)) (x[["id"]] %||% x[["run"]]) else x
-  if(resolve)
-    x <- guild("select --all", x, stdout = TRUE)
-  x
-}
 
 #' Get full set of runs scalars
 #' @param runs a runs selection
@@ -123,7 +111,7 @@ as_runs_selection <- function(x, resolve = FALSE) {
 ls_scalars <- function(runs = NULL, ...) {
   csv <- tempfile(fileext = ".csv")
   guild("tensorboard --export-scalars", csv,
-        ..., as_runs_selection(runs))
+        ..., maybe_extract_run_ids(runs))
   readr::read_csv(csv, col_types = "cccdd")
 }
 
@@ -146,7 +134,7 @@ runs_export <- function(runs = NULL, location, ...,
   guild("export --yes",
         if (move) "--move",
         if (copy_resources) "--copy-resources",
-        ..., location, as_runs_selection(runs))
+        ..., location, maybe_extract_run_ids(runs))
   invisible(runs)
 }
 
@@ -158,7 +146,7 @@ runs_import <- function(runs = NULL, location, ...,
   guild("import --yes",
         if (move) "--move",
         if (copy_resources) "--copy-resources",
-        ..., location, as_runs_selection(runs))
+        ..., location, maybe_extract_run_ids(runs))
 }
 
 # TODO: runs_export() and runs_import() should return something useful
@@ -187,21 +175,21 @@ runs_import <- function(runs = NULL, location, ...,
 #'
 #' @export
 runs_delete <- function(runs = NULL, ...) {
-  guild("runs delete --yes", ..., as_runs_selection(runs))
+  guild("runs delete --yes", ..., maybe_extract_run_ids(runs))
   invisible(runs)
 }
 
 #' @export
 #' @rdname runs_delete
 runs_purge <- function(runs = NULL, ...) {
-  guild("runs purge --yes", ..., as_runs_selection(runs))
+  guild("runs purge --yes", ..., maybe_extract_run_ids(runs))
   invisible(runs)
 }
 
 #' @export
 #' @rdname runs_delete
 runs_restore <- function(runs = NULL, ...) {
-  guild("runs restore", ..., as_runs_selection(runs))
+  guild("runs restore", ..., maybe_extract_run_ids(runs))
   invisible(runs)
 }
 
@@ -232,10 +220,10 @@ runs_restore <- function(runs = NULL, ...) {
 #' }
 runs_label <- function(runs = NULL, label, ...) {
   if (is.null(label))
-    guild("label --yes --clear", ..., as_runs_selection(runs))
+    guild("label --yes --clear", ..., maybe_extract_run_ids(runs))
   else
     guild("label --yes", "--set" = label, ...,
-          as_runs_selection(runs))
+          maybe_extract_run_ids(runs))
   # TODO: update label if `runs` is a df
   invisible(runs)
 }
@@ -248,13 +236,14 @@ runs_tag <- function(runs = NULL, tags, ..., action = c("add", "set", "remove", 
   if (action == "remove")
     action <- "delete"
 
-  runs_selection <-  as_runs_selection(runs)
+  runs_in <- runs
+  runs <-  maybe_extract_run_ids(runs)
 
   if(action %in% c("clear", "set"))
-    guild("tag --yes", ..., "--clear", runs_selection)
+    guild("tag --yes", ..., "--clear", runs)
 
   if (action == "clear")
-    return(invisible(runs_selection))
+    return(invisible(runs))
 
   if (missing(tags))
     tags <- NULL
@@ -263,27 +252,31 @@ runs_tag <- function(runs = NULL, tags, ..., action = c("add", "set", "remove", 
     tags <- as.list(tags)
     names(tags) <- rep(paste0("--", action), length(tags))
   }
-  guild("tag --yes", ..., tags, runs_selection)
-  invisible(runs_selection)
+
+  guild("tag --yes", ..., tags, runs)
+  invisible(runs_in)
 }
 
 
 #' @export
 #' @rdname runs_label
 runs_mark <- function(runs = NULL, ..., clear = FALSE) {
-  guild("mark --yes", if (clear) "--clear", ..., as_runs_selection(runs))
+  guild("mark --yes", if (clear) "--clear", ..., maybe_extract_run_ids(runs))
   invisible(runs)
 }
 
 #' @export
 #' @rdname runs_label
-runs_comment   <- function(runs = NULL, comment = NULL, ..., clear = FALSE) {
-  runs_selection <- as_runs_selection(runs)
-  if(clear)
-    guild("runs comment --clear", ..., runs_selection)
+runs_comment <- function(runs = NULL, comment = NULL, ..., clear = FALSE) {
+  runs_in <- runs
+  runs <- maybe_extract_run_ids(runs)
+  if (clear)
+    guild("runs comment --clear", ..., runs)
 
-  if(length(comment))
+  if (length(comment))
     guild("runs comment", "--add" = paste0(comment, collapse = "\n"),
-          ..., runs_selection)
-  invisible(runs)
+          ..., runs)
+  invisible(runs_in)
 }
+
+
