@@ -4,13 +4,28 @@
 \alias{guild_view}
 \title{Launch Guild Viewer}
 \usage{
-guild_view(..., wait = FALSE)
+guild_view(runs = NULL, ..., wait = FALSE)
 }
 \arguments{
-\item{...}{passed on to the \code{guild} binary}
+\item{runs}{an optional runs selection.}
+
+\item{...}{passed on to the \code{guild} executable. Pass \code{--help} to see options.}
 
 \item{wait}{whether to block the R console while the application is active.}
 }
 \description{
 Launch Guild Viewer
+}
+\examples{
+if(FALSE) {
+  guild_view()
+
+  # see all supported options
+  guild_view("--help")
+
+  # three valid ways of supplying args to the guild executable
+  guild_view("--port" = "5678")
+  guild_view("--port", "5678")
+  guild_view(c("--port", "5678"))
+}
 }

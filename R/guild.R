@@ -130,13 +130,28 @@ guild_run <- function(opspec = "train.R",
 
 #' Launch Guild Viewer
 #'
-#' @param ... passed on to the `guild` binary
+#' @param runs an optional runs selection.
+#' @param ... passed on to the `guild` executable. Pass `--help` to see options.
 #' @param wait whether to block the R console while the application is active.
 #'
 #' @export
-guild_view <- function(..., wait = FALSE) {
+#' @examples
+#' if(FALSE) {
+#'   guild_view()
+#'
+#'   # see all supported options
+#'   guild_view("--help")
+#'
+#'   # three valid ways of supplying args to the guild executable
+#'   guild_view("--port" = "5678")
+#'   guild_view("--port", "5678")
+#'   guild_view(c("--port", "5678"))
+#' }
+guild_view <- function(runs = NULL, ..., wait = FALSE) {
   # TODO: use processx here?
-  guild("view", ..., wait = wait)
+  guild("view", ..., maybe_extract_run_ids(runs), wait = wait)
+}
+
 }
 
 # dummy place holder, because R CMD check otherwise complains:
