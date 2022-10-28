@@ -198,63 +198,54 @@ runs_restore <- function(runs = NULL, ...) {
 #' Annotate runs
 #'
 #' @param runs a runs selection
-#' @param label,tag,comment string
-#' @param ...  passed on to `guild()`
-#' @param action what action to take respective to existing tags. "delete" is an alias
+#' @param label,comment a string
+#' @param add,remove a character vector of tags to add or remove
+#' @param clear bool, whether to clear the existing tags/comments first.
+#' @param ...  passed on to `guild`
 #'
 #' @export
 #' @examples
 #' if(FALSE) {
 #'
+#' ls_runs(1) %>% runs_tag(clear = TRUE)
 #' ls_runs(1) %>% runs_tag("foo")
 #' ls_runs(1)$tags
 #' ls_runs(1) %>% runs_tag("bar")
 #' ls_runs(1)$tags
-#' ls_runs(1) %>% runs_tag("foo", action = "remove")
-#' ls_runs(1) %>% runs_tag(action = "clear")
+#' ls_runs(1) %>% runs_tag(remove = "foo")
+#' ls_runs(1)$tags
+#' ls_runs(1) %>% runs_tag("baz", clear = TRUE)
+#' ls_runs(1)$tags
 #'
 #' ## pass through options to `guild tag` cli subcommand
-#' ls_runs(1) %>% runs_tag("--help")
-#' ls_runs(1) %>% runs_tag("--add" = "foo", "--delete" = "bar")
+#' runs_tag(NULL, NULL, "--help")
+#' ls_runs(1) %>% runs_tag("--add" = c("foo", "bar"))
+#' ls_runs(1) %>% runs_tag("--add" = "baz", "--delete" = "bar")
+#' ls_runs(1)$tags
 #'
 #' }
-runs_label <- function(runs = NULL, label, ...) {
-  if (is.null(label))
+runs_label <- function(runs = NULL, label, ..., clear = is.null(label)) {
+  if (clear)
     guild("label --yes --clear", ..., maybe_extract_run_ids(runs))
   else
-    guild("label --yes", "--set" = label, ...,
-          maybe_extract_run_ids(runs))
+    guild("label --yes", "--set" = label, ..., maybe_extract_run_ids(runs))
   # TODO: update label if `runs` is a df
   invisible(runs)
 }
 
+
 #' @export
 #' @rdname runs_label
-runs_tag <- function(runs = NULL, tags, ..., action = c("add", "set", "remove", "clear", "delete")) {
-  action <- match.arg(action)
-  # "remove" is alias for "delete"; use terminology consistent with runs_label()
-  if (action == "remove")
-    action <- "delete"
+runs_tag <- function(runs = NULL, add = NULL, ..., remove = NULL, clear = FALSE) {
+  if (length(add))
+    add <- list("--add" = add)
 
-  runs_in <- runs
-  runs <-  maybe_extract_run_ids(runs)
+  if (length(remove))
+    remove <- list("--delete", remove)
 
-  if(action %in% c("clear", "set"))
-    guild("tag --yes", ..., "--clear", runs)
-
-  if (action == "clear")
-    return(invisible(runs))
-
-  if (missing(tags))
-    tags <- NULL
-
-  if(!is.null(tags)) {
-    tags <- as.list(tags)
-    names(tags) <- rep(paste0("--", action), length(tags))
-  }
-
-  guild("tag --yes", ..., tags, runs)
-  invisible(runs_in)
+  guild("tag --yes", if(clear) "--clear", ...,
+        remove, add, maybe_extract_run_ids(runs))
+  invisible(runs)
 }
 
 
@@ -264,6 +255,7 @@ runs_mark <- function(runs = NULL, ..., clear = FALSE) {
   guild("mark --yes", if (clear) "--clear", ..., maybe_extract_run_ids(runs))
   invisible(runs)
 }
+
 
 #' @export
 #' @rdname runs_label
@@ -278,5 +270,3 @@ runs_comment <- function(runs = NULL, comment = NULL, ..., clear = FALSE) {
           ..., runs)
   invisible(runs_in)
 }
-
-

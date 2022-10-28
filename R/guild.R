@@ -8,22 +8,8 @@ guild <- function(...,
 
   args <- list(...)
   if(is_string(args[[1L]]))
-    args[[1L]] <- I(args[[1L]])
-  args <- as.list(rapply(args, function(x) {
-    if (inherits(x, "AsIs") || all(grepl("^[[:alnum:]_-]+$", x)))
-      as.character(x)
-    else
-      shQuote(x)
-  }))
-
-  # if called w/ named arg like: guild("--path" = val)
-  if (!is.null(nms <- names(args)))
-    for (i in seq_along(args))
-      if (isTRUE(nzchar(nm <- nms[[i]]) && startsWith(nm, "-")))
-        args[i] <- list(c(nm, args[[i]]))
-
-
-  args <- unlist(args, use.names = FALSE)
+    class(args[[1L]]) <- "AsIs" # I(args[[1L]])
+  args <- .process_args(args)
 
   if(!is.null(home))
     args <- c("-H", shQuote(home), args)
@@ -33,6 +19,38 @@ guild <- function(...,
            stdout = stdout, stderr = stderr,
            wait = wait)
 }
+
+.process_args <- function(x, name = "") {
+  if(is.list(x)) # recurse
+    return(unlist(.mapply(
+      .process_args,
+      list(x, names(x) %||% ""),
+      NULL
+    ), use.names = FALSE))
+
+  # cast, to char, but preserve names
+  storage.mode(x) <- "character"
+  if (!inherits(x, "AsIs")) {
+    needs_quoting <- !grepl("^[[:alnum:]_-]+$", x)
+    x[needs_quoting] <- shQuote(x[needs_quoting])
+  }
+
+  if(is.null(names(x)) && identical(name, ""))
+    return(x)
+
+  # if args were supplied like "--path" = path:
+  #   need to convert to c("--path", path)
+  # if args were supplied like "--add" = c(tag1, tag2)
+  #   recycle name, return c("--add", tag1, "--add", tag2)
+  nms <- names(x) %||% rep(name, length(x))
+  x <- as.list(x)
+  for (i in seq_along(nms))
+    if (isTRUE(nzchar(nm <- nms[[i]]) && startsWith(nm, "-")))
+      x[i] <- list(c(nm, x[[i]]))
+
+  unlist(x, use.names = FALSE)
+}
+
 
 
 
@@ -66,11 +84,13 @@ guild <- function(...,
 #' @return the return value from `system2()`, invisibly. This function is
 #'   primarily called for its side effect.
 #' @export
-guild_run <- function(opspec = "train.R", flags = NULL, ...,
+guild_run <- function(opspec = "train.R",
+                      flags = NULL, ...,
                       wait = TRUE,
                       label = NULL,
                       tags = NULL,
                       echo = wait) {
+
   if (is.data.frame(flags)) {
     fi <- tempfile("guild-batch-flags-", fileext = ".yml")
     on.exit(unlink(fi))

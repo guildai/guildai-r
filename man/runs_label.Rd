@@ -7,14 +7,9 @@
 \alias{runs_comment}
 \title{Annotate runs}
 \usage{
-runs_label(runs = NULL, label, ...)
+runs_label(runs = NULL, label, ..., clear = is.null(label))
 
-runs_tag(
-  runs = NULL,
-  tags,
-  ...,
-  action = c("add", "set", "remove", "clear", "delete")
-)
+runs_tag(runs = NULL, add = NULL, ..., remove = NULL, clear = FALSE)
 
 runs_mark(runs = NULL, ..., clear = FALSE)
 
@@ -23,11 +18,13 @@ runs_comment(runs = NULL, comment = NULL, ..., clear = FALSE)
 \arguments{
 \item{runs}{a runs selection}
 
-\item{label, tag, comment}{string}
+\item{label, comment}{a string}
 
-\item{...}{passed on to \code{guild()}}
+\item{...}{passed on to \code{guild}}
 
-\item{action}{what action to take respective to existing tags. "delete" is an alias}
+\item{clear}{bool, whether to clear the existing tags/comments first.}
+
+\item{add, remove}{a character vector of tags to add or remove}
 }
 \description{
 Annotate runs
@@ -35,16 +32,21 @@ Annotate runs
 \examples{
 if(FALSE) {
 
+ls_runs(1) \%>\% runs_tag(clear = TRUE)
 ls_runs(1) \%>\% runs_tag("foo")
 ls_runs(1)$tags
 ls_runs(1) \%>\% runs_tag("bar")
 ls_runs(1)$tags
-ls_runs(1) \%>\% runs_tag("foo", action = "remove")
-ls_runs(1) \%>\% runs_tag(action = "clear")
+ls_runs(1) \%>\% runs_tag(remove = "foo")
+ls_runs(1)$tags
+ls_runs(1) \%>\% runs_tag("baz", clear = TRUE)
+ls_runs(1)$tags
 
 ## pass through options to `guild tag` cli subcommand
-ls_runs(1) \%>\% runs_tag("--help")
-ls_runs(1) \%>\% runs_tag("--add" = "foo", "--delete" = "bar")
+runs_tag(NULL, NULL, "--help")
+ls_runs(1) \%>\% runs_tag("--add" = c("foo", "bar"))
+ls_runs(1) \%>\% runs_tag("--add" = "baz", "--delete" = "bar")
+ls_runs(1)$tags
 
 }
 }
