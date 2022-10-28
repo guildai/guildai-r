@@ -125,3 +125,25 @@ guild_view <- function(..., wait = FALSE) {
 if(FALSE) {
   here::here()
 }
+
+
+# TODO: other subcommands to wrap + export:
+# next:
+#   download, merge, publish,
+# later:
+#   remotes, remote, pull, push, runs pull, runs push,
+#   remote start, remote stop, sys shutdown-timer, sys s3-sync
+# think on:
+#   select?
+#     (feels like the happy path should just be feature of ls_runs(...)$id,
+#      but ?as_runs_selection would be a great place to document runs syntax)
+#   shell?
+#   tensorboard?
+#     (integration w/ tensorflow::tensorboard()?. guild does do some convenient
+#      prep of the log dir. No daemon managment tho. Also, launchable from guild_view())
+#   tensorflow inspect?
+#
+#
+# TODO: impl write_run_attrs(). write out seed, pkg env, etc in do_guild_run()
+# TODO: revisit sourcecode selection rules;
+#   manually resolve and return a full list in op data?
