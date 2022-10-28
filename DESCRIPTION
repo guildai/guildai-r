@@ -23,6 +23,7 @@ RoxygenNote: 7.2.1
 Suggests: 
     fs,
     rmarkdown,
+    dplyr,
     quarto,
     testthat (>= 3.0.0),
     withr

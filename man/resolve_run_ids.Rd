@@ -26,6 +26,7 @@ functions: \code{ls_runs()}, \code{ls_scalars()}, \code{runs_comment()},
 \code{runs_import()}.
 }
 \examples{
+if(FALSE) {
 resolve_run_ids() # returns all run ids.
 resolve_run_ids(1) # last run
 resolve_run_ids(1:2) # last 2 runs
@@ -41,4 +42,5 @@ stopifnot(identical(
   resolve_run_ids(1),
   ls_runs(1)$id
 ))
+}
 }

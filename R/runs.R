@@ -292,6 +292,7 @@ runs_comment <- function(runs = NULL, comment = NULL, ..., clear = FALSE) {
 #' @export
 #'
 #' @examples
+#' if(FALSE) {
 #' resolve_run_ids() # returns all run ids.
 #' resolve_run_ids(1) # last run
 #' resolve_run_ids(1:2) # last 2 runs
@@ -307,6 +308,7 @@ runs_comment <- function(runs = NULL, comment = NULL, ..., clear = FALSE) {
 #'   resolve_run_ids(1),
 #'   ls_runs(1)$id
 #' ))
+#' }
 resolve_run_ids <- function(runs = NULL, ...) {
   if(identical(runs, "--help"))
     return(invisible(guild("select --help")))
