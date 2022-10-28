@@ -152,6 +152,24 @@ guild_view <- function(runs = NULL, ..., wait = FALSE) {
   guild("view", ..., maybe_extract_run_ids(runs), wait = wait)
 }
 
+
+
+#' Copy run files into the current project working directory
+#'
+#' @param run a run selection
+#' @param ... passed on to `guild`
+#'
+#' @export
+#'
+#' @examples
+#' if(FALSE) {
+#' guild_merge("--help")
+#' ls_scalars() %>%
+#'   dplyr::slice_max("epoch_acc") %>%
+#'   guild_merge(I("--yes --replace"))
+#' }
+guild_merge <- function(run = NULL, ...) {
+  guild("merge", ..., maybe_extract_run_ids(run))
 }
 
 # dummy place holder, because R CMD check otherwise complains:
@@ -164,14 +182,14 @@ if(FALSE) {
 
 # TODO: other subcommands to wrap + export:
 # next:
-#   download, merge, publish,
+#   download, publish,
 # later:
 #   remotes, remote, pull, push, runs pull, runs push,
 #   remote start, remote stop, sys shutdown-timer, sys s3-sync
 # think on:
 #   select?
 #     (feels like the happy path should just be feature of ls_runs(...)$id,
-#      but ?as_runs_selection would be a great place to document runs syntax)
+#      but ?maybe_extract_run_ids would be a great place to document runs syntax)
 #   shell?
 #   tensorboard?
 #     (integration w/ tensorflow::tensorboard()?. guild does do some convenient
