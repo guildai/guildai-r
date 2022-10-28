@@ -187,9 +187,6 @@ if(FALSE) {
 #   remotes, remote, pull, push, runs pull, runs push,
 #   remote start, remote stop, sys shutdown-timer, sys s3-sync
 # think on:
-#   select?
-#     (feels like the happy path should just be feature of ls_runs(...)$id,
-#      but ?maybe_extract_run_ids would be a great place to document runs syntax)
 #   shell?
 #   tensorboard?
 #     (integration w/ tensorflow::tensorboard()?. guild does do some convenient

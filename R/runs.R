@@ -270,3 +270,57 @@ runs_comment <- function(runs = NULL, comment = NULL, ..., clear = FALSE) {
           ..., runs)
   invisible(runs_in)
 }
+
+
+
+#' Resolve run ids
+#'
+#' `guild` supports a rich syntax for runs selection throughout the api. The
+#' same selection syntax is shared by the `ls_*` and `runs_*` families of
+#' functions: `ls_runs()`, `ls_scalars()`, `runs_comment()`,
+#' `runs_label()`, `runs_mark()`, `runs_tag()`
+#' `runs_delete()`,`runs_purge()`, `runs_restore()`, `runs_export()`,
+#' `runs_import()`.
+#'
+#' @param runs a runs selection. If a data.frame, the columns `id` or `run`
+#'   are used as the run id. Otherwise, the argument is coerced to character
+#'   vector, and passed on to `guild` as a runs filter selection. Wrap the
+#'   string in `I()` to avoid quoting the argument for the shell.
+#' @param ... Other arguments passed on to `guild`
+#'
+#' @return A character vector of run ids.
+#' @export
+#'
+#' @examples
+#' resolve_run_ids() # returns all run ids.
+#' resolve_run_ids(1) # last run
+#' resolve_run_ids(1:2) # last 2 runs
+#' resolve_run_ids(1:2, "--operation" = "train.py")
+#'
+#' # three ways of getting ids for the currently staged or running runs
+#' resolve_run_ids("--staged", "--running")
+#' resolve_run_ids(c("--staged", "--running"))
+#' resolve_run_ids(I("--staged --running"))
+#'
+#' # resolve_run_ids() uses the same selection rules and syntax as ls_runs()
+#' stopifnot(identical(
+#'   resolve_run_ids(1),
+#'   ls_runs(1)$id
+#' ))
+resolve_run_ids <- function(runs = NULL, ...) {
+  if(identical(runs, "--help"))
+    return(invisible(guild("select --help")))
+  selection <- maybe_extract_run_ids(runs)
+  if(...length() || identical(selection, runs))
+    selection <- guild("select --all", ..., selection, stdout = TRUE)
+  selection
+}
+
+
+
+maybe_extract_run_ids <- function(x) {
+  if (is.list(x))
+    if(!is.null(id <- x[["id"]] %||% x[["run"]]))
+      return(id)
+  x
+}
