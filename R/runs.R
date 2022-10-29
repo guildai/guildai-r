@@ -9,6 +9,7 @@
 #' @export
 #' @importFrom jsonlite parse_json
 #' @importFrom rlang %|%
+#' @importFrom tibble tibble as_tibble
 #' @examples
 #' \dontrun{
 #' withr::with_package("dplyr", {
@@ -53,8 +54,14 @@ ls_runs <- function(...) {
        "env", "sourcecode", "opRef")] <- NULL
 
   # additional coercion
-  df$comments <- lapply(df$comments, as.character)
   df$tags     <- lapply(df$tags, as.character)
+  df$comments <- lapply(df$comments, function(x) {
+    if(!nrow(x))
+      x <- tibble(body = character(), host = character(),
+                  time = double(), user = character())
+    x$time <- .POSIXct(x$time/1000000)
+    as_tibble(x)
+  })
 
 
   ## `guild api runs` is missing some info, mainly a portable timestamp
@@ -200,8 +207,12 @@ runs_restore <- function(runs = NULL, ...) {
 #' @param runs a runs selection
 #' @param label,comment a string
 #' @param add,remove a character vector of tags to add or remove
-#' @param clear bool, whether to clear the existing tags/comments first.
+#' @param delete integer vector, which comment(s) to delete, corresponding to
+#'   the row number(s) in the dataframe found at `ls_runs()$comments`.
+#' @param clear bool, whether to clear the existing tags/comments/label.
 #' @param ...  passed on to `guild`
+#'
+#' @note `runs_comment()` will open up an editor if `comment` is not supplied.
 #'
 #' @export
 #' @examples
@@ -224,27 +235,24 @@ runs_restore <- function(runs = NULL, ...) {
 #' ls_runs(1)$tags
 #'
 #' }
-runs_label <- function(runs = NULL, label, ..., clear = is.null(label)) {
-  if (clear)
-    guild("label --yes --clear", ..., maybe_extract_run_ids(runs))
-  else
-    guild("label --yes", "--set" = label, ..., maybe_extract_run_ids(runs))
-  # TODO: update label if `runs` is a df
+runs_label <- function(runs = NULL, label = NULL, ..., clear = FALSE) {
+  guild("label --yes",
+        if (clear) "--clear",
+        "--set" = label,
+        ..., maybe_extract_run_ids(runs))
   invisible(runs)
+  # TODO: update label if `runs` is a df
 }
 
 
 #' @export
 #' @rdname runs_label
 runs_tag <- function(runs = NULL, add = NULL, ..., remove = NULL, clear = FALSE) {
-  if (length(add))
-    add <- list("--add" = add)
-
-  if (length(remove))
-    remove <- list("--delete", remove)
-
-  guild("tag --yes", if(clear) "--clear", ...,
-        remove, add, maybe_extract_run_ids(runs))
+  guild("tag --yes",
+        if(clear) "--clear",
+        "--delete" = remove,
+        "--add" = add,
+        ..., maybe_extract_run_ids(runs))
   invisible(runs)
 }
 
@@ -259,16 +267,13 @@ runs_mark <- function(runs = NULL, ..., clear = FALSE) {
 
 #' @export
 #' @rdname runs_label
-runs_comment <- function(runs = NULL, comment = NULL, ..., clear = FALSE) {
-  runs_in <- runs
-  runs <- maybe_extract_run_ids(runs)
-  if (clear)
-    guild("runs comment --clear", ..., runs)
-
-  if (length(comment))
-    guild("runs comment", "--add" = paste0(comment, collapse = "\n"),
-          ..., runs)
-  invisible(runs_in)
+runs_comment <- function(runs = NULL, comment = NULL, ..., delete = NULL, clear = FALSE) {
+  guild("runs comment --yes",
+        if (clear) "--clear",
+        "--delete" = delete,
+        "--add" = comment,
+        ..., maybe_extract_run_ids(runs))
+  invisible(runs)
 }
 
 

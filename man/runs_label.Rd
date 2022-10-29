@@ -7,13 +7,13 @@
 \alias{runs_comment}
 \title{Annotate runs}
 \usage{
-runs_label(runs = NULL, label, ..., clear = is.null(label))
+runs_label(runs = NULL, label = NULL, ..., clear = FALSE)
 
 runs_tag(runs = NULL, add = NULL, ..., remove = NULL, clear = FALSE)
 
 runs_mark(runs = NULL, ..., clear = FALSE)
 
-runs_comment(runs = NULL, comment = NULL, ..., clear = FALSE)
+runs_comment(runs = NULL, comment = NULL, ..., delete = NULL, clear = FALSE)
 }
 \arguments{
 \item{runs}{a runs selection}
@@ -22,12 +22,18 @@ runs_comment(runs = NULL, comment = NULL, ..., clear = FALSE)
 
 \item{...}{passed on to \code{guild}}
 
-\item{clear}{bool, whether to clear the existing tags/comments first.}
+\item{clear}{bool, whether to clear the existing tags/comments/label.}
 
 \item{add, remove}{a character vector of tags to add or remove}
+
+\item{delete}{integer vector, which comment(s) to delete, corresponding to
+the row number(s) in the dataframe found at \code{ls_runs()$comments}.}
 }
 \description{
 Annotate runs
+}
+\note{
+\code{runs_comment()} will open up an editor if \code{comment} is not supplied.
 }
 \examples{
 if(FALSE) {
