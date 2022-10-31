@@ -31,5 +31,5 @@ deleted runs can be purged.
 }
 \note{
 To see deleted runs, do \code{guildai:::guild("runs list --deleted")}
-or \verb{fs::dir_info(Sys.getenv(}
+(\code{ls_runs("--deleted")} supported soon)
 }

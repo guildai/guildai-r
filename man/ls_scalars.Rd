@@ -9,7 +9,7 @@ ls_scalars(runs = NULL, ...)
 \arguments{
 \item{runs}{a runs selection}
 
-\item{...}{passed on go \code{guild()}}
+\item{...}{passed on go \code{guild}}
 }
 \value{
 a tibble with runs scalars
