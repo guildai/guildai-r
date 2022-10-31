@@ -372,4 +372,20 @@ teardown_run_dir <- function(setup_info) {
   invisible()
 }
 
-# tfruns::write_run_metadata()
+#' Write run attributes
+#'
+#' This function does nothing if `is_run_active()` is `FALSE`.
+#'
+#' @param name A string
+#' @param data The data to write. This needs to be encodable as yaml.
+#'
+#' @return the written yaml, invisibly.
+#' @export
+write_run_attr <- function(name, data) {
+  if(!is_run_active())
+    return(invisible())
+  stopifnot(!nzchar(name))
+  print.yaml(data,
+             file = file.path(Sys.getenv("RUN_DIR"), ".guild/attrs", name))
+}
+
