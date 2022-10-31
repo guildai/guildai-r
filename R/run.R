@@ -1,6 +1,12 @@
 
 
-
+## TODO: need to move setup_run_dir() and teardown_run_dir() out of here and
+## into guild core run callbacks. Garret objects strongly on philosophical
+## grounds, but the workaround required from here is too big w.r.t R session
+## initialization. Specifically, sourcing .Rprofile and .Renviron (mechanism
+## renv uses, also mechanism commonly used to attach a project-local utils
+## env.).
+## https://my.guild.ai/t/guild-run-callbacks/925
 
 do_guild_run <-
 function(file = "train.R", flags_dest = file, echo = TRUE) {
