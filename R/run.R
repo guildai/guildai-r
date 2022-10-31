@@ -25,6 +25,7 @@ function(file = "train.R",
   if(!exists(".Random.seed", globalenv(), mode = "integer", inherits = FALSE))
     set.seed(NULL)
   write_run_attr("seed", .Random.seed)
+  write_run_attr("completed", FALSE)
 
   # setup default plot device.
   # the default viewers work better w/ pngs than pdf.
@@ -44,14 +45,27 @@ function(file = "train.R",
   )
 
   source2 <- new_source_w_active_echo()
-  source2(
-    file = file,
-    echo = echo,
-    spaced = FALSE,
-    max.deparse.length = Inf,
-    keep.source = TRUE,
-    deparseCtrl = c("keepInteger", "showAttributes", "keepNA")
-  )
+  withCallingHandlers({
+    source2(
+      file = file,
+      echo = echo,
+      spaced = FALSE,
+      max.deparse.length = Inf,
+      keep.source = TRUE,
+      deparseCtrl = c("keepInteger", "showAttributes", "keepNA")
+    )
+    write_run_attr("completed", TRUE)
+  },
+  error = function(e) {
+
+    write_run_attr("error", list(
+      message = e$message,
+      traceback = deparsed_call_stack()
+    ))
+
+    # forward error
+    stop(e)
+  })
 
   invisible()
 }
@@ -391,5 +405,13 @@ write_run_attr <- function(name, data) {
   stopifnot(!nzchar(name))
   print.yaml(data,
              file = file.path(Sys.getenv("RUN_DIR"), ".guild/attrs", name))
+}
+
+
+deparsed_call_stack <- function(n = 1L) {
+  calls <- rev(sys.calls())[-seq_len(n)]
+  calls <- vapply(calls, deparse1, "",
+                  collapse = "\n", width.cutoff = 100L)
+  calls
 }
 
