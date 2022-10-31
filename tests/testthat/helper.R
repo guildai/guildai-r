@@ -72,3 +72,7 @@ registerS3method("$", "yaml", `$.yaml`)
 registerS3method("[[", "yaml", `[[.yaml`)
 registerS3method("[", "yaml", `[.yaml`)
 registerS3method("str", "yaml", str.yaml)
+
+
+if(interactive() && dir.exists("~/guild/fashion-mnist"))
+  Sys.setenv("GUILD_HOME" = path.expand("~/guild/fashion-mnist/.guild"))
