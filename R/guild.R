@@ -194,6 +194,5 @@ if(FALSE) {
 #   tensorflow inspect?
 #
 #
-# TODO: impl write_run_attrs(). write out seed, pkg env, etc in do_guild_run()
 # TODO: revisit sourcecode selection rules;
 #   manually resolve and return a full list in op data?

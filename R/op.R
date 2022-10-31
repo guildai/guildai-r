@@ -85,6 +85,8 @@ r_script_guild_data <- function(r_script_path) {
   echo <- data$echo %||% TRUE
   data$echo <- NULL
 
+  # TODO: intercept `seed` or `random-seed` here?
+
   # don't pass through flags_dest to do_guild_run(),
   # because guild core will materialize the yml file.
   if(startsWith(flags_dest, "config:"))

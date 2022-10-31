@@ -22,6 +22,11 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
   write_run_attr("seed", .Random.seed)
   write_run_attr("completed", FALSE)
 
+
+  # TODO: figure out goldilocks default for what to record from R session state.
+  #   installed.packages() / renv::something() / on.exit(sessionInfo())
+
+
   # setup default plot device.
   # the default viewers work better w/ pngs than pdf.
   options(
@@ -41,6 +46,7 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
 
   source2 <- new_source_w_active_echo()
   withCallingHandlers({
+
     source2(
       file = file,
       echo = echo,
@@ -50,15 +56,16 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
       deparseCtrl = c("keepInteger", "showAttributes", "keepNA")
     )
     write_run_attr("completed", TRUE)
-  },
-  error = function(e) {
 
+  },
+
+  error = function(e) {
+    # capture error as attr
     write_run_attr("error", list(
       message = e$message,
       traceback = deparsed_call_stack()
     ))
-
-    # forward error
+    # re-raise error
     stop(e)
   })
 
@@ -409,4 +416,3 @@ deparsed_call_stack <- function(n = 1L) {
                   collapse = "\n", width.cutoff = 100L)
   calls
 }
-
