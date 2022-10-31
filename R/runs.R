@@ -56,7 +56,7 @@ ls_runs <- function(...) {
   # additional coercion
   df$tags     <- lapply(df$tags, as.character)
   df$comments <- lapply(df$comments, function(x) {
-    if(!nrow(x))
+    if(!length(x))
       x <- tibble(body = character(), host = character(),
                   time = double(), user = character())
     x$time <- .POSIXct(x$time/1000000)
@@ -101,7 +101,7 @@ ls_runs <- function(...) {
 
 #' Get full set of runs scalars
 #' @param runs a runs selection
-#' @param ... passed on go `guild()`
+#' @param ... passed on go `guild`
 #'
 #' @return a tibble with runs scalars
 #' @export
@@ -178,7 +178,7 @@ runs_import <- function(runs = NULL, location, ...,
 #' @param ... passed on to `guild()`
 #'
 #' @note To see deleted runs, do `guildai:::guild("runs list --deleted")`
-#'   or `fs::dir_info(Sys.getenv(`
+#'   (`ls_runs("--deleted")` supported soon)
 #'
 #' @export
 runs_delete <- function(runs = NULL, ...) {
