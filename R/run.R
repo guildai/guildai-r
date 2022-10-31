@@ -21,6 +21,10 @@ function(file = "train.R",
   setup_info <- setup_run_dir()
   on.exit(teardown_run_dir(setup_info))
 
+  # initialize seed so we can save it, non-interactive sessions lazily initialize seed.
+  if(!exists(".Random.seed", globalenv(), mode = "integer", inherits = FALSE))
+    set.seed(NULL)
+  write_run_attr("seed", .Random.seed)
 
   # setup default plot device.
   # the default viewers work better w/ pngs than pdf.
