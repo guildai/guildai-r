@@ -16,13 +16,6 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
   setup_info <- setup_run_dir()
   on.exit(teardown_run_dir(setup_info))
 
-  # initialize seed so we can save it, non-interactive sessions lazily initialize seed.
-  if(!exists(".Random.seed", globalenv(), mode = "integer", inherits = FALSE))
-    set.seed(NULL)
-  write_run_attr("seed", .Random.seed)
-  write_run_attr("completed", FALSE)
-
-
   # TODO: figure out goldilocks default for what to record from R session state.
   #   installed.packages() / renv::something() / on.exit(sessionInfo())
 
@@ -41,10 +34,20 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
         file.path(plots_dir, "Rplot%03d.png"),
         width = 1200, height = 715, res = 192 # ~ golden ratio @ highdpi
       )
-    }
+    },
+
+    # bump up default so recorded run scalars preserve more precision
+    digits = max(17, getOption("digits"))
   )
 
+  # initialize seed so we can save it, non-interactive sessions lazily initialize seed.
+  if(!exists(".Random.seed", globalenv(), mode = "integer", inherits = FALSE))
+    set.seed(NULL)
+  write_run_attr("random_seed", .Random.seed)
+  write_run_attr("completed", FALSE)
+
   source2 <- new_source_w_active_echo()
+
   withCallingHandlers({
 
     source2(
@@ -404,7 +407,7 @@ teardown_run_dir <- function(setup_info) {
 write_run_attr <- function(name, data) {
   if(!is_run_active())
     return(invisible())
-  stopifnot(!nzchar(name))
+  stopifnot(nzchar(name))
   print.yaml(data,
              file = file.path(Sys.getenv("RUN_DIR"), ".guild/attrs", name))
 }
