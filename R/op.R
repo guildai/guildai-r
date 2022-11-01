@@ -38,9 +38,9 @@ r_script_guild_data <- function(r_script_path) {
 
   data <- yaml(
     "flags-dest" = r_script_path,
-    "name" = r_script_path
+    "name" = r_script_path,
+    "pip-freeze" = FALSE
   )
-
 
   update_data <- function(x)
     invisible(data <<- as_yaml(config::merge(data, x)))
