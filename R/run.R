@@ -415,7 +415,6 @@ teardown_run_dir <- function(setup_info) {
 #'   Passing NULL delete the existing attr.
 #'
 #' @return the written yaml, invisibly.
-#' @export
 write_run_attr <- function(name, data) {
   if(!is_run_active())
     return(invisible())
