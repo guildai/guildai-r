@@ -8,7 +8,7 @@ test_that("seed is recorded correctly", {
   runs <- ls_runs()
   observed <- ls_scalars()$value
   reproduced <- sapply(runs$dir, function(d) {
-    rs <- yaml::read_yaml(file.path(d, ".guild/attrs/random_seed"))
+    rs <- yaml::read_yaml(file.path(d, ".guild/attrs/r-random-seed"))
     assign(".Random.seed", rs, globalenv())
     runif(1)
   }, USE.NAMES = FALSE)
