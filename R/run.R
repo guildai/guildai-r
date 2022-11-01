@@ -22,8 +22,6 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
   setup_info <- setup_run_dir()
   on.exit(teardown_run_dir(setup_info))
 
-  # TODO: figure out goldilocks default for what to record from R session state.
-  #   installed.packages() / renv::something() / on.exit(sessionInfo())
 
 
   # setup default plot device.
@@ -49,6 +47,8 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
   # initialize seed so we can save it, non-interactive sessions lazily initialize seed.
   if(!exists(".Random.seed", globalenv(), mode = "integer", inherits = FALSE))
     set.seed(NULL)
+  write_run_attr("r-random-seed", .Random.seed)
+
   write_run_attr("random_seed", .Random.seed)
   write_run_attr("completed", FALSE)
 
@@ -64,13 +64,12 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
       keep.source = TRUE,
       deparseCtrl = c("keepInteger", "showAttributes", "keepNA")
     )
-    write_run_attr("completed", TRUE)
 
   },
 
   error = function(e) {
     # capture error as attr
-    write_run_attr("error", list(
+    write_run_attr("r-error", list(
       message = e$message,
       traceback = deparsed_call_stack()
     ))

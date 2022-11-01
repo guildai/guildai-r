@@ -9,7 +9,8 @@ write_run_attr(name, data)
 \arguments{
 \item{name}{A string}
 
-\item{data}{The data to write. This needs to be encodable as yaml.}
+\item{data}{The data to write. This needs to be encodable as yaml.
+Passing NULL delete the existing attr.}
 }
 \value{
 the written yaml, invisibly.
