@@ -23,7 +23,7 @@ as_yaml <- function(x)
 
 encode_yaml <- function(x, ...) {
   as_yaml_args <- utils::modifyList(list(
-    precision = 16L,
+    precision = 17L,
     handlers = list(complex = as.character)
   ),
   list(...))

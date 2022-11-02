@@ -168,7 +168,7 @@
       cx2: 22+22i
       cx3: 33+33i
       duplicated_flag: -1
-      f: 4.5599999999999996
+      f: 4.55999999999999961
       i: 456
       not_a_global: yes
       s: Howdy Back
