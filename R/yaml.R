@@ -9,12 +9,20 @@ print.yaml <- function(x, file = "", ..., append = FALSE) {
 }
 
 
-read_yaml <- function(...) {
-  maybe_as_yaml(yaml::read_yaml(...))
+read_yaml <- function(file, ...) {
+  yaml_load_args <- utils::modifyList(
+    list(file = file,
+         handlers = list(seq = identity)), # don't simplify lists),
+    list(...))
+  maybe_as_yaml(do.call(yaml::read_yaml, yaml_load_args))
 }
 
-parse_yaml <-  function(...) {
-  maybe_as_yaml(yaml::yaml.load(...))
+parse_yaml <-  function(string, ...) {
+  yaml_load_args <- utils::modifyList(
+    list(string = string,
+         handlers = list(seq = identity)), # don't simplify lists),
+    list(...))
+  do.call(yaml::yaml.load, yaml_load_args)
 }
 
 as_yaml <- function(x)
@@ -24,7 +32,7 @@ as_yaml <- function(x)
 encode_yaml <- function(x, ...) {
   as_yaml_args <- utils::modifyList(list(
     precision = 17L,
-    handlers = list(complex = as.character)
+    handlers = list(complex = as.character) # no complex type supported
   ),
   list(...))
   out <- do.call(yaml::as.yaml, c(list(x), as_yaml_args))
