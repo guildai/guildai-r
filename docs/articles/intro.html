@@ -86,10 +86,11 @@ runs or comparisons between runs.</p></li>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>The R package provides an interface to <a href="https://guild.ai/" class="external-link">guildai core</a>. The R package will install
-guildai core on first use, or you can call <code><a href="../reference/install_guild.html">install_guild()</a></code>
-to customize the installation. You can install the
-<strong>guildai</strong> package from CRAN as follows:</p>
+<p>The R package provides an interface to <a href="https://guild.ai/" class="external-link">guildai core</a>. The R package will
+auomatically guildai core on first use, or you can call
+<code><a href="../reference/install_guild.html">install_guild()</a></code> directly to customize the installation. You
+can install the <strong>guildai</strong> package from CRAN as
+follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"guildai"</span><span class="op">)</span></span>
 <span><span class="fu">guildai</span><span class="fu">::</span><span class="fu"><a href="../reference/install_guild.html">install_guild</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -106,6 +107,9 @@ on your machine, you can install it like this:</p>
 <div class="section level2">
 <h2 id="hello-world">Hello World<a class="anchor" aria-label="anchor" href="#hello-world"></a>
 </h2>
+<div class="section level3">
+<h3 id="launch-a-run">Launch a run<a class="anchor" aria-label="anchor" href="#launch-a-run"></a>
+</h3>
 <p>To start, we’ll setup a sample project folder with one script.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.copy</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples/fashion-mnist.R"</span>, package <span class="op">=</span> <span class="st">"guildai"</span><span class="op">)</span>,</span>
@@ -181,7 +185,7 @@ on your machine, you can install it like this:</p>
 <span></span>
 <span><span class="co"># save_model_tf(model, "model.keras")</span></span>
 <span><span class="co"># saveRDS(history, "history.rds")</span></span></code></pre></div>
-<p>To train a model with <strong>guildai</strong>, just use the
+<p>To train a model with <strong>guildai</strong>, use the
 <code><a href="../reference/guild_run.html">guild_run()</a></code> function in place of the <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code>
 function to execute your R script. For example:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -190,7 +194,7 @@ function to execute your R script. For example:</p>
 <span><span class="co">#&gt; &gt; library(keras)</span></span>
 <span><span class="co">#&gt; &gt; # Prepare data ----</span></span>
 <span><span class="co">#&gt; &gt; fashion_mnist &lt;- dataset_fashion_mnist()</span></span>
-<span><span class="co">#&gt; 2022-10-21 15:08:01.026745: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered</span></span>
+<span><span class="co">#&gt; 2022-11-02 17:07:32.971807: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered</span></span>
 <span><span class="co">#&gt; &gt; c(train_images, train_labels) %&lt;-% fashion_mnist$train</span></span>
 <span><span class="co">#&gt; &gt; c(test_images, test_labels) %&lt;-% fashion_mnist$test</span></span>
 <span><span class="co">#&gt; &gt; train_images &lt;- train_images / 255</span></span>
@@ -242,45 +246,45 @@ function to execute your R script. For example:</p>
 <span><span class="co">#&gt; +       epochs = epochs,</span></span>
 <span><span class="co">#&gt; +       verbose = 2)</span></span>
 <span><span class="co">#&gt; Epoch 1/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 4s - loss: 0.5490 - accuracy: 0.8116 - val_loss: 0.4366 - val_accuracy: 0.8428 - 4s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 5s - loss: 0.5445 - accuracy: 0.8128 - val_loss: 0.4428 - val_accuracy: 0.8468 - 5s/epoch - 3ms/step</span></span>
 <span><span class="co">#&gt; Epoch 2/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.4085 - accuracy: 0.8548 - val_loss: 0.4039 - val_accuracy: 0.8539 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.4088 - accuracy: 0.8546 - val_loss: 0.4032 - val_accuracy: 0.8556 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 3/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3686 - accuracy: 0.8687 - val_loss: 0.3631 - val_accuracy: 0.8705 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.3654 - accuracy: 0.8698 - val_loss: 0.3712 - val_accuracy: 0.8701 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 4/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3433 - accuracy: 0.8767 - val_loss: 0.3564 - val_accuracy: 0.8731 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.3381 - accuracy: 0.8779 - val_loss: 0.3731 - val_accuracy: 0.8652 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 5/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.3239 - accuracy: 0.8832 - val_loss: 0.3688 - val_accuracy: 0.8658 - 3s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.3189 - accuracy: 0.8821 - val_loss: 0.3356 - val_accuracy: 0.8793 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 6/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3090 - accuracy: 0.8879 - val_loss: 0.3448 - val_accuracy: 0.8792 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3000 - accuracy: 0.8896 - val_loss: 0.3324 - val_accuracy: 0.8823 - 2s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 7/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2968 - accuracy: 0.8914 - val_loss: 0.3356 - val_accuracy: 0.8832 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2881 - accuracy: 0.8944 - val_loss: 0.3259 - val_accuracy: 0.8843 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 8/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2848 - accuracy: 0.8949 - val_loss: 0.3567 - val_accuracy: 0.8733 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2754 - accuracy: 0.8981 - val_loss: 0.3359 - val_accuracy: 0.8799 - 2s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 9/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2782 - accuracy: 0.8970 - val_loss: 0.3642 - val_accuracy: 0.8718 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2691 - accuracy: 0.9009 - val_loss: 0.3361 - val_accuracy: 0.8839 - 2s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 10/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2664 - accuracy: 0.9014 - val_loss: 0.3284 - val_accuracy: 0.8871 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2571 - accuracy: 0.9047 - val_loss: 0.3448 - val_accuracy: 0.8767 - 2s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 11/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2605 - accuracy: 0.9042 - val_loss: 0.3463 - val_accuracy: 0.8758 - 3s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2501 - accuracy: 0.9074 - val_loss: 0.3249 - val_accuracy: 0.8878 - 2s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 12/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2532 - accuracy: 0.9062 - val_loss: 0.3331 - val_accuracy: 0.8863 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2430 - accuracy: 0.9103 - val_loss: 0.3271 - val_accuracy: 0.8864 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 13/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2460 - accuracy: 0.9088 - val_loss: 0.3529 - val_accuracy: 0.8774 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 5s - loss: 0.2369 - accuracy: 0.9122 - val_loss: 0.3311 - val_accuracy: 0.8869 - 5s/epoch - 3ms/step</span></span>
 <span><span class="co">#&gt; Epoch 14/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2409 - accuracy: 0.9105 - val_loss: 0.3287 - val_accuracy: 0.8849 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 4s - loss: 0.2317 - accuracy: 0.9124 - val_loss: 0.3590 - val_accuracy: 0.8767 - 4s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 15/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2336 - accuracy: 0.9129 - val_loss: 0.3437 - val_accuracy: 0.8813 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2275 - accuracy: 0.9146 - val_loss: 0.3206 - val_accuracy: 0.8917 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 16/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2303 - accuracy: 0.9145 - val_loss: 0.3445 - val_accuracy: 0.8802 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2199 - accuracy: 0.9185 - val_loss: 0.3362 - val_accuracy: 0.8921 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 17/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2226 - accuracy: 0.9169 - val_loss: 0.3408 - val_accuracy: 0.8841 - 3s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2150 - accuracy: 0.9201 - val_loss: 0.3251 - val_accuracy: 0.8894 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 18/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2175 - accuracy: 0.9189 - val_loss: 0.3476 - val_accuracy: 0.8827 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 4s - loss: 0.2122 - accuracy: 0.9200 - val_loss: 0.3462 - val_accuracy: 0.8816 - 4s/epoch - 3ms/step</span></span>
 <span><span class="co">#&gt; Epoch 19/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2141 - accuracy: 0.9203 - val_loss: 0.3452 - val_accuracy: 0.8846 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2067 - accuracy: 0.9225 - val_loss: 0.3325 - val_accuracy: 0.8905 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">#&gt; Epoch 20/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2106 - accuracy: 0.9222 - val_loss: 0.3393 - val_accuracy: 0.8874 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">#&gt; 1500/1500 - 4s - loss: 0.2019 - accuracy: 0.9246 - val_loss: 0.3300 - val_accuracy: 0.8906 - 4s/epoch - 3ms/step</span></span>
 <span><span class="co">#&gt; &gt; plot(history)</span></span>
 <span><span class="co">#&gt; &gt; # Evaluate model ----</span></span>
 <span><span class="co">#&gt; &gt; </span></span>
@@ -289,75 +293,67 @@ function to execute your R script. For example:</p>
 <span><span class="co">#&gt; +            verbose = 0) %&gt;%</span></span>
 <span><span class="co">#&gt; +   as.list()</span></span>
 <span><span class="co">#&gt; &gt; cat('test_loss:', score$loss, "\n")</span></span>
-<span><span class="co">#&gt; test_loss: 0.3657894 </span></span>
+<span><span class="co">#&gt; test_loss: 0.36920532584190369 </span></span>
 <span><span class="co">#&gt; &gt; cat('test_accuracy:', score$accuracy, "\n")</span></span>
-<span><span class="co">#&gt; test_accuracy: 0.8793 </span></span>
+<span><span class="co">#&gt; test_accuracy: 0.88209998607635498 </span></span>
 <span><span class="co">#&gt; &gt; # save_model_tf(model, "model.keras")</span></span>
 <span><span class="co">#&gt; &gt; # saveRDS(history, "history.rds")</span></span>
 <span><span class="co">#&gt; &gt; </span></span>
 <span><span class="co">#&gt; &gt;</span></span></code></pre></div>
-<p>By default, the output stream of the run will be shown at the R
-console. After launching a run, you can launch an application to view
-your runs with <code><a href="../reference/guild_view.html">guild_view()</a></code>. From the Guild View
-application, you can also visualize run results using tensorboard.</p>
+<p>This will launch a new process in an isolated run directory using the
+provided script. By default, the output stream from the run will be
+shown at the R console (the same output stream you would see with
+<code>source("fashion-mnist.R", echo = TRUE)</code> or
+<code>Rscript fashion-mnist.R</code>).</p>
+</div>
+<div class="section level3">
+<h3 id="view-runs">View Runs<a class="anchor" aria-label="anchor" href="#view-runs"></a>
+</h3>
+<p>You can view your runs (including while they are running) with the
+“Guild View” application, by calling <code><a href="../reference/guild_view.html">guild_view()</a></code>. The
+Guild View</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_view.html">guild_view</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<!-- Include a screenshot here -->
-<p>You can also retrieve a data frame with information about the run
-with <code><a href="../reference/ls_runs.html">ls_runs()</a></code>:</p>
+<p>TODO: SCREENSHOT</p>
+<p>You can retrieve a data frame with run information using
+<code><a href="../reference/ls_runs.html">ls_runs()</a></code>:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">run</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span></span>
-<span><span class="co">#&gt; tibble [1 × 17] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co">#&gt;  $ shortId   : chr "8cabcbdb"</span></span>
-<span><span class="co">#&gt;  $ label     : chr ".fast=no batch_size=32.0 epochs=20.0 learning_rate=0.001 units=64.0"</span></span>
-<span><span class="co">#&gt;  $ flags     : tibble [1 × 5] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co">#&gt;   ..$ .fast        : logi FALSE</span></span>
-<span><span class="co">#&gt;   ..$ batch_size   : num 32</span></span>
-<span><span class="co">#&gt;   ..$ epochs       : num 20</span></span>
-<span><span class="co">#&gt;   ..$ learning_rate: num 0.001</span></span>
-<span><span class="co">#&gt;   ..$ units        : num 64</span></span>
-<span><span class="co">#&gt;  $ scalars   :List of 1</span></span>
-<span><span class="co">#&gt;   ..$ : tibble [2 × 14] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co">#&gt;   .. ..$ run       : chr [1:2] "8cabcbdb56b74dc2b536eeb625d50e3b" "8cabcbdb56b74dc2b536eeb625d50e3b"</span></span>
-<span><span class="co">#&gt;   .. ..$ prefix    : chr [1:2] ".guild" ".guild"</span></span>
-<span><span class="co">#&gt;   .. ..$ tag       : chr [1:2] "test_accuracy" "test_loss"</span></span>
-<span><span class="co">#&gt;   .. ..$ first_val : num [1:2] 0.879 0.366</span></span>
-<span><span class="co">#&gt;   .. ..$ first_step: int [1:2] 0 0</span></span>
-<span><span class="co">#&gt;   .. ..$ last_val  : num [1:2] 0.879 0.366</span></span>
-<span><span class="co">#&gt;   .. ..$ last_step : int [1:2] 0 0</span></span>
-<span><span class="co">#&gt;   .. ..$ min_val   : num [1:2] 0.879 0.366</span></span>
-<span><span class="co">#&gt;   .. ..$ min_step  : int [1:2] 0 0</span></span>
-<span><span class="co">#&gt;   .. ..$ max_val   : num [1:2] 0.879 0.366</span></span>
-<span><span class="co">#&gt;   .. ..$ max_step  : int [1:2] 0 0</span></span>
-<span><span class="co">#&gt;   .. ..$ avg_val   : num [1:2] 0.879 0.366</span></span>
-<span><span class="co">#&gt;   .. ..$ total     : num [1:2] 0.879 0.366</span></span>
-<span><span class="co">#&gt;   .. ..$ count     : int [1:2] 1 1</span></span>
-<span><span class="co">#&gt;  $ dir       : chr "/home/tomasz/guild/guildai-r/vignettes/articles/.guild/runs/8cabcbdb56b74dc2b536eeb625d50e3b"</span></span>
-<span><span class="co">#&gt;  $ operation : chr "fashion-mnist.R"</span></span>
-<span><span class="co">#&gt;  $ started   : POSIXct[1:1], format: "2022-10-21 15:07:59"</span></span>
-<span><span class="co">#&gt;  $ stopped   : POSIXct[1:1], format: "2022-10-21 15:08:56"</span></span>
-<span><span class="co">#&gt;  $ time      : chr "0:00:56"</span></span>
-<span><span class="co">#&gt;  $ tags      : chr ""</span></span>
-<span><span class="co">#&gt;  $ comments  :List of 1</span></span>
-<span><span class="co">#&gt;   ..$ : chr(0) </span></span>
-<span><span class="co">#&gt;  $ status    : chr "completed"</span></span>
-<span><span class="co">#&gt;  $ exitStatus: int 0</span></span>
-<span><span class="co">#&gt;  $ otherAttrs:'data.frame':  1 obs. of  0 variables</span></span>
-<span><span class="co">#&gt;  $ deps      :List of 1</span></span>
-<span><span class="co">#&gt;   ..$ : list()</span></span>
-<span><span class="co">#&gt;  $ projectDir: chr "/home/tomasz/guild/guildai-r/vignettes/articles"</span></span>
-<span><span class="co">#&gt;  $ id        : chr "8cabcbdb56b74dc2b536eeb625d50e3b"</span></span></code></pre></div>
+<span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 1</span></span>
+<span><span class="co">#&gt; Columns: 16</span></span>
+<span><span class="co">#&gt; $ label      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> ".fast=no batch_size=32.0 epochs=20.0 learning_rate=0.001 u…</span></span>
+<span><span class="co">#&gt; $ tags       <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> ""</span></span>
+<span><span class="co">#&gt; $ marked     <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span> FALSE</span></span>
+<span><span class="co">#&gt; $ scalars    <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> [&lt;tbl_df[2 x 14]&gt;]</span></span>
+<span><span class="co">#&gt; $ flags      <span style="color: #949494; font-style: italic;">&lt;tibble[,5]&gt;</span> &lt;tbl_df[1 x 5]&gt;</span></span>
+<span><span class="co">#&gt; $ operation  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "fashion-mnist.R"</span></span>
+<span><span class="co">#&gt; $ started    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span> 2022-11-02 17:07:30</span></span>
+<span><span class="co">#&gt; $ stopped    <span style="color: #949494; font-style: italic;">&lt;dttm&gt;</span> 2022-11-02 17:08:43</span></span>
+<span><span class="co">#&gt; $ comments   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> [&lt;tbl_df[0 x 4]&gt;]</span></span>
+<span><span class="co">#&gt; $ status     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "completed"</span></span>
+<span><span class="co">#&gt; $ exitStatus <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 0</span></span>
+<span><span class="co">#&gt; $ otherAttrs <span style="color: #949494; font-style: italic;">&lt;df[,1]&gt;</span> &lt;data.frame[1 x 1]&gt;</span></span>
+<span><span class="co">#&gt; $ deps       <span style="color: #949494; font-style: italic;">&lt;list&gt;</span> []</span></span>
+<span><span class="co">#&gt; $ projectDir <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "/home/tomasz/guild/guildai-r/vignettes/articles"</span></span>
+<span><span class="co">#&gt; $ dir        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "/home/tomasz/guild/guildai-r/vignettes/articles/.guild/ru…</span></span>
+<span><span class="co">#&gt; $ id         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "e10aaf975fb04f9c9440c8db3f019997"</span></span></code></pre></div>
 <p><code><a href="../reference/ls_runs.html">ls_runs()</a></code> returns a data frame with information about
 runs. In our sample project, we’ve launched one run, so
 <code><a href="../reference/ls_runs.html">ls_runs()</a></code> returns a 1-row data frame.</p>
+</div>
+<div class="section level3">
+<h3 id="run-directories">Run Directories<a class="anchor" aria-label="anchor" href="#run-directories"></a>
+</h3>
 <p><code><a href="../reference/guild_view.html">guild_view()</a></code> and <code><a href="../reference/ls_runs.html">ls_runs()</a></code> provide two
 convenient ways to gather and present the information from runs.
-Importantly however, all the information about the run is stored as
-plain files.</p>
+Importantly however, the run directory is easily accessible, where
+everything about the run is available as plain text files. The run
+directory also contain any artifacts generated by the run process, like
+model check points.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span><span class="va">run</span><span class="op">$</span><span class="va">dir</span>, all<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">/home/tomasz/guild/guildai-r/vignettes/articles/.guild/runs/8cabcbdb56b74dc2b536eeb625d50e3b</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB; font-weight: bold;">/home/tomasz/guild/guildai-r/vignettes/articles/.guild/runs/e10aaf975fb04f9c9440c8db3f019997</span></span></span>
 <span><span class="co">#&gt; ├── <span style="color: #0000BB; font-weight: bold;">.guild</span></span></span>
 <span><span class="co">#&gt; │   ├── <span style="color: #0000BB; font-weight: bold;">attrs</span></span></span>
 <span><span class="co">#&gt; │   │   ├── cmd</span></span>
@@ -371,7 +367,7 @@ plain files.</p>
 <span><span class="co">#&gt; │   │   ├── label</span></span>
 <span><span class="co">#&gt; │   │   ├── op</span></span>
 <span><span class="co">#&gt; │   │   ├── platform</span></span>
-<span><span class="co">#&gt; │   │   ├── random_seed</span></span>
+<span><span class="co">#&gt; │   │   ├── r-random-seed</span></span>
 <span><span class="co">#&gt; │   │   ├── run_params</span></span>
 <span><span class="co">#&gt; │   │   ├── sourcecode_digest</span></span>
 <span><span class="co">#&gt; │   │   ├── started</span></span>
@@ -379,7 +375,7 @@ plain files.</p>
 <span><span class="co">#&gt; │   │   ├── user</span></span>
 <span><span class="co">#&gt; │   │   ├── user_flags</span></span>
 <span><span class="co">#&gt; │   │   └── vcs_commit</span></span>
-<span><span class="co">#&gt; │   ├── events.out.tfevents.1666379335.horse.62465.0</span></span>
+<span><span class="co">#&gt; │   ├── events.out.tfevents.1667423323.horse.180500.0</span></span>
 <span><span class="co">#&gt; │   ├── manifest</span></span>
 <span><span class="co">#&gt; │   ├── opref</span></span>
 <span><span class="co">#&gt; │   ├── output</span></span>
@@ -392,6 +388,7 @@ plain files.</p>
 quarto document:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/view_run_report.html">view_run_report</a></span><span class="op">(</span><span class="va">run</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></code></pre></div>
+</div>
 <div class="section level3">
 <h3 id="comparing-runs">Comparing Runs<a class="anchor" aria-label="anchor" href="#comparing-runs"></a>
 </h3>
@@ -405,137 +402,7 @@ making these changes to the source code we re-run the script using
 <span><span class="co">#&gt; Replaced expression 'learning_rate &lt;- 0.001' on line 23 with 'learning_rate &lt;- 0.003'</span></span>
 <span><span class="co">#&gt; Replaced expression 'epochs &lt;- 20' on line 36 with 'epochs &lt;- 30'</span></span></code></pre>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"fashion-mnist.R"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Replaced expression '.fast &lt;- TRUE' on line 38 with '.fast &lt;- FALSE'</span></span>
-<span><span class="co">#&gt; &gt; library(keras)</span></span>
-<span><span class="co">#&gt; &gt; # Prepare data ----</span></span>
-<span><span class="co">#&gt; &gt; fashion_mnist &lt;- dataset_fashion_mnist()</span></span>
-<span><span class="co">#&gt; 2022-10-21 15:08:59.481534: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered</span></span>
-<span><span class="co">#&gt; &gt; c(train_images, train_labels) %&lt;-% fashion_mnist$train</span></span>
-<span><span class="co">#&gt; &gt; c(test_images, test_labels) %&lt;-% fashion_mnist$test</span></span>
-<span><span class="co">#&gt; &gt; train_images &lt;- train_images / 255</span></span>
-<span><span class="co">#&gt; &gt;  test_images &lt;- test_images / 255</span></span>
-<span><span class="co">#&gt; &gt; # Define model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; units &lt;- 128</span></span>
-<span><span class="co">#&gt; &gt; model &lt;- keras_model_sequential(input_shape = c(28, 28))</span></span>
-<span><span class="co">#&gt; &gt; model %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_flatten() %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_dense(units = units, activation = 'relu') %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_dense(units = 10, activation = 'softmax')</span></span>
-<span><span class="co">#&gt; &gt; learning_rate &lt;- 0.003</span></span>
-<span><span class="co">#&gt; &gt; model %&gt;% compile(</span></span>
-<span><span class="co">#&gt; +   optimizer = optimizer_adam(learning_rate),</span></span>
-<span><span class="co">#&gt; +   loss = 'sparse_categorical_crossentropy',</span></span>
-<span><span class="co">#&gt; +   metrics = c('accuracy')</span></span>
-<span><span class="co">#&gt; + )</span></span>
-<span><span class="co">#&gt; &gt; model</span></span>
-<span><span class="co">#&gt; Model: "sequential"</span></span>
-<span><span class="co">#&gt; ________________________________________________________________________________</span></span>
-<span><span class="co">#&gt;  Layer (type)                       Output Shape                    Param #     </span></span>
-<span><span class="co">#&gt; ================================================================================</span></span>
-<span><span class="co">#&gt;  flatten (Flatten)                  (None, 784)                     0           </span></span>
-<span><span class="co">#&gt;  dense_1 (Dense)                    (None, 128)                     100480      </span></span>
-<span><span class="co">#&gt;  dense (Dense)                      (None, 10)                      1290        </span></span>
-<span><span class="co">#&gt; ================================================================================</span></span>
-<span><span class="co">#&gt; Total params: 101,770</span></span>
-<span><span class="co">#&gt; Trainable params: 101,770</span></span>
-<span><span class="co">#&gt; Non-trainable params: 0</span></span>
-<span><span class="co">#&gt; ________________________________________________________________________________</span></span>
-<span><span class="co">#&gt; &gt; # Fit model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; batch_size &lt;- 32</span></span>
-<span><span class="co">#&gt; &gt; epochs &lt;- 30</span></span>
-<span><span class="co">#&gt; &gt; .fast &lt;- FALSE</span></span>
-<span><span class="co">#&gt; &gt; if (.fast) {</span></span>
-<span><span class="co">#&gt; +   n &lt;- 1:20</span></span>
-<span><span class="co">#&gt; +   train_images %&lt;&gt;% { .[n, ,] }</span></span>
-<span><span class="co">#&gt; +   test_images %&lt;&gt;% { .[n, ,] }</span></span>
-<span><span class="co">#&gt; +   test_labels %&lt;&gt;% { .[n] }</span></span>
-<span><span class="co">#&gt; +   train_labels %&lt;&gt;% { .[n] }</span></span>
-<span><span class="co">#&gt; +   epochs &lt;- 2</span></span>
-<span><span class="co">#&gt; + }</span></span>
-<span><span class="co">#&gt; &gt; history &lt;- model %&gt;%</span></span>
-<span><span class="co">#&gt; +   fit(train_images, train_labels,</span></span>
-<span><span class="co">#&gt; +       validation_split = 0.2,</span></span>
-<span><span class="co">#&gt; +       batch_size = batch_size,</span></span>
-<span><span class="co">#&gt; +       epochs = epochs,</span></span>
-<span><span class="co">#&gt; +       verbose = 2)</span></span>
-<span><span class="co">#&gt; Epoch 1/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.5080 - accuracy: 0.8179 - val_loss: 0.4114 - val_accuracy: 0.8493 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 2/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.3898 - accuracy: 0.8571 - val_loss: 0.3878 - val_accuracy: 0.8593 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 3/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3520 - accuracy: 0.8704 - val_loss: 0.4110 - val_accuracy: 0.8514 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 4/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.3318 - accuracy: 0.8780 - val_loss: 0.3732 - val_accuracy: 0.8643 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 5/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3179 - accuracy: 0.8824 - val_loss: 0.3652 - val_accuracy: 0.8719 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 6/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2994 - accuracy: 0.8889 - val_loss: 0.3852 - val_accuracy: 0.8693 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 7/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2930 - accuracy: 0.8910 - val_loss: 0.3876 - val_accuracy: 0.8606 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 8/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2832 - accuracy: 0.8933 - val_loss: 0.3606 - val_accuracy: 0.8747 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 9/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2753 - accuracy: 0.8967 - val_loss: 0.3974 - val_accuracy: 0.8677 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 10/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2674 - accuracy: 0.9002 - val_loss: 0.3405 - val_accuracy: 0.8813 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 11/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2585 - accuracy: 0.9032 - val_loss: 0.3508 - val_accuracy: 0.8823 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 12/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2535 - accuracy: 0.9042 - val_loss: 0.3673 - val_accuracy: 0.8780 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 13/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2490 - accuracy: 0.9063 - val_loss: 0.3788 - val_accuracy: 0.8743 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 14/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2441 - accuracy: 0.9096 - val_loss: 0.3627 - val_accuracy: 0.8793 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 15/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2413 - accuracy: 0.9087 - val_loss: 0.3657 - val_accuracy: 0.8802 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 16/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2348 - accuracy: 0.9118 - val_loss: 0.3802 - val_accuracy: 0.8702 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 17/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2296 - accuracy: 0.9130 - val_loss: 0.3822 - val_accuracy: 0.8822 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 18/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2297 - accuracy: 0.9122 - val_loss: 0.3706 - val_accuracy: 0.8825 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 19/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2216 - accuracy: 0.9169 - val_loss: 0.3718 - val_accuracy: 0.8819 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 20/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2177 - accuracy: 0.9190 - val_loss: 0.4080 - val_accuracy: 0.8692 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 21/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2170 - accuracy: 0.9169 - val_loss: 0.3680 - val_accuracy: 0.8863 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 22/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2143 - accuracy: 0.9182 - val_loss: 0.3755 - val_accuracy: 0.8830 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 23/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2057 - accuracy: 0.9212 - val_loss: 0.4221 - val_accuracy: 0.8735 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 24/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2031 - accuracy: 0.9230 - val_loss: 0.3911 - val_accuracy: 0.8871 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 25/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2008 - accuracy: 0.9242 - val_loss: 0.4131 - val_accuracy: 0.8773 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 26/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2004 - accuracy: 0.9237 - val_loss: 0.4035 - val_accuracy: 0.8878 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 27/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.1958 - accuracy: 0.9259 - val_loss: 0.4170 - val_accuracy: 0.8798 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 28/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.1954 - accuracy: 0.9268 - val_loss: 0.4356 - val_accuracy: 0.8735 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 29/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.1898 - accuracy: 0.9276 - val_loss: 0.4050 - val_accuracy: 0.8833 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 30/30</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.1860 - accuracy: 0.9292 - val_loss: 0.4210 - val_accuracy: 0.8850 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; &gt; plot(history)</span></span>
-<span><span class="co">#&gt; &gt; # Evaluate model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; score &lt;- model %&gt;%</span></span>
-<span><span class="co">#&gt; +   evaluate(test_images, test_labels,</span></span>
-<span><span class="co">#&gt; +            verbose = 0) %&gt;%</span></span>
-<span><span class="co">#&gt; +   as.list()</span></span>
-<span><span class="co">#&gt; &gt; cat('test_loss:', score$loss, "\n")</span></span>
-<span><span class="co">#&gt; test_loss: 0.4858736 </span></span>
-<span><span class="co">#&gt; &gt; cat('test_accuracy:', score$accuracy, "\n")</span></span>
-<span><span class="co">#&gt; test_accuracy: 0.8755 </span></span>
-<span><span class="co">#&gt; &gt; # save_model_tf(model, "model.keras")</span></span>
-<span><span class="co">#&gt; &gt; # saveRDS(history, "history.rds")</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt;</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"fashion-mnist.R"</span><span class="op">)</span></span></code></pre></div>
 <p>This will also show us a report summarizing the results of the run,
 but what we are really interested in is a comparison between this run
 and the previous one.</p>
@@ -558,14 +425,14 @@ compared.</p>
 <h2 id="flags">Flags<a class="anchor" aria-label="anchor" href="#flags"></a>
 </h2>
 <p>Flags are a form of run inputs, or paramaterization. The action we
-just did, of modifying <code>learning_rate</code>, <code>epochs</code>
-and <code>units</code> values in the script before launching the second
-run, can be handled for us by <code><a href="../reference/guild_run.html">guild_run()</a></code> using the
-<em>flags</em> interface.</p>
-<p>By default, top-level assignments of scalar literals in an R script
-are identified by guild as run flags that can be modified per-run. You
-can quickly see what flags are available in an R script by passing
-<code>--help-op</code> (more on this later).</p>
+just described, of modifying <code>learning_rate</code>,
+<code>epochs</code> and <code>units</code> values in the script before
+launching the second run, can be performed by <code><a href="../reference/guild_run.html">guild_run()</a></code>
+using the <em>flags</em> interface.</p>
+<p>By default, guild identifies all top-level assignments of scalar
+literals in an R script as <em>run flags</em> that can be modified
+per-run. You can quickly see what flags are available in an R script by
+passing <code>--help-op</code> (more on this later).</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"fashion-mnist.R"</span>, <span class="st">"--help-op"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Usage: guild run [OPTIONS] fashion-mnist.R [FLAG]...</span></span>
@@ -578,485 +445,31 @@ can quickly see what flags are available in an R script by passing
 <span><span class="co">#&gt;   epochs         (default is 20.0)</span></span>
 <span><span class="co">#&gt;   learning_rate  (default is 0.001)</span></span>
 <span><span class="co">#&gt;   units          (default is 64.0)</span></span></code></pre></div>
-<p>To launch a run with different flag values, we can do this:</p>
-<p>Now, when we inspect the run sources with
-<code><a href="../reference/view_runs_diff.html">view_runs_diff()</a></code>, we see that the source files associated
-with the run have the updated flag values, as if we had modified them
-manually.</p>
-<p>The flags interface is useful for hyperparamater optimization. At
-it’s simplest, we can just iterate over the set of flag values we
-want:</p>
+<p>You can launch a run with different flag values like this:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">learning_rate</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.003</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"fashion-mnist.R"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>learning_rate <span class="op">=</span> <span class="va">learning_rate</span><span class="op">)</span>,</span>
-<span>            wait <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p>Here <code>wait = FALSE</code> means that the
-<code><a href="../reference/guild_run.html">guild_run()</a></code> call launches the run process and returns
-immediately. This is an easy way to launch multiple training runs in
-parallel. We can view the progress and real-time outputs of our runs
-with <code><a href="../reference/guild_view.html">guild_view()</a></code>, where their status (“training” or
-“completed”).</p>
-<p>Alternatively, we can pass multiple values for each flag, and guild
-will automatically expand the combinations to a grid search. For
-example, this will launch 4 training runs, with each combination of flag
-values:</p>
+<code class="sourceCode R"><span>    <span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"fashion-mnist.R"</span>, </span>
+<span>              flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>learning_rate <span class="op">=</span> <span class="fl">0.001</span>, </span>
+<span>                           units <span class="op">=</span> <span class="fl">256</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Now, when we inspect the run sources with
+<code><a href="../reference/view_runs_diff.html">view_runs_diff()</a></code>, we see that the source file from the last
+run has updated flag values, as if we had modified them manually.</p>
+<p>The flags interface is useful for hyperparamater optimization. At
+it’s simplest, you can use just iterate over the set of flag values you
+want and pass them to <code><a href="../reference/guild_run.html">guild_run()</a></code>:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">learning_rate</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.0003</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"fashion-mnist.R"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>learning_rate <span class="op">=</span> <span class="va">learning_rate</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>You can also pass multiple values for each flag, and guild will
+automatically expand the combinations to a grid search. For example,
+this will launch 4 training runs, with each combination of flag
+values:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"fashion-mnist.R"</span>, </span>
 <span>          flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>learning_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.003</span><span class="op">)</span>,</span>
-<span>                       units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">256</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; INFO: [guild] Running trial f81ce7eaf70941bbbe6bd2d71ea4ad88: fashion-mnist.R (.fast=no, batch_size=32.0, epochs=20.0, learning_rate=0.001, units=128.0)</span></span>
-<span><span class="co">#&gt; Replaced expression 'units &lt;- 64' on line 14 with 'units &lt;- 128'</span></span>
-<span><span class="co">#&gt; Replaced expression '.fast &lt;- TRUE' on line 38 with '.fast &lt;- FALSE'</span></span>
-<span><span class="co">#&gt; &gt; library(keras)</span></span>
-<span><span class="co">#&gt; &gt; # Prepare data ----</span></span>
-<span><span class="co">#&gt; &gt; fashion_mnist &lt;- dataset_fashion_mnist()</span></span>
-<span><span class="co">#&gt; 2022-10-21 15:11:22.756375: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered</span></span>
-<span><span class="co">#&gt; &gt; c(train_images, train_labels) %&lt;-% fashion_mnist$train</span></span>
-<span><span class="co">#&gt; &gt; c(test_images, test_labels) %&lt;-% fashion_mnist$test</span></span>
-<span><span class="co">#&gt; &gt; train_images &lt;- train_images / 255</span></span>
-<span><span class="co">#&gt; &gt;  test_images &lt;- test_images / 255</span></span>
-<span><span class="co">#&gt; &gt; # Define model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; units &lt;- 128</span></span>
-<span><span class="co">#&gt; &gt; model &lt;- keras_model_sequential(input_shape = c(28, 28))</span></span>
-<span><span class="co">#&gt; &gt; model %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_flatten() %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_dense(units = units, activation = 'relu') %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_dense(units = 10, activation = 'softmax')</span></span>
-<span><span class="co">#&gt; &gt; learning_rate &lt;- 0.001</span></span>
-<span><span class="co">#&gt; &gt; model %&gt;% compile(</span></span>
-<span><span class="co">#&gt; +   optimizer = optimizer_adam(learning_rate),</span></span>
-<span><span class="co">#&gt; +   loss = 'sparse_categorical_crossentropy',</span></span>
-<span><span class="co">#&gt; +   metrics = c('accuracy')</span></span>
-<span><span class="co">#&gt; + )</span></span>
-<span><span class="co">#&gt; &gt; model</span></span>
-<span><span class="co">#&gt; Model: "sequential"</span></span>
-<span><span class="co">#&gt; ________________________________________________________________________________</span></span>
-<span><span class="co">#&gt;  Layer (type)                       Output Shape                    Param #     </span></span>
-<span><span class="co">#&gt; ================================================================================</span></span>
-<span><span class="co">#&gt;  flatten (Flatten)                  (None, 784)                     0           </span></span>
-<span><span class="co">#&gt;  dense_1 (Dense)                    (None, 128)                     100480      </span></span>
-<span><span class="co">#&gt;  dense (Dense)                      (None, 10)                      1290        </span></span>
-<span><span class="co">#&gt; ================================================================================</span></span>
-<span><span class="co">#&gt; Total params: 101,770</span></span>
-<span><span class="co">#&gt; Trainable params: 101,770</span></span>
-<span><span class="co">#&gt; Non-trainable params: 0</span></span>
-<span><span class="co">#&gt; ________________________________________________________________________________</span></span>
-<span><span class="co">#&gt; &gt; # Fit model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; batch_size &lt;- 32</span></span>
-<span><span class="co">#&gt; &gt; epochs &lt;- 20</span></span>
-<span><span class="co">#&gt; &gt; .fast &lt;- FALSE</span></span>
-<span><span class="co">#&gt; &gt; if (.fast) {</span></span>
-<span><span class="co">#&gt; +   n &lt;- 1:20</span></span>
-<span><span class="co">#&gt; +   train_images %&lt;&gt;% { .[n, ,] }</span></span>
-<span><span class="co">#&gt; +   test_images %&lt;&gt;% { .[n, ,] }</span></span>
-<span><span class="co">#&gt; +   test_labels %&lt;&gt;% { .[n] }</span></span>
-<span><span class="co">#&gt; +   train_labels %&lt;&gt;% { .[n] }</span></span>
-<span><span class="co">#&gt; +   epochs &lt;- 2</span></span>
-<span><span class="co">#&gt; + }</span></span>
-<span><span class="co">#&gt; &gt; history &lt;- model %&gt;%</span></span>
-<span><span class="co">#&gt; +   fit(train_images, train_labels,</span></span>
-<span><span class="co">#&gt; +       validation_split = 0.2,</span></span>
-<span><span class="co">#&gt; +       batch_size = batch_size,</span></span>
-<span><span class="co">#&gt; +       epochs = epochs,</span></span>
-<span><span class="co">#&gt; +       verbose = 2)</span></span>
-<span><span class="co">#&gt; Epoch 1/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.5206 - accuracy: 0.8168 - val_loss: 0.4221 - val_accuracy: 0.8528 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 2/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3857 - accuracy: 0.8608 - val_loss: 0.3669 - val_accuracy: 0.8686 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 3/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.3442 - accuracy: 0.8747 - val_loss: 0.3586 - val_accuracy: 0.8677 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 4/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.3177 - accuracy: 0.8836 - val_loss: 0.3571 - val_accuracy: 0.8748 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 5/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2999 - accuracy: 0.8899 - val_loss: 0.3471 - val_accuracy: 0.8715 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 6/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2860 - accuracy: 0.8945 - val_loss: 0.3376 - val_accuracy: 0.8775 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 7/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2733 - accuracy: 0.8986 - val_loss: 0.3279 - val_accuracy: 0.8838 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 8/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2606 - accuracy: 0.9047 - val_loss: 0.3306 - val_accuracy: 0.8852 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 9/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2492 - accuracy: 0.9075 - val_loss: 0.3202 - val_accuracy: 0.8851 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 10/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2410 - accuracy: 0.9098 - val_loss: 0.3132 - val_accuracy: 0.8907 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 11/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2334 - accuracy: 0.9123 - val_loss: 0.3286 - val_accuracy: 0.8839 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 12/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2270 - accuracy: 0.9150 - val_loss: 0.3320 - val_accuracy: 0.8861 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 13/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2174 - accuracy: 0.9185 - val_loss: 0.3191 - val_accuracy: 0.8882 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 14/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2090 - accuracy: 0.9227 - val_loss: 0.3302 - val_accuracy: 0.8908 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 15/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2048 - accuracy: 0.9240 - val_loss: 0.3249 - val_accuracy: 0.8920 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 16/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.1974 - accuracy: 0.9255 - val_loss: 0.3287 - val_accuracy: 0.8895 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 17/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.1938 - accuracy: 0.9275 - val_loss: 0.3311 - val_accuracy: 0.8906 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 18/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.1886 - accuracy: 0.9296 - val_loss: 0.3715 - val_accuracy: 0.8780 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 19/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.1818 - accuracy: 0.9327 - val_loss: 0.3313 - val_accuracy: 0.8924 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 20/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.1768 - accuracy: 0.9343 - val_loss: 0.3430 - val_accuracy: 0.8903 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; &gt; plot(history)</span></span>
-<span><span class="co">#&gt; &gt; # Evaluate model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; score &lt;- model %&gt;%</span></span>
-<span><span class="co">#&gt; +   evaluate(test_images, test_labels,</span></span>
-<span><span class="co">#&gt; +            verbose = 0) %&gt;%</span></span>
-<span><span class="co">#&gt; +   as.list()</span></span>
-<span><span class="co">#&gt; &gt; cat('test_loss:', score$loss, "\n")</span></span>
-<span><span class="co">#&gt; test_loss: 0.3661694 </span></span>
-<span><span class="co">#&gt; &gt; cat('test_accuracy:', score$accuracy, "\n")</span></span>
-<span><span class="co">#&gt; test_accuracy: 0.884 </span></span>
-<span><span class="co">#&gt; &gt; # save_model_tf(model, "model.keras")</span></span>
-<span><span class="co">#&gt; &gt; # saveRDS(history, "history.rds")</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; INFO: [guild] Running trial d116e3720d794cf28e8f6f13b7cf15d4: fashion-mnist.R (.fast=no, batch_size=32.0, epochs=20.0, learning_rate=0.001, units=256.0)</span></span>
-<span><span class="co">#&gt; Replaced expression 'units &lt;- 64' on line 14 with 'units &lt;- 256'</span></span>
-<span><span class="co">#&gt; Replaced expression '.fast &lt;- TRUE' on line 38 with '.fast &lt;- FALSE'</span></span>
-<span><span class="co">#&gt; &gt; library(keras)</span></span>
-<span><span class="co">#&gt; &gt; # Prepare data ----</span></span>
-<span><span class="co">#&gt; &gt; fashion_mnist &lt;- dataset_fashion_mnist()</span></span>
-<span><span class="co">#&gt; 2022-10-21 15:12:20.296658: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered</span></span>
-<span><span class="co">#&gt; &gt; c(train_images, train_labels) %&lt;-% fashion_mnist$train</span></span>
-<span><span class="co">#&gt; &gt; c(test_images, test_labels) %&lt;-% fashion_mnist$test</span></span>
-<span><span class="co">#&gt; &gt; train_images &lt;- train_images / 255</span></span>
-<span><span class="co">#&gt; &gt;  test_images &lt;- test_images / 255</span></span>
-<span><span class="co">#&gt; &gt; # Define model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; units &lt;- 256</span></span>
-<span><span class="co">#&gt; &gt; model &lt;- keras_model_sequential(input_shape = c(28, 28))</span></span>
-<span><span class="co">#&gt; &gt; model %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_flatten() %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_dense(units = units, activation = 'relu') %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_dense(units = 10, activation = 'softmax')</span></span>
-<span><span class="co">#&gt; &gt; learning_rate &lt;- 0.001</span></span>
-<span><span class="co">#&gt; &gt; model %&gt;% compile(</span></span>
-<span><span class="co">#&gt; +   optimizer = optimizer_adam(learning_rate),</span></span>
-<span><span class="co">#&gt; +   loss = 'sparse_categorical_crossentropy',</span></span>
-<span><span class="co">#&gt; +   metrics = c('accuracy')</span></span>
-<span><span class="co">#&gt; + )</span></span>
-<span><span class="co">#&gt; &gt; model</span></span>
-<span><span class="co">#&gt; Model: "sequential"</span></span>
-<span><span class="co">#&gt; ________________________________________________________________________________</span></span>
-<span><span class="co">#&gt;  Layer (type)                       Output Shape                    Param #     </span></span>
-<span><span class="co">#&gt; ================================================================================</span></span>
-<span><span class="co">#&gt;  flatten (Flatten)                  (None, 784)                     0           </span></span>
-<span><span class="co">#&gt;  dense_1 (Dense)                    (None, 256)                     200960      </span></span>
-<span><span class="co">#&gt;  dense (Dense)                      (None, 10)                      2570        </span></span>
-<span><span class="co">#&gt; ================================================================================</span></span>
-<span><span class="co">#&gt; Total params: 203,530</span></span>
-<span><span class="co">#&gt; Trainable params: 203,530</span></span>
-<span><span class="co">#&gt; Non-trainable params: 0</span></span>
-<span><span class="co">#&gt; ________________________________________________________________________________</span></span>
-<span><span class="co">#&gt; &gt; # Fit model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; batch_size &lt;- 32</span></span>
-<span><span class="co">#&gt; &gt; epochs &lt;- 20</span></span>
-<span><span class="co">#&gt; &gt; .fast &lt;- FALSE</span></span>
-<span><span class="co">#&gt; &gt; if (.fast) {</span></span>
-<span><span class="co">#&gt; +   n &lt;- 1:20</span></span>
-<span><span class="co">#&gt; +   train_images %&lt;&gt;% { .[n, ,] }</span></span>
-<span><span class="co">#&gt; +   test_images %&lt;&gt;% { .[n, ,] }</span></span>
-<span><span class="co">#&gt; +   test_labels %&lt;&gt;% { .[n] }</span></span>
-<span><span class="co">#&gt; +   train_labels %&lt;&gt;% { .[n] }</span></span>
-<span><span class="co">#&gt; +   epochs &lt;- 2</span></span>
-<span><span class="co">#&gt; + }</span></span>
-<span><span class="co">#&gt; &gt; history &lt;- model %&gt;%</span></span>
-<span><span class="co">#&gt; +   fit(train_images, train_labels,</span></span>
-<span><span class="co">#&gt; +       validation_split = 0.2,</span></span>
-<span><span class="co">#&gt; +       batch_size = batch_size,</span></span>
-<span><span class="co">#&gt; +       epochs = epochs,</span></span>
-<span><span class="co">#&gt; +       verbose = 2)</span></span>
-<span><span class="co">#&gt; Epoch 1/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 4s - loss: 0.4973 - accuracy: 0.8233 - val_loss: 0.4084 - val_accuracy: 0.8553 - 4s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 2/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.3762 - accuracy: 0.8624 - val_loss: 0.3866 - val_accuracy: 0.8572 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 3/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3339 - accuracy: 0.8758 - val_loss: 0.3454 - val_accuracy: 0.8734 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 4/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3087 - accuracy: 0.8865 - val_loss: 0.3431 - val_accuracy: 0.8755 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 5/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2899 - accuracy: 0.8921 - val_loss: 0.3279 - val_accuracy: 0.8838 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 6/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2753 - accuracy: 0.8975 - val_loss: 0.3256 - val_accuracy: 0.8833 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 7/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2597 - accuracy: 0.9021 - val_loss: 0.3289 - val_accuracy: 0.8818 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 8/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2486 - accuracy: 0.9066 - val_loss: 0.3358 - val_accuracy: 0.8819 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 9/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2359 - accuracy: 0.9123 - val_loss: 0.3333 - val_accuracy: 0.8842 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 10/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2287 - accuracy: 0.9144 - val_loss: 0.3059 - val_accuracy: 0.8923 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 11/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2205 - accuracy: 0.9169 - val_loss: 0.3432 - val_accuracy: 0.8839 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 12/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 4s - loss: 0.2109 - accuracy: 0.9209 - val_loss: 0.3289 - val_accuracy: 0.8876 - 4s/epoch - 3ms/step</span></span>
-<span><span class="co">#&gt; Epoch 13/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.2067 - accuracy: 0.9218 - val_loss: 0.3433 - val_accuracy: 0.8903 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 14/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.1968 - accuracy: 0.9258 - val_loss: 0.3475 - val_accuracy: 0.8850 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 15/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.1892 - accuracy: 0.9294 - val_loss: 0.3239 - val_accuracy: 0.8938 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 16/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.1843 - accuracy: 0.9294 - val_loss: 0.3262 - val_accuracy: 0.8926 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 17/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.1764 - accuracy: 0.9344 - val_loss: 0.3476 - val_accuracy: 0.8857 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 18/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.1719 - accuracy: 0.9364 - val_loss: 0.3210 - val_accuracy: 0.8921 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 19/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.1656 - accuracy: 0.9373 - val_loss: 0.3387 - val_accuracy: 0.8947 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 20/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.1635 - accuracy: 0.9393 - val_loss: 0.3453 - val_accuracy: 0.8907 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; &gt; plot(history)</span></span>
-<span><span class="co">#&gt; &gt; # Evaluate model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; score &lt;- model %&gt;%</span></span>
-<span><span class="co">#&gt; +   evaluate(test_images, test_labels,</span></span>
-<span><span class="co">#&gt; +            verbose = 0) %&gt;%</span></span>
-<span><span class="co">#&gt; +   as.list()</span></span>
-<span><span class="co">#&gt; &gt; cat('test_loss:', score$loss, "\n")</span></span>
-<span><span class="co">#&gt; test_loss: 0.384773 </span></span>
-<span><span class="co">#&gt; &gt; cat('test_accuracy:', score$accuracy, "\n")</span></span>
-<span><span class="co">#&gt; test_accuracy: 0.8845 </span></span>
-<span><span class="co">#&gt; &gt; # save_model_tf(model, "model.keras")</span></span>
-<span><span class="co">#&gt; &gt; # saveRDS(history, "history.rds")</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; INFO: [guild] Running trial f87e4548acc147b5a3fb6c1db4f2e1fc: fashion-mnist.R (.fast=no, batch_size=32.0, epochs=20.0, learning_rate=0.003, units=128.0)</span></span>
-<span><span class="co">#&gt; Replaced expression 'units &lt;- 64' on line 14 with 'units &lt;- 128'</span></span>
-<span><span class="co">#&gt; Replaced expression 'learning_rate &lt;- 0.001' on line 23 with 'learning_rate &lt;- 0.003'</span></span>
-<span><span class="co">#&gt; Replaced expression '.fast &lt;- TRUE' on line 38 with '.fast &lt;- FALSE'</span></span>
-<span><span class="co">#&gt; &gt; library(keras)</span></span>
-<span><span class="co">#&gt; &gt; # Prepare data ----</span></span>
-<span><span class="co">#&gt; &gt; fashion_mnist &lt;- dataset_fashion_mnist()</span></span>
-<span><span class="co">#&gt; 2022-10-21 15:13:18.171785: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered</span></span>
-<span><span class="co">#&gt; &gt; c(train_images, train_labels) %&lt;-% fashion_mnist$train</span></span>
-<span><span class="co">#&gt; &gt; c(test_images, test_labels) %&lt;-% fashion_mnist$test</span></span>
-<span><span class="co">#&gt; &gt; train_images &lt;- train_images / 255</span></span>
-<span><span class="co">#&gt; &gt;  test_images &lt;- test_images / 255</span></span>
-<span><span class="co">#&gt; &gt; # Define model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; units &lt;- 128</span></span>
-<span><span class="co">#&gt; &gt; model &lt;- keras_model_sequential(input_shape = c(28, 28))</span></span>
-<span><span class="co">#&gt; &gt; model %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_flatten() %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_dense(units = units, activation = 'relu') %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_dense(units = 10, activation = 'softmax')</span></span>
-<span><span class="co">#&gt; &gt; learning_rate &lt;- 0.003</span></span>
-<span><span class="co">#&gt; &gt; model %&gt;% compile(</span></span>
-<span><span class="co">#&gt; +   optimizer = optimizer_adam(learning_rate),</span></span>
-<span><span class="co">#&gt; +   loss = 'sparse_categorical_crossentropy',</span></span>
-<span><span class="co">#&gt; +   metrics = c('accuracy')</span></span>
-<span><span class="co">#&gt; + )</span></span>
-<span><span class="co">#&gt; &gt; model</span></span>
-<span><span class="co">#&gt; Model: "sequential"</span></span>
-<span><span class="co">#&gt; ________________________________________________________________________________</span></span>
-<span><span class="co">#&gt;  Layer (type)                       Output Shape                    Param #     </span></span>
-<span><span class="co">#&gt; ================================================================================</span></span>
-<span><span class="co">#&gt;  flatten (Flatten)                  (None, 784)                     0           </span></span>
-<span><span class="co">#&gt;  dense_1 (Dense)                    (None, 128)                     100480      </span></span>
-<span><span class="co">#&gt;  dense (Dense)                      (None, 10)                      1290        </span></span>
-<span><span class="co">#&gt; ================================================================================</span></span>
-<span><span class="co">#&gt; Total params: 101,770</span></span>
-<span><span class="co">#&gt; Trainable params: 101,770</span></span>
-<span><span class="co">#&gt; Non-trainable params: 0</span></span>
-<span><span class="co">#&gt; ________________________________________________________________________________</span></span>
-<span><span class="co">#&gt; &gt; # Fit model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; batch_size &lt;- 32</span></span>
-<span><span class="co">#&gt; &gt; epochs &lt;- 20</span></span>
-<span><span class="co">#&gt; &gt; .fast &lt;- FALSE</span></span>
-<span><span class="co">#&gt; &gt; if (.fast) {</span></span>
-<span><span class="co">#&gt; +   n &lt;- 1:20</span></span>
-<span><span class="co">#&gt; +   train_images %&lt;&gt;% { .[n, ,] }</span></span>
-<span><span class="co">#&gt; +   test_images %&lt;&gt;% { .[n, ,] }</span></span>
-<span><span class="co">#&gt; +   test_labels %&lt;&gt;% { .[n] }</span></span>
-<span><span class="co">#&gt; +   train_labels %&lt;&gt;% { .[n] }</span></span>
-<span><span class="co">#&gt; +   epochs &lt;- 2</span></span>
-<span><span class="co">#&gt; + }</span></span>
-<span><span class="co">#&gt; &gt; history &lt;- model %&gt;%</span></span>
-<span><span class="co">#&gt; +   fit(train_images, train_labels,</span></span>
-<span><span class="co">#&gt; +       validation_split = 0.2,</span></span>
-<span><span class="co">#&gt; +       batch_size = batch_size,</span></span>
-<span><span class="co">#&gt; +       epochs = epochs,</span></span>
-<span><span class="co">#&gt; +       verbose = 2)</span></span>
-<span><span class="co">#&gt; Epoch 1/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.4988 - accuracy: 0.8205 - val_loss: 0.5208 - val_accuracy: 0.8067 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 2/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3884 - accuracy: 0.8581 - val_loss: 0.3715 - val_accuracy: 0.8637 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 3/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3494 - accuracy: 0.8707 - val_loss: 0.3950 - val_accuracy: 0.8583 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 4/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3315 - accuracy: 0.8778 - val_loss: 0.3685 - val_accuracy: 0.8692 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 5/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3152 - accuracy: 0.8826 - val_loss: 0.3681 - val_accuracy: 0.8732 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 6/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3023 - accuracy: 0.8889 - val_loss: 0.3762 - val_accuracy: 0.8660 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 7/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2910 - accuracy: 0.8926 - val_loss: 0.3817 - val_accuracy: 0.8680 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 8/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2784 - accuracy: 0.8957 - val_loss: 0.4150 - val_accuracy: 0.8619 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 9/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2737 - accuracy: 0.8985 - val_loss: 0.3622 - val_accuracy: 0.8784 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 10/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2645 - accuracy: 0.8998 - val_loss: 0.3327 - val_accuracy: 0.8820 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 11/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2583 - accuracy: 0.9034 - val_loss: 0.3556 - val_accuracy: 0.8801 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 12/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2471 - accuracy: 0.9058 - val_loss: 0.3719 - val_accuracy: 0.8758 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 13/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2432 - accuracy: 0.9094 - val_loss: 0.3476 - val_accuracy: 0.8809 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 14/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2399 - accuracy: 0.9095 - val_loss: 0.3847 - val_accuracy: 0.8721 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 15/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2375 - accuracy: 0.9100 - val_loss: 0.3702 - val_accuracy: 0.8790 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 16/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2271 - accuracy: 0.9143 - val_loss: 0.3878 - val_accuracy: 0.8760 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 17/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2260 - accuracy: 0.9147 - val_loss: 0.3704 - val_accuracy: 0.8764 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 18/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2211 - accuracy: 0.9175 - val_loss: 0.3655 - val_accuracy: 0.8842 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 19/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2192 - accuracy: 0.9175 - val_loss: 0.4100 - val_accuracy: 0.8773 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 20/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2140 - accuracy: 0.9196 - val_loss: 0.3871 - val_accuracy: 0.8785 - 2s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; &gt; plot(history)</span></span>
-<span><span class="co">#&gt; &gt; # Evaluate model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; score &lt;- model %&gt;%</span></span>
-<span><span class="co">#&gt; +   evaluate(test_images, test_labels,</span></span>
-<span><span class="co">#&gt; +            verbose = 0) %&gt;%</span></span>
-<span><span class="co">#&gt; +   as.list()</span></span>
-<span><span class="co">#&gt; &gt; cat('test_loss:', score$loss, "\n")</span></span>
-<span><span class="co">#&gt; test_loss: 0.4201244 </span></span>
-<span><span class="co">#&gt; &gt; cat('test_accuracy:', score$accuracy, "\n")</span></span>
-<span><span class="co">#&gt; test_accuracy: 0.8766 </span></span>
-<span><span class="co">#&gt; &gt; # save_model_tf(model, "model.keras")</span></span>
-<span><span class="co">#&gt; &gt; # saveRDS(history, "history.rds")</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; INFO: [guild] Running trial 60ef8659390b48c1a1eb74a218d5bdaa: fashion-mnist.R (.fast=no, batch_size=32.0, epochs=20.0, learning_rate=0.003, units=256.0)</span></span>
-<span><span class="co">#&gt; Replaced expression 'units &lt;- 64' on line 14 with 'units &lt;- 256'</span></span>
-<span><span class="co">#&gt; Replaced expression 'learning_rate &lt;- 0.001' on line 23 with 'learning_rate &lt;- 0.003'</span></span>
-<span><span class="co">#&gt; Replaced expression '.fast &lt;- TRUE' on line 38 with '.fast &lt;- FALSE'</span></span>
-<span><span class="co">#&gt; &gt; library(keras)</span></span>
-<span><span class="co">#&gt; &gt; # Prepare data ----</span></span>
-<span><span class="co">#&gt; &gt; fashion_mnist &lt;- dataset_fashion_mnist()</span></span>
-<span><span class="co">#&gt; 2022-10-21 15:14:08.773882: E tensorflow/stream_executor/cuda/cuda_blas.cc:2981] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered</span></span>
-<span><span class="co">#&gt; &gt; c(train_images, train_labels) %&lt;-% fashion_mnist$train</span></span>
-<span><span class="co">#&gt; &gt; c(test_images, test_labels) %&lt;-% fashion_mnist$test</span></span>
-<span><span class="co">#&gt; &gt; train_images &lt;- train_images / 255</span></span>
-<span><span class="co">#&gt; &gt;  test_images &lt;- test_images / 255</span></span>
-<span><span class="co">#&gt; &gt; # Define model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; units &lt;- 256</span></span>
-<span><span class="co">#&gt; &gt; model &lt;- keras_model_sequential(input_shape = c(28, 28))</span></span>
-<span><span class="co">#&gt; &gt; model %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_flatten() %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_dense(units = units, activation = 'relu') %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_dense(units = 10, activation = 'softmax')</span></span>
-<span><span class="co">#&gt; &gt; learning_rate &lt;- 0.003</span></span>
-<span><span class="co">#&gt; &gt; model %&gt;% compile(</span></span>
-<span><span class="co">#&gt; +   optimizer = optimizer_adam(learning_rate),</span></span>
-<span><span class="co">#&gt; +   loss = 'sparse_categorical_crossentropy',</span></span>
-<span><span class="co">#&gt; +   metrics = c('accuracy')</span></span>
-<span><span class="co">#&gt; + )</span></span>
-<span><span class="co">#&gt; &gt; model</span></span>
-<span><span class="co">#&gt; Model: "sequential"</span></span>
-<span><span class="co">#&gt; ________________________________________________________________________________</span></span>
-<span><span class="co">#&gt;  Layer (type)                       Output Shape                    Param #     </span></span>
-<span><span class="co">#&gt; ================================================================================</span></span>
-<span><span class="co">#&gt;  flatten (Flatten)                  (None, 784)                     0           </span></span>
-<span><span class="co">#&gt;  dense_1 (Dense)                    (None, 256)                     200960      </span></span>
-<span><span class="co">#&gt;  dense (Dense)                      (None, 10)                      2570        </span></span>
-<span><span class="co">#&gt; ================================================================================</span></span>
-<span><span class="co">#&gt; Total params: 203,530</span></span>
-<span><span class="co">#&gt; Trainable params: 203,530</span></span>
-<span><span class="co">#&gt; Non-trainable params: 0</span></span>
-<span><span class="co">#&gt; ________________________________________________________________________________</span></span>
-<span><span class="co">#&gt; &gt; # Fit model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; batch_size &lt;- 32</span></span>
-<span><span class="co">#&gt; &gt; epochs &lt;- 20</span></span>
-<span><span class="co">#&gt; &gt; .fast &lt;- FALSE</span></span>
-<span><span class="co">#&gt; &gt; if (.fast) {</span></span>
-<span><span class="co">#&gt; +   n &lt;- 1:20</span></span>
-<span><span class="co">#&gt; +   train_images %&lt;&gt;% { .[n, ,] }</span></span>
-<span><span class="co">#&gt; +   test_images %&lt;&gt;% { .[n, ,] }</span></span>
-<span><span class="co">#&gt; +   test_labels %&lt;&gt;% { .[n] }</span></span>
-<span><span class="co">#&gt; +   train_labels %&lt;&gt;% { .[n] }</span></span>
-<span><span class="co">#&gt; +   epochs &lt;- 2</span></span>
-<span><span class="co">#&gt; + }</span></span>
-<span><span class="co">#&gt; &gt; history &lt;- model %&gt;%</span></span>
-<span><span class="co">#&gt; +   fit(train_images, train_labels,</span></span>
-<span><span class="co">#&gt; +       validation_split = 0.2,</span></span>
-<span><span class="co">#&gt; +       batch_size = batch_size,</span></span>
-<span><span class="co">#&gt; +       epochs = epochs,</span></span>
-<span><span class="co">#&gt; +       verbose = 2)</span></span>
-<span><span class="co">#&gt; Epoch 1/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.4964 - accuracy: 0.8222 - val_loss: 0.4175 - val_accuracy: 0.8431 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 2/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3858 - accuracy: 0.8618 - val_loss: 0.3690 - val_accuracy: 0.8688 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 3/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3495 - accuracy: 0.8715 - val_loss: 0.3767 - val_accuracy: 0.8666 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 4/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3293 - accuracy: 0.8783 - val_loss: 0.3545 - val_accuracy: 0.8745 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 5/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3114 - accuracy: 0.8839 - val_loss: 0.3854 - val_accuracy: 0.8649 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 6/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2990 - accuracy: 0.8888 - val_loss: 0.3497 - val_accuracy: 0.8727 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 7/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2885 - accuracy: 0.8923 - val_loss: 0.3582 - val_accuracy: 0.8712 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 8/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2763 - accuracy: 0.8970 - val_loss: 0.3658 - val_accuracy: 0.8808 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 9/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2683 - accuracy: 0.8992 - val_loss: 0.3817 - val_accuracy: 0.8723 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 10/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2598 - accuracy: 0.9032 - val_loss: 0.3479 - val_accuracy: 0.8838 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 11/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2549 - accuracy: 0.9049 - val_loss: 0.3555 - val_accuracy: 0.8801 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 12/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2510 - accuracy: 0.9057 - val_loss: 0.3843 - val_accuracy: 0.8773 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 13/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2432 - accuracy: 0.9089 - val_loss: 0.3536 - val_accuracy: 0.8829 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 14/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2382 - accuracy: 0.9110 - val_loss: 0.3834 - val_accuracy: 0.8822 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 15/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2354 - accuracy: 0.9119 - val_loss: 0.3592 - val_accuracy: 0.8826 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 16/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2280 - accuracy: 0.9149 - val_loss: 0.3818 - val_accuracy: 0.8851 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 17/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2238 - accuracy: 0.9155 - val_loss: 0.3814 - val_accuracy: 0.8809 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 18/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2186 - accuracy: 0.9172 - val_loss: 0.3880 - val_accuracy: 0.8815 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 19/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2160 - accuracy: 0.9193 - val_loss: 0.3812 - val_accuracy: 0.8833 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 20/20</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2138 - accuracy: 0.9189 - val_loss: 0.3909 - val_accuracy: 0.8808 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; &gt; plot(history)</span></span>
-<span><span class="co">#&gt; &gt; # Evaluate model ----</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt; score &lt;- model %&gt;%</span></span>
-<span><span class="co">#&gt; +   evaluate(test_images, test_labels,</span></span>
-<span><span class="co">#&gt; +            verbose = 0) %&gt;%</span></span>
-<span><span class="co">#&gt; +   as.list()</span></span>
-<span><span class="co">#&gt; &gt; cat('test_loss:', score$loss, "\n")</span></span>
-<span><span class="co">#&gt; test_loss: 0.4274907 </span></span>
-<span><span class="co">#&gt; &gt; cat('test_accuracy:', score$accuracy, "\n")</span></span>
-<span><span class="co">#&gt; test_accuracy: 0.8737 </span></span>
-<span><span class="co">#&gt; &gt; # save_model_tf(model, "model.keras")</span></span>
-<span><span class="co">#&gt; &gt; # saveRDS(history, "history.rds")</span></span>
-<span><span class="co">#&gt; &gt; </span></span>
-<span><span class="co">#&gt; &gt;</span></span></code></pre></div>
-<p>For more precision, we can pass a dataframe of flags values, with
-each row corresponding to a run.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<span>                       units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">256</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>Another way to launch a batch of runs is to pass a dataframe of flags
+values, with each row corresponding to a run.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">flags_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>learning_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.003</span><span class="op">)</span>,</span>
 <span>                        units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">256</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">flags_df</span></span>
@@ -1065,12 +478,12 @@ each row corresponding to a run.</p>
 <span><span class="co">#&gt; 2         0.003   128</span></span>
 <span><span class="co">#&gt; 3         0.001   256</span></span>
 <span><span class="co">#&gt; 4         0.003   256</span></span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"fashion-mnist.R"</span>, flags <span class="op">=</span> <span class="va">flags_df</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="flag-annotations">Flag annotations<a class="anchor" aria-label="anchor" href="#flag-annotations"></a>
 </h3>
-<p>We can optionally supply additional metadata about individual flags
+<p>You can optionally supply additional metadata about individual flags
 by placing hashpipe yaml annotations above the flag expression. For
 example, we can update our “fashion-mnist.R” script with the following
 lines:</p>
@@ -1091,9 +504,8 @@ lines:</p>
 <p>As a project grows, it’s helpful to be able to move flag definitions
 out of the main R script. To do so, you can include a
 <code>flags-dest</code> in the frontmatter of the R script, specifying
-the file path (relative to the project directory) of the file where
-guild should place the flag values. Then you can read in the flags using
-<code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code> or similar.</p>
+the file where guild should update the flag values. Then you can read in
+the flags using <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code> or similar.</p>
 <pre><code><span><span class="co">#| flags-dest: ./flags.R</span></span>
 <span></span>
 <span><span class="va">FLAGS</span> <span class="op">&lt;-</span> <span class="fu">envir</span><span class="fu">::</span><span class="fu"><a href="https://t-kalinowski.github.io/envir/reference/include.html" class="external-link">include</a></span><span class="op">(</span><span class="st">"flags.R"</span>, <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">new.env</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre>
@@ -1108,173 +520,139 @@ guild should place the flag values. Then you can read in the flags using
 <p>The flags and flag values associated with each runs are returned by
 <code><a href="../reference/ls_runs.html">ls_runs()</a></code> as a nested dataframe under
 <code>flags</code>.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">runs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">shortId</span>, <span class="va">flags</span><span class="op">)</span> <span class="co">#%&gt;% tidyr::unnest(flags, names_sep = "_")</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 7 × 2</span></span></span>
-<span><span class="co">#&gt;   shortId  flags$.fast $batch_size $epochs $learning_rate $units</span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 60ef8659 FALSE                32      20          0.003    256</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> f87e4548 FALSE                32      20          0.003    128</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> d116e372 FALSE                32      20          0.001    256</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> f81ce7ea FALSE                32      20          0.001    128</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 8b22b305 FALSE                32      20          0.001    256</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> d8df8f18 FALSE                32      30          0.003    128</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> 8cabcbdb FALSE                32      20          0.001     64</span></span></code></pre></div>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">id</span>, <span class="va">flags</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 2</span></span></span>
+<span><span class="co">#&gt;   id                               flags$.fast $batch_s…¹ $epochs $lear…² $units</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> b7f82479b63c469e95bd71e7ab05aa18 FALSE               32      30   0.003    128</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> e10aaf975fb04f9c9440c8db3f019997 FALSE               32      20   0.001     64</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># … with abbreviated variable names ¹​$batch_size, ²​$learning_rate</span></span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
 <h2 id="scalars">Scalars<a class="anchor" aria-label="anchor" href="#scalars"></a>
 </h2>
 <p>The counterpart to run <code>flags</code> are run
-<code>scalars</code>. Where as <code>flags</code> are a type of run
-input, scalars are run outputs identified by Guild as meaningful to
-track.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code>scalars</code>. Whereas <code>flags</code> are a a special type of
+run input that guild can help manage, scalars are special type of run
+output that guild can help manage.</p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">runs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">shortId</span>, <span class="va">scalars</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 7 × 2</span></span></span>
-<span><span class="co">#&gt;   shortId  scalars          </span></span>
-<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> 60ef8659 <span style="color: #949494;">&lt;tibble [2 × 14]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> f87e4548 <span style="color: #949494;">&lt;tibble [2 × 14]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> d116e372 <span style="color: #949494;">&lt;tibble [2 × 14]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> f81ce7ea <span style="color: #949494;">&lt;tibble [2 × 14]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> 8b22b305 <span style="color: #949494;">&lt;tibble [2 × 14]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> d8df8f18 <span style="color: #949494;">&lt;tibble [2 × 14]&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">7</span> 8cabcbdb <span style="color: #949494;">&lt;tibble [2 × 14]&gt;</span></span></span>
+<span>  <span class="fu">select</span><span class="op">(</span><span class="va">id</span>, <span class="va">scalars</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 2</span></span></span>
+<span><span class="co">#&gt;   id                               scalars          </span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> b7f82479b63c469e95bd71e7ab05aa18 <span style="color: #949494;">&lt;tibble [2 × 14]&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> e10aaf975fb04f9c9440c8db3f019997 <span style="color: #949494;">&lt;tibble [2 × 14]&gt;</span></span></span>
 <span></span>
 <span><span class="fu">glimpse</span><span class="op">(</span><span class="va">runs</span><span class="op">$</span><span class="va">scalars</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Rows: 2</span></span>
 <span><span class="co">#&gt; Columns: 14</span></span>
-<span><span class="co">#&gt; $ run        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "60ef8659390b48c1a1eb74a218d5bdaa", "60ef8659390b48c1a1eb74…</span></span>
+<span><span class="co">#&gt; $ run        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "b7f82479b63c469e95bd71e7ab05aa18", "b7f82479b63c469e95bd71…</span></span>
 <span><span class="co">#&gt; $ prefix     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> ".guild", ".guild"</span></span>
 <span><span class="co">#&gt; $ tag        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "test_accuracy", "test_loss"</span></span>
-<span><span class="co">#&gt; $ first_val  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8737000, 0.4274907</span></span>
+<span><span class="co">#&gt; $ first_val  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8676000, 0.4961661</span></span>
 <span><span class="co">#&gt; $ first_step <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 0, 0</span></span>
-<span><span class="co">#&gt; $ last_val   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8737000, 0.4274907</span></span>
+<span><span class="co">#&gt; $ last_val   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8676000, 0.4961661</span></span>
 <span><span class="co">#&gt; $ last_step  <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 0, 0</span></span>
-<span><span class="co">#&gt; $ min_val    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8737000, 0.4274907</span></span>
+<span><span class="co">#&gt; $ min_val    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8676000, 0.4961661</span></span>
 <span><span class="co">#&gt; $ min_step   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 0, 0</span></span>
-<span><span class="co">#&gt; $ max_val    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8737000, 0.4274907</span></span>
+<span><span class="co">#&gt; $ max_val    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8676000, 0.4961661</span></span>
 <span><span class="co">#&gt; $ max_step   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 0, 0</span></span>
-<span><span class="co">#&gt; $ avg_val    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8737000, 0.4274907</span></span>
-<span><span class="co">#&gt; $ total      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8737000, 0.4274907</span></span>
+<span><span class="co">#&gt; $ avg_val    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8676000, 0.4961661</span></span>
+<span><span class="co">#&gt; $ total      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> 0.8676000, 0.4961661</span></span>
 <span><span class="co">#&gt; $ count      <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> 1, 1</span></span></code></pre></div>
 <p>Here we see that guild has automatically identified
 <code>test_accuracy</code> and <code>test_loss</code> as run scalar
 outputs. By default, any lines printed to standard output during the run
-with the patten <code>"key: numeric-value"</code> are recorded by guild
-as <code>scalars</code>. If you are printing values for the same scalar
-<code>key</code> multiple times during a run (e.g, <code>loss</code>
-during a training loop), then be sure to also print a <code>step</code>
-scalar in between, to enable guild to track history (and enable
-visualization of the run metrics with tensorboard).</p>
-<p>Alternatively, if your run process produces tfevent records directly
-(e.g., <code>keras::callback_tensorboard("./logs")</code>), then those
+with the pattern <code>"key: &lt;numeric-value&gt;"</code> are recorded
+by guild as <code>scalars</code>. If you are printing values for the
+same scalar <code>key</code> multiple times during a run (e.g,
+<code>loss</code> during a training loop), then be sure to also print a
+<code>step</code> scalar in between, to enable guild to track history
+(and enable visualization of the run metrics with tensorboard).</p>
+<p>If your run process produces tfevent records directly (e.g.,
+<code>keras::callback_tensorboard("./logs")</code>), then those are also
 automatically identified by guild a run scalars, and included in
 <code><a href="../reference/ls_runs.html">ls_runs()</a></code> (and <code><a href="../reference/guild_view.html">guild_view()</a></code>, and tensorboard
 and other run views).</p>
-<p><code><a href="../reference/ls_runs.html">ls_runs()</a></code> by default only returns a summary of run
-scalars, but the full scalar history can also be accessed from R
+<p><code><a href="../reference/ls_runs.html">ls_runs()</a></code> returns a summary of run scalars, but the full
+set of scalars observed in runs can also be accessed from R
 directly:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/ls_runs.html">ls_runs</a></span><span class="op">(</span>scalars <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 14 × 5</span></span></span>
-<span><span class="co">#&gt;    run                              path   tag           value  step</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> 60ef8659390b48c1a1eb74a218d5bdaa .guild test_loss     0.427     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> 60ef8659390b48c1a1eb74a218d5bdaa .guild test_accuracy 0.874     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> f87e4548acc147b5a3fb6c1db4f2e1fc .guild test_loss     0.420     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> f87e4548acc147b5a3fb6c1db4f2e1fc .guild test_accuracy 0.877     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> d116e3720d794cf28e8f6f13b7cf15d4 .guild test_loss     0.385     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> d116e3720d794cf28e8f6f13b7cf15d4 .guild test_accuracy 0.885     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> f81ce7eaf70941bbbe6bd2d71ea4ad88 .guild test_loss     0.366     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> f81ce7eaf70941bbbe6bd2d71ea4ad88 .guild test_accuracy 0.884     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> 8b22b305a3ba40ab8ff700566f29747e .guild test_loss     0.391     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> 8b22b305a3ba40ab8ff700566f29747e .guild test_accuracy 0.882     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> d8df8f18e7924797be4751880a046468 .guild test_loss     0.486     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> d8df8f18e7924797be4751880a046468 .guild test_accuracy 0.876     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> 8cabcbdb56b74dc2b536eeb625d50e3b .guild test_loss     0.366     0</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> 8cabcbdb56b74dc2b536eeb625d50e3b .guild test_accuracy 0.879     0</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/ls_scalars.html">ls_scalars</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 5</span></span></span>
+<span><span class="co">#&gt;   run                              path   tag           value  step</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> b7f82479b63c469e95bd71e7ab05aa18 .guild test_loss     0.496     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> b7f82479b63c469e95bd71e7ab05aa18 .guild test_accuracy 0.868     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> e10aaf975fb04f9c9440c8db3f019997 .guild test_loss     0.369     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> e10aaf975fb04f9c9440c8db3f019997 .guild test_accuracy 0.882     0</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="using-flags-and-scalars-together">Using Flags and Scalars Together<a class="anchor" aria-label="anchor" href="#using-flags-and-scalars-together"></a>
+<h2 id="managing-runs">Managing runs<a class="anchor" aria-label="anchor" href="#managing-runs"></a>
 </h2>
-<p>We can use guild to explore what impact <code>units</code> has on
-<code>test_accuracy</code>.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">units</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">2</span> <span class="op">^</span> <span class="op">(</span><span class="fl">4</span><span class="op">:</span><span class="fl">11</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">.</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">units</span> </span>
-<span><span class="co">#&gt;  [1]   16   32   48   64   96  128  192  256  384  512  768 1024 1536 2048</span></span>
-<span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"fashion-mnist.R"</span>, </span>
-<span>          flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>units <span class="op">=</span> <span class="va">units</span><span class="op">)</span>,</span>
-<span>          echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Error in writeLines(out) : can only write character objects</span></span></code></pre></div>
-<p>We can see compare run flags and run scalars from R:</p>
+<p>Guild comes with a comprehensive set of functions for managing
+runs.</p>
+<ul>
+<li>annotate runs: <code><a href="../reference/runs_label.html">runs_comment()</a></code>, <code><a href="../reference/runs_label.html">runs_mark()</a></code>
+and <code><a href="../reference/runs_label.html">runs_tag()</a></code>.</li>
+<li>move, archive, or copy runs: <code><a href="../reference/runs_export.html">runs_export()</a></code> and
+<code><a href="../reference/runs_export.html">runs_import()</a></code>
+</li>
+<li>delete runs: <code><a href="../reference/runs_delete.html">runs_delete()</a></code> <code><a href="../reference/runs_delete.html">runs_purge()</a></code>
+<code><a href="../reference/runs_delete.html">runs_restore()</a></code>
+</li>
+</ul>
+<p>The <code>runs_*</code> family of functions all take
+<code>runs</code> as a first argument, and can be conveniently composed
+with <code>%&gt;%</code> and <code><a href="../reference/ls_runs.html">ls_runs()</a></code> or
+<code><a href="../reference/ls_scalars.html">ls_scalars()</a></code>. For example:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"1:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">units</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="co"># last 8 runs</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">runs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">select</span><span class="op">(</span><span class="va">flags</span>, <span class="va">scalars</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">rowwise</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">mutate</span><span class="op">(</span><span class="fu">across</span><span class="op">(</span><span class="va">scalars</span>, <span class="kw">function</span><span class="op">(</span><span class="va">run_scalars_df</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">run_scalars_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>      <span class="fu">select</span><span class="op">(</span><span class="va">tag</span>, <span class="va">last_val</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>      <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html" class="external-link">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">tag</span>,</span>
-<span>                         values_from <span class="op">=</span> <span class="va">last_val</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/nest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">flags</span>, <span class="va">scalars</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">arrange</span><span class="op">(</span><span class="va">units</span><span class="op">)</span> </span>
+<span><span class="va">top3_runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/ls_scalars.html">ls_scalars</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">tag</span> <span class="op">==</span> <span class="st">"test_accuracy"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span><span class="va">value</span>, n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">df</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 14 × 7</span></span></span>
-<span><span class="co">#&gt;    .fast batch_size epochs learning_rate units test_accuracy test_loss</span></span>
-<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> FALSE         32     20         0.001    16         0.858     0.414</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> FALSE         32     20         0.001    32         0.872     0.376</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> FALSE         32     20         0.001    48         0.878     0.364</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> FALSE         32     20         0.001    64         0.883     0.358</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> FALSE         32     20         0.001    96         0.878     0.380</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> FALSE         32     20         0.001   128         0.871     0.412</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> FALSE         32     20         0.001   192         0.882     0.388</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> FALSE         32     20         0.001   256         0.885     0.378</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> FALSE         32     20         0.001   384         0.890     0.365</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> FALSE         32     20         0.001   512         0.882     0.411</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> FALSE         32     20         0.001   768         0.882     0.406</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> FALSE         32     20         0.001  <span style="text-decoration: underline;">1</span>024         0.885     0.400</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> FALSE         32     20         0.001  <span style="text-decoration: underline;">1</span>536         0.888     0.404</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> FALSE         32     20         0.001  <span style="text-decoration: underline;">2</span>048         0.893     0.376</span></span></code></pre></div>
+<span><span class="va">top3_runs</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2 × 5</span></span></span>
+<span><span class="co">#&gt;   run                              path   tag           value  step</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> e10aaf975fb04f9c9440c8db3f019997 .guild test_accuracy 0.882     0</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> b7f82479b63c469e95bd71e7ab05aa18 .guild test_accuracy 0.868     0</span></span>
+<span></span>
+<span><span class="va">top3_runs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/runs_label.html">runs_tag</a></span><span class="op">(</span><span class="st">"top3"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="../reference/runs_export.html">runs_export</a></span><span class="op">(</span><span class="st">"./top3-runs"</span><span class="op">)</span></span></code></pre></div>
+<p><code>runs</code> can be supplied like a dataframe returned by
+<code><a href="../reference/ls_runs.html">ls_runs()</a></code> or <code><a href="../reference/ls_scalars.html">ls_scalars()</a></code> like in the example
+above. <code>runs</code> can also be a character vector where there is a
+flexible syntax supported for specifying runs selections. See
+<code>?resolve_run_ids()</code> for details.</p>
+</div>
+<div class="section level2">
+<h2 id="using-guild-from-the-terminal">Using guild from the terminal<a class="anchor" aria-label="anchor" href="#using-guild-from-the-terminal"></a>
+</h2>
+<p><code>guild</code> can also be used directly from the terminal. Call
+the R function <code><a href="../reference/export_guild_cli.html">export_guild_cli()</a></code> to place the
+<code>guild</code> executable on your PATH:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">units</span>, y <span class="op">=</span> <span class="va">test_accuracy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro_files/figure-html/unnamed-chunk-24-1.png" width="700"></p>
-<div class="section level3">
-<h3 id="addin">Addin<a class="anchor" aria-label="anchor" href="#addin"></a>
-</h3>
-<p>The <strong>guildai</strong> package installs an RStudio IDE addin
-which provides quick access to frequently used functions from the Addins
-menu:</p>
-<p>Note that you can use <strong>Tools</strong> -&gt; <strong>Modify
-Keyboard Shortcuts</strong> within RStudio to assign a keyboard shortcut
-to one or more of the addin commands.</p>
-</div>
-<div class="section level3">
-<h3 id="background-training">Background Training<a class="anchor" aria-label="anchor" href="#background-training"></a>
-</h3>
-<p>Since training runs can become quite lengthy, it’s often useful to
-run them in the background in order to keep the R console free for other
-work. You can launch a guild run without blocking the R console by
-specifying <code>guild_run(wait = FALSE)</code> in the call. You can
-then view real-time outputs from your run(s) using
-<code><a href="../reference/guild_view.html">guild_view()</a></code>.</p>
-<p>Alternatively, you can launch training runs in the terminal pane:</p>
-<pre><code>Rscript -e 'guildai::guild_run("train.R")'</code></pre>
-<p>If you are not running within RStudio then you can of course use a
-system terminal window for background training.</p>
-</div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/export_guild_cli.html">export_guild_cli</a></span><span class="op">(</span>dest <span class="op">=</span> <span class="st">"~/bin"</span><span class="op">)</span></span></code></pre></div>
+<p>Then you can launch runs and perform other guild operations from the
+terminal:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="ex">guild</span> run fashion-mnist.R</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="ex">guild</span> run fashion-mnist.R batch_size=<span class="st">'[32,64]'</span></span></code></pre></div>
+<p>As you move between the terminal and the R console, almost all of the
+same syntax supported from the terminal can be used from R by passing
+strings:</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"fashion-mnist.R"</span>, <span class="st">'batch_size=[32,64]'</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/knit_exit.html" class="external-link">knit_exit</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

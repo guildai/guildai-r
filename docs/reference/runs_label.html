@@ -48,13 +48,13 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">runs_label</span><span class="op">(</span>runs <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">label</span>, <span class="va">...</span>, clear <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/NULL.html" class="external-link">is.null</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">runs_label</span><span class="op">(</span>runs <span class="op">=</span> <span class="cn">NULL</span>, label <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span>, clear <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">runs_tag</span><span class="op">(</span>runs <span class="op">=</span> <span class="cn">NULL</span>, add <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span>, remove <span class="op">=</span> <span class="cn">NULL</span>, clear <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">runs_mark</span><span class="op">(</span>runs <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span>, clear <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">runs_comment</span><span class="op">(</span>runs <span class="op">=</span> <span class="cn">NULL</span>, comment <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span>, clear <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">runs_comment</span><span class="op">(</span>runs <span class="op">=</span> <span class="cn">NULL</span>, comment <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span>, delete <span class="op">=</span> <span class="cn">NULL</span>, clear <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -72,13 +72,22 @@
 
 
 <dt>clear</dt>
-<dd><p>bool, whether to clear the existing tags/comments first.</p></dd>
+<dd><p>bool, whether to clear the existing tags/comments/label.</p></dd>
 
 
 <dt>add, remove</dt>
 <dd><p>a character vector of tags to add or remove</p></dd>
 
+
+<dt>delete</dt>
+<dd><p>integer vector, which comment(s) to delete, corresponding to
+the row number(s) in the dataframe found at <code>ls_runs()$comments</code>.</p></dd>
+
 </dl></div>
+    <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p><code>runs_comment()</code> will open up an editor if <code>comment</code> is not supplied.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>

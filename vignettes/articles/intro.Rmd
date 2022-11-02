@@ -129,7 +129,7 @@ You can retrieve a data frame with run information using `ls_runs()`:
 
 ```{r}
 run <- ls_runs()
-str(run)
+tibble::glimpse(run)
 ```
 
 `ls_runs()` returns a data frame with information about runs. In our
@@ -169,7 +169,7 @@ guildai:::modify_r_file_flags("fashion-mnist.R",
   overwrite = TRUE)
 ```
 
-```{r}
+```{r results=FALSE}
 guild_run("fashion-mnist.R")
 ```
 
@@ -213,12 +213,12 @@ can quickly see what flags are available in an R script by passing
 guild_run("fashion-mnist.R", "--help-op")
 ```
 
-To launch a run with different flag values, we can do this:
+You can launch a run with different flag values like this:
 
-```{r, include=FALSE}
-guild_run("fashion-mnist.R", 
-          flags = list(learning_rate = 0.001, 
-                       units = 256))
+```{r, eval=FALSE}
+    guild_run("fashion-mnist.R", 
+              flags = list(learning_rate = 0.001, 
+                           units = 256))
 ```
 
 Now, when we inspect the run sources with `view_runs_diff()`, we see
@@ -238,7 +238,7 @@ You can also pass multiple values for each flag, and guild will
 automatically expand the combinations to a grid search. For example,
 this will launch 4 training runs, with each combination of flag values:
 
-```{r}
+```{r, eval = FALSE}
 guild_run("fashion-mnist.R", 
           flags = list(learning_rate = c(0.001, 0.003),
                        units = c(128, 256)))
@@ -302,7 +302,7 @@ The flags and flag values associated with each runs are returned by
 ```{r paged.print=FALSE}
 runs <- ls_runs()
 runs %>%
-  select(shortId, flags)
+  select(id, flags)
 ```
 
 ## Scalars
@@ -313,12 +313,12 @@ special type of run output that guild can help manage.
 
 ```{r paged.print=FALSE}
 runs %>%
-  select(shortId, scalars)
+  select(id, scalars)
 
 glimpse(runs$scalars[[1]])
 ```
 
-```{r eval=FALSE, include=FALSE}
+```{r include = FALSE, eval=FALSE, include=FALSE}
 guild_view()
 view_run_report()
 ```
@@ -340,7 +340,7 @@ automatically identified by guild a run scalars, and included in
 `ls_runs()` returns a summary of run scalars, but the full set of
 scalars observed in runs can also be accessed from R directly:
 
-```{r}
+```{r, paged.print=FALSE}
 ls_scalars()
 ```
 
@@ -356,11 +356,16 @@ The `runs_*` family of functions all take `runs` as a first argument,
 and can be conveniently composed with `%>%` and `ls_runs()` or
 `ls_scalars()`. For example:
 
-```{r}
+```{r paged.print=FALSE}
 library(dplyr)
-ls_scalars() %>% 
+
+top3_runs <- ls_scalars() %>% 
   filter(tag == "test_accuracy") %>% 
-  slice_max(n = 3) %>% 
+  slice_max(value, n = 3)
+
+top3_runs
+
+top3_runs %>% 
   runs_tag("top3") %>% 
   runs_export("./top3-runs")
 ```
@@ -375,7 +380,7 @@ selections. See `?resolve_run_ids()` for details.
 `guild` can also be used directly from the terminal. Call the R function
 `export_guild_cli()` to place the `guild` executable on your PATH:
 
-```{r}
+```{r, eval = FALSE}
 export_guild_cli(dest = "~/bin")
 ```
 
