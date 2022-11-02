@@ -182,7 +182,7 @@ if(FALSE) {
 
 # TODO: other subcommands to wrap + export:
 # next:
-#   download, publish,
+#   download, publish, api merge
 # later:
 #   remotes, remote, pull, push, runs pull, runs push,
 #   remote start, remote stop, sys shutdown-timer, sys s3-sync
