@@ -400,6 +400,10 @@ top3_runs %>%
   runs_export("./top3-runs")
 ```
 
+```{r, include = FALSE}
+unlink("./top3-runs", recursive = TRUE)
+```
+
 The `runs` arguments can be supplied as dataframe returned by
 `ls_runs()` or `ls_scalars()`, like in the example above. `runs` can
 also be a character vector, with there is a flexible syntax supported
@@ -432,7 +436,7 @@ via script frontmatter can be found
 `export_guild_cli()` to place the `guild` executable installed by
 `guildai::install_guild()` on your PATH:
 
-```{r, eval = FALSE}
+``` r
 export_guild_cli(dest = "~/bin")
 ```
 
@@ -512,6 +516,10 @@ df
 library(ggplot2)
 ggplot(df, aes(x = units, y = test_accuracy)) +
   geom_point() + geom_smooth()
+```
+
+```{r, include = FALSE}
+unlink("train.R")
 ```
 
 ### Addin
