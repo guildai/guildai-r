@@ -21,12 +21,6 @@
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/intro.html">Introduction</a>
-  </div>
-</li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
@@ -49,7 +43,7 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">view_runs_diff</span><span class="op">(</span></span>
-<span>  ids <span class="op">=</span> <span class="fu"><a href="ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="st">"1:2"</span><span class="op">)</span><span class="op">$</span><span class="va">id</span>,</span>
+<span>  runs <span class="op">=</span> <span class="st">"1:2"</span>,</span>
 <span>  output_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">ids</span>, collapse <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  template <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"templates/compare-runs.qmd"</span>, package <span class="op">=</span> <span class="st">"guildai"</span><span class="op">)</span>,</span>
 <span>  viewer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"guildai.viewer"</span><span class="op">)</span>,</span>
@@ -59,11 +53,7 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>ids, </dt>
-<dd><p>a length 2 character vector or run ids</p></dd>
-
-
-<dt>output_dir</dt>
+    <dl><dt>output_dir</dt>
 <dd><p>where to place the rendered html</p></dd>
 
 
@@ -79,6 +69,10 @@ default web browser, <code><a href="https://rdrr.io/r/utils/browseURL.html" clas
 
 <dt>...</dt>
 <dd><p>passed on to <code><a href="https://rdrr.io/pkg/quarto/man/quarto_render.html" class="external-link">quarto::quarto_render()</a></code></p></dd>
+
+
+<dt>ids, </dt>
+<dd><p>a length 2 character vector or run ids</p></dd>
 
 </dl></div>
     <div class="section level2">
