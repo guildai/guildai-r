@@ -315,8 +315,6 @@ runs_comment <- function(runs = NULL, comment = NULL, ..., delete = NULL, clear 
 #' ))
 #' }
 resolve_run_ids <- function(runs = NULL, ...) {
-  if(identical(runs, "--help"))
-    return(invisible(guild("select --help")))
   selection <- maybe_extract_run_ids(runs)
   if(...length() || identical(selection, runs))
     selection <- guild("select --all", ..., selection, stdout = TRUE)
