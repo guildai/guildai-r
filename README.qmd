@@ -389,19 +389,19 @@ example:
 ```{r paged.print=FALSE}
 library(dplyr)
 
-top3_runs <- ls_scalars() %>% 
+best <- ls_scalars() %>% 
   filter(tag == "test_accuracy") %>% 
-  slice_max(value, n = 3)
+  slice_max(value)
 
-top3_runs
+best
 
-top3_runs %>% 
-  runs_tag("top3") %>% 
-  runs_export("./top3-runs")
+best %>% 
+  runs_tag("best") %>% 
+  runs_export("./best-runs")
 ```
 
 ```{r, include = FALSE}
-unlink("./top3-runs", recursive = TRUE)
+unlink("./best-runs", recursive = TRUE)
 ```
 
 The `runs` arguments can be supplied as dataframe returned by
