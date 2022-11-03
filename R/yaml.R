@@ -19,10 +19,10 @@ read_yaml <- function(file, ...) {
 
 parse_yaml <-  function(string, ...) {
   yaml_load_args <- utils::modifyList(
-    list(string = string,
+    list(string = paste(string, collapse = "\n"),
          handlers = list(seq = identity)), # don't simplify lists),
     list(...))
-  do.call(yaml::yaml.load, yaml_load_args)
+  maybe_as_yaml(do.call(yaml::yaml.load, yaml_load_args))
 }
 
 as_yaml <- function(x)
