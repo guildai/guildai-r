@@ -5,7 +5,7 @@
 \title{compare runs}
 \usage{
 view_runs_diff(
-  ids = ls_runs("1:2")$id,
+  runs = "1:2",
   output_dir = file.path(tempdir(), paste(ids, collapse = "-")),
   template = system.file("templates/compare-runs.qmd", package = "guildai"),
   viewer = getOption("guildai.viewer"),
@@ -13,8 +13,6 @@ view_runs_diff(
 )
 }
 \arguments{
-\item{ids, }{a length 2 character vector or run ids}
-
 \item{output_dir}{where to place the rendered html}
 
 \item{template}{report template}
@@ -24,6 +22,8 @@ to an internal page viewer if available, otherwise to the R session
 default web browser, \code{utils::browseURL()}).}
 
 \item{...}{passed on to \code{quarto::quarto_render()}}
+
+\item{ids, }{a length 2 character vector or run ids}
 }
 \value{
 path to the generated html, invisibly

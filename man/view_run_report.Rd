@@ -5,7 +5,7 @@
 \title{Render a Run Summary Report}
 \usage{
 view_run_report(
-  id = ls_runs("1")$id,
+  run = "1",
   output_dir = file.path(tempdir(), id),
   template = system.file("templates/view-run.qmd", package = "guildai"),
   viewer = getOption("guildai.viewer"),
@@ -13,8 +13,6 @@ view_run_report(
 )
 }
 \arguments{
-\item{id}{run id. Defaults to the latest run.}
-
 \item{output_dir}{directory where to place the rendered document.}
 
 \item{template}{path to a parameterized quarto document.}
@@ -24,6 +22,8 @@ to an internal page viewer if available, otherwise to the R session
 default web browser, \code{utils::browseURL()}).}
 
 \item{...}{passed on to \code{quarto::quarto_render()}}
+
+\item{id}{run id. Defaults to the latest run.}
 }
 \value{
 path to the generated html, invisibly

@@ -16,12 +16,15 @@
 #' @return path to the generated html, invisibly
 #' @export
 view_run_report <- function(
-  id = ls_runs("1")$id,
+  run = "1",
   output_dir = file.path(tempdir(), id),
   template = system.file("templates/view-run.qmd", package = "guildai"),
   viewer = getOption("guildai.viewer"),
   ...)
 {
+
+  id <- resolve_run_ids(run)
+
   if(!dir.exists(output_dir))
     dir.create(output_dir, recursive = TRUE)
 
@@ -103,12 +106,13 @@ browser_viewer <- function(viewer_dir, browser = utils::browseURL) {
 #' @return path to the generated html, invisibly
 #' @export
 view_runs_diff <- function(
-    ids = ls_runs("1:2")$id,
+    runs = "1:2",
     output_dir = file.path(tempdir(), paste(ids, collapse = "-")),
     template = system.file("templates/compare-runs.qmd", package = "guildai"),
     viewer = getOption("guildai.viewer"),
     ...)
 {
+  ids <- resolve_run_ids(runs)
   stopifnot(length(ids) == 2)
 
   if(!dir.exists(output_dir))
