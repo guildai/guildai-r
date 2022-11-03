@@ -63,8 +63,9 @@ keras::install_keras()
 
 ### Launch a run
 
-To start, we’ll use an example training script. Here is what it looks
-like:
+To start, we’ll use an example training script,
+[“train.R”](https://github.com/t-kalinowski/guildai-r/blob/main/inst/examples/fashion-mnist.R).
+Here is what it looks like:
 
 ``` r
 library(keras)
@@ -127,8 +128,8 @@ cat('test_accuracy:', score$accuracy, "\n")
 # saveRDS(history, "history.rds")
 ```
 
-To train a model with **guildai**, use the `guild_run()` function in
-place of the `source()` function to execute your R script. For example:
+To train a model with guildai, use the `guild_run()` function in place
+of the `source()` function to execute your R script. For example:
 
 ``` r
 guild_run("train.R")
@@ -177,25 +178,25 @@ guild_run("train.R")
 #> +       epochs = epochs,
 #> +       verbose = 2)
 #> Epoch 1/10
-#> 1500/1500 - 4s - loss: 0.5467 - accuracy: 0.8094 - val_loss: 0.4348 - val_accuracy: 0.8504 - 4s/epoch - 2ms/step
+#> 1500/1500 - 3s - loss: 0.5418 - accuracy: 0.8124 - val_loss: 0.4483 - val_accuracy: 0.8374 - 3s/epoch - 2ms/step
 #> Epoch 2/10
-#> 1500/1500 - 3s - loss: 0.4050 - accuracy: 0.8562 - val_loss: 0.3792 - val_accuracy: 0.8651 - 3s/epoch - 2ms/step
+#> 1500/1500 - 2s - loss: 0.4060 - accuracy: 0.8555 - val_loss: 0.3982 - val_accuracy: 0.8558 - 2s/epoch - 1ms/step
 #> Epoch 3/10
-#> 1500/1500 - 2s - loss: 0.3658 - accuracy: 0.8679 - val_loss: 0.3589 - val_accuracy: 0.8734 - 2s/epoch - 2ms/step
+#> 1500/1500 - 2s - loss: 0.3670 - accuracy: 0.8674 - val_loss: 0.3861 - val_accuracy: 0.8579 - 2s/epoch - 1ms/step
 #> Epoch 4/10
-#> 1500/1500 - 2s - loss: 0.3401 - accuracy: 0.8778 - val_loss: 0.3564 - val_accuracy: 0.8764 - 2s/epoch - 1ms/step
+#> 1500/1500 - 2s - loss: 0.3411 - accuracy: 0.8769 - val_loss: 0.3550 - val_accuracy: 0.8702 - 2s/epoch - 1ms/step
 #> Epoch 5/10
-#> 1500/1500 - 2s - loss: 0.3217 - accuracy: 0.8827 - val_loss: 0.3544 - val_accuracy: 0.8755 - 2s/epoch - 2ms/step
+#> 1500/1500 - 2s - loss: 0.3212 - accuracy: 0.8830 - val_loss: 0.3901 - val_accuracy: 0.8532 - 2s/epoch - 1ms/step
 #> Epoch 6/10
-#> 1500/1500 - 2s - loss: 0.3071 - accuracy: 0.8876 - val_loss: 0.3476 - val_accuracy: 0.8749 - 2s/epoch - 1ms/step
+#> 1500/1500 - 2s - loss: 0.3076 - accuracy: 0.8852 - val_loss: 0.3374 - val_accuracy: 0.8794 - 2s/epoch - 1ms/step
 #> Epoch 7/10
-#> 1500/1500 - 3s - loss: 0.2925 - accuracy: 0.8921 - val_loss: 0.3434 - val_accuracy: 0.8748 - 3s/epoch - 2ms/step
+#> 1500/1500 - 2s - loss: 0.2941 - accuracy: 0.8911 - val_loss: 0.3450 - val_accuracy: 0.8751 - 2s/epoch - 1ms/step
 #> Epoch 8/10
-#> 1500/1500 - 2s - loss: 0.2831 - accuracy: 0.8947 - val_loss: 0.3543 - val_accuracy: 0.8763 - 2s/epoch - 2ms/step
+#> 1500/1500 - 2s - loss: 0.2831 - accuracy: 0.8958 - val_loss: 0.3475 - val_accuracy: 0.8758 - 2s/epoch - 1ms/step
 #> Epoch 9/10
-#> 1500/1500 - 2s - loss: 0.2738 - accuracy: 0.8988 - val_loss: 0.3553 - val_accuracy: 0.8738 - 2s/epoch - 2ms/step
+#> 1500/1500 - 2s - loss: 0.2738 - accuracy: 0.8982 - val_loss: 0.3393 - val_accuracy: 0.8783 - 2s/epoch - 1ms/step
 #> Epoch 10/10
-#> 1500/1500 - 2s - loss: 0.2667 - accuracy: 0.9009 - val_loss: 0.3373 - val_accuracy: 0.8832 - 2s/epoch - 2ms/step
+#> 1500/1500 - 2s - loss: 0.2665 - accuracy: 0.9004 - val_loss: 0.3571 - val_accuracy: 0.8741 - 2s/epoch - 1ms/step
 #> > plot(history)
 #> > # Evaluate model ----
 #> >
@@ -204,9 +205,9 @@ guild_run("train.R")
 #> +            verbose = 0) %>%
 #> +   as.list()
 #> > cat('test_loss:', score$loss, "\n")
-#> test_loss: 0.36685037612915039
+#> test_loss: 0.38621187210083008
 #> > cat('test_accuracy:', score$accuracy, "\n")
-#> test_accuracy: 0.87269997596740723
+#> test_accuracy: 0.86570000648498535
 #> > # save_model_tf(model, "model.keras")
 #> > # saveRDS(history, "history.rds")
 #> >
@@ -220,12 +221,11 @@ shown at the R console (the same output stream you would see with
 
 ### View Runs
 
-You can view your runs (including while they are running) with the
-“Guild View” application, by calling `guild_view()`. The Guild View App
-is run manager and visualizer. You can use it to search, filter,
-visualize, compare, view diffs of run source code and output, and more!
-It also bundles TensorBoard as an additional visualization tool for
-viewing runs.
+Call `guild_view()` to launch the *Guild View* application, which you
+can use to visualize and manage your runs. You can use it to search,
+filter, visualize, compare, view diffs of run source code and output,
+and more! It also bundles TensorBoard as an additional visualization
+tool for viewing runs.
 
 ``` r
 guild_view()
@@ -233,8 +233,7 @@ guild_view()
 
 TODO: SCREENSHOTS
 
-You can retrieve a data frame with run information in R using
-`ls_runs()`:
+Retrieve a data frame with run information in R using `ls_runs()`:
 
 ``` r
 run <- ls_runs()
@@ -247,16 +246,16 @@ tibble::glimpse(run)
 #> $ scalars    <list> [<tbl_df[2 x 14]>]
 #> $ flags      <tibble[,4]> <tbl_df[1 x 4]>
 #> $ operation  <chr> "train.R"
-#> $ started    <dttm> 2022-11-03 13:48:26
-#> $ stopped    <dttm> 2022-11-03 13:48:58
+#> $ started    <dttm> 2022-11-03 16:51:56
+#> $ stopped    <dttm> 2022-11-03 16:52:26
 #> $ comments   <list> [<tbl_df[0 x 4]>]
 #> $ status     <chr> "completed"
 #> $ exitStatus <int> 0
 #> $ otherAttrs <df[,1]> <data.frame[1 x 1]>
 #> $ deps       <list> []
 #> $ projectDir <chr> "/home/tomasz/guild/guildai-r"
-#> $ dir        <chr> "/home/tomasz/guild/guildai-r/.guild/runs/1d06e4b5ab1f46418…
-#> $ id         <chr> "1d06e4b5ab1f46418cf739576e82b909"
+#> $ dir        <chr> "/home/tomasz/guild/guildai-r/.guild/runs/32bece41d9a74e0db…
+#> $ id         <chr> "32bece41d9a74e0db32d9f3936279552"
 ```
 
 `ls_runs()` returns a data frame with information about runs. In this
@@ -268,15 +267,15 @@ returns a 1-row data frame.
 `guild_view()` and `ls_runs()` provide two convenient ways to gather and
 present the information from runs. Importantly however, the run
 directory is easily accessible. There you’ll find any files, plots,
-logs, or other output generated by a run. The run directory also contain
-additional metadata about the runs that guild recorded as plain text
-files, like the starting random seed, environment variables, information
-about the package versions, and other metadata frequently useful for
+logs, or other output generated by a run. The run directory also
+contains additional metadata about the runs that guild recorded, like
+the starting random seed, environment variables, information about the
+package versions, and other metadata frequently useful for
 reproducability.
 
 ``` r
 fs::dir_tree(run$dir[1], all = TRUE)
-#> /home/tomasz/guild/guildai-r/.guild/runs/1d06e4b5ab1f46418cf739576e82b909
+#> /home/tomasz/guild/guildai-r/.guild/runs/32bece41d9a74e0db32d9f3936279552
 #> ├── .guild
 #> │   ├── attrs
 #> │   │   ├── cmd
@@ -298,7 +297,7 @@ fs::dir_tree(run$dir[1], all = TRUE)
 #> │   │   ├── user
 #> │   │   ├── user_flags
 #> │   │   └── vcs_commit
-#> │   ├── events.out.tfevents.1667497738.horse.284503.0
+#> │   ├── events.out.tfevents.1667508746.horse.10864.0
 #> │   ├── manifest
 #> │   ├── opref
 #> │   ├── output
@@ -309,8 +308,8 @@ fs::dir_tree(run$dir[1], all = TRUE)
 #>     └── Rplot001.png
 ```
 
-A run can also be used to generate a summary report, a paramaterized
-quarto document:
+A run can be used to generate a summary report, a paramaterized quarto
+document:
 
 ``` r
 view_run_report(run$id)
@@ -328,13 +327,9 @@ code we re-run the script using `guild_run()` as before:
 guild_run("train.R")
 ```
 
-This will also show us a report summarizing the results of the run, but
-what we are really interested in is a comparison between this run and
-the previous one.
-
 The individual metrics `test_loss` and `test_accuracy` are visible in
 the comparison table in the Guild View application. You can also view
-just the diffs of two runs with `view_runs_diff()` function:
+the diffs of two runs with `view_runs_diff()` function:
 
 ``` r
 ls_runs(1:2) %>% # select the last 2 runs
@@ -353,8 +348,7 @@ the script before launching the second run, can be performed by
 
 By default, guild identifies all top-level assignments of scalar
 literals in an R script as *run flags* that can be modified per-run.
-Flags can be numerics (doubles, integers, or complex), strings, or
-booleans.
+Flags can be numeric (double, integer), string, boolean, or complex.
 
 In other words, expressions like this in the R script are identified as
 flags:
@@ -366,8 +360,8 @@ batch_size <- 32
 epochs <- 10
 ```
 
-You can quickly see what flags are available in an R script by passing
-`--help-op` (more on this syntax later).
+See what flags are available in an R script by calling `guild_run()`
+with `"--help-op"` (more on this syntax later).
 
 ``` r
 guild_run("train.R", "--help-op")
@@ -450,8 +444,8 @@ units <- 32
 activation <- "relu"
 ```
 
-Now, the `description`s and constraints will appear in `--help-op` and
-related locations.
+Now, the flag `description`s and constraints will appear in `--help-op`
+and related locations.
 
 ### Flag destinations
 
@@ -483,8 +477,8 @@ runs %>%
 #> # A tibble: 2 × 2
 #>   id                               flags$batch_size $epochs $learning_r…¹ $units
 #>   <chr>                                       <dbl>   <dbl>         <dbl>  <dbl>
-#> 1 3c874cd260fa44efae4fbf96497d2396               32      20         0.003    128
-#> 2 1d06e4b5ab1f46418cf739576e82b909               32      10         0.001     64
+#> 1 5b584ff6ad47499db376f434fa77c354               32      20         0.003    128
+#> 2 32bece41d9a74e0db32d9f3936279552               32      10         0.001     64
 #> # … with abbreviated variable name ¹​$learning_rate
 ```
 
@@ -500,25 +494,25 @@ runs %>%
 #> # A tibble: 2 × 2
 #>   id                               scalars
 #>   <chr>                            <list>
-#> 1 3c874cd260fa44efae4fbf96497d2396 <tibble [2 × 14]>
-#> 2 1d06e4b5ab1f46418cf739576e82b909 <tibble [2 × 14]>
+#> 1 5b584ff6ad47499db376f434fa77c354 <tibble [2 × 14]>
+#> 2 32bece41d9a74e0db32d9f3936279552 <tibble [2 × 14]>
 
 glimpse(runs$scalars[[1]])
 #> Rows: 2
 #> Columns: 14
-#> $ run        <chr> "3c874cd260fa44efae4fbf96497d2396", "3c874cd260fa44efae4fbf…
+#> $ run        <chr> "5b584ff6ad47499db376f434fa77c354", "5b584ff6ad47499db376f4…
 #> $ prefix     <chr> ".guild", ".guild"
 #> $ tag        <chr> "test_accuracy", "test_loss"
-#> $ first_val  <dbl> 0.8794000, 0.3985335
+#> $ first_val  <dbl> 0.8776000, 0.4228334
 #> $ first_step <int> 0, 0
-#> $ last_val   <dbl> 0.8794000, 0.3985335
+#> $ last_val   <dbl> 0.8776000, 0.4228334
 #> $ last_step  <int> 0, 0
-#> $ min_val    <dbl> 0.8794000, 0.3985335
+#> $ min_val    <dbl> 0.8776000, 0.4228334
 #> $ min_step   <int> 0, 0
-#> $ max_val    <dbl> 0.8794000, 0.3985335
+#> $ max_val    <dbl> 0.8776000, 0.4228334
 #> $ max_step   <int> 0, 0
-#> $ avg_val    <dbl> 0.8794000, 0.3985335
-#> $ total      <dbl> 0.8794000, 0.3985335
+#> $ avg_val    <dbl> 0.8776000, 0.4228334
+#> $ total      <dbl> 0.8776000, 0.4228334
 #> $ count      <int> 1, 1
 ```
 
@@ -544,19 +538,19 @@ ls_scalars()
 #> # A tibble: 4 × 5
 #>   run                              path   tag           value  step
 #>   <chr>                            <chr>  <chr>         <dbl> <dbl>
-#> 1 3c874cd260fa44efae4fbf96497d2396 .guild test_loss     0.399     0
-#> 2 3c874cd260fa44efae4fbf96497d2396 .guild test_accuracy 0.879     0
-#> 3 1d06e4b5ab1f46418cf739576e82b909 .guild test_loss     0.367     0
-#> 4 1d06e4b5ab1f46418cf739576e82b909 .guild test_accuracy 0.873     0
+#> 1 5b584ff6ad47499db376f434fa77c354 .guild test_loss     0.423     0
+#> 2 5b584ff6ad47499db376f434fa77c354 .guild test_accuracy 0.878     0
+#> 3 32bece41d9a74e0db32d9f3936279552 .guild test_loss     0.386     0
+#> 4 32bece41d9a74e0db32d9f3936279552 .guild test_accuracy 0.866     0
 ```
 
 ## Managing runs
 
-Guild comes with a comprehensive set of functions for managing runs.
+Guild comes with a family of functions for managing runs.
 
-- annotate runs: `runs_comment()`, `runs_mark()` and `runs_tag()`.
-- move, archive, or copy runs: `runs_export()` and `runs_import()`
-- delete runs: `runs_delete()` `runs_purge()` `runs_restore()`
+- Annotate runs: `runs_comment()`, `runs_mark()` and `runs_tag()`.
+- Move, archive, or copy runs: `runs_export()` and `runs_import()`.
+- Delete runs: `runs_delete()` `runs_purge()` `runs_restore()`.
 
 The `runs_*` family of functions all take `runs` as a first argument,
 and can be composed with `%>%` and `ls_runs()` or `ls_scalars()`. For
@@ -573,18 +567,19 @@ best
 #> # A tibble: 1 × 5
 #>   run                              path   tag           value  step
 #>   <chr>                            <chr>  <chr>         <dbl> <dbl>
-#> 1 3c874cd260fa44efae4fbf96497d2396 .guild test_accuracy 0.879     0
+#> 1 5b584ff6ad47499db376f434fa77c354 .guild test_accuracy 0.878     0
 
 best %>%
   runs_tag("best") %>%
   runs_export("./best-runs")
 ```
 
-The `runs` arguments can be supplied as dataframe returned by
+The `runs` arguments can be supplied as data frame, as returned by
 `ls_runs()` or `ls_scalars()`, like in the example above. `runs` can
-also be a character vector, with there is a flexible syntax supported
-for specifying runs selections: `runs` can be an `id`, an integer (the
-n-th last run), or filter specification like `--running`. See
+also be a character vector, with a flexible syntax supported for
+specifying runs selections: For example, `runs` can be an `id`, an
+integer (the n-th last run), or any combination of filter specifications
+like `--running` and `--started 'last hour'`. See
 `resolve_run_ids("--help")` for details.
 
 ## Supplying guild options
@@ -604,7 +599,7 @@ by modifying the front of the script like this:
 
 A comprehensive listing of all the options that can be supplied to guild
 via script frontmatter can be found
-[here](https://my.guild.ai/t/guild-file-reference/197#operation-attributes-6)
+[here](https://my.guild.ai/t/guild-file-reference/197#operation-attributes-6).
 
 ## Using guild from the terminal
 
@@ -665,14 +660,14 @@ units <- (2 ^ (4:11)) %>% c(diff(., 2)) %>% sort()
 units
 #>  [1]   16   32   48   64   96  128  192  256  384  512  768 1024 1536 2048
 guildai::guild_run("train.R",
-          flags = list(units = units),
-          echo = FALSE)
+                   flags = list(units = units),
+                   echo = FALSE)
 ```
 
 We can see compare run flags and run scalars from R:
 
 ``` r
-runs <- ls_runs(as.character(seq_along(units)))
+runs <- ls_runs(seq_along(units))
 
 df <- runs %>%
   select(flags, scalars) %>%
@@ -690,20 +685,20 @@ df
 #> # A tibble: 14 × 6
 #>    batch_size epochs learning_rate units test_accuracy test_loss
 #>         <dbl>  <dbl>         <dbl> <dbl>         <dbl>     <dbl>
-#>  1         32     10         0.001    16         0.834     0.460
-#>  2         32     10         0.001    32         0.870     0.371
-#>  3         32     10         0.001    48         0.870     0.359
-#>  4         32     10         0.001    64         0.878     0.353
-#>  5         32     10         0.001    96         0.877     0.346
-#>  6         32     10         0.001   128         0.883     0.350
-#>  7         32     10         0.001   192         0.884     0.344
-#>  8         32     10         0.001   256         0.882     0.335
-#>  9         32     10         0.001   384         0.881     0.345
-#> 10         32     10         0.001   512         0.879     0.351
-#> 11         32     10         0.001   768         0.886     0.330
-#> 12         32     10         0.001  1024         0.880     0.346
-#> 13         32     10         0.001  1536         0.884     0.354
-#> 14         32     10         0.001  2048         0.886     0.351
+#>  1         32     10         0.001    16         0.857     0.413
+#>  2         32     10         0.001    32         0.868     0.378
+#>  3         32     10         0.001    48         0.876     0.363
+#>  4         32     10         0.001    64         0.877     0.348
+#>  5         32     10         0.001    96         0.875     0.359
+#>  6         32     10         0.001   128         0.885     0.333
+#>  7         32     10         0.001   192         0.880     0.343
+#>  8         32     10         0.001   256         0.885     0.340
+#>  9         32     10         0.001   384         0.876     0.350
+#> 10         32     10         0.001   512         0.882     0.361
+#> 11         32     10         0.001   768         0.879     0.343
+#> 12         32     10         0.001  1024         0.877     0.373
+#> 13         32     10         0.001  1536         0.877     0.357
+#> 14         32     10         0.001  2048         0.877     0.363
 ```
 
 ``` r
