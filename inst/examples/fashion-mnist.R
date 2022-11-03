@@ -1,20 +1,20 @@
 library(keras)
 
 # Prepare data ----
+
 fashion_mnist <- dataset_fashion_mnist()
 
 c(train_images, train_labels) %<-% fashion_mnist$train
 c(test_images, test_labels) %<-% fashion_mnist$test
 
 train_images <- train_images / 255
- test_images <- test_images / 255
+test_images <- test_images / 255
 
 # Define model ----
 
 units <- 64
 
-model <- keras_model_sequential(input_shape = c(28, 28))
-model %>%
+model <- keras_model_sequential(input_shape = c(28, 28)) %>%
   layer_flatten() %>%
   layer_dense(units = units, activation = 'relu') %>%
   layer_dense(units = 10, activation = 'softmax')
@@ -33,17 +33,7 @@ model
 # Fit model ----
 
 batch_size <- 32
-epochs <- 20
-
-.fast <- TRUE
-if (.fast) {
-  n <- 1:20
-  train_images %<>% { .[n, ,] }
-  test_images %<>% { .[n, ,] }
-  test_labels %<>% { .[n] }
-  train_labels %<>% { .[n] }
-  epochs <- 2
-}
+epochs <- 10
 
 history <- model %>%
   fit(train_images, train_labels,

@@ -10,3 +10,4 @@
 ^pkgdown$
 ^vignettes/articles$
 ^vignettes/articles/\.guild$
+^README\.qmd$
