@@ -475,11 +475,6 @@ ls_runs(c("--marked", "--started", "last hour"))
 ls_runs("--marked", c("--started", "last hour"))
 ```
 
-```{r}
-knitr::knit_exit()
-```
-
-
 ## Using Flags and Scalars Together
 
 To tie things together, we'll use guild to explore what impact `units`

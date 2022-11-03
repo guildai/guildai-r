@@ -177,25 +177,25 @@ guild_run("train.R")
 #> +       epochs = epochs,
 #> +       verbose = 2)
 #> Epoch 1/10
-#> 1500/1500 - 4s - loss: 0.5422 - accuracy: 0.8121 - val_loss: 0.4255 - val_accuracy: 0.8508 - 4s/epoch - 2ms/step
+#> 1500/1500 - 3s - loss: 0.5469 - accuracy: 0.8086 - val_loss: 0.4447 - val_accuracy: 0.8463 - 3s/epoch - 2ms/step
 #> Epoch 2/10
-#> 1500/1500 - 3s - loss: 0.4069 - accuracy: 0.8549 - val_loss: 0.4219 - val_accuracy: 0.8403 - 3s/epoch - 2ms/step
+#> 1500/1500 - 2s - loss: 0.4036 - accuracy: 0.8564 - val_loss: 0.3847 - val_accuracy: 0.8622 - 2s/epoch - 2ms/step
 #> Epoch 3/10
-#> 1500/1500 - 3s - loss: 0.3692 - accuracy: 0.8658 - val_loss: 0.3648 - val_accuracy: 0.8678 - 3s/epoch - 2ms/step
+#> 1500/1500 - 2s - loss: 0.3642 - accuracy: 0.8700 - val_loss: 0.3563 - val_accuracy: 0.8739 - 2s/epoch - 1ms/step
 #> Epoch 4/10
-#> 1500/1500 - 2s - loss: 0.3400 - accuracy: 0.8773 - val_loss: 0.3619 - val_accuracy: 0.8742 - 2s/epoch - 2ms/step
+#> 1500/1500 - 2s - loss: 0.3426 - accuracy: 0.8768 - val_loss: 0.3547 - val_accuracy: 0.8736 - 2s/epoch - 1ms/step
 #> Epoch 5/10
-#> 1500/1500 - 3s - loss: 0.3226 - accuracy: 0.8829 - val_loss: 0.3411 - val_accuracy: 0.8759 - 3s/epoch - 2ms/step
+#> 1500/1500 - 2s - loss: 0.3232 - accuracy: 0.8825 - val_loss: 0.3388 - val_accuracy: 0.8779 - 2s/epoch - 1ms/step
 #> Epoch 6/10
-#> 1500/1500 - 2s - loss: 0.3076 - accuracy: 0.8869 - val_loss: 0.3860 - val_accuracy: 0.8612 - 2s/epoch - 2ms/step
+#> 1500/1500 - 2s - loss: 0.3082 - accuracy: 0.8865 - val_loss: 0.3457 - val_accuracy: 0.8784 - 2s/epoch - 1ms/step
 #> Epoch 7/10
-#> 1500/1500 - 2s - loss: 0.2975 - accuracy: 0.8901 - val_loss: 0.3387 - val_accuracy: 0.8813 - 2s/epoch - 1ms/step
+#> 1500/1500 - 2s - loss: 0.2939 - accuracy: 0.8920 - val_loss: 0.3350 - val_accuracy: 0.8845 - 2s/epoch - 1ms/step
 #> Epoch 8/10
-#> 1500/1500 - 2s - loss: 0.2851 - accuracy: 0.8951 - val_loss: 0.3346 - val_accuracy: 0.8807 - 2s/epoch - 1ms/step
+#> 1500/1500 - 2s - loss: 0.2834 - accuracy: 0.8961 - val_loss: 0.3372 - val_accuracy: 0.8809 - 2s/epoch - 1ms/step
 #> Epoch 9/10
-#> 1500/1500 - 2s - loss: 0.2753 - accuracy: 0.8992 - val_loss: 0.3252 - val_accuracy: 0.8829 - 2s/epoch - 1ms/step
+#> 1500/1500 - 2s - loss: 0.2746 - accuracy: 0.8987 - val_loss: 0.3379 - val_accuracy: 0.8802 - 2s/epoch - 1ms/step
 #> Epoch 10/10
-#> 1500/1500 - 2s - loss: 0.2675 - accuracy: 0.8999 - val_loss: 0.3257 - val_accuracy: 0.8820 - 2s/epoch - 1ms/step
+#> 1500/1500 - 2s - loss: 0.2655 - accuracy: 0.9022 - val_loss: 0.3544 - val_accuracy: 0.8738 - 2s/epoch - 1ms/step
 #> > plot(history)
 #> > # Evaluate model ----
 #> >
@@ -204,9 +204,9 @@ guild_run("train.R")
 #> +            verbose = 0) %>%
 #> +   as.list()
 #> > cat('test_loss:', score$loss, "\n")
-#> test_loss: 0.34975650906562805
+#> test_loss: 0.38945847749710083
 #> > cat('test_accuracy:', score$accuracy, "\n")
-#> test_accuracy: 0.87470000982284546
+#> test_accuracy: 0.86540001630783081
 #> > # save_model_tf(model, "model.keras")
 #> > # saveRDS(history, "history.rds")
 #> >
@@ -247,16 +247,16 @@ tibble::glimpse(run)
 #> $ scalars    <list> [<tbl_df[2 x 14]>]
 #> $ flags      <tibble[,4]> <tbl_df[1 x 4]>
 #> $ operation  <chr> "train.R"
-#> $ started    <dttm> 2022-11-03 12:34:20
-#> $ stopped    <dttm> 2022-11-03 12:34:52
+#> $ started    <dttm> 2022-11-03 12:50:40
+#> $ stopped    <dttm> 2022-11-03 12:51:10
 #> $ comments   <list> [<tbl_df[0 x 4]>]
 #> $ status     <chr> "completed"
 #> $ exitStatus <int> 0
 #> $ otherAttrs <df[,1]> <data.frame[1 x 1]>
 #> $ deps       <list> []
 #> $ projectDir <chr> "/home/tomasz/guild/guildai-r"
-#> $ dir        <chr> "/home/tomasz/guild/guildai-r/.guild/runs/511a690cbb914713a…
-#> $ id         <chr> "511a690cbb914713a255ebfb97af1769"
+#> $ dir        <chr> "/home/tomasz/guild/guildai-r/.guild/runs/0b85e8dfc7074b6c8…
+#> $ id         <chr> "0b85e8dfc7074b6c8f6b3b1b754e21c0"
 ```
 
 `ls_runs()` returns a data frame with information about runs. In this
@@ -276,7 +276,7 @@ reproducability.
 
 ``` r
 fs::dir_tree(run$dir[1], all = TRUE)
-#> /home/tomasz/guild/guildai-r/.guild/runs/511a690cbb914713a255ebfb97af1769
+#> /home/tomasz/guild/guildai-r/.guild/runs/0b85e8dfc7074b6c8f6b3b1b754e21c0
 #> ├── .guild
 #> │   ├── attrs
 #> │   │   ├── cmd
@@ -298,7 +298,7 @@ fs::dir_tree(run$dir[1], all = TRUE)
 #> │   │   ├── user
 #> │   │   ├── user_flags
 #> │   │   └── vcs_commit
-#> │   ├── events.out.tfevents.1667493292.horse.265913.0
+#> │   ├── events.out.tfevents.1667494270.horse.269861.0
 #> │   ├── manifest
 #> │   ├── opref
 #> │   ├── output
@@ -483,8 +483,8 @@ runs %>%
 #> # A tibble: 2 × 2
 #>   id                               flags$batch_size $epochs $learning_r…¹ $units
 #>   <chr>                                       <dbl>   <dbl>         <dbl>  <dbl>
-#> 1 33bd62ef1c8c4d4c89b9f9d16150c2eb               32      20         0.003    128
-#> 2 511a690cbb914713a255ebfb97af1769               32      10         0.001     64
+#> 1 c976e42c0df841b2889b3f30ec828222               32      20         0.003    128
+#> 2 0b85e8dfc7074b6c8f6b3b1b754e21c0               32      10         0.001     64
 #> # … with abbreviated variable name ¹​$learning_rate
 ```
 
@@ -500,25 +500,25 @@ runs %>%
 #> # A tibble: 2 × 2
 #>   id                               scalars
 #>   <chr>                            <list>
-#> 1 33bd62ef1c8c4d4c89b9f9d16150c2eb <tibble [2 × 14]>
-#> 2 511a690cbb914713a255ebfb97af1769 <tibble [2 × 14]>
+#> 1 c976e42c0df841b2889b3f30ec828222 <tibble [2 × 14]>
+#> 2 0b85e8dfc7074b6c8f6b3b1b754e21c0 <tibble [2 × 14]>
 
 glimpse(runs$scalars[[1]])
 #> Rows: 2
 #> Columns: 14
-#> $ run        <chr> "33bd62ef1c8c4d4c89b9f9d16150c2eb", "33bd62ef1c8c4d4c89b9f9…
+#> $ run        <chr> "c976e42c0df841b2889b3f30ec828222", "c976e42c0df841b2889b3f…
 #> $ prefix     <chr> ".guild", ".guild"
 #> $ tag        <chr> "test_accuracy", "test_loss"
-#> $ first_val  <dbl> 0.8759000, 0.4181767
+#> $ first_val  <dbl> 0.8689000, 0.4288753
 #> $ first_step <int> 0, 0
-#> $ last_val   <dbl> 0.8759000, 0.4181767
+#> $ last_val   <dbl> 0.8689000, 0.4288753
 #> $ last_step  <int> 0, 0
-#> $ min_val    <dbl> 0.8759000, 0.4181767
+#> $ min_val    <dbl> 0.8689000, 0.4288753
 #> $ min_step   <int> 0, 0
-#> $ max_val    <dbl> 0.8759000, 0.4181767
+#> $ max_val    <dbl> 0.8689000, 0.4288753
 #> $ max_step   <int> 0, 0
-#> $ avg_val    <dbl> 0.8759000, 0.4181767
-#> $ total      <dbl> 0.8759000, 0.4181767
+#> $ avg_val    <dbl> 0.8689000, 0.4288753
+#> $ total      <dbl> 0.8689000, 0.4288753
 #> $ count      <int> 1, 1
 ```
 
@@ -544,10 +544,10 @@ ls_scalars()
 #> # A tibble: 4 × 5
 #>   run                              path   tag           value  step
 #>   <chr>                            <chr>  <chr>         <dbl> <dbl>
-#> 1 33bd62ef1c8c4d4c89b9f9d16150c2eb .guild test_loss     0.418     0
-#> 2 33bd62ef1c8c4d4c89b9f9d16150c2eb .guild test_accuracy 0.876     0
-#> 3 511a690cbb914713a255ebfb97af1769 .guild test_loss     0.350     0
-#> 4 511a690cbb914713a255ebfb97af1769 .guild test_accuracy 0.875     0
+#> 1 c976e42c0df841b2889b3f30ec828222 .guild test_loss     0.429     0
+#> 2 c976e42c0df841b2889b3f30ec828222 .guild test_accuracy 0.869     0
+#> 3 0b85e8dfc7074b6c8f6b3b1b754e21c0 .guild test_loss     0.389     0
+#> 4 0b85e8dfc7074b6c8f6b3b1b754e21c0 .guild test_accuracy 0.865     0
 ```
 
 ## Managing runs
@@ -573,8 +573,8 @@ top3_runs
 #> # A tibble: 2 × 5
 #>   run                              path   tag           value  step
 #>   <chr>                            <chr>  <chr>         <dbl> <dbl>
-#> 1 33bd62ef1c8c4d4c89b9f9d16150c2eb .guild test_accuracy 0.876     0
-#> 2 511a690cbb914713a255ebfb97af1769 .guild test_accuracy 0.875     0
+#> 1 c976e42c0df841b2889b3f30ec828222 .guild test_accuracy 0.869     0
+#> 2 0b85e8dfc7074b6c8f6b3b1b754e21c0 .guild test_accuracy 0.865     0
 
 top3_runs %>%
   runs_tag("top3") %>%
@@ -656,6 +656,86 @@ ls_runs(c("--marked", "--started", "last hour"))
 ls_runs("--marked", c("--started", "last hour"))
 ```
 
+## Using Flags and Scalars Together
+
+To tie things together, we’ll use guild to explore what impact `units`
+has on `test_accuracy` in our training script.
+
 ``` r
-knitr::knit_exit()
+units <- (2 ^ (4:11)) %>% c(diff(., 2)) %>% sort()
+units
+#>  [1]   16   32   48   64   96  128  192  256  384  512  768 1024 1536 2048
+guildai::guild_run("train.R",
+          flags = list(units = units),
+          echo = FALSE)
 ```
+
+We can see compare run flags and run scalars from R:
+
+``` r
+runs <- ls_runs(as.character(seq_along(units)))
+
+df <- runs %>%
+  select(flags, scalars) %>%
+  rowwise() %>%
+  mutate(across(scalars, function(run_scalars_df) {
+    run_scalars_df %>%
+      select(tag, last_val) %>%
+      tidyr::pivot_wider(names_from = tag,
+                         values_from = last_val)
+  })) %>%
+  tidyr::unnest(c(flags, scalars)) %>%
+  arrange(units)
+
+df
+#> # A tibble: 14 × 6
+#>    batch_size epochs learning_rate units test_accuracy test_loss
+#>         <dbl>  <dbl>         <dbl> <dbl>         <dbl>     <dbl>
+#>  1         32     10         0.001    16         0.848     0.429
+#>  2         32     10         0.001    32         0.869     0.378
+#>  3         32     10         0.001    48         0.869     0.374
+#>  4         32     10         0.001    64         0.877     0.350
+#>  5         32     10         0.001    96         0.874     0.359
+#>  6         32     10         0.001   128         0.882     0.341
+#>  7         32     10         0.001   192         0.884     0.339
+#>  8         32     10         0.001   256         0.885     0.337
+#>  9         32     10         0.001   384         0.883     0.339
+#> 10         32     10         0.001   512         0.884     0.352
+#> 11         32     10         0.001   768         0.882     0.346
+#> 12         32     10         0.001  1024         0.870     0.381
+#> 13         32     10         0.001  1536         0.877     0.358
+#> 14         32     10         0.001  2048         0.879     0.374
+```
+
+``` r
+library(ggplot2)
+ggplot(df, aes(x = units, y = test_accuracy)) +
+  geom_point() + geom_smooth()
+```
+
+<img src="man/figures/README-unnamed-chunk-22-1.png"
+style="width:100.0%" />
+
+### Addin
+
+The **guildai** package installs an RStudio IDE addin which provides
+quick access to frequently used functions from the Addins menu:
+
+Note that you can use **Tools** -\> **Modify Keyboard Shortcuts** within
+RStudio to assign a keyboard shortcut to one or more of the addin
+commands.
+
+### Background Training
+
+Since training runs can become quite lengthy, it’s often useful to run
+them in the background in order to keep the R console free for other
+work. You can launch a guild run without blocking the R console by
+specifying `guild_run(wait = FALSE)` in the call. You can then view
+real-time outputs from your run(s) using `guild_view()`.
+
+Alternatively, you can launch training runs in the terminal pane:
+
+    Rscript -e 'guildai::guild_run("train.R")'
+
+If you are not running within RStudio then you can of course use a
+system terminal window for background training.
