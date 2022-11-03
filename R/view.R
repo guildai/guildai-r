@@ -3,7 +3,7 @@
 
 #' Render a Run Summary Report
 #'
-#' @param id run id. Defaults to the latest run.
+#' @param run a run selection. Defaults to the latest run.
 #' @param output_dir directory where to place the rendered document.
 #' @param template path to a parameterized quarto document.
 #' @param viewer Viewer to display training run information within (default
@@ -95,9 +95,9 @@ browser_viewer <- function(viewer_dir, browser = utils::browseURL) {
 
 #' compare runs
 #'
-#' @param ids, a length 2 character vector or run ids
-#' @param output_dir where to place the rendered html
-#' @param template report template
+#' @param runs A runs selection for two runs. Defaults to the latest two runs.
+#' @param output_dir Where to place the rendered html
+#' @param template Report template
 #' @param viewer Viewer to display training run information within (default
 #'   to an internal page viewer if available, otherwise to the R session
 #'   default web browser, `utils::browseURL()`).

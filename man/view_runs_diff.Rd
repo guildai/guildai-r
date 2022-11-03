@@ -13,17 +13,17 @@ view_runs_diff(
 )
 }
 \arguments{
-\item{output_dir}{where to place the rendered html}
+\item{runs}{A runs selection for two runs. Defaults to the latest two runs.}
 
-\item{template}{report template}
+\item{output_dir}{Where to place the rendered html}
+
+\item{template}{Report template}
 
 \item{viewer}{Viewer to display training run information within (default
 to an internal page viewer if available, otherwise to the R session
 default web browser, \code{utils::browseURL()}).}
 
 \item{...}{passed on to \code{quarto::quarto_render()}}
-
-\item{ids, }{a length 2 character vector or run ids}
 }
 \value{
 path to the generated html, invisibly
