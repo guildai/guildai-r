@@ -8,6 +8,7 @@
 ## env.).
 ## https://my.guild.ai/t/guild-run-callbacks/925
 
+
 do_guild_run <-
 function(file = "train.R", flags_dest = file, echo = TRUE) {
 
@@ -18,6 +19,8 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
   } else if (is_yml_file(flags_dest)) {
     file.copy(".guild/attrs/flags", flags_dest)
   }
+
+  remove_guild_from_PYTHONPATH()
 
   setup_info <- setup_run_dir()
   on.exit(teardown_run_dir(setup_info))
@@ -438,3 +441,28 @@ deparsed_call_stack <- function(n = 1L) {
 # TODO: delete unread sourcecode files
 # TODO: guild run should cast intergerish
 #   floats to int if the flag type is int
+
+remove_guild_from_PYTHONPATH <- function() {
+
+  # guild places itself on the PYTHONPATH, which interferes w/ reticulate
+  # finding modules. the guild executable is stand-alone and should not
+  # leak through into the R op runtime.
+  # Values like this are observed on linux:
+  # Sys.setenv("PYTHONPATH" = ".guild/sourcecode:/home/tomasz/.local/share/r-guildai/lib/python3.8/site-packages")
+  # passing `python-path: ~|null|[]|''` in op data doesn't disable this.
+
+  private_venv_home <- dirname(dirname(find_guild()))
+  old_path <- paths <- Sys.getenv("PYTHONPATH")
+  paths <- strsplit(paths, split = .Platform$path.sep, fixed = TRUE)[[1]]
+  paths <- gsub("\\\\", "/", paths) # windows
+  paths <- setdiff(paths, ".guild/sourcecode")
+  paths <- paths[!startsWith(paths, private_venv_home)]
+  if(!length(paths))
+    Sys.unsetenv("PYTHONPATH")
+  else {
+    if(is_windows())
+      paths <- shortPathName(paths)
+    Sys.setenv(PYTHONPATH = paste(paths, collapse = .Platform$path.sep))
+  }
+  invisible(old_path)
+}
