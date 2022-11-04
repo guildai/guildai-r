@@ -33,8 +33,7 @@ view_run_report <- function(
   if(!file.exists(basename(template)))
     file.copy(template, ".")
 
-  if(!requireNamespace("quarto", quietly = TRUE))
-    stop("Please install the {quarto} R package.")
+  rlang::check_installed(pkg = c("quarto", "envir"))
 
   quarto::quarto_render(
     input = basename(template),
