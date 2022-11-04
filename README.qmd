@@ -33,11 +33,9 @@ Sys.setenv("RETICULATE_PYTHON" = "~/.virtualenvs/r-tensorflow/bin/python")
 Sys.setenv("TF_CPP_MIN_LOG_LEVEL" = "3")
 
 
-# help knitr capture stdout 
+# help knitr capture stdout
 guild_run <- function(..., flags = NULL, echo = TRUE) {
   stdout <- stderr <- echo
-  if(interactive()) 
-    flags$.fast <- TRUE
   out <- guildai::guild_run(..., flags = flags, stdout = stdout, stderr = stderr)
   if(is.character(out)) writeLines(out)
   invisible(out)
@@ -102,8 +100,8 @@ keras::install_keras()
 ### Launch a run
 
 ```{r include=FALSE, copy-fashion-mnist}
-readLines("inst/examples/fashion-mnist.R") %>% 
-  c("#| sourcecode: {select: [train.R]}", .) %>% 
+readLines("inst/examples/fashion-mnist.R") %>%
+  c("#| sourcecode: {select: [train.R]}", .) %>%
   writeLines("train.R")
 ```
 
@@ -184,7 +182,7 @@ run 20 rather than 10 `epochs`. After making these changes to the source
 code we re-run the script using `guild_run()` as before:
 
 ```{r, include=FALSE}
-guildai:::modify_r_file_flags("train.R", 
+guildai:::modify_r_file_flags("train.R",
   list(units = 128, learning_rate = 0.003, epochs = 20),
   overwrite = TRUE)
 ```
@@ -206,8 +204,8 @@ The comparison report shows diffs between the run output, sourcecode,
 metrics, and recorded run.
 
 ```{r restore-fashion-mnist, include = FALSE}
-readLines("inst/examples/fashion-mnist.R") %>% 
-  c("#| sourcecode: {select: [train.R]}", .) %>% 
+readLines("inst/examples/fashion-mnist.R") %>%
+  c("#| sourcecode: {select: [train.R]}", .) %>%
   writeLines("train.R")
 ```
 
@@ -243,7 +241,7 @@ You can launch a run with different flag values like this:
 
 ```{r, eval=FALSE}
 guild_run("train.R", flags = list(
-  learning_rate = 0.001, 
+  learning_rate = 0.001,
   units = 256
 ))
 ```
@@ -267,7 +265,7 @@ this will launch 4 training runs, each run with a unique pairing of flag
 values:
 
 ```{r, eval = FALSE}
-guild_run("train.R", 
+guild_run("train.R",
           flags = list(learning_rate = c(0.001, 0.003),
                        units = c(128, 256)))
 ```
@@ -383,14 +381,14 @@ example:
 ```{r paged.print=FALSE}
 library(dplyr)
 
-best <- ls_scalars() %>% 
-  filter(tag == "test_accuracy") %>% 
+best <- ls_scalars() %>%
+  filter(tag == "test_accuracy") %>%
   slice_max(value)
 
 best
 
-best %>% 
-  runs_tag("best") %>% 
+best %>%
+  runs_tag("best") %>%
   runs_export("./best-runs")
 ```
 
@@ -461,9 +459,9 @@ command line options from R.
 -   Use `I()` to avoid quoting a string for the shell, allowing you to
     pass through multiple arguments in a single string.
 -   For arguments that take values, you can pass them from R as named
-    arguments.
+    arguments or named objects.
 
-Here are five different R expressions that invoke guild with identical
+Here are six different R expressions that invoke `guild` with identical
 system calls.
 
 ``` r
@@ -472,6 +470,7 @@ ls_runs("--marked", "--started" = "last hour")
 ls_runs("--marked", "--started", "last hour")
 ls_runs(c("--marked", "--started", "last hour"))
 ls_runs("--marked", c("--started", "last hour"))
+ls_runs("--marked", c("--started" = "last hour"))
 ```
 
 ## Using Flags and Scalars Together
@@ -481,7 +480,7 @@ has on `test_accuracy` in our training script.
 
 ```{r}
 units <- (2 ^ (4:11)) %>% c(diff(., 2)) %>% sort()
-units 
+units
 guildai::guild_run("train.R",
                    flags = list(units = units),
                    echo = FALSE)
@@ -502,7 +501,7 @@ df <- runs %>%
                          values_from = last_val)
   })) %>%
   tidyr::unnest(c(flags, scalars)) %>%
-  arrange(units) 
+  arrange(units)
 
 df
 ```
