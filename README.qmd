@@ -13,7 +13,7 @@ format: gfm
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
+  # comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%",
   paged.print=FALSE # this seemingly doesn't do anything
@@ -473,7 +473,7 @@ ls_runs("--marked", c("--started", "last hour"))
 ls_runs("--marked", c("--started" = "last hour"))
 ```
 
-## Using Flags and Scalars Together
+## End to End Example
 
 To tie things together, we'll use guild to explore what impact `units`
 has on `test_accuracy` in our training script.
