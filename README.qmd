@@ -460,11 +460,22 @@ command line options from R.
     pass through multiple arguments in a single string.
 -   For arguments that take values, you can pass them from R as named
     arguments or named objects.
+-   Named arguments are automatically translated from R conventions to
+    shell conventions:
+    -   `_` in a argument name is converted to `-`, and a `--` prefix is
+        automatically added, so `batch_comment = "foo"` becomes
+        `--batch_comment 'foo'`.
+    -   boolean values are understood to be switches, so
+        `keep_run = TRUE` is translated to `--keep-run`.
+    -   names vectors are automatically recycled for the shell, so
+        `tag = c("a", "b" "c")` becomes `--tag a --tag b --tag c`.
 
-Here are six different R expressions that invoke `guild` with identical
-system calls.
+Here are a few different R expressions that invoke `guild` with
+identical system calls.
 
 ``` r
+ls_runs(marked = TRUE, started = 'last hour')
+
 ls_runs(I("--marked --started 'last hour'"))
 ls_runs("--marked", "--started" = "last hour")
 ls_runs("--marked", "--started", "last hour")

@@ -6,10 +6,7 @@ guild <- function(...,
                   home = Sys.getenv("GUILD_HOME", here(".guild")),
                   wait = TRUE) {
 
-  args <- list(...)
-  if(is_string(args[[1L]]))
-    class(args[[1L]]) <- "AsIs" # I(args[[1L]])
-  args <- .process_args(args)
+  args <- as_guild_args(...)
 
   if(!is.null(home))
     args <- c("-H", shQuote(home), args)
@@ -20,6 +17,23 @@ guild <- function(...,
            wait = wait)
 }
 
+
+# as_guild_args(tag = c("a a" , "b", "c c"))
+# "--tag" "'a a'" "--tag" "b"     "--tag" "'c c'"
+#
+#  as_guild_args(help = TRUE)
+#  "--help"
+as_guild_args <- function(...) {
+  args <- list(...)
+  # browser()
+  if(is_string(args[[1L]]))
+    class(args[[1L]]) <- "AsIs"
+ .process_args(args)
+}
+
+
+
+#' @importFrom rlang names2
 .process_args <- function(x, name = "") {
   if(is.list(x)) # recurse
     return(unlist(.mapply(
@@ -28,8 +42,27 @@ guild <- function(...,
       NULL
     ), use.names = FALSE))
 
-  # cast, to char, but preserve names
+
+  if(is.null(x))
+    return(x)
+
+  # Fix up names by translating R conventions to shell conventions:
+  #   - separate words with - instead of _
+  #   - prefix with "--" as needed
+  nms <- if(is.null(names(x))) rep(name, length(x)) else names2(x)
+  needs_prefix <- nzchar(nms) & !startsWith(nms, "-")
+  nms[needs_prefix] <- paste0("--", nms[needs_prefix])
+  nms <- gsub("_", "-", nms, fixed = TRUE)
+
+  # boolean values are assumed to be switches in the cli
+  if(isTRUE(x) && nzchar(nms))
+    return(nms)
+  if(isFALSE(x) && nzchar(nms))
+    return(NULL)
+
+  # cast to char, but preserve class and names
   storage.mode(x) <- "character"
+
   if (!inherits(x, "AsIs")) {
     needs_quoting <- !grepl("^[[:alnum:]_-]+$", x)
     x[needs_quoting] <- shQuote(x[needs_quoting])
@@ -42,10 +75,9 @@ guild <- function(...,
   #   need to convert to c("--path", path)
   # if args were supplied like "--add" = c(tag1, tag2)
   #   recycle name, return c("--add", tag1, "--add", tag2)
-  nms <- names(x) %||% rep(name, length(x))
   x <- as.list(x)
   for (i in seq_along(nms))
-    if (isTRUE(nzchar(nm <- nms[[i]]) && startsWith(nm, "-")))
+    if (isTRUE(nzchar(nm <- nms[[i]])))
       x[i] <- list(c(nm, x[[i]]))
 
   unlist(x, use.names = FALSE)

@@ -75,8 +75,6 @@ run_files <- setdiff(run_files, c(.guild_files, .guild_attrs, ".guild/output"))
 files_as_chunk <- function(files, show_filename = TRUE) {
   chunks <- lapply(unlist(files), function(file) {
 
-
-
     ext <- tools::file_ext(basename(file))
     if(ext %in% c("png", "jpeg")) {
       pth <- normalizePath(file.path(run$dir, file))
