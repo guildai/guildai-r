@@ -2,6 +2,7 @@
 
 #' list guild runs
 #'
+#' @param runs a runs specification.
 #' @param ... additional arguments passed to `guild api runs`. Try
 #'   `"--help"` to see options.
 #'
@@ -49,8 +50,8 @@
 #' }
 #' })
 #' }
-ls_runs <- function(...) {
-  df <- guild("api runs", list(...), stdout = TRUE) |>
+ls_runs <- function(runs = NULL, ...) {
+  df <- guild("api runs", ..., maybe_extract_run_ids(runs), stdout = TRUE) |>
     paste0(collapse = "") |>
     parse_json(simplifyVector = TRUE)
 

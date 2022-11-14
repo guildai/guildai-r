@@ -4,9 +4,11 @@
 \alias{ls_runs}
 \title{list guild runs}
 \usage{
-ls_runs(...)
+ls_runs(runs = NULL, ...)
 }
 \arguments{
+\item{runs}{a runs specification.}
+
 \item{...}{additional arguments passed to \verb{guild api runs}. Try
 \code{"--help"} to see options.}
 }
