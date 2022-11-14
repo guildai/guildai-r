@@ -16,12 +16,14 @@ Imports:
   rstudioapi,
   here,
   readr,
+  dplyr,
   tibble
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.1
 Suggests: 
     fs,
+    envir,
     rmarkdown,
     dplyr,
     quarto,
