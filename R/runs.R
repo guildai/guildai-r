@@ -77,12 +77,14 @@ ls_runs <- function(runs = NULL, ...) {
     df[[tm]] <- .POSIXct(df[[tm]] / 1000000)
 
   # See "Note" below
-  df$scalars <- bind_rows(lapply(df$scalars, function(scalars_df) {
-    out <- scalars_df$lastVal
+  df$scalars <- bind_rows(lapply(df$scalars, function(run_scalars) {
+    if(!length(run_scalars))
+      return(tibble(.rows = 1L))
+    out <- run_scalars$lastVal
     names(out) <-
-      ifelse(scalars_df$prefix == ".guild",
-             scalars_df$tag,
-             paste(scalars_df$prefix, scalars_df$tag, sep = "."))
+      ifelse(run_scalars$prefix == ".guild",
+             run_scalars$tag,
+             paste(run_scalars$prefix, run_scalars$tag, sep = "."))
     as.list(out)
   }))
 
