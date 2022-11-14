@@ -249,6 +249,6 @@ test_that("guild doesn't set PYTHONPATH", {
 
   guild_run("env.R")
   env <- guild("cat --output", stdout = TRUE) |> guildai:::parse_yaml()
-  expect_identical(out$PYTHONPATH, pypath)
+  expect_identical(env$PYTHONPATH, pypath)
 
 })

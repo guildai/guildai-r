@@ -94,10 +94,12 @@ ls_runs <- function(runs = NULL, ...) {
   nms <- unique(c(nms, "dir", "id"), fromLast = TRUE)
   df <- df[nms]
 
-  df <- rename(df,
-               exit_status = exitStatus,
-               # run_dir = dir,
-               project_dir = projectDir)
+  # rename some fields for constent camel_case.
+  nms[nms == "exitStatus"] <- "exit_status"
+  nms[nms == "projectDir"] <- "project_dir"
+  # nms[nms == "dir"] <- "run_dir"
+  names(df) <- nms
+
 
   df[["flags"]] <- as_tibble(df[["flags"]])
   df[["scalars"]] <- as_tibble(df[["scalars"]])
