@@ -46,10 +46,9 @@
 <span>  opspec <span class="op">=</span> <span class="st">"train.R"</span>,</span>
 <span>  flags <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span>,</span>
-<span>  wait <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  background <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  label <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  tags <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  echo <span class="op">=</span> <span class="va">wait</span></span>
+<span>  tags <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -95,6 +94,14 @@ string that guild recognizes as a valid opspec.</p></dd>
 <dd><p>character vector of name=value strings to set environment
     variables.</p></dd>
 
+    <dt><code>wait</code></dt>
+<dd><p>a logical (not <code>NA</code>) indicating whether the <span style="R">R</span>
+    interpreter should wait for the command to finish, or run it
+    asynchronously.  This will be ignored (and the interpreter will
+    always wait) if <code>stdout = TRUE</code> or <code>stderr = TRUE</code>. When
+    running the command asynchronously, no output will be displayed on
+    the <code>Rgui</code> console in Windows (it will be dropped, instead).</p></dd>
+
     <dt><code>timeout</code></dt>
 <dd><p>timeout in seconds, ignored if 0.  This is a limit for the
     elapsed time running <code>command</code> in a separate process.   Fractions
@@ -108,8 +115,9 @@ string that guild recognizes as a valid opspec.</p></dd>
 </dl></dd>
 
 
-<dt>wait</dt>
-<dd><p>whether to wait for the run to finish</p></dd>
+<dt>background</dt>
+<dd><p>whether to do the run in the background. If <code>TRUE</code>,
+<code>guild_run()</code> returns immediately.</p></dd>
 
 
 <dt>label, tags</dt>
@@ -119,7 +127,7 @@ string that guild recognizes as a valid opspec.</p></dd>
 <dt>echo</dt>
 <dd><p>whether output from the run is shown in the current R
 console. Note, this has no effect on whether expressions are echoed in
-the guild run stdout.</p></dd>
+the guild run stdout log.</p></dd>
 
 </dl></div>
     <div class="section level2">
