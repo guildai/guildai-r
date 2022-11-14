@@ -46,13 +46,11 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
   )
 
   # initialize seed so we can save it, non-interactive sessions lazily initialize seed.
-  ## maybe propogate guilds python seed and use it to set the R seed?
-  ## Slightly complicated because python int64 seed overflows in R.
-  if(!exists(".Random.seed", globalenv(), mode = "integer", inherits = FALSE))
-    set.seed(NULL)
+  set.seed(NULL)
+  seed <- runif(1L, -.Machine$integer.max, .Machine$integer.max)
+  set.seed(seed)
   write_run_attr("random_seed", NULL)
-  write_run_attr("r-random-seed", .Random.seed)
-
+  write_run_attr("r-random-seed", seed)
   write_run_attr("env", as.list(Sys.getenv()))
 
   # TODO: figure out goldilocks default for what to record from R session state.
