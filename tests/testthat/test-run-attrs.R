@@ -9,7 +9,7 @@ test_that("seed is recorded correctly", {
   observed <- ls_scalars()$value
   reproduced <- sapply(runs$dir, function(d) {
     rs <- yaml::read_yaml(file.path(d, ".guild/attrs/r-random-seed"))
-    assign(".Random.seed", rs, globalenv())
+    set.seed(rs)
     runif(1)
   }, USE.NAMES = FALSE)
 

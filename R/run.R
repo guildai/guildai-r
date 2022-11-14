@@ -47,7 +47,7 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
 
   # initialize seed so we can save it, non-interactive sessions lazily initialize seed.
   set.seed(NULL)
-  seed <- runif(1L, -.Machine$integer.max, .Machine$integer.max)
+  seed <- stats::runif(1L, -.Machine$integer.max, .Machine$integer.max)
   set.seed(seed)
   write_run_attr("random_seed", NULL)
   write_run_attr("r-random-seed", seed)
