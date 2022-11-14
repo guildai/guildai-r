@@ -107,7 +107,7 @@ as_guild_args <- function(...) {
 #'
 #'   - a dataframe of flags for a batch of runs
 #'
-#' @param background whether to do the run in the background. If `TRUE`,
+#' @param background,wait whether to do the run in the background. If `TRUE`,
 #'   `guild_run()` returns immediately.
 #'
 #' @param label,tags optional strings used to label or tag experiments.
@@ -123,7 +123,8 @@ as_guild_args <- function(...) {
 #' @export
 guild_run <- function(opspec = "train.R",
                       flags = NULL, ...,
-                      background = FALSE,
+                      wait = TRUE,
+                      background = !wait,
                       label = NULL,
                       tags = NULL) {
 
