@@ -107,17 +107,18 @@ as_guild_args <- function(...) {
 #'
 #'   - a dataframe of flags for a batch of runs
 #'
-#' @param wait whether to wait for the run to finish
+#' @param background whether to do the run in the background. If `TRUE`,
+#'   `guild_run()` returns immediately.
 #' @param echo whether output from the run is shown in the current R
 #'   console. Note, this has no effect on whether expressions are echoed in
-#'   the guild run stdout.
+#'   the guild run stdout log.
 #'
 #' @param label,tags optional strings used to label or tag experiments.
 #'
 #' @param ... passed through to [base::system2()]. Unnamed arguments are
 #'   passed through to the guild executable. Arguments are automatically
-#'   quoted with `shQuote()`, unless they are protected with `I()`. Additionally,
-#'   named arguments to `system2()` can be supplied.
+#'   quoted with `shQuote()`, unless they are protected with `I()`.
+#'   Additionally, named arguments to `system2()` can be supplied.
 #' @inheritDotParams base::system2
 #'
 #' @return the return value from `system2()`, invisibly. This function is
@@ -125,10 +126,9 @@ as_guild_args <- function(...) {
 #' @export
 guild_run <- function(opspec = "train.R",
                       flags = NULL, ...,
-                      wait = TRUE,
+                      background = FALSE,
                       label = NULL,
-                      tags = NULL,
-                      echo = wait) {
+                      tags = NULL) {
 
   if (is.data.frame(flags)) {
     fi <- tempfile("guild-batch-flags-", fileext = ".yml")
@@ -151,19 +151,10 @@ guild_run <- function(opspec = "train.R",
     flags <- sprintf("%s=%s", names(flags), unname(flags))
   }
 
-  args <- c("--yes")
-  if(is.character(label))
-    append(args) <- c("--label", label)
-  if(is.character(tags))
-    append(args) <- as.vector(rbind("--tag", tags))
-
-  cl <- call("guild", "run", args,
-             opspec, quote(...), flags, wait = wait)
-  if (!echo)
-    cl$stdout <- cl$stderr <- FALSE
-  if(Sys.getenv("DEBUGR") == "1")
-    message("R> ", deparse1(cl))
-  invisible(eval(cl))
+  guild("run --yes",
+        label = label, tag = tags,
+        background = background, opspec, ...,
+        flags, wait = wait)
 }
 
 

@@ -8,10 +8,9 @@ guild_run(
   opspec = "train.R",
   flags = NULL,
   ...,
-  wait = TRUE,
+  background = FALSE,
   label = NULL,
-  tags = NULL,
-  echo = wait
+  tags = NULL
 )
 }
 \arguments{
@@ -44,6 +43,12 @@ string that guild recognizes as a valid opspec.}
     \code{command} is redirected to the file.}
     \item{\code{env}}{character vector of name=value strings to set environment
     variables.}
+    \item{\code{wait}}{a logical (not \code{NA}) indicating whether the \R
+    interpreter should wait for the command to finish, or run it
+    asynchronously.  This will be ignored (and the interpreter will
+    always wait) if \code{stdout = TRUE} or \code{stderr = TRUE}. When
+    running the command asynchronously, no output will be displayed on
+    the \code{Rgui} console in Windows (it will be dropped, instead).}
     \item{\code{timeout}}{timeout in seconds, ignored if 0.  This is a limit for the
     elapsed time running \code{command} in a separate process.   Fractions
     of seconds are ignored.}
@@ -51,13 +56,14 @@ string that guild recognizes as a valid opspec.}
     ignored on this platform, with a warning.}
   }}
 
-\item{wait}{whether to wait for the run to finish}
+\item{background}{whether to do the run in the background. If \code{TRUE},
+\code{guild_run()} returns immediately.}
 
 \item{label, tags}{optional strings used to label or tag experiments.}
 
 \item{echo}{whether output from the run is shown in the current R
 console. Note, this has no effect on whether expressions are echoed in
-the guild run stdout.}
+the guild run stdout log.}
 }
 \value{
 the return value from \code{system2()}, invisibly. This function is
