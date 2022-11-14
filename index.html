@@ -152,85 +152,85 @@
 <p>To train a model with guildai, use the <code><a href="reference/guild_run.html">guild_run()</a></code> function in place of the <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code> function to execute your R script. For example:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; &gt; library(keras)</span></span>
-<span><span class="co">#&gt; &gt; # Prepare data ----</span></span>
-<span><span class="co">#&gt; &gt;</span></span>
-<span><span class="co">#&gt; &gt; fashion_mnist &lt;- dataset_fashion_mnist()</span></span>
-<span><span class="co">#&gt; &gt; c(train_images, train_labels) %&lt;-% fashion_mnist$train</span></span>
-<span><span class="co">#&gt; &gt; c(test_images, test_labels) %&lt;-% fashion_mnist$test</span></span>
-<span><span class="co">#&gt; &gt; train_images &lt;- train_images / 255</span></span>
-<span><span class="co">#&gt; &gt; test_images &lt;- test_images / 255</span></span>
-<span><span class="co">#&gt; &gt; # Define model ----</span></span>
-<span><span class="co">#&gt; &gt;</span></span>
-<span><span class="co">#&gt; &gt; units &lt;- 64</span></span>
-<span><span class="co">#&gt; &gt; model &lt;- keras_model_sequential(input_shape = c(28, 28)) %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_flatten() %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_dense(units = units, activation = 'relu') %&gt;%</span></span>
-<span><span class="co">#&gt; +   layer_dense(units = 10, activation = 'softmax')</span></span>
-<span><span class="co">#&gt; &gt; learning_rate &lt;- 0.001</span></span>
-<span><span class="co">#&gt; &gt; model %&gt;% compile(</span></span>
-<span><span class="co">#&gt; +   optimizer = optimizer_adam(learning_rate),</span></span>
-<span><span class="co">#&gt; +   loss = 'sparse_categorical_crossentropy',</span></span>
-<span><span class="co">#&gt; +   metrics = c('accuracy')</span></span>
-<span><span class="co">#&gt; + )</span></span>
-<span><span class="co">#&gt; &gt; model</span></span>
-<span><span class="co">#&gt; Model: "sequential"</span></span>
-<span><span class="co">#&gt; ________________________________________________________________________________</span></span>
-<span><span class="co">#&gt;  Layer (type)                       Output Shape                    Param #</span></span>
-<span><span class="co">#&gt; ================================================================================</span></span>
-<span><span class="co">#&gt;  flatten (Flatten)                  (None, 784)                     0</span></span>
-<span><span class="co">#&gt;  dense_1 (Dense)                    (None, 64)                      50240</span></span>
-<span><span class="co">#&gt;  dense (Dense)                      (None, 10)                      650</span></span>
-<span><span class="co">#&gt; ================================================================================</span></span>
-<span><span class="co">#&gt; Total params: 50,890</span></span>
-<span><span class="co">#&gt; Trainable params: 50,890</span></span>
-<span><span class="co">#&gt; Non-trainable params: 0</span></span>
-<span><span class="co">#&gt; ________________________________________________________________________________</span></span>
-<span><span class="co">#&gt; &gt; # Fit model ----</span></span>
-<span><span class="co">#&gt; &gt;</span></span>
-<span><span class="co">#&gt; &gt; batch_size &lt;- 32</span></span>
-<span><span class="co">#&gt; &gt; epochs &lt;- 10</span></span>
-<span><span class="co">#&gt; &gt; history &lt;- model %&gt;%</span></span>
-<span><span class="co">#&gt; +   fit(train_images, train_labels,</span></span>
-<span><span class="co">#&gt; +       validation_split = 0.2,</span></span>
-<span><span class="co">#&gt; +       batch_size = batch_size,</span></span>
-<span><span class="co">#&gt; +       epochs = epochs,</span></span>
-<span><span class="co">#&gt; +       verbose = 2)</span></span>
-<span><span class="co">#&gt; Epoch 1/10</span></span>
-<span><span class="co">#&gt; 1500/1500 - 3s - loss: 0.5418 - accuracy: 0.8124 - val_loss: 0.4483 - val_accuracy: 0.8374 - 3s/epoch - 2ms/step</span></span>
-<span><span class="co">#&gt; Epoch 2/10</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.4060 - accuracy: 0.8555 - val_loss: 0.3982 - val_accuracy: 0.8558 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 3/10</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3670 - accuracy: 0.8674 - val_loss: 0.3861 - val_accuracy: 0.8579 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 4/10</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3411 - accuracy: 0.8769 - val_loss: 0.3550 - val_accuracy: 0.8702 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 5/10</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3212 - accuracy: 0.8830 - val_loss: 0.3901 - val_accuracy: 0.8532 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 6/10</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.3076 - accuracy: 0.8852 - val_loss: 0.3374 - val_accuracy: 0.8794 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 7/10</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2941 - accuracy: 0.8911 - val_loss: 0.3450 - val_accuracy: 0.8751 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 8/10</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2831 - accuracy: 0.8958 - val_loss: 0.3475 - val_accuracy: 0.8758 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 9/10</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2738 - accuracy: 0.8982 - val_loss: 0.3393 - val_accuracy: 0.8783 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; Epoch 10/10</span></span>
-<span><span class="co">#&gt; 1500/1500 - 2s - loss: 0.2665 - accuracy: 0.9004 - val_loss: 0.3571 - val_accuracy: 0.8741 - 2s/epoch - 1ms/step</span></span>
-<span><span class="co">#&gt; &gt; plot(history)</span></span>
-<span><span class="co">#&gt; &gt; # Evaluate model ----</span></span>
-<span><span class="co">#&gt; &gt;</span></span>
-<span><span class="co">#&gt; &gt; score &lt;- model %&gt;%</span></span>
-<span><span class="co">#&gt; +   evaluate(test_images, test_labels,</span></span>
-<span><span class="co">#&gt; +            verbose = 0) %&gt;%</span></span>
-<span><span class="co">#&gt; +   as.list()</span></span>
-<span><span class="co">#&gt; &gt; cat('test_loss:', score$loss, "\n")</span></span>
-<span><span class="co">#&gt; test_loss: 0.38621187210083008</span></span>
-<span><span class="co">#&gt; &gt; cat('test_accuracy:', score$accuracy, "\n")</span></span>
-<span><span class="co">#&gt; test_accuracy: 0.86570000648498535</span></span>
-<span><span class="co">#&gt; &gt; # save_model_tf(model, "model.keras")</span></span>
-<span><span class="co">#&gt; &gt; # saveRDS(history, "history.rds")</span></span>
-<span><span class="co">#&gt; &gt;</span></span>
-<span><span class="co">#&gt; &gt;</span></span></code></pre></div>
+<span><span class="co">## &gt; library(keras)</span></span>
+<span><span class="co">## &gt; # Prepare data ----</span></span>
+<span><span class="co">## &gt;</span></span>
+<span><span class="co">## &gt; fashion_mnist &lt;- dataset_fashion_mnist()</span></span>
+<span><span class="co">## &gt; c(train_images, train_labels) %&lt;-% fashion_mnist$train</span></span>
+<span><span class="co">## &gt; c(test_images, test_labels) %&lt;-% fashion_mnist$test</span></span>
+<span><span class="co">## &gt; train_images &lt;- train_images / 255</span></span>
+<span><span class="co">## &gt; test_images &lt;- test_images / 255</span></span>
+<span><span class="co">## &gt; # Define model ----</span></span>
+<span><span class="co">## &gt;</span></span>
+<span><span class="co">## &gt; units &lt;- 64</span></span>
+<span><span class="co">## &gt; model &lt;- keras_model_sequential(input_shape = c(28, 28)) %&gt;%</span></span>
+<span><span class="co">## +   layer_flatten() %&gt;%</span></span>
+<span><span class="co">## +   layer_dense(units = units, activation = 'relu') %&gt;%</span></span>
+<span><span class="co">## +   layer_dense(units = 10, activation = 'softmax')</span></span>
+<span><span class="co">## &gt; learning_rate &lt;- 0.001</span></span>
+<span><span class="co">## &gt; model %&gt;% compile(</span></span>
+<span><span class="co">## +   optimizer = optimizer_adam(learning_rate),</span></span>
+<span><span class="co">## +   loss = 'sparse_categorical_crossentropy',</span></span>
+<span><span class="co">## +   metrics = c('accuracy')</span></span>
+<span><span class="co">## + )</span></span>
+<span><span class="co">## &gt; model</span></span>
+<span><span class="co">## Model: "sequential"</span></span>
+<span><span class="co">## ________________________________________________________________________________</span></span>
+<span><span class="co">##  Layer (type)                       Output Shape                    Param #</span></span>
+<span><span class="co">## ================================================================================</span></span>
+<span><span class="co">##  flatten (Flatten)                  (None, 784)                     0</span></span>
+<span><span class="co">##  dense_1 (Dense)                    (None, 64)                      50240</span></span>
+<span><span class="co">##  dense (Dense)                      (None, 10)                      650</span></span>
+<span><span class="co">## ================================================================================</span></span>
+<span><span class="co">## Total params: 50,890</span></span>
+<span><span class="co">## Trainable params: 50,890</span></span>
+<span><span class="co">## Non-trainable params: 0</span></span>
+<span><span class="co">## ________________________________________________________________________________</span></span>
+<span><span class="co">## &gt; # Fit model ----</span></span>
+<span><span class="co">## &gt;</span></span>
+<span><span class="co">## &gt; batch_size &lt;- 32</span></span>
+<span><span class="co">## &gt; epochs &lt;- 10</span></span>
+<span><span class="co">## &gt; history &lt;- model %&gt;%</span></span>
+<span><span class="co">## +   fit(train_images, train_labels,</span></span>
+<span><span class="co">## +       validation_split = 0.2,</span></span>
+<span><span class="co">## +       batch_size = batch_size,</span></span>
+<span><span class="co">## +       epochs = epochs,</span></span>
+<span><span class="co">## +       verbose = 2)</span></span>
+<span><span class="co">## Epoch 1/10</span></span>
+<span><span class="co">## 1500/1500 - 4s - loss: 0.5479 - accuracy: 0.8098 - val_loss: 0.4199 - val_accuracy: 0.8547 - 4s/epoch - 3ms/step</span></span>
+<span><span class="co">## Epoch 2/10</span></span>
+<span><span class="co">## 1500/1500 - 3s - loss: 0.4065 - accuracy: 0.8565 - val_loss: 0.3974 - val_accuracy: 0.8608 - 3s/epoch - 2ms/step</span></span>
+<span><span class="co">## Epoch 3/10</span></span>
+<span><span class="co">## 1500/1500 - 2s - loss: 0.3647 - accuracy: 0.8690 - val_loss: 0.3768 - val_accuracy: 0.8685 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">## Epoch 4/10</span></span>
+<span><span class="co">## 1500/1500 - 2s - loss: 0.3393 - accuracy: 0.8759 - val_loss: 0.3575 - val_accuracy: 0.8732 - 2s/epoch - 1ms/step</span></span>
+<span><span class="co">## Epoch 5/10</span></span>
+<span><span class="co">## 1500/1500 - 2s - loss: 0.3200 - accuracy: 0.8841 - val_loss: 0.3706 - val_accuracy: 0.8683 - 2s/epoch - 1ms/step</span></span>
+<span><span class="co">## Epoch 6/10</span></span>
+<span><span class="co">## 1500/1500 - 2s - loss: 0.3063 - accuracy: 0.8887 - val_loss: 0.3417 - val_accuracy: 0.8775 - 2s/epoch - 1ms/step</span></span>
+<span><span class="co">## Epoch 7/10</span></span>
+<span><span class="co">## 1500/1500 - 2s - loss: 0.2941 - accuracy: 0.8924 - val_loss: 0.3450 - val_accuracy: 0.8774 - 2s/epoch - 1ms/step</span></span>
+<span><span class="co">## Epoch 8/10</span></span>
+<span><span class="co">## 1500/1500 - 2s - loss: 0.2822 - accuracy: 0.8956 - val_loss: 0.3379 - val_accuracy: 0.8810 - 2s/epoch - 1ms/step</span></span>
+<span><span class="co">## Epoch 9/10</span></span>
+<span><span class="co">## 1500/1500 - 2s - loss: 0.2730 - accuracy: 0.8987 - val_loss: 0.3373 - val_accuracy: 0.8823 - 2s/epoch - 1ms/step</span></span>
+<span><span class="co">## Epoch 10/10</span></span>
+<span><span class="co">## 1500/1500 - 2s - loss: 0.2658 - accuracy: 0.9022 - val_loss: 0.3414 - val_accuracy: 0.8809 - 2s/epoch - 1ms/step</span></span>
+<span><span class="co">## &gt; plot(history)</span></span>
+<span><span class="co">## &gt; # Evaluate model ----</span></span>
+<span><span class="co">## &gt;</span></span>
+<span><span class="co">## &gt; score &lt;- model %&gt;%</span></span>
+<span><span class="co">## +   evaluate(test_images, test_labels,</span></span>
+<span><span class="co">## +            verbose = 0) %&gt;%</span></span>
+<span><span class="co">## +   as.list()</span></span>
+<span><span class="co">## &gt; cat('test_loss:', score$loss, "\n")</span></span>
+<span><span class="co">## test_loss: 0.36843222379684448</span></span>
+<span><span class="co">## &gt; cat('test_accuracy:', score$accuracy, "\n")</span></span>
+<span><span class="co">## test_accuracy: 0.87099999189376831</span></span>
+<span><span class="co">## &gt; # save_model_tf(model, "model.keras")</span></span>
+<span><span class="co">## &gt; # saveRDS(history, "history.rds")</span></span>
+<span><span class="co">## &gt;</span></span>
+<span><span class="co">## &gt;</span></span></code></pre></div>
 <p>This will launch a new R process in an isolated run directory using the provided script. By default, the output stream from the run will be shown at the R console (the same output stream you would see with <code>source("train.R", echo = TRUE)</code> or <code>R --file=train.R</code>).</p>
 </div>
 <div class="section level3">
@@ -244,24 +244,23 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">run</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 1</span></span>
-<span><span class="co">#&gt; Columns: 16</span></span>
-<span><span class="co">#&gt; $ label      &lt;chr&gt; "batch_size=32.0 epochs=10.0 learning_rate=0.001 units=64.0"</span></span>
-<span><span class="co">#&gt; $ tags       &lt;list&gt; ""</span></span>
-<span><span class="co">#&gt; $ marked     &lt;lgl&gt; FALSE</span></span>
-<span><span class="co">#&gt; $ scalars    &lt;list&gt; [&lt;tbl_df[2 x 14]&gt;]</span></span>
-<span><span class="co">#&gt; $ flags      &lt;tibble[,4]&gt; &lt;tbl_df[1 x 4]&gt;</span></span>
-<span><span class="co">#&gt; $ operation  &lt;chr&gt; "train.R"</span></span>
-<span><span class="co">#&gt; $ started    &lt;dttm&gt; 2022-11-03 16:51:56</span></span>
-<span><span class="co">#&gt; $ stopped    &lt;dttm&gt; 2022-11-03 16:52:26</span></span>
-<span><span class="co">#&gt; $ comments   &lt;list&gt; [&lt;tbl_df[0 x 4]&gt;]</span></span>
-<span><span class="co">#&gt; $ status     &lt;chr&gt; "completed"</span></span>
-<span><span class="co">#&gt; $ exitStatus &lt;int&gt; 0</span></span>
-<span><span class="co">#&gt; $ otherAttrs &lt;df[,1]&gt; &lt;data.frame[1 x 1]&gt;</span></span>
-<span><span class="co">#&gt; $ deps       &lt;list&gt; []</span></span>
-<span><span class="co">#&gt; $ projectDir &lt;chr&gt; "/home/tomasz/guild/guildai-r"</span></span>
-<span><span class="co">#&gt; $ dir        &lt;chr&gt; "/home/tomasz/guild/guildai-r/.guild/runs/32bece41d9a74e0db…</span></span>
-<span><span class="co">#&gt; $ id         &lt;chr&gt; "32bece41d9a74e0db32d9f3936279552"</span></span></code></pre></div>
+<span><span class="co">## Rows: 1</span></span>
+<span><span class="co">## Columns: 15</span></span>
+<span><span class="co">## $ label       &lt;chr&gt; "batch_size=32.0 epochs=10.0 learning_rate=0.001 units=64.…</span></span>
+<span><span class="co">## $ tags        &lt;list&gt; &lt;&gt;</span></span>
+<span><span class="co">## $ marked      &lt;lgl&gt; FALSE</span></span>
+<span><span class="co">## $ flags       &lt;tibble[,4]&gt; &lt;tbl_df[1 x 4]&gt;</span></span>
+<span><span class="co">## $ scalars     &lt;tibble[,2]&gt; &lt;tbl_df[1 x 2]&gt;</span></span>
+<span><span class="co">## $ operation   &lt;chr&gt; "train.R"</span></span>
+<span><span class="co">## $ started     &lt;dttm&gt; 2022-11-14 14:46:32</span></span>
+<span><span class="co">## $ stopped     &lt;dttm&gt; 2022-11-14 14:47:02</span></span>
+<span><span class="co">## $ comments    &lt;list&gt; [&lt;tbl_df[0 x 4]&gt;]</span></span>
+<span><span class="co">## $ status      &lt;chr&gt; "completed"</span></span>
+<span><span class="co">## $ exit_status &lt;int&gt; 0</span></span>
+<span><span class="co">## $ deps        &lt;list&gt; []</span></span>
+<span><span class="co">## $ project_dir &lt;chr&gt; "/home/tomasz/guild/guildai-r"</span></span>
+<span><span class="co">## $ dir         &lt;chr&gt; "/home/tomasz/guild/guildai-r/.guild/runs/8795f6a0b782446…</span></span>
+<span><span class="co">## $ id          &lt;chr&gt; "8795f6a0b7824469845cce1f82c6de87"</span></span></code></pre></div>
 <p><code><a href="reference/ls_runs.html">ls_runs()</a></code> returns a data frame with information about runs. In this introduction so far, we’ve only launched 1 run, so so <code><a href="reference/ls_runs.html">ls_runs()</a></code> returns a 1-row data frame.</p>
 </div>
 <div class="section level3">
@@ -270,37 +269,38 @@
 <p><code><a href="reference/guild_view.html">guild_view()</a></code> and <code><a href="reference/ls_runs.html">ls_runs()</a></code> provide two convenient ways to gather and present the information from runs. Importantly however, the run directory is easily accessible. There you’ll find any files, plots, logs, or other output generated by a run. The run directory also contains additional metadata about the runs that guild recorded, like the starting random seed, environment variables, information about the package versions, and other metadata frequently useful for reproducability.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span><span class="va">run</span><span class="op">$</span><span class="va">dir</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; /home/tomasz/guild/guildai-r/.guild/runs/32bece41d9a74e0db32d9f3936279552</span></span>
-<span><span class="co">#&gt; ├── .guild</span></span>
-<span><span class="co">#&gt; │   ├── attrs</span></span>
-<span><span class="co">#&gt; │   │   ├── cmd</span></span>
-<span><span class="co">#&gt; │   │   ├── deps</span></span>
-<span><span class="co">#&gt; │   │   ├── env</span></span>
-<span><span class="co">#&gt; │   │   ├── exit_status</span></span>
-<span><span class="co">#&gt; │   │   ├── flags</span></span>
-<span><span class="co">#&gt; │   │   ├── host</span></span>
-<span><span class="co">#&gt; │   │   ├── id</span></span>
-<span><span class="co">#&gt; │   │   ├── initialized</span></span>
-<span><span class="co">#&gt; │   │   ├── label</span></span>
-<span><span class="co">#&gt; │   │   ├── op</span></span>
-<span><span class="co">#&gt; │   │   ├── platform</span></span>
-<span><span class="co">#&gt; │   │   ├── r-random-seed</span></span>
-<span><span class="co">#&gt; │   │   ├── run_params</span></span>
-<span><span class="co">#&gt; │   │   ├── sourcecode_digest</span></span>
-<span><span class="co">#&gt; │   │   ├── started</span></span>
-<span><span class="co">#&gt; │   │   ├── stopped</span></span>
-<span><span class="co">#&gt; │   │   ├── user</span></span>
-<span><span class="co">#&gt; │   │   ├── user_flags</span></span>
-<span><span class="co">#&gt; │   │   └── vcs_commit</span></span>
-<span><span class="co">#&gt; │   ├── events.out.tfevents.1667508746.horse.10864.0</span></span>
-<span><span class="co">#&gt; │   ├── manifest</span></span>
-<span><span class="co">#&gt; │   ├── opref</span></span>
-<span><span class="co">#&gt; │   ├── output</span></span>
-<span><span class="co">#&gt; │   ├── output.index</span></span>
-<span><span class="co">#&gt; │   └── sourcecode</span></span>
-<span><span class="co">#&gt; │       └── train.R</span></span>
-<span><span class="co">#&gt; └── plots</span></span>
-<span><span class="co">#&gt;     └── Rplot001.png</span></span></code></pre></div>
+<span><span class="co">## /home/tomasz/guild/guildai-r/.guild/runs/8795f6a0b7824469845cce1f82c6de87</span></span>
+<span><span class="co">## ├── .guild</span></span>
+<span><span class="co">## │   ├── attrs</span></span>
+<span><span class="co">## │   │   ├── cmd</span></span>
+<span><span class="co">## │   │   ├── deps</span></span>
+<span><span class="co">## │   │   ├── env</span></span>
+<span><span class="co">## │   │   ├── exit_status</span></span>
+<span><span class="co">## │   │   ├── flags</span></span>
+<span><span class="co">## │   │   ├── host</span></span>
+<span><span class="co">## │   │   ├── id</span></span>
+<span><span class="co">## │   │   ├── initialized</span></span>
+<span><span class="co">## │   │   ├── label</span></span>
+<span><span class="co">## │   │   ├── op</span></span>
+<span><span class="co">## │   │   ├── platform</span></span>
+<span><span class="co">## │   │   ├── plugins</span></span>
+<span><span class="co">## │   │   ├── r-random-seed</span></span>
+<span><span class="co">## │   │   ├── run_params</span></span>
+<span><span class="co">## │   │   ├── sourcecode_digest</span></span>
+<span><span class="co">## │   │   ├── started</span></span>
+<span><span class="co">## │   │   ├── stopped</span></span>
+<span><span class="co">## │   │   ├── user</span></span>
+<span><span class="co">## │   │   ├── user_flags</span></span>
+<span><span class="co">## │   │   └── vcs_commit</span></span>
+<span><span class="co">## │   ├── events.out.tfevents.1668455222.horse.58860.0</span></span>
+<span><span class="co">## │   ├── manifest</span></span>
+<span><span class="co">## │   ├── opref</span></span>
+<span><span class="co">## │   ├── output</span></span>
+<span><span class="co">## │   ├── output.index</span></span>
+<span><span class="co">## │   └── sourcecode</span></span>
+<span><span class="co">## │       └── train.R</span></span>
+<span><span class="co">## └── plots</span></span>
+<span><span class="co">##     └── Rplot001.png</span></span></code></pre></div>
 <p>A run can be used to generate a summary report, a paramaterized quarto document:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/view_run_report.html">view_run_report</a></span><span class="op">(</span><span class="va">run</span><span class="op">$</span><span class="va">id</span><span class="op">)</span></span></code></pre></div>
@@ -332,15 +332,15 @@
 <p>See what flags are available in an R script by calling <code><a href="reference/guild_run.html">guild_run()</a></code> with <code>"--help-op"</code> (more on this syntax later).</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>, <span class="st">"--help-op"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Usage: guild run [OPTIONS] train.R [FLAG]...</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; Use 'guild run --help' for a list of options.</span></span>
-<span><span class="co">#&gt;</span></span>
-<span><span class="co">#&gt; Flags:</span></span>
-<span><span class="co">#&gt;   batch_size     (default is 32.0)</span></span>
-<span><span class="co">#&gt;   epochs         (default is 10.0)</span></span>
-<span><span class="co">#&gt;   learning_rate  (default is 0.001)</span></span>
-<span><span class="co">#&gt;   units          (default is 64.0)</span></span></code></pre></div>
+<span><span class="co">## Usage: guild run [OPTIONS] train.R [FLAG]...</span></span>
+<span><span class="co">##</span></span>
+<span><span class="co">## Use 'guild run --help' for a list of options.</span></span>
+<span><span class="co">##</span></span>
+<span><span class="co">## Flags:</span></span>
+<span><span class="co">##   batch_size     (default is 32.0)</span></span>
+<span><span class="co">##   epochs         (default is 10.0)</span></span>
+<span><span class="co">##   learning_rate  (default is 0.001)</span></span>
+<span><span class="co">##   units          (default is 64.0)</span></span></code></pre></div>
 <p>You can launch a run with different flag values like this:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>, flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -362,11 +362,11 @@
 <code class="sourceCode R"><span><span class="va">flags_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>learning_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.001</span>, <span class="fl">0.003</span><span class="op">)</span>,</span>
 <span>                        units <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">256</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">flags_df</span></span>
-<span><span class="co">#&gt;   learning_rate units</span></span>
-<span><span class="co">#&gt; 1         0.001   128</span></span>
-<span><span class="co">#&gt; 2         0.003   128</span></span>
-<span><span class="co">#&gt; 3         0.001   256</span></span>
-<span><span class="co">#&gt; 4         0.003   256</span></span></code></pre></div>
+<span><span class="co">##   learning_rate units</span></span>
+<span><span class="co">## 1         0.001   128</span></span>
+<span><span class="co">## 2         0.003   128</span></span>
+<span><span class="co">## 3         0.001   256</span></span>
+<span><span class="co">## 4         0.003   256</span></span></code></pre></div>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>, flags <span class="op">=</span> <span class="va">flags_df</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
@@ -404,12 +404,12 @@
 <code class="sourceCode R"><span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">runs</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">id</span>, <span class="va">flags</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 2 × 2</span></span>
-<span><span class="co">#&gt;   id                               flags$batch_size $epochs $learning_r…¹ $units</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;                                       &lt;dbl&gt;   &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 5b584ff6ad47499db376f434fa77c354               32      20         0.003    128</span></span>
-<span><span class="co">#&gt; 2 32bece41d9a74e0db32d9f3936279552               32      10         0.001     64</span></span>
-<span><span class="co">#&gt; # … with abbreviated variable name ¹​$learning_rate</span></span></code></pre></div>
+<span><span class="co">## # A tibble: 2 × 2</span></span>
+<span><span class="co">##   id                               flags$batch_size $epochs $learning_r…¹ $units</span></span>
+<span><span class="co">##   &lt;chr&gt;                                       &lt;dbl&gt;   &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;</span></span>
+<span><span class="co">## 1 f2998abbb2da47ef925ecd903356eaee               32      20         0.003    128</span></span>
+<span><span class="co">## 2 8795f6a0b7824469845cce1f82c6de87               32      10         0.001     64</span></span>
+<span><span class="co">## # … with abbreviated variable name ¹​$learning_rate</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -419,41 +419,26 @@
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">runs</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">select</span><span class="op">(</span><span class="va">id</span>, <span class="va">scalars</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 2 × 2</span></span>
-<span><span class="co">#&gt;   id                               scalars</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;                            &lt;list&gt;</span></span>
-<span><span class="co">#&gt; 1 5b584ff6ad47499db376f434fa77c354 &lt;tibble [2 × 14]&gt;</span></span>
-<span><span class="co">#&gt; 2 32bece41d9a74e0db32d9f3936279552 &lt;tibble [2 × 14]&gt;</span></span>
+<span><span class="co">## # A tibble: 2 × 2</span></span>
+<span><span class="co">##   id                               scalars$test_accuracy $test_loss</span></span>
+<span><span class="co">##   &lt;chr&gt;                                            &lt;dbl&gt;      &lt;dbl&gt;</span></span>
+<span><span class="co">## 1 f2998abbb2da47ef925ecd903356eaee                 0.877      0.403</span></span>
+<span><span class="co">## 2 8795f6a0b7824469845cce1f82c6de87                 0.871      0.368</span></span>
 <span></span>
 <span><span class="fu">glimpse</span><span class="op">(</span><span class="va">runs</span><span class="op">$</span><span class="va">scalars</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 2</span></span>
-<span><span class="co">#&gt; Columns: 14</span></span>
-<span><span class="co">#&gt; $ run        &lt;chr&gt; "5b584ff6ad47499db376f434fa77c354", "5b584ff6ad47499db376f4…</span></span>
-<span><span class="co">#&gt; $ prefix     &lt;chr&gt; ".guild", ".guild"</span></span>
-<span><span class="co">#&gt; $ tag        &lt;chr&gt; "test_accuracy", "test_loss"</span></span>
-<span><span class="co">#&gt; $ first_val  &lt;dbl&gt; 0.8776000, 0.4228334</span></span>
-<span><span class="co">#&gt; $ first_step &lt;int&gt; 0, 0</span></span>
-<span><span class="co">#&gt; $ last_val   &lt;dbl&gt; 0.8776000, 0.4228334</span></span>
-<span><span class="co">#&gt; $ last_step  &lt;int&gt; 0, 0</span></span>
-<span><span class="co">#&gt; $ min_val    &lt;dbl&gt; 0.8776000, 0.4228334</span></span>
-<span><span class="co">#&gt; $ min_step   &lt;int&gt; 0, 0</span></span>
-<span><span class="co">#&gt; $ max_val    &lt;dbl&gt; 0.8776000, 0.4228334</span></span>
-<span><span class="co">#&gt; $ max_step   &lt;int&gt; 0, 0</span></span>
-<span><span class="co">#&gt; $ avg_val    &lt;dbl&gt; 0.8776000, 0.4228334</span></span>
-<span><span class="co">#&gt; $ total      &lt;dbl&gt; 0.8776000, 0.4228334</span></span>
-<span><span class="co">#&gt; $ count      &lt;int&gt; 1, 1</span></span></code></pre></div>
+<span><span class="co">##  num [1:2] 0.877 0.871</span></span></code></pre></div>
 <p>Here we see that guild has automatically identified <code>test_accuracy</code> and <code>test_loss</code> as run scalar outputs. By default, any lines printed to standard output during the run with the pattern <code>"key: &lt;numeric-value&gt;"</code> are recorded by guild as <code>scalars</code>. If you are printing values for the same scalar <code>key</code> multiple times during a run (e.g, <code>loss</code> during a training loop), then be sure to also print a <code>step</code> scalar in between, to enable guild to track history (and enable visualization of the run metrics with Guild View and TensorBoard).</p>
 <p>If the run process produces tfevent records (e.g., <code>keras::callback_tensorboard()</code>), those are also automatically identified by guild as run scalars, and included in <code><a href="reference/ls_runs.html">ls_runs()</a></code> (and <code><a href="reference/guild_view.html">guild_view()</a></code>, and TensorBoard and other run views).</p>
 <p><code><a href="reference/ls_runs.html">ls_runs()</a></code> returns a summary of run scalars, but the full set of scalars observed in runs can also be accessed from R directly:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/ls_scalars.html">ls_scalars</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; # A tibble: 4 × 5</span></span>
-<span><span class="co">#&gt;   run                              path   tag           value  step</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;                            &lt;chr&gt;  &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 5b584ff6ad47499db376f434fa77c354 .guild test_loss     0.423     0</span></span>
-<span><span class="co">#&gt; 2 5b584ff6ad47499db376f434fa77c354 .guild test_accuracy 0.878     0</span></span>
-<span><span class="co">#&gt; 3 32bece41d9a74e0db32d9f3936279552 .guild test_loss     0.386     0</span></span>
-<span><span class="co">#&gt; 4 32bece41d9a74e0db32d9f3936279552 .guild test_accuracy 0.866     0</span></span></code></pre></div>
+<span><span class="co">## # A tibble: 4 × 5</span></span>
+<span><span class="co">##   run                              path   tag           value  step</span></span>
+<span><span class="co">##   &lt;chr&gt;                            &lt;chr&gt;  &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">## 1 f2998abbb2da47ef925ecd903356eaee .guild test_loss     0.403     0</span></span>
+<span><span class="co">## 2 f2998abbb2da47ef925ecd903356eaee .guild test_accuracy 0.877     0</span></span>
+<span><span class="co">## 3 8795f6a0b7824469845cce1f82c6de87 .guild test_loss     0.368     0</span></span>
+<span><span class="co">## 4 8795f6a0b7824469845cce1f82c6de87 .guild test_accuracy 0.871     0</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="managing-runs">Managing runs<a class="anchor" aria-label="anchor" href="#managing-runs"></a>
@@ -473,10 +458,10 @@
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">best</span></span>
-<span><span class="co">#&gt; # A tibble: 1 × 5</span></span>
-<span><span class="co">#&gt;   run                              path   tag           value  step</span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;                            &lt;chr&gt;  &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt; 1 5b584ff6ad47499db376f434fa77c354 .guild test_accuracy 0.878     0</span></span>
+<span><span class="co">## # A tibble: 1 × 5</span></span>
+<span><span class="co">##   run                              path   tag           value  step</span></span>
+<span><span class="co">##   &lt;chr&gt;                            &lt;chr&gt;  &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">## 1 f2998abbb2da47ef925ecd903356eaee .guild test_accuracy 0.877     0</span></span>
 <span></span>
 <span><span class="va">best</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="reference/runs_label.html">runs_tag</a></span><span class="op">(</span><span class="st">"best"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -506,70 +491,74 @@
 <p>As you move between the terminal and the R console, almost all of the same syntax supported from the terminal can be used from R by passing strings to the respective R functions.</p>
 <p>By default, R character vectors supplied to <code>...</code> throughout most R functions are quoted for the system shell and passed through to guild. This enables usage like:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>, <span class="st">'batch_size=[32,64]'</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>, <span class="st">"batch_size=[32,64]"</span><span class="op">)</span></span></code></pre></div>
 <p>There are some additional conveniences provided for passing through command line options from R.</p>
 <ul>
 <li>Use <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code> to avoid quoting a string for the shell, allowing you to pass through multiple arguments in a single string.</li>
-<li>For arguments that take values, you can pass them from R as named arguments.</li>
+<li>For arguments that take values, you can pass them from R as named arguments or named objects.</li>
+<li>Named arguments are automatically translated from R conventions to shell conventions:
+<ul>
+<li>
+<code>_</code> in a argument name is converted to <code>-</code>, and a <code>--</code> prefix is automatically added, so <code>batch_comment = "foo"</code> becomes <code>--batch_comment 'foo'</code>.</li>
+<li>boolean values are understood to be switches, so <code>keep_run = TRUE</code> is translated to <code>--keep-run</code>.</li>
+<li>names vectors are automatically recycled for the shell, so <code>tag = c("a", "b" "c")</code> becomes <code>--tag a --tag b --tag c</code>.</li>
 </ul>
-<p>Here are five different R expressions that invoke guild with identical system calls.</p>
+</li>
+</ul>
+<p>Here are a few different R expressions that invoke <code>guild</code> with identical system calls.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="st">"--marked --started 'last hour'"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/ls_runs.html">ls_runs</a></span><span class="op">(</span>marked <span class="op">=</span> <span class="cn">TRUE</span>, started <span class="op">=</span> <span class="st">'last hour'</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu"><a href="reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="st">"--marked"</span>, <span class="st">"--started"</span> <span class="op">=</span> <span class="st">"last hour"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="st">"--marked"</span>, <span class="st">"--started"</span>, <span class="st">"last hour"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="st">"--marked"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--started"</span>, <span class="st">"last hour"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="st">"--marked"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--started"</span> <span class="op">=</span> <span class="st">"last hour"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--marked"</span>, <span class="st">"--started"</span>, <span class="st">"last hour"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="st">"--marked"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--started"</span>, <span class="st">"last hour"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="st">"--marked --started 'last hour'"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="st">"-Fm -Fs 'last hour'"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="st">"-Fm"</span>, <span class="st">"-Fs"</span> <span class="op">=</span> <span class="st">'last hour'</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="using-flags-and-scalars-together">Using Flags and Scalars Together<a class="anchor" aria-label="anchor" href="#using-flags-and-scalars-together"></a>
+<h2 id="end-to-end-example">End to End Example<a class="anchor" aria-label="anchor" href="#end-to-end-example"></a>
 </h2>
 <p>To tie things together, we’ll use guild to explore what impact <code>units</code> has on <code>test_accuracy</code> in our training script.</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">units</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">2</span> <span class="op">^</span> <span class="op">(</span><span class="fl">4</span><span class="op">:</span><span class="fl">11</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">.</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">units</span></span>
-<span><span class="co">#&gt;  [1]   16   32   48   64   96  128  192  256  384  512  768 1024 1536 2048</span></span>
-<span><span class="fu">guildai</span><span class="fu">::</span><span class="fu"><a href="reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>,</span>
-<span>                   flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>units <span class="op">=</span> <span class="va">units</span><span class="op">)</span>,</span>
-<span>                   echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p>We can see compare run flags and run scalars from R:</p>
+<span><span class="co">##  [1]   16   32   48   64   96  128  192  256  384  512  768 1024 1536 2048</span></span></code></pre></div>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">guildai</span><span class="fu">::</span><span class="fu"><a href="reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>,</span>
+<span>                   flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>units <span class="op">=</span> <span class="va">units</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>We can see compare run flags and run scalars from R:</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/ls_runs.html">ls_runs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">units</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">df</span> <span class="op">&lt;-</span> <span class="va">runs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">flags</span>, <span class="va">scalars</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rowwise.html" class="external-link">rowwise</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="va">scalars</span>, <span class="kw">function</span><span class="op">(</span><span class="va">run_scalars_df</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">run_scalars_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">tag</span>, <span class="va">last_val</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>      <span class="fu">tidyr</span><span class="fu">::</span><span class="fu">pivot_wider</span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">tag</span>,</span>
-<span>                         values_from <span class="op">=</span> <span class="va">last_val</span><span class="op">)</span></span>
-<span>  <span class="op">}</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">tidyr</span><span class="fu">::</span><span class="fu">unnest</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">flags</span>, <span class="va">scalars</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">units</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">flags</span>, <span class="va">scalars</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">df</span></span>
-<span><span class="co">#&gt; # A tibble: 14 × 6</span></span>
-<span><span class="co">#&gt;    batch_size epochs learning_rate units test_accuracy test_loss</span></span>
-<span><span class="co">#&gt;         &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;         &lt;dbl&gt;     &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1         32     10         0.001    16         0.857     0.413</span></span>
-<span><span class="co">#&gt;  2         32     10         0.001    32         0.868     0.378</span></span>
-<span><span class="co">#&gt;  3         32     10         0.001    48         0.876     0.363</span></span>
-<span><span class="co">#&gt;  4         32     10         0.001    64         0.877     0.348</span></span>
-<span><span class="co">#&gt;  5         32     10         0.001    96         0.875     0.359</span></span>
-<span><span class="co">#&gt;  6         32     10         0.001   128         0.885     0.333</span></span>
-<span><span class="co">#&gt;  7         32     10         0.001   192         0.880     0.343</span></span>
-<span><span class="co">#&gt;  8         32     10         0.001   256         0.885     0.340</span></span>
-<span><span class="co">#&gt;  9         32     10         0.001   384         0.876     0.350</span></span>
-<span><span class="co">#&gt; 10         32     10         0.001   512         0.882     0.361</span></span>
-<span><span class="co">#&gt; 11         32     10         0.001   768         0.879     0.343</span></span>
-<span><span class="co">#&gt; 12         32     10         0.001  1024         0.877     0.373</span></span>
-<span><span class="co">#&gt; 13         32     10         0.001  1536         0.877     0.357</span></span>
-<span><span class="co">#&gt; 14         32     10         0.001  2048         0.877     0.363</span></span></code></pre></div>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<span><span class="co">## # A tibble: 14 × 2</span></span>
+<span><span class="co">##    flags$batch_size $epochs $learning_rate $units scalars$test_accuracy $test_…¹</span></span>
+<span><span class="co">##               &lt;dbl&gt;   &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;                 &lt;dbl&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">##  1               32      10          0.001   2048                 0.886    0.345</span></span>
+<span><span class="co">##  2               32      10          0.001   1536                 0.884    0.340</span></span>
+<span><span class="co">##  3               32      10          0.001   1024                 0.884    0.342</span></span>
+<span><span class="co">##  4               32      10          0.001    768                 0.877    0.365</span></span>
+<span><span class="co">##  5               32      10          0.001    512                 0.888    0.324</span></span>
+<span><span class="co">##  6               32      10          0.001    384                 0.878    0.360</span></span>
+<span><span class="co">##  7               32      10          0.001    256                 0.882    0.340</span></span>
+<span><span class="co">##  8               32      10          0.001    192                 0.883    0.336</span></span>
+<span><span class="co">##  9               32      10          0.001    128                 0.880    0.342</span></span>
+<span><span class="co">## 10               32      10          0.001     96                 0.872    0.362</span></span>
+<span><span class="co">## 11               32      10          0.001     64                 0.866    0.371</span></span>
+<span><span class="co">## 12               32      10          0.001     48                 0.874    0.355</span></span>
+<span><span class="co">## 13               32      10          0.001     32                 0.857    0.404</span></span>
+<span><span class="co">## 14               32      10          0.001     16                 0.860    0.398</span></span>
+<span><span class="co">## # … with abbreviated variable name ¹​$test_loss</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">df</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">units</span>, y <span class="op">=</span> <span class="va">test_accuracy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span><span class="va">df</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">flags</span><span class="op">$</span><span class="va">units</span>, y <span class="op">=</span> <span class="va">scalars</span><span class="op">$</span><span class="va">test_accuracy</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_smooth</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-22-1.png" style="width:100.0%"></p>
+<p><img src="reference/figures/README-unnamed-chunk-23-1.png" style="width:100.0%"></p>
 <div class="section level3">
 <h3 id="addin">Addin<a class="anchor" aria-label="anchor" href="#addin"></a>
 </h3>
@@ -579,9 +568,9 @@
 <div class="section level3">
 <h3 id="background-training">Background Training<a class="anchor" aria-label="anchor" href="#background-training"></a>
 </h3>
-<p>Since training runs can become quite lengthy, it’s often useful to run them in the background in order to keep the R console free for other work. You can launch a guild run without blocking the R console by specifying <code>guild_run(wait = FALSE)</code> in the call. You can then view real-time outputs from your run(s) using <code><a href="reference/guild_view.html">guild_view()</a></code>.</p>
+<p>Since training runs can become quite lengthy, it’s often useful to run them in the background in order to keep the R console free for other work. You can launch a guild run without blocking the R console by specifying <code>guild_run(background = TRUE)</code> in the call. You can then view real-time outputs from your run(s) using <code><a href="reference/guild_view.html">guild_view()</a></code>.</p>
 <p>Alternatively, you can launch training runs in the terminal pane:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>Rscript <span class="sc">-</span>e <span class="st">'guildai::guild_run("train.R")'</span></span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>Rscript <span class="sc">-</span>e <span class="st">'guildai::guild_run("train.R")'</span></span></code></pre></div>
 <p>If you are not running within RStudio then you can of course use a system terminal window for background training.</p>
 </div>
 </div>
