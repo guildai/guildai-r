@@ -1,12 +1,12 @@
 
 #' @importFrom here here
 #' @importFrom rlang is_string
-guild <- function(...,
+guild <- function(command = character(), ...,
                   stdout = "", stderr = "",
                   home = Sys.getenv("GUILD_HOME", here(".guild")),
                   wait = TRUE) {
 
-  args <- as_guild_args(...)
+  args <- as_guild_args(I(command), ...)
 
   if(!is.null(home))
     args <- c("-H", shQuote(home), args)
@@ -17,6 +17,7 @@ guild <- function(...,
            wait = wait)
 }
 
+# TODO: protect against partial matching of guild() args to system2() args
 
 # as_guild_args(tag = c("a a" , "b", "c c"))
 # "--tag" "'a a'" "--tag" "b"     "--tag" "'c c'"
@@ -24,11 +25,12 @@ guild <- function(...,
 #  as_guild_args(help = TRUE)
 #  "--help"
 as_guild_args <- function(...) {
-  args <- list(...)
-  # browser()
-  if(is_string(args[[1L]]))
-    class(args[[1L]]) <- "AsIs"
- .process_args(args)
+  args <- .process_args(list(...))
+  # protect from shell quoting multiple times if args
+  # channel through `as_guild_args()` multiple times
+  if(length(args))
+    class(args) <- "AsIs"
+  args
 }
 
 
@@ -44,6 +46,11 @@ as_guild_args <- function(...) {
 
 
   if(is.null(x))
+    return(x)
+
+  if(inherits(x, "AsIs") && is.null(names(x)))
+    # early return branch for args that go through
+    # as_guild_args() multiple times
     return(x)
 
   # Fix up names by translating R conventions to shell conventions:
