@@ -10,38 +10,47 @@
 #' @importFrom jsonlite parse_json
 #' @importFrom rlang %|%
 #' @importFrom tibble tibble as_tibble
+#' @importFrom dplyr bind_rows rename if_else
 #' @examples
 #' \dontrun{
+#' if(FALSE) {
 #' withr::with_package("dplyr", {
 #'
-#' ## sort and filter using scalars
-#' pluck_scalar <- function(scalar_summary_df, val, tag, prefix = ".guild") {
-#'   if(!length(scalar_summary_df)) return(NA)
-#'   out <- scalar_summary_df %>%
-#'     filter(tag == {{ tag }}, prefix == {{ prefix }}) %>%
-#'     pull({{ val }})
-#'   if(length(out) < 1)
-#'     out <- NA
-#'   out
-#' }
+#' ls_runs() # get the full set of runs
+#' ls_runs(1) # get the most recent run
+#' ls_runs(1:3) # get the last 3 runs
 #'
+#' # some other examples for passing filter expressions
+#' ls_runs(staged = TRUE) # list only staged runs
+#' ls_runs(tag = c("convnet", "keras"), started = "last hour")
+#' ls_runs(error = TRUE)
+#'
+#' #'
 #' runs <- ls_runs()
-#' runs %>%
-#'   rowwise() %>%
-#'   mutate(
-#'     min_val_loss =
-#'       pluck_scalar(scalars, min_val, "epoch_loss", "logs/validation"),
-#'     .after = label) %>%
-#'   ungroup() %>%
-#'   slice_min(min_val_loss, n = 5)
 #'
+#' # filter down the runs list to ones of interest
+#' runs <- runs %>%
+#'   filter(exit_status == 0) %>% # run ended without an error code
+#'   filter(scalars$test_accuracy > .8) %>%
+#'   filter(flags$epochs > 10) %>%
+#'   arrange(scalars$test_loss) %>%
+#'   select(id, flags, scalars)
+#'
+#' # retrieve full scalars history from the runs of interest
+#' runs$id %>%
+#'   ls_scalars()
+#'
+#' # export the best run
+#' runs %>%
+#'   slice_max(scalars$test_accuracy) %>%
+#'   runs_tag("best") %>%
+#'   runs_export("./my-best-runs")
+#'
+#' }
 #' })
 #' }
 ls_runs <- function(...) {
-  if ("--help" %in% c(...))
-    return(guild("api runs --help"))
-
-  df <- guild("api runs", ..., stdout = TRUE) |>
+  df <- guild("api runs", list(...), stdout = TRUE) |>
     paste0(collapse = "") |>
     parse_json(simplifyVector = TRUE)
 
@@ -49,9 +58,10 @@ ls_runs <- function(...) {
     return()
 
   # drop some overly verbose info. All this
-  # is easily accessible in run_dir/.guild/attrs users that need it.
+  # is easily accessible in run_dir/.guild/attrs
+  # for users that need it.
   df[c("shortId", "time", "command", "files",
-       "env", "sourcecode", "opRef")] <- NULL
+       "env", "sourcecode", "opRef", "otherAttrs")] <- NULL
 
   # additional coercion
   df$tags     <- lapply(df$tags, as.character)
@@ -59,44 +69,79 @@ ls_runs <- function(...) {
     if(!length(x))
       x <- tibble(body = character(), host = character(),
                   time = double(), user = character())
-    x$time <- .POSIXct(x$time/1000000)
+    x$time <- .POSIXct(x$time / 1000000)
     as_tibble(x)
   })
+  for(tm in c("started", "stopped"))
+    df[[tm]] <- .POSIXct(df[[tm]] / 1000000)
 
-
-  ## `guild api runs` is missing some info, mainly a portable timestamp
-  ## and marked status.
-  # --json option always shows all runs, so don't pass `...`
-  df2 <- guild("runs list --json", stdout = TRUE) |>
-    paste0(collapse = "") |>
-    parse_json(simplifyVector = TRUE)
-
-  df2 <- df2[match(df$id, df2$id), ]
-
-  stopifnot(identical(df$id, df2$id))
-
-  # use epoch for timestamps
-  df$started <- .POSIXct(df2$started/1000000)
-  df$stopped <- .POSIXct(df2$stopped/1000000)
-  df$marked <- df2$marked %|% FALSE
-
+  # See "Note" below
+  df$scalars <- bind_rows(lapply(df$scalars, function(scalars_df) {
+    out <- scalars_df$lastVal
+    names(out) <-
+      ifelse(scalars_df$prefix == ".guild",
+             scalars_df$tag,
+             paste(scalars_df$prefix, scalars_df$tag, sep = "."))
+    as.list(out)
+  }))
 
   # reorder columns for nicer printing.
-  nms <- unique(c("label", "tags", "marked", "scalars", "flags",
+  nms <- unique(c("label", "tags", "marked", "flags", "scalars",
                   names(df)))
   nms <- unique(c(nms, "dir", "id"), fromLast = TRUE)
   df <- df[nms]
 
-  ## fix up scalars to make it convenient for other dplyr verbs
+  df <- rename(df,
+               exit_status = exitStatus,
+               project_dir = projectDir,
+               run_dir = dir)
 
-
-  df <- tibble::as_tibble(df)
-  df[["flags"]] <- tibble::as_tibble(df[["flags"]])
-  df[["scalars"]] <- lapply(df[["scalars"]], tibble::as_tibble)
+  df[["flags"]] <- as_tibble(df[["flags"]])
+  df[["scalars"]] <- as_tibble(df[["scalars"]])
+  df <- as_tibble(df)
 
   df
 }
 
+
+## Note on ls_runs()$scalars:
+##
+## We fixup `scalars` to make it more convenient to compose ls_runs() with dplyr::filter()
+# By default, system("guild api runs") returns something that simplifies
+# to a list of dataframes that look like this:
+## # A tibble: 4 × 14
+##   run                              prefix tag           firstVal firstStep lastVal lastStep minVal minStep maxVal maxStep avgVal total count
+##   <chr>                            <chr>  <chr>            <dbl>     <int>   <dbl>    <int>  <dbl>   <int>  <dbl>   <int>  <dbl> <dbl> <int>
+## 1 a1adb737137240bb92adf6e8bbd88ff6 .guild test_accuracy    0.887         0   0.887        0  0.887       0  0.887       0  0.887 0.887     1
+## 2 a1adb737137240bb92adf6e8bbd88ff6 .guild test_loss        0.339         0   0.339        0  0.339       0  0.339       0  0.339 0.339     1
+## 3 a1adb737137240bb92adf6e8bbd88ff6 train  test_accuracy    0.887         0   0.887        0  0.887       0  0.887       0  0.887 0.887     1
+## 4 a1adb737137240bb92adf6e8bbd88ff6 train  test_loss        0.339         0   0.339        0  0.339       0  0.339       0  0.339 0.339     1
+#
+# In ls_runs() we simplify that list down to a single df with NA's for scalars in runs that don't exist,
+# (like flags), so users can write: ls_runs() %>% filter(scalars$test_loss < .1)
+#
+# An alternative explored was to make the scalar summaries easily "hoist-able", like this:
+# df %>%
+#   tidyr::hoist(scalars, final_test_loss = c("test_loss", "lastVal")) %>%
+#   filter(final_test_loss > .3)
+#
+# Here is a snippet that makes it hoistable, in case it's needed later:
+# df$scalars %<>%
+#   lapply(function(scalars_df) {
+#     prefix <- unique(scalars_df$prefix)
+#     names(prefix) <- prefix
+#     out <- lapply(prefix, function(p) {
+#       sc <- scalars_df %>% filter(prefix == p)
+#       sc[c("run", "prefix", "tag")] <- NULL
+#       sc <- lapply(seq_len(nrow(sc)), function(r) sc[r,])
+#       names(sc) <- sc_og$tag
+#       sc
+#     })
+#     no_prefix <- out$.guild
+#     out$.guild <- NULL
+#     out <- c(no_prefix, out)
+#     out
+#   })
 
 
 #' Get full set of runs scalars

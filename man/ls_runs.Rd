@@ -18,29 +18,40 @@ list guild runs
 }
 \examples{
 \dontrun{
+if(FALSE) {
 withr::with_package("dplyr", {
 
-## sort and filter using scalars
-pluck_scalar <- function(scalar_summary_df, val, tag, prefix = ".guild") {
-  if(!length(scalar_summary_df)) return(NA)
-  out <- scalar_summary_df \%>\%
-    filter(tag == {{ tag }}, prefix == {{ prefix }}) \%>\%
-    pull({{ val }})
-  if(length(out) < 1)
-    out <- NA
-  out
-}
+ls_runs() # get the full set of runs
+ls_runs(1) # get the most recent run
+ls_runs(1:3) # get the last 3 runs
 
+# some other examples for passing filter expressions
+ls_runs(staged = TRUE) # list only staged runs
+ls_runs(tag = c("convnet", "keras"), started = "last hour")
+ls_runs(error = TRUE)
+
+#'
 runs <- ls_runs()
-runs \%>\%
-  rowwise() \%>\%
-  mutate(
-    min_val_loss =
-      pluck_scalar(scalars, min_val, "epoch_loss", "logs/validation"),
-    .after = label) \%>\%
-  ungroup() \%>\%
-  slice_min(min_val_loss, n = 5)
 
+# filter down the runs list to ones of interest
+runs <- runs \%>\%
+  filter(exit_status == 0) \%>\% # run ended without an error code
+  filter(scalars$test_accuracy > .8) \%>\%
+  filter(flags$epochs > 10) \%>\%
+  arrange(scalars$test_loss) \%>\%
+  select(id, flags, scalars)
+
+# retrieve full scalars history from the runs of interest
+runs$id \%>\%
+  ls_scalars()
+
+# export the best run
+runs \%>\%
+  slice_max(scalars$test_accuracy) \%>\%
+  runs_tag("best") \%>\%
+  runs_export("./my-best-runs")
+
+}
 })
 }
 }
