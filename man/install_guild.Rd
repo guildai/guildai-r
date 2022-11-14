@@ -13,7 +13,7 @@ install_guild(
 \item{guildai}{character vector passed directly to \verb{pip install}. To
 install the release version of guildai, this can be \code{"guildai"}.}
 
-\item{python}{path to python binary, used to create a private venv.}
+\item{python}{path to a python binary, used to create a private venv.}
 }
 \value{
 path to the guild binary

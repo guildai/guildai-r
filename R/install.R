@@ -30,7 +30,7 @@ find_python <- function() {
 #'
 #' @param guildai character vector passed directly to `pip install`. To
 #'   install the release version of guildai, this can be `"guildai"`.
-#' @param python path to python binary, used to create a private venv.
+#' @param python path to a python binary, used to create a private venv.
 #'
 #' @return path to the guild binary
 #' @export
@@ -92,7 +92,7 @@ export_guild_cli <- function(dest = "~/bin", completions = TRUE) {
 
   g <- find_guild()
   dest <- file.path(dest, basename(g))
-  file.symlink(g <- find_guild(), dest)
+  file.symlink(g, dest)
   message("Created symlink: '", dest, "' -> '", g, "'")
   if(completions)
     guild("completion --install", "--shell" = basename(Sys.getenv("SHELL")))
