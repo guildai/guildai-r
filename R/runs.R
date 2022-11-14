@@ -94,8 +94,8 @@ ls_runs <- function(runs = NULL, ...) {
 
   df <- rename(df,
                exit_status = exitStatus,
-               project_dir = projectDir,
-               run_dir = dir)
+               # run_dir = dir,
+               project_dir = projectDir)
 
   df[["flags"]] <- as_tibble(df[["flags"]])
   df[["scalars"]] <- as_tibble(df[["scalars"]])

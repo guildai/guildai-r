@@ -133,85 +133,85 @@ of the `source()` function to execute your R script. For example:
 
 ``` r
 guild_run("train.R")
-#> > library(keras)
-#> > # Prepare data ----
-#> >
-#> > fashion_mnist <- dataset_fashion_mnist()
-#> > c(train_images, train_labels) %<-% fashion_mnist$train
-#> > c(test_images, test_labels) %<-% fashion_mnist$test
-#> > train_images <- train_images / 255
-#> > test_images <- test_images / 255
-#> > # Define model ----
-#> >
-#> > units <- 64
-#> > model <- keras_model_sequential(input_shape = c(28, 28)) %>%
-#> +   layer_flatten() %>%
-#> +   layer_dense(units = units, activation = 'relu') %>%
-#> +   layer_dense(units = 10, activation = 'softmax')
-#> > learning_rate <- 0.001
-#> > model %>% compile(
-#> +   optimizer = optimizer_adam(learning_rate),
-#> +   loss = 'sparse_categorical_crossentropy',
-#> +   metrics = c('accuracy')
-#> + )
-#> > model
-#> Model: "sequential"
-#> ________________________________________________________________________________
-#>  Layer (type)                       Output Shape                    Param #
-#> ================================================================================
-#>  flatten (Flatten)                  (None, 784)                     0
-#>  dense_1 (Dense)                    (None, 64)                      50240
-#>  dense (Dense)                      (None, 10)                      650
-#> ================================================================================
-#> Total params: 50,890
-#> Trainable params: 50,890
-#> Non-trainable params: 0
-#> ________________________________________________________________________________
-#> > # Fit model ----
-#> >
-#> > batch_size <- 32
-#> > epochs <- 10
-#> > history <- model %>%
-#> +   fit(train_images, train_labels,
-#> +       validation_split = 0.2,
-#> +       batch_size = batch_size,
-#> +       epochs = epochs,
-#> +       verbose = 2)
-#> Epoch 1/10
-#> 1500/1500 - 3s - loss: 0.5418 - accuracy: 0.8124 - val_loss: 0.4483 - val_accuracy: 0.8374 - 3s/epoch - 2ms/step
-#> Epoch 2/10
-#> 1500/1500 - 2s - loss: 0.4060 - accuracy: 0.8555 - val_loss: 0.3982 - val_accuracy: 0.8558 - 2s/epoch - 1ms/step
-#> Epoch 3/10
-#> 1500/1500 - 2s - loss: 0.3670 - accuracy: 0.8674 - val_loss: 0.3861 - val_accuracy: 0.8579 - 2s/epoch - 1ms/step
-#> Epoch 4/10
-#> 1500/1500 - 2s - loss: 0.3411 - accuracy: 0.8769 - val_loss: 0.3550 - val_accuracy: 0.8702 - 2s/epoch - 1ms/step
-#> Epoch 5/10
-#> 1500/1500 - 2s - loss: 0.3212 - accuracy: 0.8830 - val_loss: 0.3901 - val_accuracy: 0.8532 - 2s/epoch - 1ms/step
-#> Epoch 6/10
-#> 1500/1500 - 2s - loss: 0.3076 - accuracy: 0.8852 - val_loss: 0.3374 - val_accuracy: 0.8794 - 2s/epoch - 1ms/step
-#> Epoch 7/10
-#> 1500/1500 - 2s - loss: 0.2941 - accuracy: 0.8911 - val_loss: 0.3450 - val_accuracy: 0.8751 - 2s/epoch - 1ms/step
-#> Epoch 8/10
-#> 1500/1500 - 2s - loss: 0.2831 - accuracy: 0.8958 - val_loss: 0.3475 - val_accuracy: 0.8758 - 2s/epoch - 1ms/step
-#> Epoch 9/10
-#> 1500/1500 - 2s - loss: 0.2738 - accuracy: 0.8982 - val_loss: 0.3393 - val_accuracy: 0.8783 - 2s/epoch - 1ms/step
-#> Epoch 10/10
-#> 1500/1500 - 2s - loss: 0.2665 - accuracy: 0.9004 - val_loss: 0.3571 - val_accuracy: 0.8741 - 2s/epoch - 1ms/step
-#> > plot(history)
-#> > # Evaluate model ----
-#> >
-#> > score <- model %>%
-#> +   evaluate(test_images, test_labels,
-#> +            verbose = 0) %>%
-#> +   as.list()
-#> > cat('test_loss:', score$loss, "\n")
-#> test_loss: 0.38621187210083008
-#> > cat('test_accuracy:', score$accuracy, "\n")
-#> test_accuracy: 0.86570000648498535
-#> > # save_model_tf(model, "model.keras")
-#> > # saveRDS(history, "history.rds")
-#> >
-#> >
+## > library(keras)
+## > # Prepare data ----
+## >
+## > fashion_mnist <- dataset_fashion_mnist()
+## > c(train_images, train_labels) %<-% fashion_mnist$train
+## > c(test_images, test_labels) %<-% fashion_mnist$test
+## > train_images <- train_images / 255
+## > test_images <- test_images / 255
+## > # Define model ----
+## >
+## > units <- 64
+## > model <- keras_model_sequential(input_shape = c(28, 28)) %>%
+## +   layer_flatten() %>%
+## +   layer_dense(units = units, activation = 'relu') %>%
+## +   layer_dense(units = 10, activation = 'softmax')
+## > learning_rate <- 0.001
+## > model %>% compile(
+## +   optimizer = optimizer_adam(learning_rate),
+## +   loss = 'sparse_categorical_crossentropy',
+## +   metrics = c('accuracy')
+## + )
+## > model
+## Model: "sequential"
+## ________________________________________________________________________________
+##  Layer (type)                       Output Shape                    Param #
+## ================================================================================
+##  flatten (Flatten)                  (None, 784)                     0
+##  dense_1 (Dense)                    (None, 64)                      50240
+##  dense (Dense)                      (None, 10)                      650
+## ================================================================================
+## Total params: 50,890
+## Trainable params: 50,890
+## Non-trainable params: 0
+## ________________________________________________________________________________
+## > # Fit model ----
+## >
+## > batch_size <- 32
+## > epochs <- 10
+## > history <- model %>%
+## +   fit(train_images, train_labels,
+## +       validation_split = 0.2,
+## +       batch_size = batch_size,
+## +       epochs = epochs,
+## +       verbose = 2)
+## Epoch 1/10
+## 1500/1500 - 4s - loss: 0.5479 - accuracy: 0.8098 - val_loss: 0.4199 - val_accuracy: 0.8547 - 4s/epoch - 3ms/step
+## Epoch 2/10
+## 1500/1500 - 3s - loss: 0.4065 - accuracy: 0.8565 - val_loss: 0.3974 - val_accuracy: 0.8608 - 3s/epoch - 2ms/step
+## Epoch 3/10
+## 1500/1500 - 2s - loss: 0.3647 - accuracy: 0.8690 - val_loss: 0.3768 - val_accuracy: 0.8685 - 2s/epoch - 2ms/step
+## Epoch 4/10
+## 1500/1500 - 2s - loss: 0.3393 - accuracy: 0.8759 - val_loss: 0.3575 - val_accuracy: 0.8732 - 2s/epoch - 1ms/step
+## Epoch 5/10
+## 1500/1500 - 2s - loss: 0.3200 - accuracy: 0.8841 - val_loss: 0.3706 - val_accuracy: 0.8683 - 2s/epoch - 1ms/step
+## Epoch 6/10
+## 1500/1500 - 2s - loss: 0.3063 - accuracy: 0.8887 - val_loss: 0.3417 - val_accuracy: 0.8775 - 2s/epoch - 1ms/step
+## Epoch 7/10
+## 1500/1500 - 2s - loss: 0.2941 - accuracy: 0.8924 - val_loss: 0.3450 - val_accuracy: 0.8774 - 2s/epoch - 1ms/step
+## Epoch 8/10
+## 1500/1500 - 2s - loss: 0.2822 - accuracy: 0.8956 - val_loss: 0.3379 - val_accuracy: 0.8810 - 2s/epoch - 1ms/step
+## Epoch 9/10
+## 1500/1500 - 2s - loss: 0.2730 - accuracy: 0.8987 - val_loss: 0.3373 - val_accuracy: 0.8823 - 2s/epoch - 1ms/step
+## Epoch 10/10
+## 1500/1500 - 2s - loss: 0.2658 - accuracy: 0.9022 - val_loss: 0.3414 - val_accuracy: 0.8809 - 2s/epoch - 1ms/step
+## > plot(history)
+## > # Evaluate model ----
+## >
+## > score <- model %>%
+## +   evaluate(test_images, test_labels,
+## +            verbose = 0) %>%
+## +   as.list()
+## > cat('test_loss:', score$loss, "\n")
+## test_loss: 0.36843222379684448
+## > cat('test_accuracy:', score$accuracy, "\n")
+## test_accuracy: 0.87099999189376831
+## > # save_model_tf(model, "model.keras")
+## > # saveRDS(history, "history.rds")
+## >
+## >
 ```
 
 This will launch a new R process in an isolated run directory using the
@@ -238,24 +238,23 @@ Retrieve a data frame with run information in R using `ls_runs()`:
 ``` r
 run <- ls_runs()
 tibble::glimpse(run)
-#> Rows: 1
-#> Columns: 16
-#> $ label      <chr> "batch_size=32.0 epochs=10.0 learning_rate=0.001 units=64.0"
-#> $ tags       <list> ""
-#> $ marked     <lgl> FALSE
-#> $ scalars    <list> [<tbl_df[2 x 14]>]
-#> $ flags      <tibble[,4]> <tbl_df[1 x 4]>
-#> $ operation  <chr> "train.R"
-#> $ started    <dttm> 2022-11-03 16:51:56
-#> $ stopped    <dttm> 2022-11-03 16:52:26
-#> $ comments   <list> [<tbl_df[0 x 4]>]
-#> $ status     <chr> "completed"
-#> $ exitStatus <int> 0
-#> $ otherAttrs <df[,1]> <data.frame[1 x 1]>
-#> $ deps       <list> []
-#> $ projectDir <chr> "/home/tomasz/guild/guildai-r"
-#> $ dir        <chr> "/home/tomasz/guild/guildai-r/.guild/runs/32bece41d9a74e0db…
-#> $ id         <chr> "32bece41d9a74e0db32d9f3936279552"
+## Rows: 1
+## Columns: 15
+## $ label       <chr> "batch_size=32.0 epochs=10.0 learning_rate=0.001 units=64.…
+## $ tags        <list> <>
+## $ marked      <lgl> FALSE
+## $ flags       <tibble[,4]> <tbl_df[1 x 4]>
+## $ scalars     <tibble[,2]> <tbl_df[1 x 2]>
+## $ operation   <chr> "train.R"
+## $ started     <dttm> 2022-11-14 14:46:32
+## $ stopped     <dttm> 2022-11-14 14:47:02
+## $ comments    <list> [<tbl_df[0 x 4]>]
+## $ status      <chr> "completed"
+## $ exit_status <int> 0
+## $ deps        <list> []
+## $ project_dir <chr> "/home/tomasz/guild/guildai-r"
+## $ dir         <chr> "/home/tomasz/guild/guildai-r/.guild/runs/8795f6a0b782446…
+## $ id          <chr> "8795f6a0b7824469845cce1f82c6de87"
 ```
 
 `ls_runs()` returns a data frame with information about runs. In this
@@ -275,37 +274,38 @@ reproducability.
 
 ``` r
 fs::dir_tree(run$dir[1], all = TRUE)
-#> /home/tomasz/guild/guildai-r/.guild/runs/32bece41d9a74e0db32d9f3936279552
-#> ├── .guild
-#> │   ├── attrs
-#> │   │   ├── cmd
-#> │   │   ├── deps
-#> │   │   ├── env
-#> │   │   ├── exit_status
-#> │   │   ├── flags
-#> │   │   ├── host
-#> │   │   ├── id
-#> │   │   ├── initialized
-#> │   │   ├── label
-#> │   │   ├── op
-#> │   │   ├── platform
-#> │   │   ├── r-random-seed
-#> │   │   ├── run_params
-#> │   │   ├── sourcecode_digest
-#> │   │   ├── started
-#> │   │   ├── stopped
-#> │   │   ├── user
-#> │   │   ├── user_flags
-#> │   │   └── vcs_commit
-#> │   ├── events.out.tfevents.1667508746.horse.10864.0
-#> │   ├── manifest
-#> │   ├── opref
-#> │   ├── output
-#> │   ├── output.index
-#> │   └── sourcecode
-#> │       └── train.R
-#> └── plots
-#>     └── Rplot001.png
+## /home/tomasz/guild/guildai-r/.guild/runs/8795f6a0b7824469845cce1f82c6de87
+## ├── .guild
+## │   ├── attrs
+## │   │   ├── cmd
+## │   │   ├── deps
+## │   │   ├── env
+## │   │   ├── exit_status
+## │   │   ├── flags
+## │   │   ├── host
+## │   │   ├── id
+## │   │   ├── initialized
+## │   │   ├── label
+## │   │   ├── op
+## │   │   ├── platform
+## │   │   ├── plugins
+## │   │   ├── r-random-seed
+## │   │   ├── run_params
+## │   │   ├── sourcecode_digest
+## │   │   ├── started
+## │   │   ├── stopped
+## │   │   ├── user
+## │   │   ├── user_flags
+## │   │   └── vcs_commit
+## │   ├── events.out.tfevents.1668455222.horse.58860.0
+## │   ├── manifest
+## │   ├── opref
+## │   ├── output
+## │   ├── output.index
+## │   └── sourcecode
+## │       └── train.R
+## └── plots
+##     └── Rplot001.png
 ```
 
 A run can be used to generate a summary report, a paramaterized quarto
@@ -365,15 +365,15 @@ with `"--help-op"` (more on this syntax later).
 
 ``` r
 guild_run("train.R", "--help-op")
-#> Usage: guild run [OPTIONS] train.R [FLAG]...
-#>
-#> Use 'guild run --help' for a list of options.
-#>
-#> Flags:
-#>   batch_size     (default is 32.0)
-#>   epochs         (default is 10.0)
-#>   learning_rate  (default is 0.001)
-#>   units          (default is 64.0)
+## Usage: guild run [OPTIONS] train.R [FLAG]...
+##
+## Use 'guild run --help' for a list of options.
+##
+## Flags:
+##   batch_size     (default is 32.0)
+##   epochs         (default is 10.0)
+##   learning_rate  (default is 0.001)
+##   units          (default is 64.0)
 ```
 
 You can launch a run with different flag values like this:
@@ -416,11 +416,11 @@ values, with each row corresponding to a run.
 flags_df <- expand.grid(learning_rate = c(0.001, 0.003),
                         units = c(128, 256))
 flags_df
-#>   learning_rate units
-#> 1         0.001   128
-#> 2         0.003   128
-#> 3         0.001   256
-#> 4         0.003   256
+##   learning_rate units
+## 1         0.001   128
+## 2         0.003   128
+## 3         0.001   256
+## 4         0.003   256
 ```
 
 ``` r
@@ -474,12 +474,12 @@ The flags and flag values associated with each runs are returned by
 runs <- ls_runs()
 runs %>%
   select(id, flags)
-#> # A tibble: 2 × 2
-#>   id                               flags$batch_size $epochs $learning_r…¹ $units
-#>   <chr>                                       <dbl>   <dbl>         <dbl>  <dbl>
-#> 1 5b584ff6ad47499db376f434fa77c354               32      20         0.003    128
-#> 2 32bece41d9a74e0db32d9f3936279552               32      10         0.001     64
-#> # … with abbreviated variable name ¹​$learning_rate
+## # A tibble: 2 × 2
+##   id                               flags$batch_size $epochs $learning_r…¹ $units
+##   <chr>                                       <dbl>   <dbl>         <dbl>  <dbl>
+## 1 f2998abbb2da47ef925ecd903356eaee               32      20         0.003    128
+## 2 8795f6a0b7824469845cce1f82c6de87               32      10         0.001     64
+## # … with abbreviated variable name ¹​$learning_rate
 ```
 
 ## Scalars
@@ -491,29 +491,14 @@ special type of run output that guild can help manage.
 ``` r
 runs %>%
   select(id, scalars)
-#> # A tibble: 2 × 2
-#>   id                               scalars
-#>   <chr>                            <list>
-#> 1 5b584ff6ad47499db376f434fa77c354 <tibble [2 × 14]>
-#> 2 32bece41d9a74e0db32d9f3936279552 <tibble [2 × 14]>
+## # A tibble: 2 × 2
+##   id                               scalars$test_accuracy $test_loss
+##   <chr>                                            <dbl>      <dbl>
+## 1 f2998abbb2da47ef925ecd903356eaee                 0.877      0.403
+## 2 8795f6a0b7824469845cce1f82c6de87                 0.871      0.368
 
 glimpse(runs$scalars[[1]])
-#> Rows: 2
-#> Columns: 14
-#> $ run        <chr> "5b584ff6ad47499db376f434fa77c354", "5b584ff6ad47499db376f4…
-#> $ prefix     <chr> ".guild", ".guild"
-#> $ tag        <chr> "test_accuracy", "test_loss"
-#> $ first_val  <dbl> 0.8776000, 0.4228334
-#> $ first_step <int> 0, 0
-#> $ last_val   <dbl> 0.8776000, 0.4228334
-#> $ last_step  <int> 0, 0
-#> $ min_val    <dbl> 0.8776000, 0.4228334
-#> $ min_step   <int> 0, 0
-#> $ max_val    <dbl> 0.8776000, 0.4228334
-#> $ max_step   <int> 0, 0
-#> $ avg_val    <dbl> 0.8776000, 0.4228334
-#> $ total      <dbl> 0.8776000, 0.4228334
-#> $ count      <int> 1, 1
+##  num [1:2] 0.877 0.871
 ```
 
 Here we see that guild has automatically identified `test_accuracy` and
@@ -535,13 +520,13 @@ scalars observed in runs can also be accessed from R directly:
 
 ``` r
 ls_scalars()
-#> # A tibble: 4 × 5
-#>   run                              path   tag           value  step
-#>   <chr>                            <chr>  <chr>         <dbl> <dbl>
-#> 1 5b584ff6ad47499db376f434fa77c354 .guild test_loss     0.423     0
-#> 2 5b584ff6ad47499db376f434fa77c354 .guild test_accuracy 0.878     0
-#> 3 32bece41d9a74e0db32d9f3936279552 .guild test_loss     0.386     0
-#> 4 32bece41d9a74e0db32d9f3936279552 .guild test_accuracy 0.866     0
+## # A tibble: 4 × 5
+##   run                              path   tag           value  step
+##   <chr>                            <chr>  <chr>         <dbl> <dbl>
+## 1 f2998abbb2da47ef925ecd903356eaee .guild test_loss     0.403     0
+## 2 f2998abbb2da47ef925ecd903356eaee .guild test_accuracy 0.877     0
+## 3 8795f6a0b7824469845cce1f82c6de87 .guild test_loss     0.368     0
+## 4 8795f6a0b7824469845cce1f82c6de87 .guild test_accuracy 0.871     0
 ```
 
 ## Managing runs
@@ -564,10 +549,10 @@ best <- ls_scalars() %>%
   slice_max(value)
 
 best
-#> # A tibble: 1 × 5
-#>   run                              path   tag           value  step
-#>   <chr>                            <chr>  <chr>         <dbl> <dbl>
-#> 1 5b584ff6ad47499db376f434fa77c354 .guild test_accuracy 0.878     0
+## # A tibble: 1 × 5
+##   run                              path   tag           value  step
+##   <chr>                            <chr>  <chr>         <dbl> <dbl>
+## 1 f2998abbb2da47ef925ecd903356eaee .guild test_accuracy 0.877     0
 
 best %>%
   runs_tag("best") %>%
@@ -628,7 +613,7 @@ functions are quoted for the system shell and passed through to guild.
 This enables usage like:
 
 ``` r
-guild_run("train.R", 'batch_size=[32,64]')
+guild_run("train.R", "batch_size=[32,64]")
 ```
 
 There are some additional conveniences provided for passing through
@@ -637,20 +622,33 @@ command line options from R.
 - Use `I()` to avoid quoting a string for the shell, allowing you to
   pass through multiple arguments in a single string.
 - For arguments that take values, you can pass them from R as named
-  arguments.
+  arguments or named objects.
+- Named arguments are automatically translated from R conventions to
+  shell conventions:
+  - `_` in a argument name is converted to `-`, and a `--` prefix is
+    automatically added, so `batch_comment = "foo"` becomes
+    `--batch_comment 'foo'`.
+  - boolean values are understood to be switches, so `keep_run = TRUE`
+    is translated to `--keep-run`.
+  - names vectors are automatically recycled for the shell, so
+    `tag = c("a", "b" "c")` becomes `--tag a --tag b --tag c`.
 
-Here are five different R expressions that invoke guild with identical
-system calls.
+Here are a few different R expressions that invoke `guild` with
+identical system calls.
 
 ``` r
-ls_runs(I("--marked --started 'last hour'"))
+ls_runs(marked = TRUE, started = 'last hour')
+
 ls_runs("--marked", "--started" = "last hour")
-ls_runs("--marked", "--started", "last hour")
-ls_runs(c("--marked", "--started", "last hour"))
 ls_runs("--marked", c("--started", "last hour"))
+ls_runs("--marked", c("--started" = "last hour"))
+ls_runs(c("--marked", "--started", "last hour"))
+ls_runs(I("--marked --started 'last hour'"))
+ls_runs(I("-Fm -Fs 'last hour'"))
+ls_runs("-Fm", "-Fs" = 'last hour')
 ```
 
-## Using Flags and Scalars Together
+## End to End Example
 
 To tie things together, we’ll use guild to explore what impact `units`
 has on `test_accuracy` in our training script.
@@ -658,10 +656,12 @@ has on `test_accuracy` in our training script.
 ``` r
 units <- (2 ^ (4:11)) %>% c(diff(., 2)) %>% sort()
 units
-#>  [1]   16   32   48   64   96  128  192  256  384  512  768 1024 1536 2048
+##  [1]   16   32   48   64   96  128  192  256  384  512  768 1024 1536 2048
+```
+
+``` r
 guildai::guild_run("train.R",
-                   flags = list(units = units),
-                   echo = FALSE)
+                   flags = list(units = units))
 ```
 
 We can see compare run flags and run scalars from R:
@@ -670,44 +670,36 @@ We can see compare run flags and run scalars from R:
 runs <- ls_runs(seq_along(units))
 
 df <- runs %>%
-  select(flags, scalars) %>%
-  rowwise() %>%
-  mutate(across(scalars, function(run_scalars_df) {
-    run_scalars_df %>%
-      select(tag, last_val) %>%
-      tidyr::pivot_wider(names_from = tag,
-                         values_from = last_val)
-  })) %>%
-  tidyr::unnest(c(flags, scalars)) %>%
-  arrange(units)
+  select(flags, scalars)
 
 df
-#> # A tibble: 14 × 6
-#>    batch_size epochs learning_rate units test_accuracy test_loss
-#>         <dbl>  <dbl>         <dbl> <dbl>         <dbl>     <dbl>
-#>  1         32     10         0.001    16         0.857     0.413
-#>  2         32     10         0.001    32         0.868     0.378
-#>  3         32     10         0.001    48         0.876     0.363
-#>  4         32     10         0.001    64         0.877     0.348
-#>  5         32     10         0.001    96         0.875     0.359
-#>  6         32     10         0.001   128         0.885     0.333
-#>  7         32     10         0.001   192         0.880     0.343
-#>  8         32     10         0.001   256         0.885     0.340
-#>  9         32     10         0.001   384         0.876     0.350
-#> 10         32     10         0.001   512         0.882     0.361
-#> 11         32     10         0.001   768         0.879     0.343
-#> 12         32     10         0.001  1024         0.877     0.373
-#> 13         32     10         0.001  1536         0.877     0.357
-#> 14         32     10         0.001  2048         0.877     0.363
+## # A tibble: 14 × 2
+##    flags$batch_size $epochs $learning_rate $units scalars$test_accuracy $test_…¹
+##               <dbl>   <dbl>          <dbl>  <dbl>                 <dbl>    <dbl>
+##  1               32      10          0.001   2048                 0.886    0.345
+##  2               32      10          0.001   1536                 0.884    0.340
+##  3               32      10          0.001   1024                 0.884    0.342
+##  4               32      10          0.001    768                 0.877    0.365
+##  5               32      10          0.001    512                 0.888    0.324
+##  6               32      10          0.001    384                 0.878    0.360
+##  7               32      10          0.001    256                 0.882    0.340
+##  8               32      10          0.001    192                 0.883    0.336
+##  9               32      10          0.001    128                 0.880    0.342
+## 10               32      10          0.001     96                 0.872    0.362
+## 11               32      10          0.001     64                 0.866    0.371
+## 12               32      10          0.001     48                 0.874    0.355
+## 13               32      10          0.001     32                 0.857    0.404
+## 14               32      10          0.001     16                 0.860    0.398
+## # … with abbreviated variable name ¹​$test_loss
 ```
 
 ``` r
 library(ggplot2)
-ggplot(df, aes(x = units, y = test_accuracy)) +
+ggplot(df, aes(x = flags$units, y = scalars$test_accuracy)) +
   geom_point() + geom_smooth()
 ```
 
-<img src="man/figures/README-unnamed-chunk-22-1.png"
+<img src="man/figures/README-unnamed-chunk-23-1.png"
 style="width:100.0%" />
 
 ### Addin
@@ -724,7 +716,7 @@ commands.
 Since training runs can become quite lengthy, it’s often useful to run
 them in the background in order to keep the R console free for other
 work. You can launch a guild run without blocking the R console by
-specifying `guild_run(wait = FALSE)` in the call. You can then view
+specifying `guild_run(background = TRUE)` in the call. You can then view
 real-time outputs from your run(s) using `guild_view()`.
 
 Alternatively, you can launch training runs in the terminal pane:

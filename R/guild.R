@@ -153,8 +153,8 @@ guild_run <- function(opspec = "train.R",
 
   guild("run --yes",
         label = label, tag = tags,
-        background = background, opspec, ...,
-        flags, wait = wait)
+        background = background,
+        ..., opspec, flags)
 }
 
 

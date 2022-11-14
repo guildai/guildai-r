@@ -13,7 +13,6 @@ format: gfm
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  # comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%",
   paged.print=FALSE # this seemingly doesn't do anything
@@ -24,7 +23,6 @@ library(guildai)
 
 
 if(!interactive()) unlink(".guild", recursive = TRUE)
-
 
 Sys.setenv(PATH = paste0(R.home("bin"), ":", Sys.getenv("PATH")))
 for(v in c("VIRTUAL_ENV", "PYTHONHOME", "PYTHONPATH", "GUILD_HOME"))
@@ -450,7 +448,7 @@ functions are quoted for the system shell and passed through to guild.
 This enables usage like:
 
 ``` r
-guild_run("train.R", 'batch_size=[32,64]')
+guild_run("train.R", "batch_size=[32,64]")
 ```
 
 There are some additional conveniences provided for passing through
@@ -476,12 +474,13 @@ identical system calls.
 ``` r
 ls_runs(marked = TRUE, started = 'last hour')
 
-ls_runs(I("--marked --started 'last hour'"))
 ls_runs("--marked", "--started" = "last hour")
-ls_runs("--marked", "--started", "last hour")
-ls_runs(c("--marked", "--started", "last hour"))
 ls_runs("--marked", c("--started", "last hour"))
 ls_runs("--marked", c("--started" = "last hour"))
+ls_runs(c("--marked", "--started", "last hour"))
+ls_runs(I("--marked --started 'last hour'"))
+ls_runs(I("-Fm -Fs 'last hour'"))
+ls_runs("-Fm", "-Fs" = 'last hour')
 ```
 
 ## End to End Example
@@ -492,9 +491,12 @@ has on `test_accuracy` in our training script.
 ```{r}
 units <- (2 ^ (4:11)) %>% c(diff(., 2)) %>% sort()
 units
+```
+
+```{r }
+#| output: false
 guildai::guild_run("train.R",
-                   flags = list(units = units),
-                   echo = FALSE)
+                   flags = list(units = units))
 ```
 
 We can see compare run flags and run scalars from R:
@@ -503,23 +505,14 @@ We can see compare run flags and run scalars from R:
 runs <- ls_runs(seq_along(units))
 
 df <- runs %>%
-  select(flags, scalars) %>%
-  rowwise() %>%
-  mutate(across(scalars, function(run_scalars_df) {
-    run_scalars_df %>%
-      select(tag, last_val) %>%
-      tidyr::pivot_wider(names_from = tag,
-                         values_from = last_val)
-  })) %>%
-  tidyr::unnest(c(flags, scalars)) %>%
-  arrange(units)
+  select(flags, scalars)
 
 df
 ```
 
 ```{r, message=FALSE, warning=FALSE}
 library(ggplot2)
-ggplot(df, aes(x = units, y = test_accuracy)) +
+ggplot(df, aes(x = flags$units, y = scalars$test_accuracy)) +
   geom_point() + geom_smooth()
 ```
 
@@ -541,7 +534,7 @@ commands.
 Since training runs can become quite lengthy, it's often useful to run
 them in the background in order to keep the R console free for other
 work. You can launch a guild run without blocking the R console by
-specifying `guild_run(wait = FALSE)` in the call. You can then view
+specifying `guild_run(background = TRUE)` in the call. You can then view
 real-time outputs from your run(s) using `guild_view()`.
 
 Alternatively, you can launch training runs in the terminal pane:
