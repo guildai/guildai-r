@@ -109,9 +109,6 @@ as_guild_args <- function(...) {
 #'
 #' @param background whether to do the run in the background. If `TRUE`,
 #'   `guild_run()` returns immediately.
-#' @param echo whether output from the run is shown in the current R
-#'   console. Note, this has no effect on whether expressions are echoed in
-#'   the guild run stdout log.
 #'
 #' @param label,tags optional strings used to label or tag experiments.
 #'

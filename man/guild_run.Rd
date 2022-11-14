@@ -60,10 +60,6 @@ string that guild recognizes as a valid opspec.}
 \code{guild_run()} returns immediately.}
 
 \item{label, tags}{optional strings used to label or tag experiments.}
-
-\item{echo}{whether output from the run is shown in the current R
-console. Note, this has no effect on whether expressions are echoed in
-the guild run stdout log.}
 }
 \value{
 the return value from \code{system2()}, invisibly. This function is
