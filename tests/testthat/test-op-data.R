@@ -227,3 +227,28 @@ test_that("guild run w/ flags-dest: globals", {
   expect_snapshot_guild_cat_last_output()
 
 })
+
+
+test_that("guild doesn't set PYTHONPATH", {
+
+  withr::local_envvar(PYTHONPATH = NA)
+  local_project(test_resource("env.R"))
+
+  guild_run("env.R")
+  env <- guild("cat --output", stdout = TRUE) |> guildai:::parse_yaml()
+  expect_false("PYTHONPATH" %in% names(env))
+  # expect_false(any(grepl("^PYTHONPATH", out)))
+
+  pypath <- "foo/bar:baz:/foobaz"
+  Sys.setenv(PYTHONPATH = pypath)
+
+  # guild_run("env.R", flags = c(var = "PYTHONPATH"))
+  # out <- guild("cat --output", stdout = TRUE) |>
+  #   guildai:::parse_yaml()
+  # expect_identical(as.character(out), pypath)
+
+  guild_run("env.R")
+  env <- guild("cat --output", stdout = TRUE) |> guildai:::parse_yaml()
+  expect_identical(out$PYTHONPATH, pypath)
+
+})

@@ -20,8 +20,6 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
     file.copy(".guild/attrs/flags", flags_dest)
   }
 
-  remove_guild_from_PYTHONPATH()
-
   setup_info <- setup_run_dir()
   on.exit(teardown_run_dir(setup_info))
 
