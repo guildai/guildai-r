@@ -11,7 +11,7 @@
 #' @importFrom jsonlite parse_json
 #' @importFrom rlang %|%
 #' @importFrom tibble tibble as_tibble
-#' @importFrom dplyr bind_rows rename if_else
+#' @importFrom dplyr bind_rows bind_cols
 #' @examples
 #' \dontrun{
 #' if(FALSE) {
@@ -77,16 +77,21 @@ ls_runs <- function(runs = NULL, ...) {
     df[[tm]] <- .POSIXct(df[[tm]] / 1000000)
 
   # See "Note" below
-  df$scalars <- bind_rows(lapply(df$scalars, function(run_scalars) {
-    if(!length(run_scalars))
-      return(tibble(.rows = 1L))
-    out <- run_scalars$lastVal
-    names(out) <-
-      ifelse(run_scalars$prefix == ".guild",
-             run_scalars$tag,
-             paste(run_scalars$prefix, run_scalars$tag, sep = "."))
-    as.list(out)
-  }))
+  scalars <-
+    bind_rows(lapply(df$scalars, function(run_scalars) {
+      if (!length(run_scalars))
+        return(tibble(.rows = 1L))
+      out <- as.list(run_scalars$lastVal)
+      names(out) <- run_scalars$tag
+      path <- str_drop_prefix(run_scalars$prefix, "logs/")
+      lapply(split.default(out, path), as_tibble)
+    }))
+
+  # unpack scalars parsed from stdout
+  # leave scalars from run generated tfevent records packed
+  from_stdout <- scalars[[".guild"]]
+  scalars[[".guild"]] <- NULL
+  df$scalars <- dplyr::bind_cols(from_stdout, scalars)
 
   # reorder columns for nicer printing.
   nms <- unique(c("label", "tags", "marked", "flags", "scalars",
@@ -102,7 +107,7 @@ ls_runs <- function(runs = NULL, ...) {
 
 
   df[["flags"]] <- as_tibble(df[["flags"]])
-  df[["scalars"]] <- as_tibble(df[["scalars"]])
+  # df[["scalars"]] <- as_tibble(df[["scalars"]])
   df <- as_tibble(df)
 
   df
@@ -169,7 +174,12 @@ ls_scalars <- function(runs = NULL, ...) {
   csv <- tempfile(fileext = ".csv")
   guild("tensorboard --export-scalars", csv,
         ..., maybe_extract_run_ids(runs))
-  readr::read_csv(csv, col_types = "cccdd")
+  out <- readr::read_csv(csv, col_types = "cccdd", na = character())
+  path <- out$path
+  path[path == ".guild"] <- NA_character_
+  path <- str_drop_prefix(path, "logs/")
+  out$path <- path
+  out
 }
 
 
