@@ -10,9 +10,7 @@ guild_run(
   ...,
   wait = TRUE,
   background = !wait,
-  echo = TRUE,
-  label = NULL,
-  tags = NULL
+  echo = TRUE
 )
 }
 \arguments{
@@ -58,8 +56,6 @@ string that guild recognizes as a valid opspec.}
 \item{echo}{whether output from the run is shown in the current R console.
 Note, this has no effect on whether expressions are echoed in the guild run
 stdout log. To disable echoing of expression in the run logs, specify \verb{#| echo: false} in the run script frontmatter.}
-
-\item{label, tags}{optional strings used to label or tag experiments.}
 }
 \value{
 the return value from \code{system2()}, invisibly. This function is

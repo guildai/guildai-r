@@ -110,8 +110,6 @@ as_guild_args <- function(...) {
 #' @param background,wait whether to do the run in the background. If `TRUE`,
 #'   `guild_run()` returns immediately.
 #'
-#' @param label,tags optional strings used to label or tag experiments.
-#'
 #' @param echo whether output from the run is shown in the current R console.
 #'   Note, this has no effect on whether expressions are echoed in the guild run
 #'   stdout log. To disable echoing of expression in the run logs, specify `#|
@@ -130,18 +128,14 @@ guild_run <- function(opspec = "train.R",
                       flags = NULL, ...,
                       wait = TRUE,
                       background = !wait,
-                      echo = TRUE,
-                      label = NULL,
-                      tags = NULL) {
+                      echo = TRUE) {
 
   if (is.data.frame(flags)) {
     fi <- tempfile("guild-batch-flags-", fileext = ".yml")
     on.exit(unlink(fi))
     print.yaml(flags, fi, column.major = FALSE)
     flags <- paste0("@", fi)
-  }
-
-  if (!is.null(names(flags))) {
+  } else if (!is.null(names(flags))) {
     # A scalar string for flags is passed through
     # otherwise, do some prep to build the command line arg
     flags <- lapply(flags, function(f) {
@@ -156,7 +150,6 @@ guild_run <- function(opspec = "train.R",
   }
 
   guild("run --yes",
-        label = label, tag = tags,
         background = background,
         ..., opspec, flags,
         stdout = echo)
