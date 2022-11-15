@@ -9,12 +9,9 @@
 #' @param viewer Viewer to display training run information within (default
 #'   to an internal page viewer if available, otherwise to the R session
 #'   default web browser, `utils::browseURL()`).
-
-
 #' @param ... passed on to `quarto::quarto_render()`
 #'
 #' @return path to the generated html, invisibly
-#' @export
 view_run_report <- function(
   run = "1",
   output_dir = file.path(tempdir(), id),
@@ -103,7 +100,6 @@ browser_viewer <- function(viewer_dir, browser = utils::browseURL) {
 #' @param ... passed on to `quarto::quarto_render()`
 #'
 #' @return path to the generated html, invisibly
-#' @export
 view_runs_diff <- function(
     runs = "1:2",
     output_dir = file.path(tempdir(), paste(ids, collapse = "-")),
