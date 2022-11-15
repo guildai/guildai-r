@@ -178,25 +178,25 @@ guild_run("train.R")
 ## +       epochs = epochs,
 ## +       verbose = 2)
 ## Epoch 1/10
-## 1500/1500 - 4s - loss: 0.5479 - accuracy: 0.8098 - val_loss: 0.4199 - val_accuracy: 0.8547 - 4s/epoch - 3ms/step
+## 1500/1500 - 3s - loss: 0.5362 - accuracy: 0.8140 - val_loss: 0.4463 - val_accuracy: 0.8376 - 3s/epoch - 2ms/step
 ## Epoch 2/10
-## 1500/1500 - 3s - loss: 0.4065 - accuracy: 0.8565 - val_loss: 0.3974 - val_accuracy: 0.8608 - 3s/epoch - 2ms/step
+## 1500/1500 - 2s - loss: 0.4032 - accuracy: 0.8553 - val_loss: 0.4412 - val_accuracy: 0.8403 - 2s/epoch - 2ms/step
 ## Epoch 3/10
-## 1500/1500 - 2s - loss: 0.3647 - accuracy: 0.8690 - val_loss: 0.3768 - val_accuracy: 0.8685 - 2s/epoch - 2ms/step
+## 1500/1500 - 2s - loss: 0.3691 - accuracy: 0.8666 - val_loss: 0.3635 - val_accuracy: 0.8686 - 2s/epoch - 1ms/step
 ## Epoch 4/10
-## 1500/1500 - 2s - loss: 0.3393 - accuracy: 0.8759 - val_loss: 0.3575 - val_accuracy: 0.8732 - 2s/epoch - 1ms/step
+## 1500/1500 - 2s - loss: 0.3427 - accuracy: 0.8748 - val_loss: 0.3571 - val_accuracy: 0.8713 - 2s/epoch - 1ms/step
 ## Epoch 5/10
-## 1500/1500 - 2s - loss: 0.3200 - accuracy: 0.8841 - val_loss: 0.3706 - val_accuracy: 0.8683 - 2s/epoch - 1ms/step
+## 1500/1500 - 2s - loss: 0.3230 - accuracy: 0.8816 - val_loss: 0.3595 - val_accuracy: 0.8692 - 2s/epoch - 1ms/step
 ## Epoch 6/10
-## 1500/1500 - 2s - loss: 0.3063 - accuracy: 0.8887 - val_loss: 0.3417 - val_accuracy: 0.8775 - 2s/epoch - 1ms/step
+## 1500/1500 - 2s - loss: 0.3100 - accuracy: 0.8868 - val_loss: 0.3435 - val_accuracy: 0.8733 - 2s/epoch - 1ms/step
 ## Epoch 7/10
-## 1500/1500 - 2s - loss: 0.2941 - accuracy: 0.8924 - val_loss: 0.3450 - val_accuracy: 0.8774 - 2s/epoch - 1ms/step
+## 1500/1500 - 2s - loss: 0.2942 - accuracy: 0.8917 - val_loss: 0.3324 - val_accuracy: 0.8809 - 2s/epoch - 1ms/step
 ## Epoch 8/10
-## 1500/1500 - 2s - loss: 0.2822 - accuracy: 0.8956 - val_loss: 0.3379 - val_accuracy: 0.8810 - 2s/epoch - 1ms/step
+## 1500/1500 - 2s - loss: 0.2848 - accuracy: 0.8962 - val_loss: 0.3341 - val_accuracy: 0.8796 - 2s/epoch - 1ms/step
 ## Epoch 9/10
-## 1500/1500 - 2s - loss: 0.2730 - accuracy: 0.8987 - val_loss: 0.3373 - val_accuracy: 0.8823 - 2s/epoch - 1ms/step
+## 1500/1500 - 2s - loss: 0.2727 - accuracy: 0.9001 - val_loss: 0.3555 - val_accuracy: 0.8739 - 2s/epoch - 1ms/step
 ## Epoch 10/10
-## 1500/1500 - 2s - loss: 0.2658 - accuracy: 0.9022 - val_loss: 0.3414 - val_accuracy: 0.8809 - 2s/epoch - 1ms/step
+## 1500/1500 - 2s - loss: 0.2645 - accuracy: 0.9038 - val_loss: 0.3335 - val_accuracy: 0.8832 - 2s/epoch - 1ms/step
 ## > plot(history)
 ## > # Evaluate model ----
 ## >
@@ -205,9 +205,9 @@ guild_run("train.R")
 ## +            verbose = 0) %>%
 ## +   as.list()
 ## > cat('test_loss:', score$loss, "\n")
-## test_loss: 0.36843222379684448
+## test_loss: 0.36542254686355591
 ## > cat('test_accuracy:', score$accuracy, "\n")
-## test_accuracy: 0.87099999189376831
+## test_accuracy: 0.87129998207092285
 ## > # save_model_tf(model, "model.keras")
 ## > # saveRDS(history, "history.rds")
 ## >
@@ -246,15 +246,15 @@ tibble::glimpse(run)
 ## $ flags       <tibble[,4]> <tbl_df[1 x 4]>
 ## $ scalars     <tibble[,2]> <tbl_df[1 x 2]>
 ## $ operation   <chr> "train.R"
-## $ started     <dttm> 2022-11-14 14:46:32
-## $ stopped     <dttm> 2022-11-14 14:47:02
+## $ started     <dttm> 2022-11-15 10:16:09
+## $ stopped     <dttm> 2022-11-15 10:16:38
 ## $ comments    <list> [<tbl_df[0 x 4]>]
 ## $ status      <chr> "completed"
 ## $ exit_status <int> 0
 ## $ deps        <list> []
 ## $ project_dir <chr> "/home/tomasz/guild/guildai-r"
-## $ dir         <chr> "/home/tomasz/guild/guildai-r/.guild/runs/8795f6a0b782446…
-## $ id          <chr> "8795f6a0b7824469845cce1f82c6de87"
+## $ dir         <chr> "/home/tomasz/guild/guildai-r/.guild/runs/e1b65f54723b45b…
+## $ id          <chr> "e1b65f54723b45b783ab0260b8373be6"
 ```
 
 `ls_runs()` returns a data frame with information about runs. In this
@@ -274,7 +274,7 @@ reproducability.
 
 ``` r
 fs::dir_tree(run$dir[1], all = TRUE)
-## /home/tomasz/guild/guildai-r/.guild/runs/8795f6a0b7824469845cce1f82c6de87
+## /home/tomasz/guild/guildai-r/.guild/runs/e1b65f54723b45b783ab0260b8373be6
 ## ├── .guild
 ## │   ├── attrs
 ## │   │   ├── cmd
@@ -297,7 +297,7 @@ fs::dir_tree(run$dir[1], all = TRUE)
 ## │   │   ├── user
 ## │   │   ├── user_flags
 ## │   │   └── vcs_commit
-## │   ├── events.out.tfevents.1668455222.horse.58860.0
+## │   ├── events.out.tfevents.1668525398.horse.110618.0
 ## │   ├── manifest
 ## │   ├── opref
 ## │   ├── output
@@ -468,7 +468,7 @@ YAML files are also supported as a flags destination:
 ### Retreiving Run Flags
 
 The flags and flag values associated with each runs are returned by
-`ls_runs()` as a nested dataframe under the `flags` name.
+`ls_runs()` as a packed dataframe under the `flags` name.
 
 ``` r
 runs <- ls_runs()
@@ -477,8 +477,8 @@ runs %>%
 ## # A tibble: 2 × 2
 ##   id                               flags$batch_size $epochs $learning_r…¹ $units
 ##   <chr>                                       <dbl>   <dbl>         <dbl>  <dbl>
-## 1 f2998abbb2da47ef925ecd903356eaee               32      20         0.003    128
-## 2 8795f6a0b7824469845cce1f82c6de87               32      10         0.001     64
+## 1 447570897ab04a1d81569b40b3ca59c4               32      20         0.003    128
+## 2 e1b65f54723b45b783ab0260b8373be6               32      10         0.001     64
 ## # … with abbreviated variable name ¹​$learning_rate
 ```
 
@@ -494,11 +494,11 @@ runs %>%
 ## # A tibble: 2 × 2
 ##   id                               scalars$test_accuracy $test_loss
 ##   <chr>                                            <dbl>      <dbl>
-## 1 f2998abbb2da47ef925ecd903356eaee                 0.877      0.403
-## 2 8795f6a0b7824469845cce1f82c6de87                 0.871      0.368
+## 1 447570897ab04a1d81569b40b3ca59c4                 0.866      0.466
+## 2 e1b65f54723b45b783ab0260b8373be6                 0.871      0.365
 
 glimpse(runs$scalars[[1]])
-##  num [1:2] 0.877 0.871
+##  num [1:2] 0.866 0.871
 ```
 
 Here we see that guild has automatically identified `test_accuracy` and
@@ -521,12 +521,12 @@ scalars observed in runs can also be accessed from R directly:
 ``` r
 ls_scalars()
 ## # A tibble: 4 × 5
-##   run                              path   tag           value  step
-##   <chr>                            <chr>  <chr>         <dbl> <dbl>
-## 1 f2998abbb2da47ef925ecd903356eaee .guild test_loss     0.403     0
-## 2 f2998abbb2da47ef925ecd903356eaee .guild test_accuracy 0.877     0
-## 3 8795f6a0b7824469845cce1f82c6de87 .guild test_loss     0.368     0
-## 4 8795f6a0b7824469845cce1f82c6de87 .guild test_accuracy 0.871     0
+##   run                              path  tag           value  step
+##   <chr>                            <chr> <chr>         <dbl> <dbl>
+## 1 447570897ab04a1d81569b40b3ca59c4 <NA>  test_loss     0.466     0
+## 2 447570897ab04a1d81569b40b3ca59c4 <NA>  test_accuracy 0.866     0
+## 3 e1b65f54723b45b783ab0260b8373be6 <NA>  test_loss     0.365     0
+## 4 e1b65f54723b45b783ab0260b8373be6 <NA>  test_accuracy 0.871     0
 ```
 
 ## Managing runs
@@ -550,9 +550,9 @@ best <- ls_scalars() %>%
 
 best
 ## # A tibble: 1 × 5
-##   run                              path   tag           value  step
-##   <chr>                            <chr>  <chr>         <dbl> <dbl>
-## 1 f2998abbb2da47ef925ecd903356eaee .guild test_accuracy 0.877     0
+##   run                              path  tag           value  step
+##   <chr>                            <chr> <chr>         <dbl> <dbl>
+## 1 e1b65f54723b45b783ab0260b8373be6 <NA>  test_accuracy 0.871     0
 
 best %>%
   runs_tag("best") %>%
@@ -676,20 +676,20 @@ df
 ## # A tibble: 14 × 2
 ##    flags$batch_size $epochs $learning_rate $units scalars$test_accuracy $test_…¹
 ##               <dbl>   <dbl>          <dbl>  <dbl>                 <dbl>    <dbl>
-##  1               32      10          0.001   2048                 0.886    0.345
-##  2               32      10          0.001   1536                 0.884    0.340
-##  3               32      10          0.001   1024                 0.884    0.342
-##  4               32      10          0.001    768                 0.877    0.365
-##  5               32      10          0.001    512                 0.888    0.324
-##  6               32      10          0.001    384                 0.878    0.360
-##  7               32      10          0.001    256                 0.882    0.340
-##  8               32      10          0.001    192                 0.883    0.336
-##  9               32      10          0.001    128                 0.880    0.342
-## 10               32      10          0.001     96                 0.872    0.362
-## 11               32      10          0.001     64                 0.866    0.371
-## 12               32      10          0.001     48                 0.874    0.355
-## 13               32      10          0.001     32                 0.857    0.404
-## 14               32      10          0.001     16                 0.860    0.398
+##  1               32      10          0.001   2048                 0.877    0.370
+##  2               32      10          0.001   1536                 0.884    0.341
+##  3               32      10          0.001   1024                 0.887    0.340
+##  4               32      10          0.001    768                 0.880    0.356
+##  5               32      10          0.001    512                 0.877    0.350
+##  6               32      10          0.001    384                 0.880    0.360
+##  7               32      10          0.001    256                 0.879    0.357
+##  8               32      10          0.001    192                 0.884    0.338
+##  9               32      10          0.001    128                 0.872    0.359
+## 10               32      10          0.001     96                 0.879    0.346
+## 11               32      10          0.001     64                 0.873    0.362
+## 12               32      10          0.001     48                 0.873    0.368
+## 13               32      10          0.001     32                 0.866    0.389
+## 14               32      10          0.001     16                 0.855    0.413
 ## # … with abbreviated variable name ¹​$test_loss
 ```
 

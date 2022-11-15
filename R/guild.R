@@ -149,10 +149,13 @@ guild_run <- function(opspec = "train.R",
     flags <- sprintf("%s=%s", names(flags), unname(flags))
   }
 
-  guild("run --yes",
-        background = background,
-        ..., opspec, flags,
-        stdout = echo)
+  cl <- as.call(c(quote(guild), "run --yes",
+                  background = background, ...,
+                  opspec, flags))
+  if (isFALSE(echo))
+    cl$stdout <- FALSE
+
+  eval(cl)
 }
 
 

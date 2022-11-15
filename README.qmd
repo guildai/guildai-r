@@ -33,8 +33,7 @@ Sys.setenv("TF_CPP_MIN_LOG_LEVEL" = "3")
 
 # help knitr capture stdout
 guild_run <- function(..., flags = NULL, echo = TRUE) {
-  stdout <- stderr <- echo
-  out <- guildai::guild_run(..., flags = flags, stdout = stdout, stderr = stderr)
+  out <- guildai::guild_run(..., flags = flags, stdout = echo, stderr = echo)
   if(is.character(out)) writeLines(out)
   invisible(out)
 }
@@ -322,7 +321,7 @@ YAML files are also supported as a flags destination:
 ### Retreiving Run Flags
 
 The flags and flag values associated with each runs are returned by
-`ls_runs()` as a nested dataframe under the `flags` name.
+`ls_runs()` as a packed dataframe under the `flags` name.
 
 ```{r paged.print=FALSE}
 runs <- ls_runs()
