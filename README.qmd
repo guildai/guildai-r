@@ -163,13 +163,6 @@ reproducability.
 fs::dir_tree(run$dir[1], all = TRUE)
 ```
 
-A run can be used to generate a summary report, a paramaterized quarto
-document:
-
-```{r eval=FALSE}
-view_run_report(run$id)
-```
-
 ### Comparing Runs
 
 Let's make a couple of changes to our training script to see if we can
@@ -189,16 +182,7 @@ guild_run("train.R")
 ```
 
 The individual metrics `test_loss` and `test_accuracy` are visible in
-the comparison table in the Guild View application. You can also view
-the diffs of two runs with `view_runs_diff()` function:
-
-```{r, eval = FALSE}
-ls_runs(1:2) %>% # select the last 2 runs
-  view_runs_diff()
-```
-
-The comparison report shows diffs between the run output, sourcecode,
-metrics, and recorded run.
+the comparison table in the Guild View application.
 
 ```{r restore-fashion-mnist, include = FALSE}
 readLines("inst/examples/fashion-mnist.R") %>%
@@ -302,11 +286,11 @@ and related locations.
 
 ### Flag destinations
 
-As a project grows, it's helpful to be able to move flag definitions out
-of the main R script. To do so, you can include a `flags-dest` in the
-frontmatter of the R script, specifying the file where guild should read
-and update the flag values. Then you can read in the flag values in the
-main R script using `source()` or similar.
+As a project grows, it can be helpful to be able to move flag
+definitions out of the main R script. To do so, you can include a
+`flags-dest` in the frontmatter of the R script, specifying the file
+where guild should read and update the flag values. Then you can read in
+the flag values in the main R script using `source()` or similar.
 
     #| flags-dest: ./flags.R
 
@@ -356,8 +340,9 @@ If the run process produces tfevent records (e.g.,
 identified by guild as run scalars, and included in `ls_runs()` (and
 `guild_view()`, and TensorBoard and other run views).
 
-`ls_runs()` returns a summary of run scalars, but the full set of
-scalars observed in runs can also be accessed from R directly:
+`ls_runs()` returns the last observed value for each run scalar key, but
+the full history of scalars observed in runs can also be accessed from R
+directly:
 
 ```{r, paged.print=FALSE}
 ls_scalars()
@@ -479,7 +464,7 @@ ls_runs("--marked", c("--started" = "last hour"))
 ls_runs(c("--marked", "--started", "last hour"))
 ls_runs(I("--marked --started 'last hour'"))
 ls_runs(I("-Fm -Fs 'last hour'"))
-ls_runs("-Fm", "-Fs" = 'last hour')
+ls_runs("-Fm", "-Fs" = "last hour")
 ```
 
 ## End to End Example
