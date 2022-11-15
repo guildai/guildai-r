@@ -112,6 +112,11 @@ as_guild_args <- function(...) {
 #'
 #' @param label,tags optional strings used to label or tag experiments.
 #'
+#' @param echo whether output from the run is shown in the current R console.
+#'   Note, this has no effect on whether expressions are echoed in the guild run
+#'   stdout log. To disable echoing of expression in the run logs, specify `#|
+#'   echo: false` in the run script frontmatter.
+#'
 #' @param ... passed through to [base::system2()]. Unnamed arguments are
 #'   passed through to the guild executable. Arguments are automatically
 #'   quoted with `shQuote()`, unless they are protected with `I()`.
@@ -125,6 +130,7 @@ guild_run <- function(opspec = "train.R",
                       flags = NULL, ...,
                       wait = TRUE,
                       background = !wait,
+                      echo = TRUE,
                       label = NULL,
                       tags = NULL) {
 
@@ -152,7 +158,8 @@ guild_run <- function(opspec = "train.R",
   guild("run --yes",
         label = label, tag = tags,
         background = background,
-        ..., opspec, flags)
+        ..., opspec, flags,
+        stdout = echo)
 }
 
 
