@@ -55,7 +55,10 @@ as_guild_args <- function(...) {
   # Fix up names by translating R conventions to shell conventions:
   #   - separate words with - instead of _
   #   - prefix with "--" as needed
+  #   - accept a "." prefix as an alias for a "-" prefix
   nms <- if(is.null(names(x))) rep(name, length(x)) else names2(x)
+  nms <- sub("^\\.\\.", "--", nms)
+  nms <- sub("^\\.", "-", nms)
   needs_prefix <- nzchar(nms) & !startsWith(nms, "-")
   nms[needs_prefix] <- paste0("--", nms[needs_prefix])
   nms <- gsub("_", "-", nms, fixed = TRUE)

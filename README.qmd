@@ -236,7 +236,7 @@ simplest, you can iterate over the set of flag values you want and pass
 them to separate calls of `guild_run()`:
 
 ```{r, eval = FALSE}
-for (learning_rate in c(0.001, 0.0003))
+for (learning_rate in c(0.001, 0.003))
   guild_run("train.R", c(learning_rate = learning_rate))
 ```
 
@@ -464,6 +464,7 @@ ls_runs("--marked", c("--started" = "last hour"))
 ls_runs(c("--marked", "--started", "last hour"))
 ls_runs(I("--marked --started 'last hour'"))
 ls_runs(I("-Fm -Fs 'last hour'"))
+ls_runs(.Fm = TRUE, .Fs = 'last hour')
 ls_runs("-Fm", "-Fs" = "last hour")
 ```
 
@@ -496,7 +497,8 @@ df
 
 ```{r, message=FALSE, warning=FALSE}
 library(ggplot2)
-ggplot(df, aes(x = flags$units, y = scalars$test_accuracy)) +
+ggplot(df, aes(x = flags$units,
+               y = scalars$test_accuracy)) +
   geom_point() + geom_smooth()
 ```
 
