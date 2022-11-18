@@ -49,7 +49,7 @@ install_guild <-
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL), mustWork = FALSE)
   unlink(venv, recursive = TRUE)
   python <- normalizePath(python)
-  system2(python, c("-m", "venv", shQuote(venv)))
+  system2t(python, c("-m", "venv", shQuote(venv)))
   python <- if (is_windows())
    file.path(venv, "Scripts", "python.exe", fsep = "\\") else
    file.path(venv, "bin", "python")
