@@ -118,7 +118,7 @@ ls_runs <- function(runs = NULL, ...) {
   names(df) <- nms
 
   df[["flags"]] <- as_tibble(df[["flags"]])
-  # df[["scalars"]] <- as_tibble(df[["scalars"]])
+  df[["scalars"]] <- as_tibble(df[["scalars"]])
   df <- as_tibble(df)
 
   df
