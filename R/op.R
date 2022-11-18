@@ -39,6 +39,7 @@ r_script_guild_data <- function(r_script_path) {
   data <- yaml(
     "flags-dest" = r_script_path,
     "name" = r_script_path,
+    "sourcecode" = list(dest = "."),
     "pip-freeze" = FALSE
   )
 
@@ -206,6 +207,8 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
 
 }
 
+## TODO: a way to declare required packages that can't otherwise be easily infered?
+## ? #| requires: {packages: [glmnet]}  or similar
 
 ## TODO:
 ## if user has flags-dest: file:foo.yml

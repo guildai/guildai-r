@@ -13,15 +13,14 @@ do_guild_run <-
 function(file = "train.R", flags_dest = file, echo = TRUE) {
 
   if (is_r_file(flags_dest)) {
-    modify_r_file_flags(file.path(".guild/sourcecode/", flags_dest),
-                        read_yaml(".guild/attrs/flags"),
+    modify_r_file_flags(flags_dest, read_yaml(".guild/attrs/flags"),
                         overwrite = TRUE)
   } else if (is_yml_file(flags_dest)) {
     file.copy(".guild/attrs/flags", flags_dest)
   }
 
-  setup_info <- setup_run_dir()
-  on.exit(teardown_run_dir(setup_info))
+  # setup_info <- setup_run_dir()
+  # on.exit(teardown_run_dir(setup_info))
 
 
 
