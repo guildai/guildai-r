@@ -9,7 +9,31 @@ guild_view(runs = NULL, ..., wait = FALSE)
 \arguments{
 \item{runs}{an optional runs selection.}
 
-\item{...}{passed on to the \code{guild} executable. Pass \code{--help} to see options.}
+\item{...}{
+  Arguments passed on to \code{\link[=guild_view_opts]{guild_view_opts}}
+  \describe{
+    \item{\code{host}}{Name of host interface to listen on.}
+    \item{\code{port}}{Port to listen on.}
+    \item{\code{include_batch}}{Include batch runs.}
+    \item{\code{no_open}}{Don't open Guild View in a browser.}
+    \item{\code{logging}}{Log requests.}
+    \item{\code{filter}}{Filter runs using a filter expression. See Filter by Expression above for details..}
+    \item{\code{operation}}{Filter runs with operations matching \code{VAL}.}
+    \item{\code{label}}{Filter runs with labels matching VAL. To show unlabeled runs, use --unlabeled.}
+    \item{\code{unlabeled}}{Filter only runs without labels.}
+    \item{\code{tag}}{Filter runs with TAG.}
+    \item{\code{comment}}{Filter runs with comments matching VAL.}
+    \item{\code{marked}}{Filter only marked runs.}
+    \item{\code{unmarked}}{Filter only unmarked runs.}
+    \item{\code{started}}{Filter only runs started within RANGE. See above for valid time ranges.}
+    \item{\code{digest}}{Filter only runs with a matching source code digest.}
+    \item{\code{running}}{Filter only runs that are still running.}
+    \item{\code{completed}}{Filter only completed runs.}
+    \item{\code{error}}{Filter only runs that exited with an error.}
+    \item{\code{terminated}}{Filter only runs terminated by the user.}
+    \item{\code{pending}}{Filter only pending runs.}
+    \item{\code{staged}}{Filter only staged runs.}
+  }}
 
 \item{wait}{whether to block the R console while the application is active.}
 }

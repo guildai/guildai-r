@@ -26,28 +26,53 @@ string that guild recognizes as a valid opspec.}
 }}
 
 \item{...}{
-  Arguments passed on to \code{\link[base:system2]{base::system2}}
+  Arguments passed on to \code{\link[=guild_run_opts]{guild_run_opts}}
   \describe{
-    \item{\code{command}}{the system command to be invoked, as a character string.}
-    \item{\code{args}}{a character vector of arguments to \command{command}.}
-    \item{\code{stdout,stderr}}{where output to \file{stdout} or
-    \file{stderr} should be sent.  Possible values are \code{""}, to the \R
-    console (the default), \code{NULL} or \code{FALSE} (discard output),
-    \code{TRUE} (capture the output in a character vector) or a
-    character string naming a file.}
-    \item{\code{stdin}}{should input be diverted?  \code{""} means the default,
-    alternatively a character string naming a file.  Ignored
-    if \code{input} is supplied.}
-    \item{\code{input}}{if a character vector is supplied, this is copied one
-    string per line to a temporary file, and the standard input of
-    \code{command} is redirected to the file.}
-    \item{\code{env}}{character vector of name=value strings to set environment
-    variables.}
-    \item{\code{timeout}}{timeout in seconds, ignored if 0.  This is a limit for the
-    elapsed time running \code{command} in a separate process.   Fractions
-    of seconds are ignored.}
-    \item{\code{minimized,invisible}}{arguments that are accepted on Windows but
-    ignored on this platform, with a warning.}
+    \item{\code{label}}{Set a label for the run.}
+    \item{\code{tag}}{Associate TAG with run. May be used multiple times.}
+    \item{\code{comment}}{Comment associated with the run.}
+    \item{\code{edit_comment}}{Use an editor to type a comment.}
+    \item{\code{edit_flags}}{Use an editor to review and modify flags.}
+    \item{\code{run_dir}}{Use alternative run directory DIR. Cannot be used with --stage.}
+    \item{\code{stage}}{Stage an operation.}
+    \item{\code{start}}{Start a staged run or restart an existing run. Cannot be used with --proto or --run-dir.}
+    \item{\code{proto}}{Use the operation, flags and source code from RUN. Flags may be added or redefined in this operation. Cannot be used with --restart.}
+    \item{\code{force_sourcecode}}{Use working source code when --restart or --proto is specified. Ignored otherwise.}
+    \item{\code{gpus}}{Limit availabe GPUs to DEVICES, a comma separated list of device IDs. By default all GPUs are available. Cannot beused with --no-gpus.}
+    \item{\code{no_gpus}}{Disable GPUs for run. Cannot be used with --gpu.}
+    \item{\code{batch_label}}{Label to use for batch runs. Ignored for non-batch runs.}
+    \item{\code{batch_tag}}{Associate TAG with batch. Ignored for non-batch runs. May be used multiple times.}
+    \item{\code{batch_comment}}{Comment associated with batch.}
+    \item{\code{edit_batch_comment}}{Use an editor to type a batch comment.}
+    \item{\code{optimizer}}{Optimize the run using the specified algorithm. See Optimizing Runs for more information.}
+    \item{\code{optimize}}{Optimize the run using the default optimizer.}
+    \item{\code{minimize}}{Column to minimize when running with an optimizer. See help for compare command for details specifying a column. May not be used with --maximize.}
+    \item{\code{maximize}}{Column to maximize when running with an optimizer. See help for compare command for details specifying a column. May not be used with --minimize.}
+    \item{\code{opt_flag}}{Flag for OPTIMIZER. May be used multiple times.}
+    \item{\code{max_trials}}{Maximum number of trials to run in batch operations. Default is optimizer specific. If optimizer is not specified, default is 20.}
+    \item{\code{stage_trials}}{For batch operations, stage trials without running them.}
+    \item{\code{remote}}{Run the operation remotely.}
+    \item{\code{yes}}{Do not prompt before running operation.}
+    \item{\code{force_flags}}{Accept all flag assignments, even for undefined or invalid values.}
+    \item{\code{force_deps}}{Continue even when a required resource is not resolved.}
+    \item{\code{stop_after}}{Stop operation after N minutes.}
+    \item{\code{fail_on_trial_error}}{Stop batch operations when a trial exits with an error.}
+    \item{\code{needed}}{Run only if there is not an available matching run. A matching run is of the same operation with the same flag values that is not stopped due to an error.}
+    \item{\code{pidfile}}{Run operation in background, writing the background process ID to PIDFILE.}
+    \item{\code{no_wait}}{Don't wait for a remote operation to complete. Ignored if run is local.}
+    \item{\code{save_trials}}{Saves generated trials to a CSV batch file. See BATCH FILES for more information.}
+    \item{\code{keep_run}}{Keep run even when configured with 'delete-on-success'.}
+    \item{\code{keep_batch}}{Keep batch run rather than delete it on success.}
+    \item{\code{dep}}{Include PATH as a dependency.}
+    \item{\code{quiet}}{Do not show output.}
+    \item{\code{print_cmd}}{Show operation command and exit.}
+    \item{\code{print_env}}{Show operation environment and exit.}
+    \item{\code{print_trials}}{Show generated trials and exit.}
+    \item{\code{help_model}}{Show model help and exit.}
+    \item{\code{help_op}}{Show operation help and exit.}
+    \item{\code{test_output_scalars}}{Test output scalars on output. Use '-' to read from standard intput.}
+    \item{\code{test_sourcecode}}{Test source code selection.}
+    \item{\code{test_flags}}{Test flag configuration.}
   }}
 
 \item{background, wait}{whether to do the run in the background. If \code{TRUE},

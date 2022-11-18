@@ -16,7 +16,6 @@ guild <- function(command = NULL, ...,
            wait = wait)
 }
 
-# TODO: protect against partial matching of guild() args to system2() args
 
 # as_guild_args(tag = c("a a" , "b", "c c"))
 # "--tag" "'a a'" "--tag" "b"     "--tag" "'c c'"
@@ -121,7 +120,7 @@ as_guild_args <- function(...) {
 #'   passed through to the guild executable. Arguments are automatically
 #'   quoted with `shQuote()`, unless they are protected with `I()`.
 #'   Additionally, named arguments to `system2()` can be supplied.
-#' @inheritDotParams base::system2
+#' @inheritDotParams guild_run_opts
 #'
 #' @return the return value from `system2()`, invisibly. This function is
 #'   primarily called for its side effect.
@@ -152,7 +151,7 @@ guild_run <- function(opspec = "train.R",
   }
 
   cl <- as.call(c(quote(guild), "run --yes",
-                  background = background, ...,
+                  guild_run_opts(..., background = background),
                   opspec, flags))
   if (isFALSE(echo))
     cl$stdout <- FALSE
@@ -164,7 +163,7 @@ guild_run <- function(opspec = "train.R",
 #' Launch Guild Viewer
 #'
 #' @param runs an optional runs selection.
-#' @param ... passed on to the `guild` executable. Pass `--help` to see options.
+#' @inheritDotParams guild_view_opts
 #' @param wait whether to block the R console while the application is active.
 #'
 #' @export
@@ -182,7 +181,7 @@ guild_run <- function(opspec = "train.R",
 #' }
 guild_view <- function(runs = NULL, ..., wait = FALSE) {
   # TODO: use processx here?
-  guild("view", ..., maybe_extract_run_ids(runs), wait = wait)
+  guild("view", guild_view_opts(...), maybe_extract_run_ids(runs), wait = wait)
 }
 
 
@@ -190,7 +189,7 @@ guild_view <- function(runs = NULL, ..., wait = FALSE) {
 #' Copy run files into the current project working directory
 #'
 #' @param run a run selection
-#' @param ... passed on to `guild`
+#' @inheritDotParams guild_merge_opts
 #'
 #' @export
 #'
@@ -202,7 +201,7 @@ guild_view <- function(runs = NULL, ..., wait = FALSE) {
 #'   guild_merge(I("--yes --replace"))
 #' }
 guild_merge <- function(run = NULL, ...) {
-  guild("merge", ..., maybe_extract_run_ids(run))
+  guild("merge", guild_merge_opts(...), maybe_extract_run_ids(run))
 }
 
 # dummy place holder, because R CMD check otherwise complains:
@@ -229,5 +228,6 @@ if(FALSE) {
 #
 # TODO: revisit sourcecode selection rules;
 #   manually resolve and return a full list in op data?
+
 
 ## TODO: vectorize guild_run() on script, so can do `guild_run(c("patha.R`, "pathb.R"))`
