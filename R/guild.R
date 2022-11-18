@@ -1,15 +1,14 @@
 
 #' @importFrom here here
 #' @importFrom rlang is_string
-guild <- function(command = character(), ...,
+guild <- function(command = NULL, ...,
                   stdout = "", stderr = "",
-                  home = Sys.getenv("GUILD_HOME", here(".guild")),
                   wait = TRUE) {
 
-  args <- as_guild_args(I(command), ...)
+  args <- as_guild_args(I(command %||% character()), ...)
 
-  if(!is.null(home))
-    args <- c("-H", shQuote(home), args)
+  if(is.na(Sys.getenv("GUILD_HOME", NA_character_)))
+    args <- c("-H", shQuote(here(".guild")), args)
   if(Sys.getenv("DEBUG") == "1")
     args <- c("-D", "5678", args)
   system2t(find_guild(), args,
