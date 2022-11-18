@@ -3,6 +3,7 @@
 
 test_that("guild run", {
   local_project(test_resource("basic.R"))
+  # Sys.setenv("DEBUGR" = 1); browser()
   guild_run("basic.R")
   expect_equal(nrow(ls_runs()), 1L)
 })

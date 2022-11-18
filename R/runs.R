@@ -84,6 +84,12 @@ ls_runs <- function(runs = NULL, ...) {
       out <- as.list(run_scalars$lastVal)
       names(out) <- run_scalars$tag
       path <- str_drop_prefix(run_scalars$prefix, "logs/")
+      # TODO?: include `step` as another scalar in this context,
+      # maybe only if the user output it in stdout
+      # if((step <- max(run_scalars$maxStep[run_scalars$prefix == ".guild"])) >= 0L) {
+      #   out[["step"]] <- step
+      #   append(path) <- ".guild"
+      # }
       lapply(split.default(out, path), as_tibble)
     }))
 
@@ -91,6 +97,12 @@ ls_runs <- function(runs = NULL, ...) {
   # leave scalars from run generated tfevent records packed
   from_stdout <- scalars[[".guild"]]
   scalars[[".guild"]] <- NULL
+  ## TODO: check for name collisions between stdout keys and tfevent record paths,
+  ## figure out something elegant. Right now ti
+  # if(length(colliding_names <-
+  #      intersect(names(from_stdout), names(scalars))) {
+  #   ???
+  # }
   df$scalars <- dplyr::bind_cols(from_stdout, scalars)
 
   # reorder columns for nicer printing.
@@ -99,12 +111,11 @@ ls_runs <- function(runs = NULL, ...) {
   nms <- unique(c(nms, "dir", "id"), fromLast = TRUE)
   df <- df[nms]
 
-  # rename some fields for constent camel_case.
+  # rename some fields for consistent camel_case.
   nms[nms == "exitStatus"] <- "exit_status"
   nms[nms == "projectDir"] <- "project_dir"
   # nms[nms == "dir"] <- "run_dir"
   names(df) <- nms
-
 
   df[["flags"]] <- as_tibble(df[["flags"]])
   # df[["scalars"]] <- as_tibble(df[["scalars"]])
@@ -389,3 +400,16 @@ maybe_extract_run_ids <- function(x) {
       return(id)
   x
 }
+
+# TODO: support for multiple `flags-dest` file paths, as a yaml list
+
+# TODO: `guild api runs --operation 'train.R'` doesn't work, I think because
+# guild doesn't know about this operation in this context because it's not
+# listed in the guildfile. Not sure what the best way to resolve this is, or
+# even if we should...
+
+
+# TODO: tidyr::unpack() loses data if names collide.
+# df <- ls_runs()
+# df$flags$test_accuracy <- 1
+# ls_runs() %>%  select(id, flags, scalars) %>% tidyr::unpack(c(flags, scalars))

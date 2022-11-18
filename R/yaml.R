@@ -40,6 +40,9 @@ encode_yaml <- function(x, ...) {
   out
 }
 
+# TODO: merge guild.yml w/ op frontmatter (or ../guild.yml, ../../guild.yml)
+# TODO: support source(chdir = TRUE) somehow?
+# TODO: infer sourecode.root = ".." somehow based on rproj?
 
 yaml <- function(...)
   as_yaml(rlang::dots_list(..., .named = TRUE))

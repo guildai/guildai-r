@@ -229,3 +229,5 @@ if(FALSE) {
 #
 # TODO: revisit sourcecode selection rules;
 #   manually resolve and return a full list in op data?
+
+## TODO: vectorize guild_run() on script, so can do `guild_run(c("patha.R`, "pathb.R"))`
