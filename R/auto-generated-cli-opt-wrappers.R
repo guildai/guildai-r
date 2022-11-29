@@ -222,7 +222,7 @@ label = NULL, unlabeled = FALSE, tag = NULL, comment = NULL,
 marked = FALSE, unmarked = FALSE, started = NULL, digest = NULL,
 running = FALSE, completed = FALSE, error = FALSE, terminated = FALSE,
 pending = FALSE, staged = FALSE)
-as_guild_args(..., as.list.environment(environment(), all.names = TRUE)[-1L])
+as_guild_args(as.list.environment(environment()), ...)
 
 #' guild_run_opts
 #' Run an operation.
@@ -443,7 +443,6 @@ as_guild_args(..., as.list.environment(environment(), all.names = TRUE)[-1L])
 #' @param max_trials Maximum number of trials to run in batch operations. Default is optimizer specific. If optimizer is not specified, default is 20.
 #' @param stage_trials For batch operations, stage trials without running them.
 #' @param remote Run the operation remotely.
-#' @param yes Do not prompt before running operation.
 #' @param force_flags Accept all flag assignments, even for undefined or invalid values.
 #' @param force_deps Continue even when a required resource is not resolved.
 #' @param stop_after Stop operation after N minutes.
@@ -472,14 +471,14 @@ proto = NULL, force_sourcecode = FALSE, gpus = NULL, no_gpus = FALSE,
 batch_label = NULL, batch_tag = NULL, batch_comment = NULL,
 edit_batch_comment = FALSE, optimizer = NULL, optimize = FALSE,
 minimize = NULL, maximize = NULL, opt_flag = NULL, max_trials = NULL,
-stage_trials = FALSE, remote = NULL, yes = FALSE, force_flags = FALSE,
+stage_trials = FALSE, remote = NULL, force_flags = FALSE,
 force_deps = FALSE, stop_after = NULL, fail_on_trial_error = FALSE,
 needed = FALSE, background = FALSE, pidfile = NULL, no_wait = FALSE,
 save_trials = NULL, keep_run = FALSE, keep_batch = FALSE,
 dep = NULL, quiet = FALSE, print_cmd = FALSE, print_env = FALSE,
 print_trials = FALSE, help_model = FALSE, help_op = FALSE,
 test_output_scalars = NULL, test_sourcecode = FALSE, test_flags = FALSE)
-as_guild_args(..., as.list.environment(environment(), all.names = TRUE)[-1L])
+as_guild_args(as.list.environment(environment()), ...)
 
 #' guild_select_opts
 #' Select a run and shows its ID.
@@ -701,7 +700,7 @@ label = NULL, unlabeled = FALSE, tag = NULL, comment = NULL,
 marked = FALSE, unmarked = FALSE, started = NULL, digest = NULL,
 running = FALSE, completed = FALSE, error = FALSE, terminated = FALSE,
 pending = FALSE, staged = FALSE)
-as_guild_args(..., as.list.environment(environment(), all.names = TRUE)[-1L])
+as_guild_args(as.list.environment(environment()), ...)
 
 #' guild_merge_opts
 #' Copy run files to a project directory.
@@ -748,7 +747,6 @@ as_guild_args(..., as.list.environment(environment(), all.names = TRUE)[-1L])
 #' @param no_summary Don't generate a run summary.
 #' @param summary_name Name used for the run summary. Use '${run_id}' in the name to include the run ID.
 #' @param preview Show what would happen on a merge.
-#' @param yes Don't prompt before copying files.
 #' @param replace Allow replacement of existing files. Cannot be used with --no-replace
 #' @param no_replace Fail if any target file would be replaced, even if that file is committed to the project VCS. Cannot be used with \code{replace}.
 guild_merge_opts <-
@@ -759,6 +757,6 @@ completed = FALSE, error = FALSE, terminated = FALSE, pending = FALSE,
 staged = FALSE, target_dir = NULL, sourcecode = FALSE, all = FALSE,
 skip_sourcecode = FALSE, skip_deps = FALSE, exclude = NULL,
 no_summary = FALSE, summary_name = NULL, preview = FALSE,
-yes = FALSE, replace = FALSE, no_replace = FALSE)
-as_guild_args(..., as.list.environment(environment(), all.names = TRUE)[-1L])
+replace = FALSE, no_replace = FALSE)
+as_guild_args(as.list.environment(environment()), ...)
 

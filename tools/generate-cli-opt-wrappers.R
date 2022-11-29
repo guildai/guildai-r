@@ -1,15 +1,21 @@
 #!/usr/bin/env Rscript
 
-Sys.setenv(GUILD_HELP_JSON=1)
-devtools::load_all()
 library(purrr)
 library(tibble)
 library(dplyr)
 library(stringr)
 library(commafree)
-library(magrittr, include.only = "%<>%")
 library(glue)
+library(envir)
 
+attach_eval({
+  import_from(guildai, guild, str_drop_prefix, parse_yaml)
+  import_from(magrittr, `%<>%`, not)
+  filter_out <- function(.data, ...) {
+    dots <- lapply(quos(...), function(q) quo( not(!!q) ))
+    filter(.data, !!!dots)
+  }
+})
 
 parse_opt_term_field <- function(term) {
   # term can have up to three fields
@@ -41,8 +47,8 @@ parse_opt_term_field <- function(term) {
       list(short_name = short_name, name = name, default = list(default))
     }) %>%
     mutate(name = name %>%
-             guildai:::str_drop_prefix("--") %>%
-             gsub("-", "_", ., fixed = TRUE))
+             str_drop_prefix("--") %>%
+             str_replace_all(fixed("-"), "_"))
 
 }
 
@@ -72,8 +78,8 @@ opt_cli_name_to_r_name <- function(x) {
 }
 
 
-gen_wrapper_text <- function(command, omit = NULL) {
-  x <- guild(command, "--help", stdout = TRUE) |>
+gen_wrapper_text <- function(command, passes_on_to = NULL, omit = NULL) {
+  x <- guild(command, "--help", env = "GUILD_HELP_JSON=1", stdout = TRUE) |>
     paste0(collapse = "") |>
     parse_yaml()
 
@@ -81,7 +87,7 @@ gen_wrapper_text <- function(command, omit = NULL) {
 
   opts <- transpose(x$options) %>% map(flatten_chr) %>% as_tibble()
   opts <- bind_cols(opts, parse_opt_term_field(opts$term))
-  opts <- opts %>% filter(!name %in% c(omit, "help"))
+  opts <- opts %>% filter(!name %in% c(omit, "help", "yes"))
   opts$help %<>% replace_cli_arg_names_with_r_arg_names()
 
   roxy_params <-
@@ -99,16 +105,23 @@ gen_wrapper_text <- function(command, omit = NULL) {
     roxy_params
   })
 
-  wrapper_fn <-
-    as.function.default(c(
-      alist(... = ), deframe(select(opts, name, default)),
-      quote(as_guild_args(..., as.list.environment(environment(), all.names = TRUE)[-1L]))))
+  frmls <- c(alist(... = ), deframe(select(opts, name, default)))
+  body <- if(is.null(passes_on_to))
+    quote(as_guild_args(as.list.environment(environment()), ...))
+  else
+    bquote(c(as_guild_args(as.list.environment(environment())),
+           .(substitute(passes_on_to))(...)))
+
+  wrapper_fn <- as.function.default(c(frmls, body))
+
+  # all.names=FALSE: kludge to omit the `...` symbol.
 
   txt <- c(roxy,
            paste(fn_name, "<-"), deparse(wrapper_fn),
            "\n\n")
   trimws(txt)
-}; gen_wrapper_text("run") %>% invisible() #cat()#%>% .$term %>% parse_opt_term_field()
+}; #gen_wrapper_text("run") %>% invisible() #cat()#%>% .$term %>% parse_opt_term_field()
+
 
 
 
