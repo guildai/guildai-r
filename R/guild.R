@@ -3,6 +3,7 @@
 #' @importFrom rlang is_string
 guild <- function(command = NULL, ...,
                   stdout = "", stderr = "",
+                  env = NULL,
                   wait = TRUE) {
 
   args <- as_guild_args(I(command %||% character()), ...)
@@ -12,6 +13,7 @@ guild <- function(command = NULL, ...,
   if(Sys.getenv("DEBUG") == "1")
     args <- c("-D", "5678", args)
   system2t(find_guild(), args,
+           env = env,
            stdout = stdout, stderr = stderr,
            wait = wait)
 }
