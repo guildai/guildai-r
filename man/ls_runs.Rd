@@ -4,7 +4,7 @@
 \alias{ls_runs}
 \title{list guild runs}
 \usage{
-ls_runs(runs = NULL, ..., scalars = c("last", "min", "max", "full"))
+ls_runs(runs = NULL, ...)
 }
 \arguments{
 \item{runs}{a runs specification.}

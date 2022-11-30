@@ -32,7 +32,6 @@ guild_merge_opts(
   no_summary = FALSE,
   summary_name = NULL,
   preview = FALSE,
-  yes = FALSE,
   replace = FALSE,
   no_replace = FALSE
 )
@@ -89,8 +88,6 @@ guild_merge_opts(
 \item{summary_name}{Name used for the run summary. Use '${run_id}' in the name to include the run ID.}
 
 \item{preview}{Show what would happen on a merge.}
-
-\item{yes}{Don't prompt before copying files.}
 
 \item{replace}{Allow replacement of existing files. Cannot be used with --no-replace}
 

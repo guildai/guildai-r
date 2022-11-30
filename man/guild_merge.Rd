@@ -37,7 +37,6 @@ guild_merge(run = NULL, ...)
     \item{\code{no_summary}}{Don't generate a run summary.}
     \item{\code{summary_name}}{Name used for the run summary. Use '${run_id}' in the name to include the run ID.}
     \item{\code{preview}}{Show what would happen on a merge.}
-    \item{\code{yes}}{Don't prompt before copying files.}
     \item{\code{replace}}{Allow replacement of existing files. Cannot be used with --no-replace}
     \item{\code{no_replace}}{Fail if any target file would be replaced, even if that file is committed to the project VCS. Cannot be used with \code{replace}.}
   }}

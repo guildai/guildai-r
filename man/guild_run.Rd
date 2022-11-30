@@ -52,7 +52,6 @@ string that guild recognizes as a valid opspec.}
     \item{\code{max_trials}}{Maximum number of trials to run in batch operations. Default is optimizer specific. If optimizer is not specified, default is 20.}
     \item{\code{stage_trials}}{For batch operations, stage trials without running them.}
     \item{\code{remote}}{Run the operation remotely.}
-    \item{\code{yes}}{Do not prompt before running operation.}
     \item{\code{force_flags}}{Accept all flag assignments, even for undefined or invalid values.}
     \item{\code{force_deps}}{Continue even when a required resource is not resolved.}
     \item{\code{stop_after}}{Stop operation after N minutes.}

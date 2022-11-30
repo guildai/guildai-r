@@ -31,7 +31,6 @@ guild_run_opts(
   max_trials = NULL,
   stage_trials = FALSE,
   remote = NULL,
-  yes = FALSE,
   force_flags = FALSE,
   force_deps = FALSE,
   stop_after = NULL,
@@ -105,8 +104,6 @@ guild_run_opts(
 \item{stage_trials}{For batch operations, stage trials without running them.}
 
 \item{remote}{Run the operation remotely.}
-
-\item{yes}{Do not prompt before running operation.}
 
 \item{force_flags}{Accept all flag assignments, even for undefined or invalid values.}
 
