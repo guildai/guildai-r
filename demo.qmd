@@ -1,0 +1,96 @@
+---
+title: "Untitled"
+format: revealjs
+editor: visual
+---
+
+## Guild
+
+Guild is a tool you can use to keep track of machine learning
+experiments.
+
+It sits somewhere between between a git history, a database, a browser,
+and a process orchestrator.
+
+I think of it like a lab notebook that a biologist or chemist might use.
+It's an experiment journal for a scientist to record their lines of
+inquiry. It's used while experiments are being conducted, to document
+hypotheses, results, and an initial interpretation of the results.
+
+A lab notebook serves as an organizational tool and a memory aid. It is
+also a primary record of scientific research, an artifact that can be
+referred back, or shared with a colleague.
+
+Guild AI is an imagining of what a lab notebook could be for data
+scientists.
+
+Here is how it works.
+
+We start with an R script. *Any* R script.
+
+It is explicitly *unopinionated* about machine learning frameworks. It
+works with tidymodels, tensorflow, torch, xgboost, mlr3, all of them
+combined, or no framework at all.
+
+To demo it here, I'm going to show guild without any framework. Just a
+simple R script named "experiment.R", and all it does does is a random
+walk for 10 steps.
+
+```{r}
+y <- 0
+for(step in 1:10) {
+  y <- y + sample(c(1, -1), 1)
+  cat("step:", step, "\n")
+  cat("y:", y, "\n")
+}
+```
+
+The first thing to notice is that there is no configuration with any
+external service or servers. This is a local first tool.
+
+Not only that, but there there is also no "library(guildai)" call in the
+experiment script. Just like a lab notebook is not part of the
+experiment, guildai is not part of your experiment script.
+
+The natural thing to do with a script like this is to run it. You can
+run it by calling the "source" function, (in the IDE you might click the
+"source" button), or at the terminal you might type
+`Rscript experiment.R`.
+
+``` r
+source("experiment.R")
+```
+
+``` bash
+Rscript experiment.R
+```
+
+`source()` is great while working interactively, but of course, it
+leaves no record of the run. What guild provides is a replacement for
+"source" that not only runs the script, but also produces a record of
+the run. In R or at the terminal, it's a command called "guild run".
+
+``` r
+library(guildai)
+guild_run("experiment.R")
+```
+
+``` bash
+guild run experiment.R
+```
+
+The run is the primary unit of composition. After a run, you can view
+the run record produced in couple of ways. Guild comes built-in with
+interfaces for viewing, managing, and analyzing runs in four contexts:
+from the browser, from R, from python, and from the terminal.
+
+To start however, I'm going to show you first
+
+Saying that you "run a run to make a run" might get confusing, so we use
+a different word here: guild runs operations, and the artifact from
+running an operation is a run record.
+
+possibly to at a much later time, possibly as part of a different line
+of inquire. Those who've spent any significant amount of time in a wet
+lab know that some of the greatest value of a well kept lab notebook.
+
