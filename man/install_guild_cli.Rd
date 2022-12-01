@@ -7,8 +7,8 @@
 install_guild_cli(dest = "~/bin", completions = TRUE)
 }
 \arguments{
-\item{dest}{Where to place the \code{guild} executable.
-This should be a location on the \code{PATH}.}
+\item{dest}{Where to place the \code{guild} executable. This should be a
+location on the \code{PATH}.}
 
 \item{completions}{Whether to also install shell completion helpers.}
 }
@@ -16,6 +16,6 @@ This should be a location on the \code{PATH}.}
 path to the installed guild executable, invisibly.
 }
 \description{
-This function makes available the \code{guild} executable installed by \code{install_guild()}
-for usage in the Terminal.
+This function makes available the \code{guild} executable installed by
+\code{install_guild()} for usage in the Terminal.
 }

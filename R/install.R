@@ -80,11 +80,11 @@ find_guild <- function() {
 
 #' Install guild for usage in the Terminal
 #'
-#' This function makes available the `guild` executable installed by `install_guild()`
-#' for usage in the Terminal.
+#' This function makes available the `guild` executable installed by
+#' `install_guild()` for usage in the Terminal.
 #'
-#' @param dest Where to place the `guild` executable.
-#'   This should be a location on the `PATH`.
+#' @param dest Where to place the `guild` executable. This should be a
+#'   location on the `PATH`.
 #' @param completions Whether to also install shell completion helpers.
 #'
 #' @return path to the installed guild executable, invisibly.

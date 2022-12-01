@@ -4,16 +4,31 @@
 \alias{write_run_attr}
 \title{Write run attributes}
 \usage{
-write_run_attr(name, data)
+write_run_attr(name, data, ..., append = FALSE)
 }
 \arguments{
 \item{name}{A string}
 
 \item{data}{The data to write. This needs to be encodable as yaml.
-Passing NULL delete the existing attr.}
+If missing, the existing attr is deleted.}
+
+\item{...}{
+  Arguments passed on to \code{\link[yaml:as.yaml]{yaml::as.yaml}}
+  \describe{
+    \item{\code{line.sep}}{ the line separator character(s) to use }
+    \item{\code{indent}}{ the number of spaces to use for indenting }
+    \item{\code{omap}}{ determines whether or not to convert a list to a YAML omap; see Details }
+    \item{\code{column.major}}{ determines how to convert a data.frame; see Details }
+    \item{\code{unicode}}{ determines whether or not to allow unescaped unicode characters in output }
+    \item{\code{precision}}{ number of significant digits to use when formatting numeric values }
+    \item{\code{indent.mapping.sequence}}{ determines whether or not to indent sequences in mapping context }
+    \item{\code{handlers}}{ named list of custom handler functions for R objects; see Details }
+  }}
+
+\item{append}{whether to append to the existing attr file.}
 }
 \value{
-the written yaml, invisibly.
+the written lines, invisibly.
 }
 \description{
 This function does nothing if \code{is_run_active()} is \code{FALSE}.
