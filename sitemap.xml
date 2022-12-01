@@ -10,9 +10,6 @@
     <loc>https://t-kalinowski.github.io/guildai-r/index.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/export_guild_cli.html</loc>
-  </url>
-  <url>
     <loc>https://t-kalinowski.github.io/guildai-r/reference/guild_merge.html</loc>
   </url>
   <url>
@@ -38,6 +35,9 @@
   </url>
   <url>
     <loc>https://t-kalinowski.github.io/guildai-r/reference/install_guild.html</loc>
+  </url>
+  <url>
+    <loc>https://t-kalinowski.github.io/guildai-r/reference/install_guild_cli.html</loc>
   </url>
   <url>
     <loc>https://t-kalinowski.github.io/guildai-r/reference/is_run_active.html</loc>

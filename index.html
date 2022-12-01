@@ -475,9 +475,9 @@
 <div class="section level2">
 <h2 id="using-guild-from-the-terminal">Using guild from the terminal<a class="anchor" aria-label="anchor" href="#using-guild-from-the-terminal"></a>
 </h2>
-<p><code>guild</code> can also be used directly from the terminal. Call the R function <code><a href="reference/export_guild_cli.html">export_guild_cli()</a></code> to place the <code>guild</code> executable installed by <code><a href="reference/install_guild.html">guildai::install_guild()</a></code> on your PATH:</p>
+<p><code>guild</code> can also be used directly from the terminal. Call the R function <code>export_guild_cli()</code> to place the <code>guild</code> executable installed by <code><a href="reference/install_guild.html">guildai::install_guild()</a></code> on your PATH:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/export_guild_cli.html">export_guild_cli</a></span><span class="op">(</span>dest <span class="op">=</span> <span class="st">"~/bin"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">export_guild_cli</span><span class="op">(</span>dest <span class="op">=</span> <span class="st">"~/bin"</span><span class="op">)</span></span></code></pre></div>
 <p>Then you can launch runs and perform other guild operations from the terminal:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="ex">guild</span> run train.R</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="ex">guild</span> run train.R batch_size=<span class="st">'[32,64]'</span></span></code></pre></div>
