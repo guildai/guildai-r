@@ -193,10 +193,14 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
 
     lineno <- utils::getSrcLocation(exprs[i], "line")
     # look for adjacent anno hints about this flag
-    if (is_anno[lineno - 1L]) {
+    if (isTRUE(is_anno[lineno - 1L])) {
       anno_start <- anno_end <- lineno - 1L
-      while (is_anno[anno_start - 1L])
+      while (isTRUE(is_anno[anno_start - 1L]))
         subtract(anno_start) <- 1L
+      # TODO: add test if lineno==1L to ensure no error
+      # TODO: expand check to make sure we don't falsly pickup frontmatter as flag anno.
+      #1  #| echo: false
+      #2  y <- 0
 
       anno <- parse_yaml_anno(text[anno_start:anno_end])
       append(param) <- anno
