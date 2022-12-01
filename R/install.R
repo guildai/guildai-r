@@ -78,31 +78,38 @@ find_guild <- function() {
 }
 
 
-#' Export guild for usage in the Terminal
+#' Install guild for usage in the Terminal
+#'
+#' This function makes available the `guild` executable installed by `install_guild()`
+#' for usage in the Terminal.
 #'
 #' @param dest Where to place the `guild` executable.
-#'   This should be a location on the PATH.
+#'   This should be a location on the `PATH`.
 #' @param completions Whether to also install shell completion helpers.
 #'
-#' @return path to the installed guild executable, invisibly
+#' @return path to the installed guild executable, invisibly.
 #' @export
-export_guild_cli <- function(dest = "~/bin", completions = TRUE) {
+install_guild_cli <- function(dest = "~/bin", completions = TRUE) {
   if(!dir.exists(dest))
     dir.create(dest)
 
   guild_exe <- find_guild()
   link <- file.path(dest, basename(guild_exe))
   unlink(link)
+  message("Creating symlink: '", link, "' -> '", guild_exe, "'")
   file.symlink(guild_exe, link)
-  message("Created symlink: '", link, "' -> '", guild_exe, "'")
-  if(completions)
+  if (completions)
     guild("completion --install", "--shell" = basename(Sys.getenv("SHELL")))
 
   paths <- normalizePath(
     strsplit(Sys.getenv("PATH"), .Platform$path.sep, fixed = TRUE)[[1]],
     mustWork = FALSE)
-  if(!normalizePath(dest) %in% paths)
+  if (!normalizePath(dest) %in% paths)
     warning(sprintf("'%s' is not on the PATH.", dest))
+
+  if (Sys.which("guild") != guild_exe)
+    warning("A different 'guild' executable is first on the PATH: ",
+            "'", Sys.which("guild"), "'")
 
   invisible(link)
 }
