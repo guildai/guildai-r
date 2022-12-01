@@ -48,13 +48,24 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
   set.seed(NULL)
   seed <- stats::runif(1L, -.Machine$integer.max, .Machine$integer.max)
   set.seed(seed)
-  write_run_attr("random_seed", NULL)
+  # write_run_attr("random_seed", seed)
+  # write_run_attr("r-width", getOption("width"))
+
+  write_run_attr("random_seed", data = ) # delete missleading existing attr
   write_run_attr("r-random-seed", seed)
+
   write_run_attr("env", as.list(Sys.getenv()))
+  on.exit({
+    write_run_attr("r-session-info",
+                   I(capture.output(print(sessionInfo()))))
+    ## TODO: discuss w/ garret if we want to adopt a "all attrs are yaml" convention
+    ## and if so, what should this session info print out be.
+  })
 
   # TODO: figure out goldilocks default for what to record from R session state.
   #   installed.packages() / renv::something() / on.exit(sessionInfo())
   # write_run_attr("r_env")
+
 
   source2 <- new_source_w_active_echo()
 
@@ -410,20 +421,25 @@ teardown_run_dir <- function(setup_info) {
 #'
 #' @param name A string
 #' @param data The data to write. This needs to be encodable as yaml.
-#'   Passing NULL delete the existing attr.
+#'   If missing, the existing attr is deleted. To avoid encoding `data` as yaml
+#'   you can wrap a character vector in `I()` to pass the actual lines to be written.
 #'
-#' @return the written yaml, invisibly.
-write_run_attr <- function(name, data) {
+#' @return the written lines, invisibly.
+write_run_attr <- function(name, data, append = FALSE) {
   if(!is_run_active())
     return(invisible())
   stopifnot(nzchar(name))
   file <- file.path(Sys.getenv("RUN_DIR"), ".guild/attrs", name)
-  if(is.null(data))
+  if(missing(data))
     unlink(file)
-  else
-    print.yaml(data, file = file)
+  if (!inherits(data, "AsIs"))
+    data <- encode_yaml(data)
+  cat(data, file = file, sep = "\n", append = append)
+  invisible(data)
 }
 
+# TODO: scalars not detected if they're a flag. Are name collisions between
+# flags and scalars not allowed?
 
 deparsed_call_stack <- function(n = 1L) {
   calls <- rev(sys.calls())[-seq_len(n)]
