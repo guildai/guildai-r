@@ -9,8 +9,16 @@ editor: visual
 Guild is a tool you can use to keep track of machine learning
 experiments.
 
-It sits somewhere between between a git history, a database, a browser,
-and a process orchestrator.
+It sits somewhere between between a git history, a database, and an
+orchestrator.
+
+(slide: image w/ venn diagram of three circles, git, database, process
+orcestrator. guild in the middle)
+
+(alt fun slide: witches brew cauldren w/ things being thrown in)
+
+(slide: image of a science notebook):
+https://aids.harvard.edu/consider-the-lab-notebook/
 
 I think of it like a lab notebook that a biologist or chemist might use.
 It's an experiment journal for a scientist to record their lines of
@@ -52,10 +60,9 @@ Not only that, but there there is also no "library(guildai)" call in the
 experiment script. Just like a lab notebook is not part of the
 experiment, guildai is not part of your experiment script.
 
-The natural thing to do with a script like this is to run it. You can
-run it by calling the "source" function, (in the IDE you might click the
-"source" button), or at the terminal you might type
-`Rscript experiment.R`.
+The natural thing to do with a script is to run it. You can run it by
+calling the "source" function, (in the IDE you might click the "source"
+button), or at the terminal you might type `Rscript experiment.R`.
 
 ``` r
 source("experiment.R")
@@ -68,7 +75,8 @@ Rscript experiment.R
 `source()` is great while working interactively, but of course, it
 leaves no record of the run. What guild provides is a replacement for
 "source" that not only runs the script, but also produces a record of
-the run. In R or at the terminal, it's a command called "guild run".
+the run. From R or from the terminal, it's the same command: "guild
+run".
 
 ``` r
 library(guildai)
@@ -79,12 +87,22 @@ guild_run("experiment.R")
 guild run experiment.R
 ```
 
-The run is the primary unit of composition. After a run, you can view
-the run record produced in couple of ways. Guild comes built-in with
-interfaces for viewing, managing, and analyzing runs in four contexts:
-from the browser, from R, from python, and from the terminal.
+After a run, you can view the run record produced in couple of ways.
+Guild comes built-in with interfaces for viewing, managing, and
+analyzing runs in four contexts: from the browser, from R, from python,
+and from the terminal.
 
-To start however, I'm going to show you first
+The browser viewer can be launched with `guild_view()`.
+
+``` r
+guild_view() 
+```
+
+To start however, I'm going to show you from the file explorer.
+
+(open up .guild folder, show the run id folder, show whats in there)
+
+------------------------------------------------------------------------
 
 Saying that you "run a run to make a run" might get confusing, so we use
 a different word here: guild runs operations, and the artifact from
