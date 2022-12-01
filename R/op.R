@@ -28,7 +28,9 @@ emit_r_script_guild_data <- function(r_script_path = commandArgs(TRUE)[1]) {
 #   supply `arg-name: gsub("_", "-", name)` ?
 
 r_script_guild_data <- function(r_script_path) {
+
   r_script_path <- gsub("\\", "/", r_script_path, fixed = TRUE)
+  r_script_path <- str_drop_prefix(r_script_path, "./")
 
   text <- readLines(r_script_path)
   # handle case of empty file
@@ -93,11 +95,12 @@ r_script_guild_data <- function(r_script_path) {
   if(startsWith(flags_dest, "config:"))
     flags_dest <- NULL
 
-  cl <- call(":::", quote(guildai), call("do_guild_run",
-    r_script_path,
-    flags_dest = flags_dest,
-    echo = echo
-  ))
+  cl <- call("do_guild_run", r_script_path)
+  if(!identical(flags_dest, r_script_path))
+    cl["flags_dest"] <- list(flags_dest) # preserve NULL
+  if(!isTRUE(echo))
+    cl$echo <- echo
+  cl <- call(":::", quote(guildai), cl)
 
   data$exec <- sprintf("%s -e %s",
                        rscript_bin(),
