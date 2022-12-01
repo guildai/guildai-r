@@ -84,16 +84,17 @@ find_guild <- function() {
 #'   This should be a location on the PATH.
 #' @param completions Whether to also install shell completion helpers.
 #'
-#' @return path to the guild executable, invisibly
+#' @return path to the installed guild executable, invisibly
 #' @export
 export_guild_cli <- function(dest = "~/bin", completions = TRUE) {
   if(!dir.exists(dest))
     dir.create(dest)
 
-  g <- find_guild()
-  dest <- file.path(dest, basename(g))
-  file.symlink(g, dest)
-  message("Created symlink: '", dest, "' -> '", g, "'")
+  guild_exe <- find_guild()
+  link <- file.path(dest, basename(guild_exe))
+  unlink(link)
+  file.symlink(guild_exe, link)
+  message("Created symlink: '", link, "' -> '", guild_exe, "'")
   if(completions)
     guild("completion --install", "--shell" = basename(Sys.getenv("SHELL")))
 
@@ -103,26 +104,6 @@ export_guild_cli <- function(dest = "~/bin", completions = TRUE) {
   if(!normalizePath(dest) %in% paths)
     warning(sprintf("'%s' is not on the PATH.", dest))
 
-  invisible(g)
+  invisible(link)
 }
 
-
-#
-#   function(destination = switch(basename(Sys.getenv("SHELL")),
-#                                 bash = "~/.bashrc",
-#                                 zsh = "~/.zprofile",
-#                                 ".profile"))
-#     ,
-# completions = TRUE) {
-#
-#
-#   g <- find_guild()
-#   # if(!is_windows()) {
-#   #   if(startsWith(g, path.expand("~")))
-#   #     g <- paste0("~", str_drop_prefix(g, path.expand("~")))
-  # }
-#   cat(sprintf('export PATH="%s:$PATH"', g))
-#   "[ -s ~/.guild/bash_completion ] && . ~/.guild/bash_completion"  # Enable completion for guild
-#
-#
-# }

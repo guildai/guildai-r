@@ -13,7 +13,7 @@ This should be a location on the PATH.}
 \item{completions}{Whether to also install shell completion helpers.}
 }
 \value{
-path to the guild executable, invisibly
+path to the installed guild executable, invisibly
 }
 \description{
 Export guild for usage in the Terminal
