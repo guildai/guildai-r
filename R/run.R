@@ -28,6 +28,9 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
   # the default viewers work better w/ pngs than pdf.
   options(
     "device" = function() {
+      # TODO: after dest.dir change, need to revisit this default plots dir location
+      # What happens if a file is overwritten? Should the default plots dir be
+      # under .guild/plots perhaps?
       plots_dir <- file.path(Sys.getenv("RUN_DIR", "."), "plots")
       if (!dir.exists(plots_dir))
         dir.create(plots_dir, recursive = TRUE)
@@ -65,7 +68,6 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
   # TODO: figure out goldilocks default for what to record from R session state.
   #   installed.packages() / renv::something() / on.exit(sessionInfo())
   # write_run_attr("r_env")
-
 
   source2 <- new_source_w_active_echo()
 

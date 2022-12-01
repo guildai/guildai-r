@@ -214,6 +214,15 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
 
 }
 
+## TODO: guild bug in the way it writes out flags
+## If `y` is a flag, guild writes out this to attrs, which is not valid yaml:
+## y: 0.0
+## It should be
+## 'y': 0.0
+## Otherwise, this get's parsed into R as
+## yaml::yaml.load("y: 0.0") |> dput()
+## list(`TRUE` = 0)
+
 ## TODO: a way to declare required packages that can't otherwise be easily infered?
 ## ? #| requires: {packages: [glmnet]}  or similar
 
