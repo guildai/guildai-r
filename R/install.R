@@ -39,11 +39,11 @@ find_python <- function() {
 #' @examples
 #' if(FALSE) {
 #' install_guild(c("-e", "~/guild/guildai"))
-#' install_guild("~/guild/guildai", reticulate::install_python())
+#' # install_guild("~/guild/guildai", reticulate::install_python())
 #' install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
-#' install_guild(
-#'   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
-#'   python = reticulate::install_python())
+#' # install_guild(
+#' #   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
+#' #   python = reticulate::install_python())
 #' }
 install_guild <-
   function(guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",

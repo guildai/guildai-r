@@ -11,3 +11,6 @@
 ^vignettes/articles$
 ^vignettes/articles/\.guild$
 ^README\.qmd$
+^demo\.qmd$
+^demo$
+^TODO\.md$
