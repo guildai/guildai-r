@@ -59,10 +59,10 @@
 <dd><p>Filter runs with operations matching <code>VAL</code>.</p></dd>
 
     <dt><code>label</code></dt>
-<dd><p>Filter runs with labels matching VAL. To show unlabeled runs, use --unlabeled.</p></dd>
+<dd><p>Filter runs with labels matching VAL. To show unlabeled runs, use <code>unlabeled</code>.</p></dd>
 
     <dt><code>unlabeled</code></dt>
-<dd><p>Filter only runs without labels.</p></dd>
+<dd><p>(bool) Filter only runs without labels.</p></dd>
 
     <dt><code>tag</code></dt>
 <dd><p>Filter runs with TAG.</p></dd>
@@ -71,10 +71,10 @@
 <dd><p>Filter runs with comments matching VAL.</p></dd>
 
     <dt><code>marked</code></dt>
-<dd><p>Filter only marked runs.</p></dd>
+<dd><p>(bool) Filter only marked runs.</p></dd>
 
     <dt><code>unmarked</code></dt>
-<dd><p>Filter only unmarked runs.</p></dd>
+<dd><p>(bool) Filter only unmarked runs.</p></dd>
 
     <dt><code>started</code></dt>
 <dd><p>Filter only runs started within RANGE. See above for valid time ranges.</p></dd>
@@ -83,55 +83,55 @@
 <dd><p>Filter only runs with a matching source code digest.</p></dd>
 
     <dt><code>running</code></dt>
-<dd><p>Filter only runs that are still running.</p></dd>
+<dd><p>(bool) Filter only runs that are still running.</p></dd>
 
     <dt><code>completed</code></dt>
-<dd><p>Filter only completed runs.</p></dd>
+<dd><p>(bool) Filter only completed runs.</p></dd>
 
     <dt><code>error</code></dt>
-<dd><p>Filter only runs that exited with an error.</p></dd>
+<dd><p>(bool) Filter only runs that exited with an error.</p></dd>
 
     <dt><code>terminated</code></dt>
-<dd><p>Filter only runs terminated by the user.</p></dd>
+<dd><p>(bool) Filter only runs terminated by the user.</p></dd>
 
     <dt><code>pending</code></dt>
-<dd><p>Filter only pending runs.</p></dd>
+<dd><p>(bool) Filter only pending runs.</p></dd>
 
     <dt><code>staged</code></dt>
-<dd><p>Filter only staged runs.</p></dd>
+<dd><p>(bool) Filter only staged runs.</p></dd>
 
     <dt><code>target_dir</code></dt>
 <dd><p>Directory to merge run files to (required if project directory cannot be determined for the run).</p></dd>
 
     <dt><code>sourcecode</code></dt>
-<dd><p>Only copy run source code. Implies use of <code>skip_deps</code>. Cannot be used with <code>skip_sourcecode</code>.</p></dd>
+<dd><p>(bool) Only copy run source code. Implies use of <code>skip_deps</code>. Cannot be used with <code>skip_sourcecode</code>.</p></dd>
 
     <dt><code>all</code></dt>
-<dd><p>Copy all run files. May be used with <code>skip_sourcecode</code>, <code>skip_deps</code>, and <code>exclude</code> to copy all but the skipped/excluded files.</p></dd>
+<dd><p>(bool) Copy all run files. May be used with <code>skip_sourcecode</code>, <code>skip_deps</code>, and <code>exclude</code> to copy all but the skipped/excluded files.</p></dd>
 
     <dt><code>skip_sourcecode</code></dt>
-<dd><p>Don't copy run source code.</p></dd>
+<dd><p>(bool) Don't copy run source code.</p></dd>
 
     <dt><code>skip_deps</code></dt>
-<dd><p>Don't copy project-local dependencies.</p></dd>
+<dd><p>(bool) Don't copy project-local dependencies.</p></dd>
 
     <dt><code>exclude</code></dt>
 <dd><p>Exclude a file or pattern (may be used multiple times).</p></dd>
 
     <dt><code>no_summary</code></dt>
-<dd><p>Don't generate a run summary.</p></dd>
+<dd><p>(bool) Don't generate a run summary.</p></dd>
 
     <dt><code>summary_name</code></dt>
 <dd><p>Name used for the run summary. Use '$run_id' in the name to include the run ID.</p></dd>
 
     <dt><code>preview</code></dt>
-<dd><p>Show what would happen on a merge.</p></dd>
+<dd><p>(bool) Show what would happen on a merge.</p></dd>
 
     <dt><code>replace</code></dt>
-<dd><p>Allow replacement of existing files. Cannot be used with --no-replace</p></dd>
+<dd><p>(bool) Allow replacement of existing files. Cannot be used with <code>no_replace</code></p></dd>
 
     <dt><code>no_replace</code></dt>
-<dd><p>Fail if any target file would be replaced, even if that file is committed to the project VCS. Cannot be used with <code>replace</code>.</p></dd>
+<dd><p>(bool) Fail if any target file would be replaced, even if that file is committed to the project VCS. Cannot be used with <code>replace</code>.</p></dd>
 
   
 </dl></dd>

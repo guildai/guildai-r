@@ -101,7 +101,7 @@ defined in the current project.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>...</dt>
-<dd><p>passed on to the <code>guild</code> executable. Pass <code>'--help'</code> to see all options.</p></dd>
+<dd><p>passed on to the <code>guild</code> executable. Arguments are automatically quoted with <code><a href="https://rdrr.io/r/base/shQuote.html" class="external-link">shQuote()</a></code>, unless they are protected with <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I()</a></code>. Pass <code>'--help'</code> or <code>help = TRUE</code> to see all options.</p></dd>
 
 
 <dt>label</dt>
@@ -117,23 +117,23 @@ defined in the current project.</p>
 
 
 <dt>edit_comment</dt>
-<dd><p>Use an editor to type a comment.</p></dd>
+<dd><p>(bool) Use an editor to type a comment.</p></dd>
 
 
 <dt>edit_flags</dt>
-<dd><p>Use an editor to review and modify flags.</p></dd>
+<dd><p>(bool) Use an editor to review and modify flags.</p></dd>
 
 
 <dt>run_dir</dt>
-<dd><p>Use alternative run directory DIR. Cannot be used with --stage.</p></dd>
+<dd><p>Use alternative run directory DIR. Cannot be used with <code>stage</code>.</p></dd>
 
 
 <dt>stage</dt>
-<dd><p>Stage an operation.</p></dd>
+<dd><p>(bool) Stage an operation.</p></dd>
 
 
 <dt>start</dt>
-<dd><p>Start a staged run or restart an existing run. Cannot be used with --proto or --run-dir.</p></dd>
+<dd><p>Start a staged run or restart an existing run. Cannot be used with <code>proto</code> or <code>run_dir</code>.</p></dd>
 
 
 <dt>proto</dt>
@@ -141,15 +141,15 @@ defined in the current project.</p>
 
 
 <dt>force_sourcecode</dt>
-<dd><p>Use working source code when --restart or --proto is specified. Ignored otherwise.</p></dd>
+<dd><p>(bool) Use working source code when --restart or <code>proto</code> is specified. Ignored otherwise.</p></dd>
 
 
 <dt>gpus</dt>
-<dd><p>Limit availabe GPUs to DEVICES, a comma separated list of device IDs. By default all GPUs are available. Cannot beused with --no-gpus.</p></dd>
+<dd><p>Limit availabe GPUs to DEVICES, a comma separated list of device IDs. By default all GPUs are available. Cannot beused with <code>no_gpus</code>.</p></dd>
 
 
 <dt>no_gpus</dt>
-<dd><p>Disable GPUs for run. Cannot be used with --gpu.</p></dd>
+<dd><p>(bool) Disable GPUs for run. Cannot be used with <code>gpus</code>.</p></dd>
 
 
 <dt>batch_label</dt>
@@ -165,7 +165,7 @@ defined in the current project.</p>
 
 
 <dt>edit_batch_comment</dt>
-<dd><p>Use an editor to type a batch comment.</p></dd>
+<dd><p>(bool) Use an editor to type a batch comment.</p></dd>
 
 
 <dt>optimizer</dt>
@@ -173,15 +173,15 @@ defined in the current project.</p>
 
 
 <dt>optimize</dt>
-<dd><p>Optimize the run using the default optimizer.</p></dd>
+<dd><p>(bool) Optimize the run using the default optimizer.</p></dd>
 
 
 <dt>minimize</dt>
-<dd><p>Column to minimize when running with an optimizer. See help for compare command for details specifying a column. May not be used with --maximize.</p></dd>
+<dd><p>Column to minimize when running with an optimizer. See help for compare command for details specifying a column. May not be used with <code>maximize</code>.</p></dd>
 
 
 <dt>maximize</dt>
-<dd><p>Column to maximize when running with an optimizer. See help for compare command for details specifying a column. May not be used with --minimize.</p></dd>
+<dd><p>Column to maximize when running with an optimizer. See help for compare command for details specifying a column. May not be used with <code>minimize</code>.</p></dd>
 
 
 <dt>opt_flag</dt>
@@ -193,7 +193,7 @@ defined in the current project.</p>
 
 
 <dt>stage_trials</dt>
-<dd><p>For batch operations, stage trials without running them.</p></dd>
+<dd><p>(bool) For batch operations, stage trials without running them.</p></dd>
 
 
 <dt>remote</dt>
@@ -201,11 +201,11 @@ defined in the current project.</p>
 
 
 <dt>force_flags</dt>
-<dd><p>Accept all flag assignments, even for undefined or invalid values.</p></dd>
+<dd><p>(bool) Accept all flag assignments, even for undefined or invalid values.</p></dd>
 
 
 <dt>force_deps</dt>
-<dd><p>Continue even when a required resource is not resolved.</p></dd>
+<dd><p>(bool) Continue even when a required resource is not resolved.</p></dd>
 
 
 <dt>stop_after</dt>
@@ -213,15 +213,15 @@ defined in the current project.</p>
 
 
 <dt>fail_on_trial_error</dt>
-<dd><p>Stop batch operations when a trial exits with an error.</p></dd>
+<dd><p>(bool) Stop batch operations when a trial exits with an error.</p></dd>
 
 
 <dt>needed</dt>
-<dd><p>Run only if there is not an available matching run. A matching run is of the same operation with the same flag values that is not stopped due to an error.</p></dd>
+<dd><p>(bool) Run only if there is not an available matching run. A matching run is of the same operation with the same flag values that is not stopped due to an error.</p></dd>
 
 
 <dt>background</dt>
-<dd><p>Run operation in background.</p></dd>
+<dd><p>(bool) Run operation in background.</p></dd>
 
 
 <dt>pidfile</dt>
@@ -229,7 +229,7 @@ defined in the current project.</p>
 
 
 <dt>no_wait</dt>
-<dd><p>Don't wait for a remote operation to complete. Ignored if run is local.</p></dd>
+<dd><p>(bool) Don't wait for a remote operation to complete. Ignored if run is local.</p></dd>
 
 
 <dt>save_trials</dt>
@@ -237,11 +237,11 @@ defined in the current project.</p>
 
 
 <dt>keep_run</dt>
-<dd><p>Keep run even when configured with 'delete-on-success'.</p></dd>
+<dd><p>(bool) Keep run even when configured with 'delete-on-success'.</p></dd>
 
 
 <dt>keep_batch</dt>
-<dd><p>Keep batch run rather than delete it on success.</p></dd>
+<dd><p>(bool) Keep batch run rather than delete it on success.</p></dd>
 
 
 <dt>dep</dt>
@@ -249,27 +249,27 @@ defined in the current project.</p>
 
 
 <dt>quiet</dt>
-<dd><p>Do not show output.</p></dd>
+<dd><p>(bool) Do not show output.</p></dd>
 
 
 <dt>print_cmd</dt>
-<dd><p>Show operation command and exit.</p></dd>
+<dd><p>(bool) Show operation command and exit.</p></dd>
 
 
 <dt>print_env</dt>
-<dd><p>Show operation environment and exit.</p></dd>
+<dd><p>(bool) Show operation environment and exit.</p></dd>
 
 
 <dt>print_trials</dt>
-<dd><p>Show generated trials and exit.</p></dd>
+<dd><p>(bool) Show generated trials and exit.</p></dd>
 
 
 <dt>help_model</dt>
-<dd><p>Show model help and exit.</p></dd>
+<dd><p>(bool) Show model help and exit.</p></dd>
 
 
 <dt>help_op</dt>
-<dd><p>Show operation help and exit.</p></dd>
+<dd><p>(bool) Show operation help and exit.</p></dd>
 
 
 <dt>test_output_scalars</dt>
@@ -277,11 +277,11 @@ defined in the current project.</p>
 
 
 <dt>test_sourcecode</dt>
-<dd><p>Test source code selection.</p></dd>
+<dd><p>(bool) Test source code selection.</p></dd>
 
 
 <dt>test_flags</dt>
-<dd><p>Test flag configuration.</p></dd>
+<dd><p>(bool) Test flag configuration.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -412,9 +412,9 @@ applied to <code>restart</code> (see above).</p>
 
 
 <p>To run an operation outside of Guild's run management facility,
-use <code>run_dir</code> or <code>stage_dir</code> to specify an alternative run
+use <code>run_dir</code> or <code>stage-dir</code> to specify an alternative run
 directory. These options are useful when developing or debugging
-an operation. Use <code>stage_dir</code> to prepare a run directory for an
+an operation. Use <code>stage-dir</code> to prepare a run directory for an
 operation without running the operation itself. This is useful
 when you want to verify run directory layout or manually run an
 operation in a prepared directory.</p>
@@ -430,7 +430,7 @@ and do not appear in run listings.</p>
 devices. To limit the GPU devices available to a run, use
 <code>gpus</code>.</p>
 <p>For example, to limit visible GPU devices to <code>0</code> and <code>1</code>, run:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>guild run <span class="sc">--</span>gpus <span class="dv">0</span>,<span class="dv">1</span> ...</span></code></pre><p></p></div>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>guild run gpus <span class="dv">0</span>,<span class="dv">1</span> ...</span></code></pre><p></p></div>
 <p>To disable all available GPUs, use <code>no_gpus</code>.</p>
 <p><strong>NOTE:</strong> <code>gpus</code> and <code>no_gpus</code> are used to construct the
 <code>CUDA_VISIBLE_DEVICES</code> environment variable used for the run
