@@ -40,8 +40,8 @@ It is explicitly *unopinionated* about machine learning frameworks. It
 works with tidymodels, tensorflow, torch, xgboost, mlr3, all of them
 combined, or no framework at all.
 
-To demo it here, I'm going to show guild without any framework. Just a
-simple R script named "experiment.R", and all it does does is a random
+To demo it at first, I'm going to show guild without any framework. Just
+a simple R script named "experiment.R", and all it does does is a random
 walk for 10 steps.
 
 ```{r}
@@ -95,12 +95,41 @@ and from the terminal.
 The browser viewer can be launched with `guild_view()`.
 
 ``` r
-guild_view() 
+guild_view()
 ```
 
-To start however, I'm going to show you from the file explorer.
+Here we see our run with some salient attributes, like a timestamp,
+random seed, r packages that were loaded and so on. Guild keeps also
+track of all the run outputs. Here we see what was printed to stdout. It
+also saves off a snapshot of all the files that were associated with the
+run.
 
-(open up .guild folder, show the run id folder, show whats in there)
+We can rerun the same experiment, `guild_run("experiment.R")` and now we
+see our 2nd run show up in the browser sidebar.
+
+...
+
+show meld diff view
+
+open up .guild folder, show the run id folder, show whats in there
+
+Show what happens if a run generates a `plot()`. Or a saved file like
+`saveRDS()`.
+
+`ls_runs()`
+
+`ls_scalars()`
+
+flags
+
+tensorboard + tfevents
+
+Annotate runs: labels, tags, comments, mark.
+
+Manage runs: import, export; delete purge, restore
+
+`export_guild_cli()` and the relationship between R interface and cli
+interface
 
 ------------------------------------------------------------------------
 
@@ -111,4 +140,3 @@ running an operation is a run record.
 possibly to at a much later time, possibly as part of a different line
 of inquire. Those who've spent any significant amount of time in a wet
 lab know that some of the greatest value of a well kept lab notebook.
-
