@@ -28,6 +28,7 @@ test_that("guild run", {
 test_that("guild run", {
   # flags an be passed in as a data.frame, one run per row
   local_project(test_resource("basic.R"))
+  # Sys.setenv("DEBUGR" = 1); browser()
   guild_run("basic.R", flags = data.frame(
     x = c(.1, .2),
     noise = c(.4, .5),

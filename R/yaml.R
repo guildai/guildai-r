@@ -28,14 +28,15 @@ parse_yaml <-  function(string, ...) {
 as_yaml <- function(x)
   maybe_as_yaml(as.list(x))
 
-
+#' @importFrom utils modifyList
 encode_yaml <- function(x, ...) {
-  as_yaml_args <- utils::modifyList(list(
-    precision = 17L,
-    handlers = list(complex = as.character) # no complex type supported
-  ),
-  list(...))
-  out <- do.call(yaml::as.yaml, c(list(maybe_as_yaml(x)), as_yaml_args))
+  out <- do.call(yaml::as.yaml, c(
+    list(maybe_as_yaml(x)),
+    utils::modifyList(list(
+      precision = 16L,
+      handlers = list(complex = as.character) # no complex type supported
+    ),
+    list(...))))
   out <- strsplit(out, "\n", fixed = TRUE)[[1L]]
   out
 }
@@ -53,7 +54,7 @@ maybe_as_yaml <- function(x) {
 
   if(is.atomic(x) && length(x) != 1L)
     x <- as.list(x)
-  if(is.list(x))
+  if(is.list(x) && is.null(oldClass(x)))
     class(x) <- "yaml"
   x
 }
