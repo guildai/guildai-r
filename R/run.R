@@ -16,7 +16,7 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
     modify_r_file_flags(flags_dest, read_yaml(".guild/attrs/flags"),
                         overwrite = TRUE)
   } else if (is_yml_file(flags_dest)) {
-    file.copy(".guild/attrs/flags", flags_dest)
+    file.copy(".guild/attrs/flags", flags_dest, overwrite = TRUE)
   }
 
   # setup_info <- setup_run_dir()
