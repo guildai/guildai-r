@@ -33,7 +33,7 @@ encode_yaml <- function(x, ...) {
   out <- do.call(yaml::as.yaml, c(
     list(maybe_as_yaml(x)),
     utils::modifyList(list(
-      precision = 16L,
+      precision = 15L,
       handlers = list(complex = as.character) # no complex type supported
     ),
     list(...))))

@@ -44,7 +44,7 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
     },
 
     # bump up default so recorded run scalars preserve more precision
-    digits = max(17, getOption("digits"))
+    digits = max(15, getOption("digits"))
   )
 
   # initialize seed so we can save it, non-interactive sessions lazily initialize seed.
