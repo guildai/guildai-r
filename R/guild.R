@@ -102,26 +102,23 @@ as_guild_args <- function(...) {
 #'
 #' @param opspec typically path to an R script, but could be an scalar
 #'   string that guild recognizes as a valid opspec.
-#' @param flags
+#' @param flags flag values for the run(s)
 #'
-#'   - a named list or vector like `c(noise = .3, dropout = .4)`
+#'   - a named list or vector like `c(noise = .3, dropout = .4)`. Lists with
+#'   vectors of length greater than 1 are automatically expanded into a grid
+#'   of combinations for a batch of runs. For example, `list(noise = c(.2,
+#'   .3), dropout = c(.4, .5)` expands to a batch of 4 runs.
 #'
-#'   - a scalar string like `"noise=.3 dropout=.4"`
+#'   - a dataframe of flags for a batch of runs.
 #'
-#'   - a dataframe of flags for a batch of runs
+#'   - a scalar string like `"noise=.3 dropout=.4"`. Any flags specification
+#'   accepted at the terminal is valid here as well.
 #'
-#' @param background,wait whether to do the run in the background. If `TRUE`,
-#'   `guild_run()` returns immediately.
-#'
-#' @param echo whether output from the run is shown in the current R console.
-#'   Note, this has no effect on whether expressions are echoed in the guild run
-#'   stdout log. To disable echoing of expression in the run logs, specify `#|
-#'   echo: false` in the run script frontmatter.
-#'
-#' @param ... passed through to [base::system2()]. Unnamed arguments are
-#'   passed through to the guild executable. Arguments are automatically
-#'   quoted with `shQuote()`, unless they are protected with `I()`.
-#'   Additionally, named arguments to `system2()` can be supplied.
+#' @param echo whether output from the run is shown in the current R
+#'   console. Note, this has no effect on whether expressions are echoed in
+#'   the guild run stdout log. To disable echoing of expression in the run
+#'   logs, specify `#| echo: false` in the run script frontmatter.
+#' @param ... passed on to `guild run`
 #' @inheritDotParams guild_run_opts
 #'
 #' @return the return value from `system2()`, invisibly. This function is
@@ -129,8 +126,6 @@ as_guild_args <- function(...) {
 #' @export
 guild_run <- function(opspec = "train.R",
                       flags = NULL, ...,
-                      wait = TRUE,
-                      background = !wait,
                       echo = TRUE) {
 
   if (is.data.frame(flags)) {
@@ -142,23 +137,18 @@ guild_run <- function(opspec = "train.R",
     # A scalar string for flags is passed through
     # otherwise, do some prep to build the command line arg
     flags <- lapply(flags, function(f) {
-      x <- vapply(f,
-                  function(fv) if(is.character(fv)) fv else encode_yaml(fv),
-                  "", USE.NAMES = FALSE)
-      if(length(x) > 1)
+      x <- vapply(f, function(fv)
+        if (is.character(fv)) fv else encode_yaml(fv),
+        "", USE.NAMES = FALSE)
+      if (length(x) > 1)
         x <- sprintf("[%s]", paste0(x, collapse = ","))
       x
     })
     flags <- sprintf("%s=%s", names(flags), unname(flags))
   }
 
-  cl <- as.call(c(quote(guild), "run --yes",
-                  guild_run_opts(..., background = background),
-                  opspec, flags))
-  if (isFALSE(echo))
-    cl$stdout <- FALSE
-
-  eval(cl)
+  guild("run --yes", list(...), opspec, flags,
+        stdout = if(isTRUE(echo)) "" else FALSE)
 }
 
 

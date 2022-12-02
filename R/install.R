@@ -26,23 +26,25 @@ find_python <- function() {
 
 #' Install guildai core
 #'
-#' This installs the `guild` executable for use by the package.
+#' This installs the `guild` executable for use by the R package.
 #'
-#' @param guildai character vector passed directly to `pip install`. To
-#'   install the release version of guildai, this can be `"guildai"`.
-#' @param python path to a python binary, used to create a private venv.
+#' @param guildai Character vector of arguments passed directly to `pip
+#'   install`. To install the release version of guildai, this can be
+#'   `"guildai"`.
+#' @param python Path to a python binary, used to create a private venv.
 #'
 #' @return path to the guild binary
 #' @export
 #'
 #' @examples
-#' # install_guild(c("-e", "~/guild/guildai"))
-#' # install_guild("~/guildai", reticulate::install_python())
-#' # install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
-#' # install_guild(
-#' #   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
-#' #   python = reticulate::install_python())
-#' #
+#' if(FALSE) {
+#' install_guild(c("-e", "~/guild/guildai"))
+#' install_guild("~/guild/guildai", reticulate::install_python())
+#' install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
+#' install_guild(
+#'   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
+#'   python = reticulate::install_python())
+#' }
 install_guild <-
   function(guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
            python = find_python()) {

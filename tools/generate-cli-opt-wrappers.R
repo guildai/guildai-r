@@ -46,19 +46,21 @@ parse_opt_term_field <- function(term) {
 
       list(short_name = short_name, name = name, default = list(default))
     }) %>%
-    mutate(name = name %>%
+    mutate(
+      cli_name = name,
+      name = name %>%
              str_drop_prefix("--") %>%
              str_replace_all(fixed("-"), "_"))
 
 }
 
-
-replace_cli_arg_names_with_r_arg_names <- function(x)  {
-  m <- gregexec("`--[[:alnum:]-]+`", x)
-  regmatches(x, m) <- regmatches(x, m) %>%
-    map(~sprintf("\\code{%s}", opt_cli_name_to_r_name(.x)))
-  x
-}
+#
+# replace_cli_arg_names_with_r_arg_names <- function(x)  {
+#   m <- gregexec("`--[[:alnum:]-]+`", x)
+#   regmatches(x, m) <- regmatches(x, m) %>%
+#     map(~sprintf("\\code{%s}", opt_cli_name_to_r_name(.x)))
+#   x
+# }
 
 # opt_name_to_rarg_name <- function(x) {
 opt_r_name_to_cli_name <- function(x) {
@@ -72,29 +74,60 @@ opt_r_name_to_cli_name <- function(x) {
 
 opt_cli_name_to_r_name <- function(x) {
   x <- yasp::unwrap(x, "`", n_pairs = 1)
-  x <- guildai:::str_drop_prefix(x, "--")
+  x <- str_drop_prefix(x, "--")
   x <- gsub("-", "_", x, fixed = TRUE)
   x
 }
 
 
-gen_wrapper_text <- function(command, passes_on_to = NULL, omit = NULL) {
+tidy_opts <- function(command, omit = NULL) {
   x <- guild(command, "--help", env = "GUILD_HELP_JSON=1", stdout = TRUE) |>
     paste0(collapse = "") |>
     parse_yaml()
 
-  fn_name <- x$usage$prog %>% gsub(" ", "_", .) %>% paste0(., "_opts")
-
   opts <- transpose(x$options) %>% map(flatten_chr) %>% as_tibble()
   opts <- bind_cols(opts, parse_opt_term_field(opts$term))
   opts <- opts %>% filter(!name %in% c(omit, "help", "yes"))
-  opts$help %<>% replace_cli_arg_names_with_r_arg_names()
+
+  # opts$help %<>% replace_cli_arg_names_with_r_arg_names()
+
+  # replace cli names w/ name:  --proto  -->  `proto`
+  # prefix switches w/ "(bool)"
+  opts$help <- opts$help %>%
+    imap_chr(function(h, i) {
+      for(r in seq_len(nrow(opts)))
+        h <- str_replace_all(h,
+                             fixed(opts$cli_name[[r]]),
+                             backtick(opts$name[[r]]))
+      if(is.logical(opts$default[[i]]))
+        h <- str_c("(bool) ", h)
+      h
+    })
+
+  help <- x$help
+  for(r in seq_len(nrow(opts)))
+    help <- str_replace_all(help,
+                            fixed(opts$cli_name[[r]]),
+                            opts$name[[r]])
+
+
+  attr(opts, "command") <- x$usage$prog
+  attr(opts, "help") <- help
+  opts
+}
+
+
+gen_wrapper_text <- function(command, passes_on_to = NULL, omit = NULL) {
+  opts <- tidy_opts(command, omit = omit)
+
+  fn_name <- attr(opts, "command") %>%
+    gsub(" ", "_", .) %>% paste0(., "_opts")
 
   roxy_params <-
-    c("@param ... passed on to the `guild` executable. Pass `'--help'` to see all options.",
+    c("@param ... passed on to the `guild` executable. Arguments are automatically quoted with `shQuote()`, unless they are protected with `I()`. Pass `'--help'` or `help = TRUE` to see all options.",
       glue::glue_data(opts, "@param {name} {help}"))
 
-  roxy_desc <- x$help %>%
+  roxy_desc <- attr(opts, "help") %>%
     strsplit("\n", fixed = TRUE) %>% .[[1L]] %>%
     replace_cli_arg_names_with_r_arg_names() %>%
     gsub(".\b", "", .) %>% c("", "")
@@ -112,6 +145,8 @@ gen_wrapper_text <- function(command, passes_on_to = NULL, omit = NULL) {
     bquote(c(as_guild_args(as.list.environment(environment())),
            .(substitute(passes_on_to))(...)))
 
+  body <- substitute({body}, list(body = body))
+
   wrapper_fn <- as.function.default(c(frmls, body))
 
   # all.names=FALSE: kludge to omit the `...` symbol.
@@ -119,7 +154,8 @@ gen_wrapper_text <- function(command, passes_on_to = NULL, omit = NULL) {
   txt <- c(roxy,
            paste(fn_name, "<-"), deparse(wrapper_fn),
            "\n\n")
-  trimws(txt)
+  txt <- trimws(txt)
+  glue::as_glue(txt) # noquote print method
 }; #gen_wrapper_text("run") %>% invisible() #cat()#%>% .$term %>% parse_opt_term_field()
 
 
@@ -135,8 +171,14 @@ writeLines(c %(% {
 
 }, "R/auto-generated-cli-opt-wrappers.R")
 
-devtools::document()
 # TODO: guild_select_opts should be it's own func that other opts inherit dot params to
 # TODO: filter out irrelevant help sections from roxy descriptions, like "Breakpoints" for `guild run`
 
-gen_wrapper_text("select")
+
+# df <- tidy_opts("run")
+#
+# select_opts <- tidy_opts("select")
+#
+# gen_wrapper_text("select")
+
+devtools::document()

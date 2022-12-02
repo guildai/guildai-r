@@ -31,49 +31,49 @@ guild_view_opts(
 )
 }
 \arguments{
-\item{...}{passed on to the \code{guild} executable. Pass \code{'--help'} to see all options.}
+\item{...}{passed on to the \code{guild} executable. Arguments are automatically quoted with \code{shQuote()}, unless they are protected with \code{I()}. Pass \code{'--help'} or \code{help = TRUE} to see all options.}
 
 \item{host}{Name of host interface to listen on.}
 
 \item{port}{Port to listen on.}
 
-\item{include_batch}{Include batch runs.}
+\item{include_batch}{(bool) Include batch runs.}
 
-\item{no_open}{Don't open Guild View in a browser.}
+\item{no_open}{(bool) Don't open Guild View in a browser.}
 
-\item{logging}{Log requests.}
+\item{logging}{(bool) Log requests.}
 
 \item{filter}{Filter runs using a filter expression. See Filter by Expression above for details..}
 
 \item{operation}{Filter runs with operations matching \code{VAL}.}
 
-\item{label}{Filter runs with labels matching VAL. To show unlabeled runs, use --unlabeled.}
+\item{label}{Filter runs with labels matching VAL. To show unlabeled runs, use \code{unlabeled}.}
 
-\item{unlabeled}{Filter only runs without labels.}
+\item{unlabeled}{(bool) Filter only runs without labels.}
 
 \item{tag}{Filter runs with TAG.}
 
 \item{comment}{Filter runs with comments matching VAL.}
 
-\item{marked}{Filter only marked runs.}
+\item{marked}{(bool) Filter only marked runs.}
 
-\item{unmarked}{Filter only unmarked runs.}
+\item{unmarked}{(bool) Filter only unmarked runs.}
 
 \item{started}{Filter only runs started within RANGE. See above for valid time ranges.}
 
 \item{digest}{Filter only runs with a matching source code digest.}
 
-\item{running}{Filter only runs that are still running.}
+\item{running}{(bool) Filter only runs that are still running.}
 
-\item{completed}{Filter only completed runs.}
+\item{completed}{(bool) Filter only completed runs.}
 
-\item{error}{Filter only runs that exited with an error.}
+\item{error}{(bool) Filter only runs that exited with an error.}
 
-\item{terminated}{Filter only runs terminated by the user.}
+\item{terminated}{(bool) Filter only runs terminated by the user.}
 
-\item{pending}{Filter only pending runs.}
+\item{pending}{(bool) Filter only pending runs.}
 
-\item{staged}{Filter only staged runs.}
+\item{staged}{(bool) Filter only staged runs.}
 }
 \description{
 Features include:
@@ -153,7 +153,7 @@ expressions with logical operators.
 For example, to match runs with flag \code{batch-size} equal to 100
 that have \code{loss} less than 0.8, use:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{--filter 'batch-size = 10 and loss < 0.8'
+\if{html}{\out{<div class="sourceCode">}}\preformatted{filter 'batch-size = 10 and loss < 0.8'
 }\if{html}{\out{</div>}}
 
 \strong{IMPORTANT:} You must quote EXPR if it contains spaces or
@@ -208,7 +208,7 @@ specified time range.
 spaces. For example, to filter runs started within the last hour,
 use the option:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{--started 'last hour'
+\if{html}{\out{<div class="sourceCode">}}\preformatted{started 'last hour'
 }\if{html}{\out{</div>}}
 
 You can specify a time range using several different forms:
@@ -260,7 +260,7 @@ Runs may also be filtered by specifying one or more status
 filters: \code{running}, \code{completed}, \code{error}, and
 \code{terminated}. These may be used together to include runs that
 match any of the filters. For example to only include runs that
-were either terminated or exited with an error, use \code{--terminated --error}, or the short form \code{-Set}.
+were either terminated or exited with an error, use \verb{terminated error}, or the short form \code{-Set}.
 
 You may combine more than one status character with \code{-S} to
 expand the filter. For example, \code{-Set} shows only runs with

@@ -10,23 +10,24 @@ install_guild(
 )
 }
 \arguments{
-\item{guildai}{character vector passed directly to \verb{pip install}. To
-install the release version of guildai, this can be \code{"guildai"}.}
+\item{guildai}{Character vector of arguments passed directly to \verb{pip install}. To install the release version of guildai, this can be
+\code{"guildai"}.}
 
-\item{python}{path to a python binary, used to create a private venv.}
+\item{python}{Path to a python binary, used to create a private venv.}
 }
 \value{
 path to the guild binary
 }
 \description{
-This installs the \code{guild} executable for use by the package.
+This installs the \code{guild} executable for use by the R package.
 }
 \examples{
-# install_guild(c("-e", "~/guild/guildai"))
-# install_guild("~/guildai", reticulate::install_python())
-# install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
-# install_guild(
-#   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
-#   python = reticulate::install_python())
-#
+if(FALSE) {
+install_guild(c("-e", "~/guild/guildai"))
+install_guild("~/guild/guildai", reticulate::install_python())
+install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
+install_guild(
+  guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
+  python = reticulate::install_python())
+}
 }

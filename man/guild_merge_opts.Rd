@@ -37,65 +37,65 @@ guild_merge_opts(
 )
 }
 \arguments{
-\item{...}{passed on to the \code{guild} executable. Pass \code{'--help'} to see all options.}
+\item{...}{passed on to the \code{guild} executable. Arguments are automatically quoted with \code{shQuote()}, unless they are protected with \code{I()}. Pass \code{'--help'} or \code{help = TRUE} to see all options.}
 
 \item{filter}{Filter runs using a filter expression. See Filter by Expression above for details..}
 
 \item{operation}{Filter runs with operations matching \code{VAL}.}
 
-\item{label}{Filter runs with labels matching VAL. To show unlabeled runs, use --unlabeled.}
+\item{label}{Filter runs with labels matching VAL. To show unlabeled runs, use \code{unlabeled}.}
 
-\item{unlabeled}{Filter only runs without labels.}
+\item{unlabeled}{(bool) Filter only runs without labels.}
 
 \item{tag}{Filter runs with TAG.}
 
 \item{comment}{Filter runs with comments matching VAL.}
 
-\item{marked}{Filter only marked runs.}
+\item{marked}{(bool) Filter only marked runs.}
 
-\item{unmarked}{Filter only unmarked runs.}
+\item{unmarked}{(bool) Filter only unmarked runs.}
 
 \item{started}{Filter only runs started within RANGE. See above for valid time ranges.}
 
 \item{digest}{Filter only runs with a matching source code digest.}
 
-\item{running}{Filter only runs that are still running.}
+\item{running}{(bool) Filter only runs that are still running.}
 
-\item{completed}{Filter only completed runs.}
+\item{completed}{(bool) Filter only completed runs.}
 
-\item{error}{Filter only runs that exited with an error.}
+\item{error}{(bool) Filter only runs that exited with an error.}
 
-\item{terminated}{Filter only runs terminated by the user.}
+\item{terminated}{(bool) Filter only runs terminated by the user.}
 
-\item{pending}{Filter only pending runs.}
+\item{pending}{(bool) Filter only pending runs.}
 
-\item{staged}{Filter only staged runs.}
+\item{staged}{(bool) Filter only staged runs.}
 
 \item{target_dir}{Directory to merge run files to (required if project directory cannot be determined for the run).}
 
-\item{sourcecode}{Only copy run source code. Implies use of \code{skip_deps}. Cannot be used with \code{skip_sourcecode}.}
+\item{sourcecode}{(bool) Only copy run source code. Implies use of \code{skip_deps}. Cannot be used with \code{skip_sourcecode}.}
 
-\item{all}{Copy all run files. May be used with \code{skip_sourcecode}, \code{skip_deps}, and \code{exclude} to copy all but the skipped/excluded files.}
+\item{all}{(bool) Copy all run files. May be used with \code{skip_sourcecode}, \code{skip_deps}, and \code{exclude} to copy all but the skipped/excluded files.}
 
-\item{skip_sourcecode}{Don't copy run source code.}
+\item{skip_sourcecode}{(bool) Don't copy run source code.}
 
-\item{skip_deps}{Don't copy project-local dependencies.}
+\item{skip_deps}{(bool) Don't copy project-local dependencies.}
 
 \item{exclude}{Exclude a file or pattern (may be used multiple times).}
 
-\item{no_summary}{Don't generate a run summary.}
+\item{no_summary}{(bool) Don't generate a run summary.}
 
 \item{summary_name}{Name used for the run summary. Use '${run_id}' in the name to include the run ID.}
 
-\item{preview}{Show what would happen on a merge.}
+\item{preview}{(bool) Show what would happen on a merge.}
 
-\item{replace}{Allow replacement of existing files. Cannot be used with --no-replace}
+\item{replace}{(bool) Allow replacement of existing files. Cannot be used with \code{no_replace}}
 
-\item{no_replace}{Fail if any target file would be replaced, even if that file is committed to the project VCS. Cannot be used with \code{replace}.}
+\item{no_replace}{(bool) Fail if any target file would be replaced, even if that file is committed to the project VCS. Cannot be used with \code{replace}.}
 }
 \description{
 By default, Guild copies run files into the current directory. To
-copy files to a different directory, use \verb{--target-dir DIR}.
+copy files to a different directory, use \verb{target_dir DIR}.
 }
 \details{
 Guild checks that the run originated from the current directory

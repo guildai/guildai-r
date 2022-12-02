@@ -55,7 +55,7 @@ guild_run_opts(
 )
 }
 \arguments{
-\item{...}{passed on to the \code{guild} executable. Pass \code{'--help'} to see all options.}
+\item{...}{passed on to the \code{guild} executable. Arguments are automatically quoted with \code{shQuote()}, unless they are protected with \code{I()}. Pass \code{'--help'} or \code{help = TRUE} to see all options.}
 
 \item{label}{Set a label for the run.}
 
@@ -63,23 +63,23 @@ guild_run_opts(
 
 \item{comment}{Comment associated with the run.}
 
-\item{edit_comment}{Use an editor to type a comment.}
+\item{edit_comment}{(bool) Use an editor to type a comment.}
 
-\item{edit_flags}{Use an editor to review and modify flags.}
+\item{edit_flags}{(bool) Use an editor to review and modify flags.}
 
-\item{run_dir}{Use alternative run directory DIR. Cannot be used with --stage.}
+\item{run_dir}{Use alternative run directory DIR. Cannot be used with \code{stage}.}
 
-\item{stage}{Stage an operation.}
+\item{stage}{(bool) Stage an operation.}
 
-\item{start}{Start a staged run or restart an existing run. Cannot be used with --proto or --run-dir.}
+\item{start}{Start a staged run or restart an existing run. Cannot be used with \code{proto} or \code{run_dir}.}
 
 \item{proto}{Use the operation, flags and source code from RUN. Flags may be added or redefined in this operation. Cannot be used with --restart.}
 
-\item{force_sourcecode}{Use working source code when --restart or --proto is specified. Ignored otherwise.}
+\item{force_sourcecode}{(bool) Use working source code when --restart or \code{proto} is specified. Ignored otherwise.}
 
-\item{gpus}{Limit availabe GPUs to DEVICES, a comma separated list of device IDs. By default all GPUs are available. Cannot beused with --no-gpus.}
+\item{gpus}{Limit availabe GPUs to DEVICES, a comma separated list of device IDs. By default all GPUs are available. Cannot beused with \code{no_gpus}.}
 
-\item{no_gpus}{Disable GPUs for run. Cannot be used with --gpu.}
+\item{no_gpus}{(bool) Disable GPUs for run. Cannot be used with \code{gpus}.}
 
 \item{batch_label}{Label to use for batch runs. Ignored for non-batch runs.}
 
@@ -87,65 +87,65 @@ guild_run_opts(
 
 \item{batch_comment}{Comment associated with batch.}
 
-\item{edit_batch_comment}{Use an editor to type a batch comment.}
+\item{edit_batch_comment}{(bool) Use an editor to type a batch comment.}
 
 \item{optimizer}{Optimize the run using the specified algorithm. See Optimizing Runs for more information.}
 
-\item{optimize}{Optimize the run using the default optimizer.}
+\item{optimize}{(bool) Optimize the run using the default optimizer.}
 
-\item{minimize}{Column to minimize when running with an optimizer. See help for compare command for details specifying a column. May not be used with --maximize.}
+\item{minimize}{Column to minimize when running with an optimizer. See help for compare command for details specifying a column. May not be used with \code{maximize}.}
 
-\item{maximize}{Column to maximize when running with an optimizer. See help for compare command for details specifying a column. May not be used with --minimize.}
+\item{maximize}{Column to maximize when running with an optimizer. See help for compare command for details specifying a column. May not be used with \code{minimize}.}
 
 \item{opt_flag}{Flag for OPTIMIZER. May be used multiple times.}
 
 \item{max_trials}{Maximum number of trials to run in batch operations. Default is optimizer specific. If optimizer is not specified, default is 20.}
 
-\item{stage_trials}{For batch operations, stage trials without running them.}
+\item{stage_trials}{(bool) For batch operations, stage trials without running them.}
 
 \item{remote}{Run the operation remotely.}
 
-\item{force_flags}{Accept all flag assignments, even for undefined or invalid values.}
+\item{force_flags}{(bool) Accept all flag assignments, even for undefined or invalid values.}
 
-\item{force_deps}{Continue even when a required resource is not resolved.}
+\item{force_deps}{(bool) Continue even when a required resource is not resolved.}
 
 \item{stop_after}{Stop operation after N minutes.}
 
-\item{fail_on_trial_error}{Stop batch operations when a trial exits with an error.}
+\item{fail_on_trial_error}{(bool) Stop batch operations when a trial exits with an error.}
 
-\item{needed}{Run only if there is not an available matching run. A matching run is of the same operation with the same flag values that is not stopped due to an error.}
+\item{needed}{(bool) Run only if there is not an available matching run. A matching run is of the same operation with the same flag values that is not stopped due to an error.}
 
-\item{background}{Run operation in background.}
+\item{background}{(bool) Run operation in background.}
 
 \item{pidfile}{Run operation in background, writing the background process ID to PIDFILE.}
 
-\item{no_wait}{Don't wait for a remote operation to complete. Ignored if run is local.}
+\item{no_wait}{(bool) Don't wait for a remote operation to complete. Ignored if run is local.}
 
 \item{save_trials}{Saves generated trials to a CSV batch file. See BATCH FILES for more information.}
 
-\item{keep_run}{Keep run even when configured with 'delete-on-success'.}
+\item{keep_run}{(bool) Keep run even when configured with 'delete-on-success'.}
 
-\item{keep_batch}{Keep batch run rather than delete it on success.}
+\item{keep_batch}{(bool) Keep batch run rather than delete it on success.}
 
 \item{dep}{Include PATH as a dependency.}
 
-\item{quiet}{Do not show output.}
+\item{quiet}{(bool) Do not show output.}
 
-\item{print_cmd}{Show operation command and exit.}
+\item{print_cmd}{(bool) Show operation command and exit.}
 
-\item{print_env}{Show operation environment and exit.}
+\item{print_env}{(bool) Show operation environment and exit.}
 
-\item{print_trials}{Show generated trials and exit.}
+\item{print_trials}{(bool) Show generated trials and exit.}
 
-\item{help_model}{Show model help and exit.}
+\item{help_model}{(bool) Show model help and exit.}
 
-\item{help_op}{Show operation help and exit.}
+\item{help_op}{(bool) Show operation help and exit.}
 
 \item{test_output_scalars}{Test output scalars on output. Use '-' to read from standard intput.}
 
-\item{test_sourcecode}{Test source code selection.}
+\item{test_sourcecode}{(bool) Test source code selection.}
 
-\item{test_flags}{Test flag configuration.}
+\item{test_flags}{(bool) Test flag configuration.}
 }
 \description{
 By default Guild tries to run \code{OPERATION} for the default model
@@ -285,9 +285,9 @@ applied to \code{restart} (see above).
 \subsection{Alternate Run Directory}{
 
 To run an operation outside of Guild's run management facility,
-use \code{run_dir} or \code{stage_dir} to specify an alternative run
+use \code{run_dir} or \code{stage-dir} to specify an alternative run
 directory. These options are useful when developing or debugging
-an operation. Use \code{stage_dir} to prepare a run directory for an
+an operation. Use \code{stage-dir} to prepare a run directory for an
 operation without running the operation itself. This is useful
 when you want to verify run directory layout or manually run an
 operation in a prepared directory.
@@ -304,7 +304,7 @@ devices. To limit the GPU devices available to a run, use
 
 For example, to limit visible GPU devices to \code{0} and \code{1}, run:
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{guild run --gpus 0,1 ...
+\if{html}{\out{<div class="sourceCode">}}\preformatted{guild run gpus 0,1 ...
 }\if{html}{\out{</div>}}
 
 To disable all available GPUs, use \code{no_gpus}.
