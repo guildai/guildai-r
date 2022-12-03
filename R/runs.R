@@ -341,21 +341,9 @@ runs_mark <- function(runs = NULL, ..., clear = FALSE) {
 runs_comment <- function(runs = NULL, comment = NULL, ...,
                          delete = NULL, clear = FALSE) {
   if(is.null(comment) && is.null(delete) && isFALSE(clear) &&
-     requireNamespace("rstudioapi", quietly = TRUE) &&
-     rstudioapi::isAvailable()) {
-    # Guild will attempt to launch EDITOR (e.g., vi), which will fail in the IDE
-    # because the IDE doesn't pass through system() doesn't pass through
-    # console commands to the tty.
-    fi <- tempfile("guild-comment", fileext = ".txt")
-    # write some whitespace to trick the IDE into drawing a bigger edit dialog.
-    # otherwise it's too small by default and not resizable
-    writeLines(c(strrep(" ", 75), character(23)), fi)
-    mtime <- file.mtime(fi)
-    utils::file.edit(fi, title = "Guild Comment")
-    if(mtime != file.mtime(fi))
-      comment <- trimws(paste0(trimws(readLines(fi)), collapse = "\n"))
-    unlink(fi)
-    if(!nzchar(comment))
+     is_rstudio()) {
+    comment <- edit_comment()
+    if(is.null(comment) || !nzchar(comment))
       return(message("Aborting due to an empty comment."))
   }
   if(length(comment) > 1)
@@ -366,7 +354,27 @@ runs_comment <- function(runs = NULL, comment = NULL, ...,
   invisible(runs)
 }
 
+is_rstudio <- function() {
+  identical(.Platform$GUI, "RStudio")
+}
 
+edit_comment <- function() {
+  # Guild will attempt to launch EDITOR (e.g., vi), which will fail in the IDE
+  # because the IDE doesn't pass through system() doesn't pass through
+  # console commands to the tty.
+
+  fi <- tempfile("guild-comment", fileext = ".txt")
+  on.exit(unlink(fi))
+  # write some whitespace to trick the IDE into drawing a bigger edit dialog.
+  # otherwise it's too small by default and not resizable
+  writeLines(c(strrep(" ", 75), character(23)), fi)
+  mtime <- file.mtime(fi)
+  utils::file.edit(fi, title = "Guild Comment")
+  if(mtime != file.mtime(fi))
+    trimws(paste0(trimws(readLines(fi)), collapse = "\n"))
+  else
+    NULL
+}
 
 
 #' Resolve run ids
