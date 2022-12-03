@@ -87,11 +87,14 @@ accepted at the terminal is valid here as well.</p></li>
     <dt><code>start</code></dt>
 <dd><p>Start a staged run or restart an existing run. Cannot be used with <code>proto</code> or <code>run_dir</code>.</p></dd>
 
+    <dt><code>restart</code></dt>
+<dd><p>Start a staged run or restart an existing run. Cannot be used with <code>proto</code> or <code>run_dir</code>.</p></dd>
+
     <dt><code>proto</code></dt>
-<dd><p>Use the operation, flags and source code from RUN. Flags may be added or redefined in this operation. Cannot be used with --restart.</p></dd>
+<dd><p>Use the operation, flags and source code from RUN. Flags may be added or redefined in this operation. Cannot be used with <code>restart</code>.</p></dd>
 
     <dt><code>force_sourcecode</code></dt>
-<dd><p>(bool) Use working source code when --restart or <code>proto</code> is specified. Ignored otherwise.</p></dd>
+<dd><p>(bool) Use working source code when <code>restart</code> or <code>proto</code> is specified. Ignored otherwise.</p></dd>
 
     <dt><code>gpus</code></dt>
 <dd><p>Limit availabe GPUs to DEVICES, a comma separated list of device IDs. By default all GPUs are available. Cannot beused with <code>no_gpus</code>.</p></dd>
@@ -127,6 +130,9 @@ accepted at the terminal is valid here as well.</p></li>
 <dd><p>Flag for OPTIMIZER. May be used multiple times.</p></dd>
 
     <dt><code>max_trials</code></dt>
+<dd><p>Maximum number of trials to run in batch operations. Default is optimizer specific. If optimizer is not specified, default is 20.</p></dd>
+
+    <dt><code>trials</code></dt>
 <dd><p>Maximum number of trials to run in batch operations. Default is optimizer specific. If optimizer is not specified, default is 20.</p></dd>
 
     <dt><code>stage_trials</code></dt>

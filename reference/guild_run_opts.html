@@ -58,6 +58,7 @@ defined in the current project.</p>
 <span>  run_dir <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  stage <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  start <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  restart <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  proto <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  force_sourcecode <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  gpus <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -72,6 +73,7 @@ defined in the current project.</p>
 <span>  maximize <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  opt_flag <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  max_trials <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  trials <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  stage_trials <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  remote <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  force_flags <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -136,12 +138,16 @@ defined in the current project.</p>
 <dd><p>Start a staged run or restart an existing run. Cannot be used with <code>proto</code> or <code>run_dir</code>.</p></dd>
 
 
+<dt>restart</dt>
+<dd><p>Start a staged run or restart an existing run. Cannot be used with <code>proto</code> or <code>run_dir</code>.</p></dd>
+
+
 <dt>proto</dt>
-<dd><p>Use the operation, flags and source code from RUN. Flags may be added or redefined in this operation. Cannot be used with --restart.</p></dd>
+<dd><p>Use the operation, flags and source code from RUN. Flags may be added or redefined in this operation. Cannot be used with <code>restart</code>.</p></dd>
 
 
 <dt>force_sourcecode</dt>
-<dd><p>(bool) Use working source code when --restart or <code>proto</code> is specified. Ignored otherwise.</p></dd>
+<dd><p>(bool) Use working source code when <code>restart</code> or <code>proto</code> is specified. Ignored otherwise.</p></dd>
 
 
 <dt>gpus</dt>
@@ -189,6 +195,10 @@ defined in the current project.</p>
 
 
 <dt>max_trials</dt>
+<dd><p>Maximum number of trials to run in batch operations. Default is optimizer specific. If optimizer is not specified, default is 20.</p></dd>
+
+
+<dt>trials</dt>
 <dd><p>Maximum number of trials to run in batch operations. Default is optimizer specific. If optimizer is not specified, default is 20.</p></dd>
 
 
@@ -444,7 +454,7 @@ options redefines that environment variable for the run.</p>
 
 <p>Use <code>optimizer</code> to run the operation multiple times in attempt
 to optimize a result. Use <code>minimize</code> or <code>maximize</code> to indicate
-what should be optimized. Use <code>max_runs</code> to indicate the maximum
+what should be optimized. Use <code>--max-runs</code> to indicate the maximum
 number of runs the optimizer should generate.</p>
 </div>
 
