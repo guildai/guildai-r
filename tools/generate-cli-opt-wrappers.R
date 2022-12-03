@@ -19,10 +19,11 @@ attach_eval({
 })
 
 parse_opt_term_field <- function(term) {
-  # term can have up to three fields
+  # term can have a variable number of fields
   # '-h, --host HOST'     short_name long_name val
   # '-n, --no-open'       switch, short + long name
   # '--logging'           switch, only long name
+  # '--start, --restart RUN'  multiple long_name + val
 
   term %>%
     strsplit(",?\\s+") %>%
@@ -117,7 +118,7 @@ gen_wrapper_text <- function(command, passes_on_to = NULL, omit = NULL) {
   opts <- tidy_opts(command, omit = omit)
 
   fn_name <- attr(opts, "command") %>%
-    gsub(" ", "_", .) %>% paste0(., "_opts")
+    gsub(" ", "_", .) %>% paste0(., "_cli")
 
   roxy_params <-
     c("@param ... passed on to the `guild` executable. Arguments are automatically quoted with `shQuote()`, unless they are protected with `I()`. Pass `'--help'` or `help = TRUE` to see all options.",
@@ -128,6 +129,7 @@ gen_wrapper_text <- function(command, passes_on_to = NULL, omit = NULL) {
     c("", "")
 
   roxy <- paste("#'", c %(% {
+    # attr(opts, "command")
     fn_name
     roxy_desc
     roxy_params
@@ -147,6 +149,8 @@ gen_wrapper_text <- function(command, passes_on_to = NULL, omit = NULL) {
   # all.names=FALSE: kludge to omit the `...` symbol.
 
   txt <- c(roxy,
+           # paste(backtick(fn_name), "<-"), deparse(wrapper_fn),
+           # paste(backtick(attr(opts, "command")), "<-"), deparse(wrapper_fn),
            paste(fn_name, "<-"), deparse(wrapper_fn),
            "\n\n")
   txt <- trimws(txt)
@@ -158,11 +162,11 @@ gen_wrapper_text <- function(command, passes_on_to = NULL, omit = NULL) {
 
 writeLines(c %(% {
 
-  gen_wrapper_text("view")
   gen_wrapper_text("run", omit = c(
     "break", "break_on_error", "random_seed", "debug_sourcecode"))
-  gen_wrapper_text("select")
+  gen_wrapper_text("view")
   gen_wrapper_text("merge")
+  gen_wrapper_text("select")
 
 }, "R/auto-generated-cli-opt-wrappers.R")
 

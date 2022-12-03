@@ -10,7 +10,7 @@ guild_view(runs = NULL, ..., wait = FALSE)
 \item{runs}{an optional runs selection.}
 
 \item{...}{
-  Arguments passed on to \code{\link[=guild_view_opts]{guild_view_opts}}
+  Arguments passed on to \code{\link[=guild_view_cli]{guild_view_cli}}
   \describe{
     \item{\code{host}}{Name of host interface to listen on.}
     \item{\code{port}}{Port to listen on.}

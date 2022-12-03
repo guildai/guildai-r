@@ -21,7 +21,7 @@ accepted at the terminal is valid here as well.
 }}
 
 \item{...}{
-  Arguments passed on to \code{\link[=guild_run_opts]{guild_run_opts}}
+  Arguments passed on to \code{\link[=guild_run_cli]{guild_run_cli}}
   \describe{
     \item{\code{label}}{Set a label for the run.}
     \item{\code{tag}}{Associate TAG with run. May be used multiple times.}

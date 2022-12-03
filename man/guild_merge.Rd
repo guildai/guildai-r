@@ -10,7 +10,7 @@ guild_merge(run = NULL, ...)
 \item{run}{a run selection}
 
 \item{...}{
-  Arguments passed on to \code{\link[=guild_merge_opts]{guild_merge_opts}}
+  Arguments passed on to \code{\link[=guild_merge_cli]{guild_merge_cli}}
   \describe{
     \item{\code{filter}}{Filter runs using a filter expression. See Filter by Expression above for details..}
     \item{\code{operation}}{Filter runs with operations matching \code{VAL}.}

@@ -119,7 +119,7 @@ as_guild_args <- function(...) {
 #'   the guild run stdout log. To disable echoing of expression in the run
 #'   logs, specify `#| echo: false` in the run script frontmatter.
 #' @param ... passed on to `guild run`
-#' @inheritDotParams guild_run_opts
+#' @inheritDotParams guild_run_cli
 #'
 #' @return the return value from `system2()`, invisibly. This function is
 #'   primarily called for its side effect.
@@ -155,7 +155,7 @@ guild_run <- function(opspec = "train.R",
 #' Launch Guild Viewer
 #'
 #' @param runs an optional runs selection.
-#' @inheritDotParams guild_view_opts
+#' @inheritDotParams guild_view_cli
 #' @param wait whether to block the R console while the application is active.
 #'
 #' @export
@@ -181,7 +181,7 @@ guild_view <- function(runs = NULL, ..., wait = FALSE) {
 #' Copy run files into the current project working directory
 #'
 #' @param run a run selection
-#' @inheritDotParams guild_merge_opts
+#' @inheritDotParams guild_merge_cli
 #'
 #' @export
 #'
