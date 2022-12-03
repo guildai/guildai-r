@@ -347,6 +347,8 @@ runs_comment <- function(runs = NULL, comment = NULL, ...,
     # because the IDE doesn't pass through system() doesn't pass through
     # console commands to the tty.
     fi <- tempfile("guild-comment", fileext = ".txt")
+    # write some whitespace to trick the IDE into drawing a bigger edit dialog.
+    # otherwise it's too small by default and not resizable
     writeLines(c(strrep(" ", 75), character(23)), fi)
     mtime <- file.mtime(fi)
     utils::file.edit(fi, title = "Guild Comment")
