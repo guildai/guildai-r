@@ -20,7 +20,7 @@ runs_comment(runs = NULL, comment = NULL, ..., delete = NULL, clear = FALSE)
 
 \item{label, comment}{a string}
 
-\item{...}{passed on to \code{guild}}
+\item{...}{passed on to \code{guild}. Pass \code{"--help"} to see all options.}
 
 \item{clear}{bool, whether to clear the existing tags/comments/label.}
 

@@ -281,7 +281,7 @@ runs_restore <- function(runs = NULL, ...) {
 #' @param delete integer vector, which comment(s) to delete, corresponding to
 #'   the row number(s) in the dataframe found at `ls_runs()$comments`.
 #' @param clear bool, whether to clear the existing tags/comments/label.
-#' @param ...  passed on to `guild`
+#' @param ...  passed on to `guild`. Pass `"--help"` to see all options.
 #'
 #' @note `runs_comment()` will open up an editor if `comment` is not supplied.
 #'
@@ -338,14 +338,32 @@ runs_mark <- function(runs = NULL, ..., clear = FALSE) {
 
 #' @export
 #' @rdname runs_label
-runs_comment <- function(runs = NULL, comment = NULL, ..., delete = NULL, clear = FALSE) {
+runs_comment <- function(runs = NULL, comment = NULL, ...,
+                         delete = NULL, clear = FALSE) {
+  if(is.null(comment) && is.null(delete) && isFALSE(clear) &&
+     requireNamespace("rstudioapi", quietly = TRUE) &&
+     rstudioapi::isAvailable()) {
+    # Guild will attempt to launch EDITOR (e.g., vi), which will fail in the IDE
+    # because the IDE doesn't pass through system() doesn't pass through
+    # console commands to the tty.
+    fi <- tempfile("guild-comment", fileext = ".txt")
+    writeLines(c(strrep(" ", 75), character(23)), fi)
+    mtime <- file.mtime(fi)
+    utils::file.edit(fi, title = "Guild Comment")
+    if(mtime != file.mtime(fi))
+      comment <- trimws(paste0(trimws(readLines(fi)), collapse = "\n"))
+    unlink(fi)
+    if(!nzchar(comment))
+      return(message("Aborting due to an empty comment."))
+  }
+  if(length(comment) > 1)
+    comment <- paste0(comment, collapse = "\n")
   guild("runs comment --yes",
-        if (clear) "--clear",
-        "--delete" = delete,
-        "--add" = comment,
-        ..., maybe_extract_run_ids(runs))
+        list(clear = clear, delete = delete, add = comment, ...),
+        maybe_extract_run_ids(runs))
   invisible(runs)
 }
+
 
 
 
