@@ -26,16 +26,15 @@ find_python <- function() {
 
 find_python_from_registry <- function() {
   for (hive in c("HCU", "HLM")) {
-    reg <- utils::readRegistry(paste0("SOFTWARE\\Python\\PythonCore"),
-                               hive = "HCU",
-                               maxdepth = 3)
-    for (el in reg) {
-      if (!is.list(el))
-        next
-      if (is.null(python <- el$InstallPath$ExecutablePath))
-        next
-      if (file.exists(python))
-        return(python)
+    entries <- utils::readRegistry("SOFTWARE\\Python\\PythonCore",
+                                   hive = hive,
+                                   maxdepth = 3)
+    for (en in entries) {
+      tryCatch({
+        python <- en$InstallPath$ExecutablePath
+        if (file.exists(python))
+          return(python)
+      }, error = identity)
     }
   }
   invisible()
