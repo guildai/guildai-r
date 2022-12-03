@@ -4,7 +4,7 @@
 \alias{resolve_run_ids}
 \title{Resolve run ids}
 \usage{
-resolve_run_ids(runs = NULL, ...)
+resolve_run_ids(runs = NULL, ..., all = TRUE)
 }
 \arguments{
 \item{runs}{a runs selection. If a data.frame, the columns \code{id} or \code{run}
@@ -13,6 +13,8 @@ vector, and passed on to \code{guild} as a runs filter selection. Wrap the
 string in \code{I()} to avoid quoting the argument for the shell.}
 
 \item{...}{Other arguments passed on to \code{guild}}
+
+\item{all}{Return all matching runs, not just the latest.}
 }
 \value{
 A character vector of run ids.
@@ -30,9 +32,10 @@ if(FALSE) {
 resolve_run_ids() # returns all run ids.
 resolve_run_ids(1) # last run
 resolve_run_ids(1:2) # last 2 runs
-resolve_run_ids(1:2, "--operation" = "train.py")
+resolve_run_ids(1:2, operation = "train.py")
 
 # three ways of getting ids for the currently staged or running runs
+resolve_run_ids(staged = TRUE, running = TRUE)
 resolve_run_ids("--staged", "--running")
 resolve_run_ids(c("--staged", "--running"))
 resolve_run_ids(I("--staged --running"))

@@ -381,6 +381,7 @@ runs_comment <- function(runs = NULL, comment = NULL, ...,
 #'   vector, and passed on to `guild` as a runs filter selection. Wrap the
 #'   string in `I()` to avoid quoting the argument for the shell.
 #' @param ... Other arguments passed on to `guild`
+#' @param all Return all matching runs, not just the latest.
 #'
 #' @return A character vector of run ids.
 #' @export
@@ -390,9 +391,10 @@ runs_comment <- function(runs = NULL, comment = NULL, ...,
 #' resolve_run_ids() # returns all run ids.
 #' resolve_run_ids(1) # last run
 #' resolve_run_ids(1:2) # last 2 runs
-#' resolve_run_ids(1:2, "--operation" = "train.py")
+#' resolve_run_ids(1:2, operation = "train.py")
 #'
 #' # three ways of getting ids for the currently staged or running runs
+#' resolve_run_ids(staged = TRUE, running = TRUE)
 #' resolve_run_ids("--staged", "--running")
 #' resolve_run_ids(c("--staged", "--running"))
 #' resolve_run_ids(I("--staged --running"))
@@ -403,10 +405,11 @@ runs_comment <- function(runs = NULL, comment = NULL, ...,
 #'   ls_runs(1)$id
 #' ))
 #' }
-resolve_run_ids <- function(runs = NULL, ...) {
+resolve_run_ids <- function(runs = NULL, ..., all = TRUE) {
   selection <- maybe_extract_run_ids(runs)
   if(...length() || identical(selection, runs))
-    selection <- guild("select --all", ..., selection, stdout = TRUE)
+    selection <- guild("select", list(all = all, ..., selection),
+                       stdout = TRUE)
   selection
 }
 
