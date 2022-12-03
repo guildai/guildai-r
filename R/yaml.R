@@ -34,6 +34,7 @@ encode_yaml <- function(x, ...) {
     list(maybe_as_yaml(x)),
     utils::modifyList(list(
       precision = 15L,
+      indent.mapping.sequence = TRUE,
       handlers = list(complex = as.character) # no complex type supported
     ),
     list(...))))

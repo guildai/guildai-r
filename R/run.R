@@ -460,7 +460,7 @@ write_run_attr <- function(name, data, ..., append = FALSE) {
   if(missing(data))
     return(unlink(file))
   data <- encode_yaml(data, ...)
-  cat(data, "", file = file, sep = "\n", append = append)
+  cat(data, file = file, sep = "\n", append = append)
   invisible(data)
 }
 
