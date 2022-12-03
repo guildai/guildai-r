@@ -15,6 +15,7 @@ guild_run_opts(
   run_dir = NULL,
   stage = FALSE,
   start = NULL,
+  restart = NULL,
   proto = NULL,
   force_sourcecode = FALSE,
   gpus = NULL,
@@ -29,6 +30,7 @@ guild_run_opts(
   maximize = NULL,
   opt_flag = NULL,
   max_trials = NULL,
+  trials = NULL,
   stage_trials = FALSE,
   remote = NULL,
   force_flags = FALSE,
@@ -73,9 +75,11 @@ guild_run_opts(
 
 \item{start}{Start a staged run or restart an existing run. Cannot be used with \code{proto} or \code{run_dir}.}
 
-\item{proto}{Use the operation, flags and source code from RUN. Flags may be added or redefined in this operation. Cannot be used with --restart.}
+\item{restart}{Start a staged run or restart an existing run. Cannot be used with \code{proto} or \code{run_dir}.}
 
-\item{force_sourcecode}{(bool) Use working source code when --restart or \code{proto} is specified. Ignored otherwise.}
+\item{proto}{Use the operation, flags and source code from RUN. Flags may be added or redefined in this operation. Cannot be used with \code{restart}.}
+
+\item{force_sourcecode}{(bool) Use working source code when \code{restart} or \code{proto} is specified. Ignored otherwise.}
 
 \item{gpus}{Limit availabe GPUs to DEVICES, a comma separated list of device IDs. By default all GPUs are available. Cannot beused with \code{no_gpus}.}
 
@@ -100,6 +104,8 @@ guild_run_opts(
 \item{opt_flag}{Flag for OPTIMIZER. May be used multiple times.}
 
 \item{max_trials}{Maximum number of trials to run in batch operations. Default is optimizer specific. If optimizer is not specified, default is 20.}
+
+\item{trials}{Maximum number of trials to run in batch operations. Default is optimizer specific. If optimizer is not specified, default is 20.}
 
 \item{stage_trials}{(bool) For batch operations, stage trials without running them.}
 
@@ -319,7 +325,7 @@ options redefines that environment variable for the run.
 
 Use \code{optimizer} to run the operation multiple times in attempt
 to optimize a result. Use \code{minimize} or \code{maximize} to indicate
-what should be optimized. Use \code{max_runs} to indicate the maximum
+what should be optimized. Use \code{--max-runs} to indicate the maximum
 number of runs the optimizer should generate.
 }
 

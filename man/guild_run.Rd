@@ -31,8 +31,9 @@ accepted at the terminal is valid here as well.
     \item{\code{run_dir}}{Use alternative run directory DIR. Cannot be used with \code{stage}.}
     \item{\code{stage}}{(bool) Stage an operation.}
     \item{\code{start}}{Start a staged run or restart an existing run. Cannot be used with \code{proto} or \code{run_dir}.}
-    \item{\code{proto}}{Use the operation, flags and source code from RUN. Flags may be added or redefined in this operation. Cannot be used with --restart.}
-    \item{\code{force_sourcecode}}{(bool) Use working source code when --restart or \code{proto} is specified. Ignored otherwise.}
+    \item{\code{restart}}{Start a staged run or restart an existing run. Cannot be used with \code{proto} or \code{run_dir}.}
+    \item{\code{proto}}{Use the operation, flags and source code from RUN. Flags may be added or redefined in this operation. Cannot be used with \code{restart}.}
+    \item{\code{force_sourcecode}}{(bool) Use working source code when \code{restart} or \code{proto} is specified. Ignored otherwise.}
     \item{\code{gpus}}{Limit availabe GPUs to DEVICES, a comma separated list of device IDs. By default all GPUs are available. Cannot beused with \code{no_gpus}.}
     \item{\code{no_gpus}}{(bool) Disable GPUs for run. Cannot be used with \code{gpus}.}
     \item{\code{batch_label}}{Label to use for batch runs. Ignored for non-batch runs.}
@@ -45,6 +46,7 @@ accepted at the terminal is valid here as well.
     \item{\code{maximize}}{Column to maximize when running with an optimizer. See help for compare command for details specifying a column. May not be used with \code{minimize}.}
     \item{\code{opt_flag}}{Flag for OPTIMIZER. May be used multiple times.}
     \item{\code{max_trials}}{Maximum number of trials to run in batch operations. Default is optimizer specific. If optimizer is not specified, default is 20.}
+    \item{\code{trials}}{Maximum number of trials to run in batch operations. Default is optimizer specific. If optimizer is not specified, default is 20.}
     \item{\code{stage_trials}}{(bool) For batch operations, stage trials without running them.}
     \item{\code{remote}}{Run the operation remotely.}
     \item{\code{force_flags}}{(bool) Accept all flag assignments, even for undefined or invalid values.}

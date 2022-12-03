@@ -240,7 +240,7 @@ as_guild_args(as.list.environment(environment()), ...)
 #' in the format ``--NAME=VAL`` can be passed to the script using
 #' flags (see below).
 #'
-#' `[MODEL]:OPERATION` may be omitted if \code{restart} or `proto` is
+#' `[MODEL]:OPERATION` may be omitted if `restart` or `proto` is
 #' specified, in which case the operation used in `RUN` is used.
 #'
 #' Specify `FLAG` values in the form `FLAG=VAL`.
@@ -316,7 +316,7 @@ as_guild_args(as.list.environment(environment()), ...)
 #'
 #' Guild limits trials by randomly sampling the maximum number from
 #' the total list of generated files. You can specify the seed used
-#' for the random sample with \code{random_seed}. The random seed is
+#' for the random sample with `random_seed`. The random seed is
 #' guaranteed to generate consistent results when used on the same
 #' version of Python. When used across different versions of Python,
 #' the results may be inconsistent.
@@ -338,7 +338,7 @@ as_guild_args(as.list.environment(environment()), ...)
 #'
 #' ### Restart an Operation
 #'
-#' If \code{restart} is specified, `RUN` is restarted using its
+#' If `restart` is specified, `RUN` is restarted using its
 #' operation and flags. Unlike `proto`, restart does not create a
 #' new run. You cannot change the operation, flags, source code, or
 #' run directory when restarting a run.
@@ -349,7 +349,7 @@ as_guild_args(as.list.environment(environment()), ...)
 #' with the staged run ID to start it.
 #'
 #' If `start` is specified, `RUN` is started using the same rules
-#' applied to \code{restart} (see above).
+#' applied to `restart` (see above).
 #'
 #' ### Alternate Run Directory
 #'
@@ -385,7 +385,7 @@ as_guild_args(as.list.environment(environment()), ...)
 #'
 #' Use `optimizer` to run the operation multiple times in attempt
 #' to optimize a result. Use `minimize` or `maximize` to indicate
-#' what should be optimized. Use \code{max_runs} to indicate the maximum
+#' what should be optimized. Use `--max-runs` to indicate the maximum
 #' number of runs the optimizer should generate.
 #'
 #' ### Edit Flags
@@ -397,7 +397,7 @@ as_guild_args(as.list.environment(environment()), ...)
 #'
 #' ### Debug Source Code
 #'
-#' Use \code{debug_sourcecode} to specify the location of project source
+#' Use `debug_sourcecode` to specify the location of project source
 #' code for debugging. Guild uses this path instead of the location
 #' of the copied soure code for the run. For example, when debugging
 #' project files, use this option to ensure that modules are loaded
@@ -405,7 +405,7 @@ as_guild_args(as.list.environment(environment()), ...)
 #'
 #' ### Breakpoints
 #'
-#' Use \code{break} to set breakpoints for Python based operations.
+#' Use `break` to set breakpoints for Python based operations.
 #' `LOCATION` may be specified as `[FILENAME:]LINE` or as
 #' `MODULE.FUNCTION`.
 #'
@@ -429,8 +429,9 @@ as_guild_args(as.list.environment(environment()), ...)
 #' @param run_dir Use alternative run directory DIR. Cannot be used with `stage`.
 #' @param stage (bool) Stage an operation.
 #' @param start Start a staged run or restart an existing run. Cannot be used with `proto` or `run_dir`.
-#' @param proto Use the operation, flags and source code from RUN. Flags may be added or redefined in this operation. Cannot be used with --restart.
-#' @param force_sourcecode (bool) Use working source code when --restart or `proto` is specified. Ignored otherwise.
+#' @param restart Start a staged run or restart an existing run. Cannot be used with `proto` or `run_dir`.
+#' @param proto Use the operation, flags and source code from RUN. Flags may be added or redefined in this operation. Cannot be used with `restart`.
+#' @param force_sourcecode (bool) Use working source code when `restart` or `proto` is specified. Ignored otherwise.
 #' @param gpus Limit availabe GPUs to DEVICES, a comma separated list of device IDs. By default all GPUs are available. Cannot beused with `no_gpus`.
 #' @param no_gpus (bool) Disable GPUs for run. Cannot be used with `gpus`.
 #' @param batch_label Label to use for batch runs. Ignored for non-batch runs.
@@ -443,6 +444,7 @@ as_guild_args(as.list.environment(environment()), ...)
 #' @param maximize Column to maximize when running with an optimizer. See help for compare command for details specifying a column. May not be used with `minimize`.
 #' @param opt_flag Flag for OPTIMIZER. May be used multiple times.
 #' @param max_trials Maximum number of trials to run in batch operations. Default is optimizer specific. If optimizer is not specified, default is 20.
+#' @param trials Maximum number of trials to run in batch operations. Default is optimizer specific. If optimizer is not specified, default is 20.
 #' @param stage_trials (bool) For batch operations, stage trials without running them.
 #' @param remote Run the operation remotely.
 #' @param force_flags (bool) Accept all flag assignments, even for undefined or invalid values.
@@ -469,11 +471,11 @@ as_guild_args(as.list.environment(environment()), ...)
 guild_run_opts <-
 function (..., label = NULL, tag = NULL, comment = NULL, edit_comment = FALSE,
 edit_flags = FALSE, run_dir = NULL, stage = FALSE, start = NULL,
-proto = NULL, force_sourcecode = FALSE, gpus = NULL, no_gpus = FALSE,
-batch_label = NULL, batch_tag = NULL, batch_comment = NULL,
+restart = NULL, proto = NULL, force_sourcecode = FALSE, gpus = NULL,
+no_gpus = FALSE, batch_label = NULL, batch_tag = NULL, batch_comment = NULL,
 edit_batch_comment = FALSE, optimizer = NULL, optimize = FALSE,
 minimize = NULL, maximize = NULL, opt_flag = NULL, max_trials = NULL,
-stage_trials = FALSE, remote = NULL, force_flags = FALSE,
+trials = NULL, stage_trials = FALSE, remote = NULL, force_flags = FALSE,
 force_deps = FALSE, stop_after = NULL, fail_on_trial_error = FALSE,
 needed = FALSE, background = FALSE, pidfile = NULL, no_wait = FALSE,
 save_trials = NULL, keep_run = FALSE, keep_batch = FALSE,
@@ -510,7 +512,7 @@ as_guild_args(as.list.environment(environment()), ...)
 #' with the lowest `loss` scalar value, use `min loss`.
 #'
 #' For help with COLSPEC formatting, see `COLUMN SPECS` in `compare`
-#' help by running `guild compare --help`.
+#' help by running `guild compare help`.
 #'
 #' Other run filters are applied before selecting a minimum or
 #' maximium scalar value.

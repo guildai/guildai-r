@@ -102,7 +102,7 @@ To select the run with the lowest or highest column value, use
 with the lowest \code{loss} scalar value, use \verb{min loss}.
 
 For help with COLSPEC formatting, see \verb{COLUMN SPECS} in \code{compare}
-help by running \verb{guild compare --help}.
+help by running \verb{guild compare help}.
 
 Other run filters are applied before selecting a minimum or
 maximium scalar value.

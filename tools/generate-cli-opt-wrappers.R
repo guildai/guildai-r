@@ -11,6 +11,7 @@ library(envir)
 attach_eval({
   import_from(guildai, guild, str_drop_prefix, parse_yaml)
   import_from(magrittr, `%<>%`, not)
+  import_from(tidyr, unnest)
   filter_out <- function(.data, ...) {
     dots <- lapply(quos(...), function(q) quo( not(!!q) ))
     filter(.data, !!!dots)
@@ -25,7 +26,7 @@ parse_opt_term_field <- function(term) {
 
   term %>%
     strsplit(",?\\s+") %>%
-    map_dfr(function(x) {
+    map(function(x) {
 
       if (startsWith(x[1], "-") && !startsWith(x[1], "--")) {
         short_name <- x[1]
@@ -33,8 +34,9 @@ parse_opt_term_field <- function(term) {
       } else
         short_name <- NA_character_
 
-      if (startsWith(x[1], "--")) {
-        name <- x[1]
+      name <- character()
+      while (length(x) && startsWith(x[1], "--")) {
+        name <- c(name, x[1])
         x <- x[-1]
       }
 
@@ -44,23 +46,10 @@ parse_opt_term_field <- function(term) {
         # it's a bool switch
         default <- FALSE
 
-      list(short_name = short_name, name = name, default = list(default))
-    }) %>%
-    mutate(
-      cli_name = name,
-      name = name %>%
-             str_drop_prefix("--") %>%
-             str_replace_all(fixed("-"), "_"))
-
+      tibble(short_name, name, default = list(default))
+    })
 }
 
-#
-# replace_cli_arg_names_with_r_arg_names <- function(x)  {
-#   m <- gregexec("`--[[:alnum:]-]+`", x)
-#   regmatches(x, m) <- regmatches(x, m) %>%
-#     map(~sprintf("\\code{%s}", opt_cli_name_to_r_name(.x)))
-#   x
-# }
 
 # opt_name_to_rarg_name <- function(x) {
 opt_r_name_to_cli_name <- function(x) {
@@ -86,10 +75,15 @@ tidy_opts <- function(command, omit = NULL) {
     parse_yaml()
 
   opts <- transpose(x$options) %>% map(flatten_chr) %>% as_tibble()
-  opts <- bind_cols(opts, parse_opt_term_field(opts$term))
-  opts <- opts %>% filter(!name %in% c(omit, "help", "yes"))
-
-  # opts$help %<>% replace_cli_arg_names_with_r_arg_names()
+  opts <- opts %>%
+    mutate(info = parse_opt_term_field(term)) %>%
+    unnest(info) %>%
+    mutate(
+      cli_name = name,
+      name = name %>%
+        str_drop_prefix("--") %>%
+        str_replace_all(fixed("-"), "_")
+    )
 
   # replace cli names w/ name:  --proto  -->  `proto`
   # prefix switches w/ "(bool)"
@@ -105,11 +99,13 @@ tidy_opts <- function(command, omit = NULL) {
     })
 
   help <- x$help
+  help <- gsub(".\b", "", help)
   for(r in seq_len(nrow(opts)))
     help <- str_replace_all(help,
                             fixed(opts$cli_name[[r]]),
                             opts$name[[r]])
 
+  opts <- opts %>% filter(!name %in% c(omit, "help", "yes"))
 
   attr(opts, "command") <- x$usage$prog
   attr(opts, "help") <- help
@@ -129,8 +125,7 @@ gen_wrapper_text <- function(command, passes_on_to = NULL, omit = NULL) {
 
   roxy_desc <- attr(opts, "help") %>%
     strsplit("\n", fixed = TRUE) %>% .[[1L]] %>%
-    replace_cli_arg_names_with_r_arg_names() %>%
-    gsub(".\b", "", .) %>% c("", "")
+    c("", "")
 
   roxy <- paste("#'", c %(% {
     fn_name
