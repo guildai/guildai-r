@@ -7,17 +7,38 @@ find_python <- function() {
     "/usr/bin/python3",
     Sys.which("python3"),
     Sys.which("python")
-    # TODO: search also in default python locations on windows
     # TODO: do we really want to use system python on mac?
     #       Maybe look in /usr/bin/local first?
   )))
     if(file.exists(python))
       return(python)
 
+  if (is_windows() &&
+      file.exists(python <- find_python_from_registry()))
+    return(python)
+
+
   stop(
 "python executable not found. Please:
   -  download and install Python http://python.org/downloads/
   -  ensure it is on your PATH")
+}
+
+find_python_from_registry <- function() {
+  for (hive in c("HCU", "HLM")) {
+    reg <- utils::readRegistry(paste0("SOFTWARE\\Python\\PythonCore"),
+                               hive = "HCU",
+                               maxdepth = 3)
+    for (el in reg) {
+      if (!is.list(el))
+        next
+      if (is.null(python <- el$InstallPath$ExecutablePath))
+        next
+      if (file.exists(python))
+        return(python)
+    }
+  }
+  invisible()
 }
 
 
