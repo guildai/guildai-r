@@ -57,7 +57,7 @@ functions: <code><a href="ls_runs.html">ls_runs()</a></code>, <code><a href="ls_
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">resolve_run_ids</span><span class="op">(</span>runs <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">resolve_run_ids</span><span class="op">(</span>runs <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -71,6 +71,10 @@ string in <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link"
 
 <dt>...</dt>
 <dd><p>Other arguments passed on to <code>guild</code></p></dd>
+
+
+<dt>all</dt>
+<dd><p>Return all matching runs, not just the latest.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -86,9 +90,10 @@ string in <code><a href="https://rdrr.io/r/base/AsIs.html" class="external-link"
 <span class="r-in"><span><span class="fu">resolve_run_ids</span><span class="op">(</span><span class="op">)</span> <span class="co"># returns all run ids.</span></span></span>
 <span class="r-in"><span><span class="fu">resolve_run_ids</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span> <span class="co"># last run</span></span></span>
 <span class="r-in"><span><span class="fu">resolve_run_ids</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="co"># last 2 runs</span></span></span>
-<span class="r-in"><span><span class="fu">resolve_run_ids</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, <span class="st">"--operation"</span> <span class="op">=</span> <span class="st">"train.py"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">resolve_run_ids</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span>, operation <span class="op">=</span> <span class="st">"train.py"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># three ways of getting ids for the currently staged or running runs</span></span></span>
+<span class="r-in"><span><span class="fu">resolve_run_ids</span><span class="op">(</span>staged <span class="op">=</span> <span class="cn">TRUE</span>, running <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">resolve_run_ids</span><span class="op">(</span><span class="st">"--staged"</span>, <span class="st">"--running"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">resolve_run_ids</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--staged"</span>, <span class="st">"--running"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">resolve_run_ids</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="st">"--staged --running"</span><span class="op">)</span><span class="op">)</span></span></span>
