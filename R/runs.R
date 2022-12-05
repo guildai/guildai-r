@@ -11,7 +11,7 @@
 #' @details
 #'
 #' Guild has support for a custom filter expression syntax. This syntax is
-#' primarily useful at the command line, and R users will generally prefer to
+#' primarily useful in the terminal, and R users will generally prefer to
 #' filter the returned dataframe directly using `dplyr::filter()` or `[`.
 #' Nevertheless, R users can supply guild filter expressions here as well.
 #'
@@ -172,7 +172,6 @@
 #' ls_runs(tag = c("convnet", "keras"), started = "last hour")
 #' ls_runs(error = TRUE)
 #'
-#' #'
 #' runs <- ls_runs()
 #'
 #' # filter down the runs list to ones of interest
