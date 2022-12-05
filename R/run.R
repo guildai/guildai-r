@@ -40,7 +40,8 @@ prune_unaccessed_run_files <- function(start_info) {
   withr::local_dir(Sys.getenv("RUN_DIR"))
   end_info <- file.info(rownames(start_info), extra_cols = FALSE)
   unaccessed <- rownames(start_info)[start_info$atime == end_info$atime]
-  message("Deleting: ", paste0(shQuote(unaccessed), collapse = ","))
+  if(Sys.getenv("DEBUGR") == 1)
+    message("Deleting: ", paste0(shQuote(unaccessed), collapse = ","))
   unlink(unaccessed)
   invisible(unaccessed)
 }
@@ -322,18 +323,21 @@ modify_r_file_flags <- function(filename, flags, overwrite = FALSE,
     # TODO: support for injecting flags for expressions like `foo <- get_foo()`?
     # TODO: ensure/force type-stable flag injections? NULLable flag values?
 
-    # emit message about the magic we just did
-    old_l <- l
-    l[[3L]] <- flags[[name]] # replace the value in node
-    message(sprintf("Replaced expression '%s' on line %i with '%s'",
-                    deparse1(old_l), line_start, deparse1(l)))
+    if(Sys.getenv("DEBUGR") == 1) {
+      # emit message about the magic we just did
+      old_l <- l
+      l[[3L]] <- flags[[name]] # replace the value in node
+      message(sprintf("Replaced expression '%s' on line %i with '%s'",
+                      deparse1(old_l), line_start, deparse1(l)))
+    }
 
     flags[[name]] <- NULL # null out flag value; each flag is injected only once
 
   }
 
-  if(length(flags))
-    warning("Unused params received but not injected: ", unlist(flags))
+  if(length(flags) && Sys.getenv("DEBUGR") == 1)
+    message("Additional flags: \n",
+            paste("  ", encode_yaml(flags), collapse = "\n"))
 
   if(isTRUE(overwrite))
     writeLines(text, filename)
