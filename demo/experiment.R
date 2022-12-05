@@ -6,6 +6,3 @@ for(i in 1:10) {
   cat("step:", i, "\n")
   cat("position:", position, "\n")
 }
-
-library(commafree)
-library(yasp)
