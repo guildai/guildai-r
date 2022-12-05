@@ -129,9 +129,10 @@ install_guild_cli <- function(dest = "~/bin", completions = TRUE) {
   if (!normalizePath(dest) %in% paths)
     warning(sprintf("'%s' is not on the PATH.", dest))
 
-  if (Sys.which("guild") != guild_exe)
+  if (Sys.which("guild") != path.expand(link)) {
     warning("A different 'guild' executable is first on the PATH: ",
             "'", Sys.which("guild"), "'")
+  }
 
   invisible(link)
 }
