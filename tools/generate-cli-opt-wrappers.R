@@ -169,7 +169,7 @@ writeLines(c %(% {
   gen_wrapper_text("merge")
   gen_wrapper_text("select")
 
-}, "R/auto-generated-cli-opt-wrappers.R")
+}, "R/auto-generated-cli-doc-stubs.R")
 
 # TODO: guild_select_opts should be it's own func that other opts inherit dot params to
 # TODO: filter out irrelevant help sections from roxy descriptions, like "Breakpoints" for `guild run`
