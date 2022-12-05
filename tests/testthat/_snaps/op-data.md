@@ -83,21 +83,6 @@
 
 ---
 
-    Replaced expression 'i <- 123L' on line 3 with 'i <- 456L'
-    Replaced expression 'f <- 1.123' on line 4 with 'f <- 4.56'
-    Replaced expression 's <- "Howdy Guild"' on line 5 with 's <- "Howdy Back"'
-    Replaced expression 'b <- FALSE' on line 10 with 'b <- TRUE'
-    Replaced expression 's2 <- "foo"' on line 16 with 's2 <- "abc"'
-    Replaced expression 's3 <- "\n    foobarbaz\n    "' on line 17 with 's3 <- "def"'
-    Replaced expression 'cx <- 0+0i' on line 20 with 'cx <- 1+1i'
-    Replaced expression 'cx1 <- 1+1i' on line 24 with 'cx1 <- 2+2i'
-    Replaced expression 's4 = "A string"' on line 31 with 's4 = "A loooooooonger string"'
-    Replaced expression 's5 <- "Another string"' on line 31 with 's5 <- "a different string"'
-    Replaced expression 'duplicated_flag = 1L' on line 35 with 'duplicated_flag = 99L'
-    Replaced expression 'cx2 <- 2+2i' on line 40 with 'cx2 <- 22+22i'
-    Replaced expression 'cx3 <- 3+3i' on line 41 with 'cx3 <- 33+33i'
-    Replaced expression 'i2 <- -123L' on line 45 with 'i2 <- 123L'
-    Replaced expression 'i3 <- 123L' on line 46 with 'i3 <- -123L'
     > #| echo: true
     > 
     > i <- 456L
@@ -179,8 +164,6 @@
 
 ---
 
-    Replaced expression 's <- "Howdy Guild"' on line 5 with 's <- "foo\nbar\nbaz"'
-    Replaced expression 's4 = "A string"' on line 31 with 's4 = "s"'
     > #| echo: true
     > 
     > i <- 123L
