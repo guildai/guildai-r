@@ -19,7 +19,7 @@ parse_yaml_anno <- function(x) {
 #' @importFrom rlang %||%
 #' @importFrom utils modifyList
 emit_r_script_guild_data <- function(r_script_path = commandArgs(TRUE)[1]) {
-  print.yaml(out <- r_script_guild_data(r_script_path),
+  print.yaml(r_script_guild_data(r_script_path),
              c("", if(Sys.getenv("DEBUGR") == "1")
                "emitted-script-guild-op-data.yml"))
 }
@@ -42,6 +42,8 @@ r_script_guild_data <- function(r_script_path) {
     "flags-dest" = r_script_path,
     "name" = r_script_path,
     "sourcecode" = list(dest = "."),
+    "prune-on-success" = TRUE,
+    "echo" = TRUE,
     "pip-freeze" = FALSE
   )
 
@@ -88,6 +90,10 @@ r_script_guild_data <- function(r_script_path) {
   echo <- data$echo %||% TRUE
   data$echo <- NULL
 
+  # intercept user supplied `prune-on-success` here
+  prune_on_success <- data[["prune-on-success"]] %||% TRUE
+  data[["prune-on-success"]] <- NULL
+
   # TODO: intercept `seed` or `random-seed` here?
 
   # don't pass through flags_dest to do_guild_run(),
@@ -100,6 +106,8 @@ r_script_guild_data <- function(r_script_path) {
     cl["flags_dest"] <- list(flags_dest) # preserve NULL
   if(!isTRUE(echo))
     cl$echo <- echo
+  if(!isTRUE(prune_on_success))
+    cl$prune_on_success <- prune_on_success
   cl <- call(":::", quote(guildai), cl)
 
   data$exec <- sprintf("%s -e %s",

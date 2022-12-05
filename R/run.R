@@ -8,10 +8,49 @@
 ## env.).
 ## https://my.guild.ai/t/guild-run-callbacks/925
 
+get_run_files_info <- function(main_file = NULL) {
+  files <- list.files(all.files = TRUE, no.. = TRUE, recursive = TRUE)
+  files <- files[!startsWith(files, ".guild")]
+  files <- file.info(files, extra_cols = FALSE)
+  # update so atime == mtime. This is needed on linux, which by default
+  # only updates atime on a read operation if it's different from mtime
+  # https://superuser.com/questions/464290/why-is-cat-not-changing-the-access-time
+  # To avoid loading fs, we can use Sys.setFileTime(path, time)
+  Sys.setFileTime(rownames(files), files$mtime)
+  # fs::file_touch(rownames(files), access_time = files$mtime)
+  files <- file.info(rownames(files), extra_cols = FALSE)
 
+  # ensure enough time has passed so that if user reads files,
+  # the resolution of file system shows that w/ a new atime value
+  # E.g., HFS+ onl has atime resolution of 1 sec, FAT 2 secs
+  if (!is.null(main_file))
+    repeat {
+      readLines(main_file, 1)
+      if (files[main_file, "atime"] !=
+          file.info(main_file, extra_cols = FALSE)$atime)
+        break
+      Sys.sleep(0.1)
+    }
+
+  files
+}
+
+prune_unaccessed_run_files <- function(start_info) {
+  stopifnot(is_run_active())
+  withr::local_dir(Sys.getenv("RUN_DIR"))
+  end_info <- file.info(rownames(start_info), extra_cols = FALSE)
+  unaccessed <- rownames(start_info)[start_info$atime == end_info$atime]
+  message("Deleting: ", paste0(shQuote(unaccessed), collapse = ","))
+  unlink(unaccessed)
+  invisible(unaccessed)
+}
 
 do_guild_run <-
-function(file = "train.R", flags_dest = file, echo = TRUE) {
+function(file = "train.R", flags_dest = file, echo = TRUE,
+         prune_on_success = TRUE) {
+
+  if(prune_on_success)
+    run_files_info_at_start <- get_run_files_info(file)
 
   if (is_r_file(flags_dest)) {
     modify_r_file_flags(flags_dest, read_yaml(".guild/attrs/flags"),
@@ -22,8 +61,6 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
 
   # setup_info <- setup_run_dir()
   # on.exit(teardown_run_dir(setup_info))
-
-
 
   # setup default plot device.
   # the default viewers work better w/ pngs than pdf.
@@ -64,10 +101,8 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
   #   write_run_attr("r-session-info", sessionInfo())
   # })
 
-  for (pkgname in rev(loadedNamespaces())) {
-    if(pkgname %in% "base") next
+  for (pkgname in setdiff(loadedNamespaces(), "base"))
     write_run_attr_pkg_loaded(pkgname)
-  }
 
   for(pkgname in installed.packages2())
     setHook(packageEvent(pkgname, "onLoad"), write_run_attr_pkg_loaded)
@@ -89,6 +124,9 @@ function(file = "train.R", flags_dest = file, echo = TRUE) {
       keep.source = TRUE,
       deparseCtrl = c("keepInteger", "showAttributes", "keepNA")
     )
+
+    if (prune_on_success)
+      prune_unaccessed_run_files(run_files_info_at_start)
 
   },
 
