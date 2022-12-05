@@ -164,6 +164,7 @@ writeLines(c %(% {
 
   gen_wrapper_text("run", omit = c(
     "break", "break_on_error", "random_seed", "debug_sourcecode"))
+  gen_wrapper_text("api runs")
   gen_wrapper_text("view")
   gen_wrapper_text("merge")
   gen_wrapper_text("select")

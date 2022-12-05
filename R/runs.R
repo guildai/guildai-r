@@ -2,9 +2,155 @@
 
 #' list guild runs
 #'
+#' Returns a dataframe with information about the known guild runs stored at
+#' the location:
+#' ```r
+#'  Sys.getenv("GUILD_HOME", here::here(".guild"))
+#' ```
+#'
+#' @details
+#'
+#' Guild has support for a custom filter expression syntax. This syntax is
+#' primarily useful at the command line, and R users will generally prefer to
+#' filter the returned dataframe directly using `dplyr::filter()` or `[`.
+#' Nevertheless, R users can supply guild filter expressions here as well.
+#'
+#'
+#' ### Filter by Expression
+#'
+#' Use `filter` to limit runs that match a filter
+#' expressions. Filter expressions compare run attributes, flag
+#' values, or scalars to target values. They may include multiple
+#' expressions with logical operators.
+#'
+#' For example, to match runs with flag `batch-size` equal to 100
+#' that have `loss` less than 0.8, use:
+#'
+#'     ls_runs(filter = "batch-size = 10 and loss < 0.8")
+#'
+#' Target values may be numbers, strings or lists containing numbers
+#' and strings. Lists are defined
+#' using square braces where each item is separated by a comma.
+#'
+#' Comparisons may use the following operators:
+#' '=', '!=', '<', '<=', '>', '>='.
+#'
+#' Text comparisons may use 'contains' to test
+#' for case-insensitive string membership. A value may be tested for
+#' membership or not in a list using 'in' or 'not in'
+#' respectively. An value may be tested for undefined using 'is
+#' undefined' or defined using 'is not undefined'.
+#'
+#' Logical operators include 'or' and 'and'. An expression may be
+#' negated by preceding it with 'not'. Parentheses may be used to
+#' control the order of precedence when expressions are evaluated.
+#'
+#' If a value reference matches more than one type of run information
+#' (e.g. a flag is named 'label', which is also a run attribute), the
+#' value is read in order of run attribute, then flag value, then
+#' scalar. To disambiguate the reference, use a prefix `attr:`,
+#' `flag:`, or `scalar:` as needed. For example, to filter using a
+#' flag value named 'label', use 'flag:label'.
+#'
+#' Other examples:
+#'
+#'     "operation = train and acc > 0.9"
+#'     "operation = train and (acc > 0.9 or loss < 0.3)"
+#'     "batch-size = 100 or batch-size = 200"
+#'     "batch-size in [100,200]"
+#'     "batch-size not in [400,800]"
+#'     "batch-size is undefined"
+#'     "batch-size is not undefined"
+#'     "label contains best and operation not in [test,deploy]"
+#'     "status in [error,terminated]"
+#'
+#' **NOTE:** Comments and tags are not supported in filter
+#' expressions at this time. Use `comment` and `tag` options
+#' along with filter expressions to further refine a selection.
+#'
+#' ### Filter by Run Start Time
+#'
+#' Use `started` to limit runs to those that have started within a
+#' specified time range.
+#'
+#'     ls_runs(started = 'last hour')
+#'
+#' You can specify a time range using several different forms:
+#'
+#'
+#'     "after DATETIME"
+#'     "before DATETIME"
+#'     "between DATETIME and DATETIME"
+#'     "last N minutes|hours|days"
+#'     "today|yesterday"
+#'     "this week|month|year"
+#'     "last week|month|year"
+#'     "N days|weeks|months|years ago"
+#'
+#' `DATETIME` may be specified as a date in the format ``YY-MM-DD``
+#' (the leading ``YY-`` may be omitted) or as a time in the format
+#' ``HH:MM`` (24 hour clock). A date and time may be specified
+#' together as `DATE TIME`.
+#'
+#' When using ``between DATETIME and DATETIME``, values for
+#' `DATETIME` may be specified in either order.
+#'
+#' When specifying values like ``minutes`` and ``hours`` the trailing
+#' ``s`` may be omitted to improve readability. You may also use
+#' ``min`` instead of ``minutes`` and ``hr`` instead of ``hours``.
+#'
+#' Examples:
+#'
+#'
+#'     "after 7-1"
+#'     "after 9:00"
+#'     "between 1-1 and 4-30"
+#'     "between 10:00 and 15:00"
+#'     "last 30 min"
+#'     "last 6 hours"
+#'     "today"
+#'     "this week"
+#'     "last month"
+#'     "3 weeks ago"
+#'
+#'
+#' ### Filter by Run Status
+#'
+#' Runs may also be filtered by specifying one or more status
+#' filters: `running`, `completed`, `error`, and
+#' `terminated`. These may be used together to include runs that
+#' match any of the filters. For example to only include runs that
+#' were either terminated or exited with an error, use
+#'
+#'     ls_runs(terminated = TRUE, error = TRUE)
+#'
+#' Status filters are applied before `RUN` indexes are resolved. For
+#' example, a run index of ``1``
+#' (as in, `ls_runs(1, terminated = TRUE, error = TRUE)` is the latest run
+#' that matches the status filters.
+#'
+#'
 #' @param runs a runs specification.
-#' @param ... additional arguments passed to `guild api runs`. Try
-#'   `"--help"` to see options.
+#' @param ... passed on to `guild`.
+#' @param filter (character vector) Filter runs using a guild filter expression. See details section.
+#' @param operation (character vector) Filter runs with matching `operation`s. A run is
+#' only included if any part of its full operation name matches the value.
+#' @param label (character vector) Filter runs with matching labels.
+#' @param unlabeled (bool) Filter only runs without labels.
+#' @param tag (character vector) Filter runs with `tag`.
+#' @param comment (character vector) Filter runs with comments matching.
+#' @param marked (bool) Filter only marked runs.
+#' @param unmarked (bool) Filter only unmarked runs.
+#' @param started (string) Filter only runs started within RANGE. See details for valid time ranges.
+#' @param digest (string) Filter only runs with a matching source code digest.
+#' @param running (bool) Filter only runs that are still running.
+#' @param completed (bool) Filter only completed runs.
+#' @param error (bool) Filter only runs that exited with an error.
+#' @param terminated (bool) Filter only runs terminated by the user.
+#' @param pending (bool) Filter only pending runs.
+#' @param staged (bool) Filter only staged runs.
+#' @param deleted (bool) Show deleted runs.
+#' @param include_batch (bool) Include batch runs.
 #'
 #' @return a dataframe of runs
 #' @export
@@ -50,8 +196,31 @@
 #' }
 #' })
 #' }
-ls_runs <- function(runs = NULL, ...) {
-  df <- guild("api runs", ..., maybe_extract_run_ids(runs), stdout = TRUE) |>
+ls_runs <-
+function(runs = NULL, ...,
+         filter = NULL,
+         operation = NULL,
+         label = NULL,
+         unlabeled = FALSE,
+         tag = NULL,
+         comment = NULL,
+         marked = FALSE,
+         unmarked = FALSE,
+         started = NULL,
+         digest = NULL,
+         running = FALSE,
+         completed = FALSE,
+         error = FALSE,
+         terminated = FALSE,
+         pending = FALSE,
+         staged = FALSE,
+         deleted = FALSE,
+         include_batch = FALSE) {
+
+  df <- guild("api runs", list(...),
+              mget(setdiff(ls(), "runs")),
+              maybe_extract_run_ids(runs),
+              stdout = TRUE) |>
     paste0(collapse = "") |>
     parse_json(simplifyVector = TRUE)
 

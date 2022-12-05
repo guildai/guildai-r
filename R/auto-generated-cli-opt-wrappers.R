@@ -258,6 +258,46 @@ test_output_scalars = NULL, test_sourcecode = FALSE, test_flags = FALSE)
 as_guild_args(as.list.environment(environment()), ...)
 }
 
+#' guild_api_runs_cli
+#' Show runs as JSON.
+#'
+#' IMPORTANT: This command is experimental and subject to change without
+#' notice.
+#'
+#'
+#' @param ... passed on to the `guild` executable. Arguments are automatically quoted with `shQuote()`, unless they are protected with `I()`. Pass `'--help'` or `help = TRUE` to see all options.
+#' @param format (bool) Format the JSON outout.
+#' @param archive Show runs archived in PATH.
+#' @param filter Filter runs using a filter expression. See Filter by Expression above for details..
+#' @param operation Filter runs with operations matching `VAL`.
+#' @param label Filter runs with labels matching VAL. To show unlabeled runs, use `unlabeled`.
+#' @param unlabeled (bool) Filter only runs without labels.
+#' @param tag Filter runs with TAG.
+#' @param comment Filter runs with comments matching VAL.
+#' @param marked (bool) Filter only marked runs.
+#' @param unmarked (bool) Filter only unmarked runs.
+#' @param started Filter only runs started within RANGE. See above for valid time ranges.
+#' @param digest Filter only runs with a matching source code digest.
+#' @param running (bool) Filter only runs that are still running.
+#' @param completed (bool) Filter only completed runs.
+#' @param error (bool) Filter only runs that exited with an error.
+#' @param terminated (bool) Filter only runs terminated by the user.
+#' @param pending (bool) Filter only pending runs.
+#' @param staged (bool) Filter only staged runs.
+#' @param api_version API version.
+#' @param deleted (bool) Show deleted runs.
+#' @param include_batch (bool) Include batch runs.
+guild_api_runs_cli <-
+function (..., format = FALSE, archive = NULL, filter = NULL,
+operation = NULL, label = NULL, unlabeled = FALSE, tag = NULL,
+comment = NULL, marked = FALSE, unmarked = FALSE, started = NULL,
+digest = NULL, running = FALSE, completed = FALSE, error = FALSE,
+terminated = FALSE, pending = FALSE, staged = FALSE, api_version = NULL,
+deleted = FALSE, include_batch = FALSE)
+{
+as_guild_args(as.list.environment(environment()), ...)
+}
+
 #' guild_view_cli
 #' Visualize runs in a local web application.
 #'
@@ -608,132 +648,14 @@ as_guild_args(as.list.environment(environment()), ...)
 #' Use `unmarked` to only include unmarked runs. This option may
 #' not be used with `marked`.
 #'
-#' ### Filter by Expression
-#'
-#' Use `filter` to limit runs that match a filter
-#' expressions. Filter expressions compare run attributes, flag
-#' values, or scalars to target values. They may include multiple
-#' expressions with logical operators.
-#'
-#' For example, to match runs with flag `batch-size` equal to 100
-#' that have `loss` less than 0.8, use:
-#'
-#'     filter 'batch-size = 10 and loss < 0.8'
-#'
-#' **IMPORTANT:** You must quote EXPR if it contains spaces or
-#' characters that the shell uses (e.g. '<' or '>').
-#'
-#' Target values may be numbers, strings or lists containing numbers
-#' and strings. Strings that contain spaces must be quoted, otherwise
-#' a target string values does not require quotes. Lists are defined
-#' using square braces where each item is separated by a comma.
-#'
-#' Comparisons may use the following operators: '=', '!=' (or '<>'),
-#' '<', '<=', '>', '>='. Text comparisons may use 'contains' to test
-#' for case-insensitive string membership. A value may be tested for
-#' membership or not in a list using 'in' or 'not in'
-#' respectively. An value may be tested for undefined using 'is
-#' undefined' or defined using 'is not undefined'.
-#'
-#' Logical operators include 'or' and 'and'. An expression may be
-#' negated by preceding it with 'not'. Parentheses may be used to
-#' control the order of precedence when expressions are evaluated.
-#'
-#' If a value reference matches more than one type of run information
-#' (e.g. a flag is named 'label', which is also a run attribute), the
-#' value is read in order of run attribute, then flag value, then
-#' scalar. To disambiguate the reference, use a prefix `attr:`,
-#' `flag:`, or `scalar:` as needed. For example, to filter using a
-#' flag value named 'label', use 'flag:label'.
-#'
-#' Other examples:
-#'
-#'
-#'   `operation = train and acc > 0.9`
-#'   `operation = train and (acc > 0.9 or loss < 0.3)`
-#'   `batch-size = 100 or batch-size = 200`
-#'   `batch-size in [100,200]`
-#'   `batch-size not in [400,800]`
-#'   `batch-size is undefined`
-#'   `batch-size is not undefined`
-#'   `label contains best and operation not in [test,deploy]`
-#'   `status in [error,terminated]`
-#'
-#' **NOTE:** Comments and tags are not supported in filter
-#' expressions at this time. Use `comment` and `tag` options
-#' along with filter expressions to further refine a selection.
-#'
-#' ### Filter by Run Start Time
-#'
-#' Use `started` to limit runs to those that have started within a
-#' specified time range.
-#'
-#' **IMPORTANT:** You must quote RANGE values that contain
-#' spaces. For example, to filter runs started within the last hour,
-#' use the option:
-#'
-#'     started 'last hour'
-#'
-#' You can specify a time range using several different forms:
-#'
-#'
-#'   `after DATETIME`
-#'   `before DATETIME`
-#'   `between DATETIME and DATETIME`
-#'   `last N minutes|hours|days`
-#'   `today|yesterday`
-#'   `this week|month|year`
-#'   `last week|month|year`
-#'   `N days|weeks|months|years ago`
-#'
-#' `DATETIME` may be specified as a date in the format ``YY-MM-DD``
-#' (the leading ``YY-`` may be omitted) or as a time in the format
-#' ``HH:MM`` (24 hour clock). A date and time may be specified
-#' together as `DATE TIME`.
-#'
-#' When using ``between DATETIME and DATETIME``, values for
-#' `DATETIME` may be specified in either order.
-#'
-#' When specifying values like ``minutes`` and ``hours`` the trailing
-#' ``s`` may be omitted to improve readability. You may also use
-#' ``min`` instead of ``minutes`` and ``hr`` instead of ``hours``.
-#'
-#' Examples:
-#'
-#'
-#'   `after 7-1`
-#'   `after 9:00`
-#'   `between 1-1 and 4-30`
-#'   `between 10:00 and 15:00`
-#'   `last 30 min`
-#'   `last 6 hours`
-#'   `today`
-#'   `this week`
-#'   `last month`
-#'   `3 weeks ago`
-#'
+
 #' ### Filter by Source Code Digest
 #'
 #' To show runs for a specific source code digest, use `-g` or
 #' `digest` with a complete or partial digest value.
 #'
 #'
-#' ### Filter by Run Status
-#'
-#' Runs may also be filtered by specifying one or more status
-#' filters: `running`, `completed`, `error`, and
-#' `terminated`. These may be used together to include runs that
-#' match any of the filters. For example to only include runs that
-#' were either terminated or exited with an error, use ``terminated
-#' error``, or the short form ``-Set``.
-#'
-#' You may combine more than one status character with ``-S`` to
-#' expand the filter. For example, ``-Set`` shows only runs with
-#' terminated or error status.
-#'
-#' Status filters are applied before `RUN` indexes are resolved. For
-#' example, a run index of ``1`` is the latest run that matches the
-#' status filters.
+
 #'
 #'
 #' @param ... passed on to the `guild` executable. Arguments are automatically quoted with `shQuote()`, unless they are protected with `I()`. Pass `'--help'` or `help = TRUE` to see all options.

@@ -49,7 +49,7 @@ as_guild_args <- function(...) {
     return(x)
 
   if(inherits(x, "AsIs") && is.null(names(x)))
-    # early return branch for args that go through
+    # early return for args that go through
     # as_guild_args() multiple times
     return(x)
 

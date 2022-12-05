@@ -4,19 +4,204 @@
 \alias{ls_runs}
 \title{list guild runs}
 \usage{
-ls_runs(runs = NULL, ...)
+ls_runs(
+  runs = NULL,
+  ...,
+  filter = NULL,
+  operation = NULL,
+  label = NULL,
+  unlabeled = FALSE,
+  tag = NULL,
+  comment = NULL,
+  marked = FALSE,
+  unmarked = FALSE,
+  started = NULL,
+  digest = NULL,
+  running = FALSE,
+  completed = FALSE,
+  error = FALSE,
+  terminated = FALSE,
+  pending = FALSE,
+  staged = FALSE,
+  deleted = FALSE,
+  include_batch = FALSE
+)
 }
 \arguments{
 \item{runs}{a runs specification.}
 
-\item{...}{additional arguments passed to \verb{guild api runs}. Try
-\code{"--help"} to see options.}
+\item{...}{passed on to \code{guild}.}
+
+\item{filter}{(character vector) Filter runs using a guild filter expression. See details section.}
+
+\item{operation}{(character vector) Filter runs with matching \code{operation}s. A run is
+only included if any part of its full operation name matches the value.}
+
+\item{label}{(character vector) Filter runs with matching labels.}
+
+\item{unlabeled}{(bool) Filter only runs without labels.}
+
+\item{tag}{(character vector) Filter runs with \code{tag}.}
+
+\item{comment}{(character vector) Filter runs with comments matching.}
+
+\item{marked}{(bool) Filter only marked runs.}
+
+\item{unmarked}{(bool) Filter only unmarked runs.}
+
+\item{started}{(string) Filter only runs started within RANGE. See details for valid time ranges.}
+
+\item{digest}{(string) Filter only runs with a matching source code digest.}
+
+\item{running}{(bool) Filter only runs that are still running.}
+
+\item{completed}{(bool) Filter only completed runs.}
+
+\item{error}{(bool) Filter only runs that exited with an error.}
+
+\item{terminated}{(bool) Filter only runs terminated by the user.}
+
+\item{pending}{(bool) Filter only pending runs.}
+
+\item{staged}{(bool) Filter only staged runs.}
+
+\item{deleted}{(bool) Show deleted runs.}
+
+\item{include_batch}{(bool) Include batch runs.}
 }
 \value{
 a dataframe of runs
 }
 \description{
-list guild runs
+Returns a dataframe with information about the known guild runs stored at
+the location:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{ Sys.getenv("GUILD_HOME", here::here(".guild"))
+}\if{html}{\out{</div>}}
+}
+\details{
+Guild has support for a custom filter expression syntax. This syntax is
+primarily useful at the command line, and R users will generally prefer to
+filter the returned dataframe directly using \code{dplyr::filter()} or \code{[}.
+Nevertheless, R users can supply guild filter expressions here as well.
+\subsection{Filter by Expression}{
+
+Use \code{filter} to limit runs that match a filter
+expressions. Filter expressions compare run attributes, flag
+values, or scalars to target values. They may include multiple
+expressions with logical operators.
+
+For example, to match runs with flag \code{batch-size} equal to 100
+that have \code{loss} less than 0.8, use:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{ls_runs(filter = "batch-size = 10 and loss < 0.8")
+}\if{html}{\out{</div>}}
+
+Target values may be numbers, strings or lists containing numbers
+and strings. Lists are defined
+using square braces where each item is separated by a comma.
+
+Comparisons may use the following operators:
+'=', '!=', '<', '<=', '>', '>='.
+
+Text comparisons may use 'contains' to test
+for case-insensitive string membership. A value may be tested for
+membership or not in a list using 'in' or 'not in'
+respectively. An value may be tested for undefined using 'is
+undefined' or defined using 'is not undefined'.
+
+Logical operators include 'or' and 'and'. An expression may be
+negated by preceding it with 'not'. Parentheses may be used to
+control the order of precedence when expressions are evaluated.
+
+If a value reference matches more than one type of run information
+(e.g. a flag is named 'label', which is also a run attribute), the
+value is read in order of run attribute, then flag value, then
+scalar. To disambiguate the reference, use a prefix \verb{attr:},
+\verb{flag:}, or \verb{scalar:} as needed. For example, to filter using a
+flag value named 'label', use 'flag:label'.
+
+Other examples:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{"operation = train and acc > 0.9"
+"operation = train and (acc > 0.9 or loss < 0.3)"
+"batch-size = 100 or batch-size = 200"
+"batch-size in [100,200]"
+"batch-size not in [400,800]"
+"batch-size is undefined"
+"batch-size is not undefined"
+"label contains best and operation not in [test,deploy]"
+"status in [error,terminated]"
+}\if{html}{\out{</div>}}
+
+\strong{NOTE:} Comments and tags are not supported in filter
+expressions at this time. Use \code{comment} and \code{tag} options
+along with filter expressions to further refine a selection.
+}
+
+\subsection{Filter by Run Start Time}{
+
+Use \code{started} to limit runs to those that have started within a
+specified time range.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{ls_runs(started = 'last hour')
+}\if{html}{\out{</div>}}
+
+You can specify a time range using several different forms:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{"after DATETIME"
+"before DATETIME"
+"between DATETIME and DATETIME"
+"last N minutes|hours|days"
+"today|yesterday"
+"this week|month|year"
+"last week|month|year"
+"N days|weeks|months|years ago"
+}\if{html}{\out{</div>}}
+
+\code{DATETIME} may be specified as a date in the format \code{YY-MM-DD}
+(the leading \verb{YY-} may be omitted) or as a time in the format
+\code{HH:MM} (24 hour clock). A date and time may be specified
+together as \verb{DATE TIME}.
+
+When using \verb{between DATETIME and DATETIME}, values for
+\code{DATETIME} may be specified in either order.
+
+When specifying values like \code{minutes} and \code{hours} the trailing
+\code{s} may be omitted to improve readability. You may also use
+\code{min} instead of \code{minutes} and \code{hr} instead of \code{hours}.
+
+Examples:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{"after 7-1"
+"after 9:00"
+"between 1-1 and 4-30"
+"between 10:00 and 15:00"
+"last 30 min"
+"last 6 hours"
+"today"
+"this week"
+"last month"
+"3 weeks ago"
+}\if{html}{\out{</div>}}
+}
+
+\subsection{Filter by Run Status}{
+
+Runs may also be filtered by specifying one or more status
+filters: \code{running}, \code{completed}, \code{error}, and
+\code{terminated}. These may be used together to include runs that
+match any of the filters. For example to only include runs that
+were either terminated or exited with an error, use
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{ls_runs(terminated = TRUE, error = TRUE)
+}\if{html}{\out{</div>}}
+
+Status filters are applied before \code{RUN} indexes are resolved. For
+example, a run index of \code{1}
+(as in, \code{ls_runs(1, terminated = TRUE, error = TRUE)} is the latest run
+that matches the status filters.
+}
 }
 \examples{
 \dontrun{
