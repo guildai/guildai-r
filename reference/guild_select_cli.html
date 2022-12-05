@@ -236,116 +236,11 @@ not be used with <code>marked</code>.</p>
 </div>
 
 <div class="section">
-<h3 id="filter-by-expression">Filter by Expression<a class="anchor" aria-label="anchor" href="#filter-by-expression"></a></h3>
-
-
-<p>Use <code>filter</code> to limit runs that match a filter
-expressions. Filter expressions compare run attributes, flag
-values, or scalars to target values. They may include multiple
-expressions with logical operators.</p>
-<p>For example, to match runs with flag <code>batch-size</code> equal to 100
-that have <code>loss</code> less than 0.8, use:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>filter <span class="st">'batch-size = 10 and loss &lt; 0.8'</span></span></code></pre><p></p></div>
-<p><strong>IMPORTANT:</strong> You must quote EXPR if it contains spaces or
-characters that the shell uses (e.g. '&lt;' or '&gt;').</p>
-<p>Target values may be numbers, strings or lists containing numbers
-and strings. Strings that contain spaces must be quoted, otherwise
-a target string values does not require quotes. Lists are defined
-using square braces where each item is separated by a comma.</p>
-<p>Comparisons may use the following operators: '=', '!=' (or '&lt;&gt;'),
-'&lt;', '&lt;=', '&gt;', '&gt;='. Text comparisons may use 'contains' to test
-for case-insensitive string membership. A value may be tested for
-membership or not in a list using 'in' or 'not in'
-respectively. An value may be tested for undefined using 'is
-undefined' or defined using 'is not undefined'.</p>
-<p>Logical operators include 'or' and 'and'. An expression may be
-negated by preceding it with 'not'. Parentheses may be used to
-control the order of precedence when expressions are evaluated.</p>
-<p>If a value reference matches more than one type of run information
-(e.g. a flag is named 'label', which is also a run attribute), the
-value is read in order of run attribute, then flag value, then
-scalar. To disambiguate the reference, use a prefix <code>attr:</code>,
-<code>flag:</code>, or <code>scalar:</code> as needed. For example, to filter using a
-flag value named 'label', use 'flag:label'.</p>
-<p>Other examples:</p>
-<p><code>operation = train and acc &gt; 0.9</code>
-<code>operation = train and (acc &gt; 0.9 or loss &lt; 0.3)</code>
-<code>batch-size = 100 or batch-size = 200</code>
-<code>batch-size in [100,200]</code>
-<code>batch-size not in [400,800]</code>
-<code>batch-size is undefined</code>
-<code>batch-size is not undefined</code>
-<code>label contains best and operation not in [test,deploy]</code>
-<code>status in [error,terminated]</code></p>
-<p><strong>NOTE:</strong> Comments and tags are not supported in filter
-expressions at this time. Use <code>comment</code> and <code>tag</code> options
-along with filter expressions to further refine a selection.</p>
-</div>
-
-<div class="section">
-<h3 id="filter-by-run-start-time">Filter by Run Start Time<a class="anchor" aria-label="anchor" href="#filter-by-run-start-time"></a></h3>
-
-
-<p>Use <code>started</code> to limit runs to those that have started within a
-specified time range.</p>
-<p><strong>IMPORTANT:</strong> You must quote RANGE values that contain
-spaces. For example, to filter runs started within the last hour,
-use the option:</p>
-<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>started <span class="st">'last hour'</span></span></code></pre><p></p></div>
-<p>You can specify a time range using several different forms:</p>
-<p><code>after DATETIME</code>
-<code>before DATETIME</code>
-<code>between DATETIME and DATETIME</code>
-<code>last N minutes|hours|days</code>
-<code>today|yesterday</code>
-<code>this week|month|year</code>
-<code>last week|month|year</code>
-<code>N days|weeks|months|years ago</code></p>
-<p><code>DATETIME</code> may be specified as a date in the format <code>YY-MM-DD</code>
-(the leading <code>YY-</code> may be omitted) or as a time in the format
-<code>HH:MM</code> (24 hour clock). A date and time may be specified
-together as <code>DATE TIME</code>.</p>
-<p>When using <code>between DATETIME and DATETIME</code>, values for
-<code>DATETIME</code> may be specified in either order.</p>
-<p>When specifying values like <code>minutes</code> and <code>hours</code> the trailing
-<code>s</code> may be omitted to improve readability. You may also use
-<code>min</code> instead of <code>minutes</code> and <code>hr</code> instead of <code>hours</code>.</p>
-<p>Examples:</p>
-<p><code>after 7-1</code>
-<code>after 9:00</code>
-<code>between 1-1 and 4-30</code>
-<code>between 10:00 and 15:00</code>
-<code>last 30 min</code>
-<code>last 6 hours</code>
-<code>today</code>
-<code>this week</code>
-<code>last month</code>
-<code>3 weeks ago</code></p>
-</div>
-
-<div class="section">
 <h3 id="filter-by-source-code-digest">Filter by Source Code Digest<a class="anchor" aria-label="anchor" href="#filter-by-source-code-digest"></a></h3>
 
 
 <p>To show runs for a specific source code digest, use <code>-g</code> or
 <code>digest</code> with a complete or partial digest value.</p>
-</div>
-
-<div class="section">
-<h3 id="filter-by-run-status">Filter by Run Status<a class="anchor" aria-label="anchor" href="#filter-by-run-status"></a></h3>
-
-
-<p>Runs may also be filtered by specifying one or more status
-filters: <code>running</code>, <code>completed</code>, <code>error</code>, and
-<code>terminated</code>. These may be used together to include runs that
-match any of the filters. For example to only include runs that
-were either terminated or exited with an error, use <code>terminated error</code>, or the short form <code>-Set</code>.</p>
-<p>You may combine more than one status character with <code>-S</code> to
-expand the filter. For example, <code>-Set</code> shows only runs with
-terminated or error status.</p>
-<p>Status filters are applied before <code>RUN</code> indexes are resolved. For
-example, a run index of <code>1</code> is the latest run that matches the
-status filters.</p>
 </div>
 
     </div>
