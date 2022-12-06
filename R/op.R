@@ -42,7 +42,7 @@ r_script_guild_data <- function(r_script_path) {
     "flags-dest" = r_script_path,
     "name" = r_script_path,
     "sourcecode" = list(dest = "."),
-    "prune-on-success" = TRUE,
+    # "prune-on-success" = TRUE,
     "echo" = TRUE,
     "pip-freeze" = FALSE
   )
@@ -90,9 +90,9 @@ r_script_guild_data <- function(r_script_path) {
   echo <- data$echo %||% TRUE
   data$echo <- NULL
 
-  # intercept user supplied `prune-on-success` here
-  prune_on_success <- data[["prune-on-success"]] %||% TRUE
-  data[["prune-on-success"]] <- NULL
+  # # intercept user supplied `prune-on-success` here
+  # prune_on_success <- data[["prune-on-success"]] %||% TRUE
+  # data[["prune-on-success"]] <- NULL
 
   # TODO: intercept `seed` or `random-seed` here?
 
