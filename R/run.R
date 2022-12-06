@@ -7,70 +7,9 @@
 ## renv uses, also mechanism commonly used to attach a project-local utils
 ## env.).
 ## https://my.guild.ai/t/guild-run-callbacks/925
-
-get_run_files_info <- function(main_file = NULL) {
-  files <- list.files(all.files = TRUE, no.. = TRUE, recursive = TRUE,
-                      include.dirs = TRUE)
-  files <- files[!startsWith(files, ".guild")]
-  files <- file.info(files, extra_cols = FALSE)
-  # update so atime == mtime. This is needed on linux, which by default
-  # only updates atime on a read operation if it's different from mtime
-  # https://superuser.com/questions/464290/why-is-cat-not-changing-the-access-time
-  # To avoid loading fs, we can use Sys.setFileTime(path, time)
-  Sys.setFileTime(rownames(files), files$mtime)
-  # fs::file_touch(rownames(files), access_time = files$mtime)
-  files <- file.info(rownames(files), extra_cols = FALSE)
-
-  # ensure enough time has passed so that if user reads files,
-  # the resolution of file system shows that w/ a new atime value
-  # E.g., HFS+ onl has atime resolution of 1 sec, FAT 2 secs
-  if (!is.null(main_file))
-    repeat {
-      readLines(main_file, 1)
-      if (files[main_file, "atime"] !=
-          file.info(main_file, extra_cols = FALSE)$atime)
-        break
-      Sys.sleep(0.1)
-    }
-
-  files
-}
-
-prune_unaccessed_run_files <- function(start_info) {
-# This is commented out because the default mount options on macOS include
-# noatime, which means that to implement this we'll need a different, more
-# reliable way of detecting if a file was read during a run than checking
-# atime.
-#
-# Perhaps running the actual run process w/ something like strace:
-# https://unix.stackexchange.com/questions/58887/how-do-i-monitor-opened-files-of-a-process-in-realtime
-# (and Process Monitor on Windows:
-# https://stackoverflow.com/questions/3847745/systrace-for-windows)
-#
-# We'd probably need separate code paths for macOS, Windows, and Linux.
-
-  stopifnot(is_run_active())
-  withr::local_dir(Sys.getenv("RUN_DIR"))
-  end_info <- file.info(rownames(start_info), extra_cols = FALSE)
-  unaccessed <- rownames(start_info)[start_info$atime == end_info$atime]
-  files <- unaccessed[!start_info$isdir]
-  dirs <- unaccessed[start_info$isdir]
-  if(Sys.getenv("DEBUGR") == 1)
-    message("Deleting: ", paste0("  ", encode_yaml(
-      list(files = files, dirs = dirs)),
-      collapse = ","))
-  unlink(files)
-  # TODO: sort dirs by depth, double check dirs are empty
-  unlink(dirs)
-  invisible(unaccessed)
-}
-
 do_guild_run <-
 function(file = "train.R", flags_dest = file, echo = TRUE,
          prune_on_success = TRUE) {
-
-  # if(prune_on_success)
-  #   run_files_info_at_start <- get_run_files_info(file)
 
   if (is_r_file(flags_dest)) {
     modify_r_file_flags(flags_dest, read_yaml(".guild/attrs/flags"),
@@ -144,9 +83,6 @@ function(file = "train.R", flags_dest = file, echo = TRUE,
       keep.source = TRUE,
       deparseCtrl = c("keepInteger", "showAttributes", "keepNA")
     )
-
-    # if (prune_on_success)
-    #   prune_unaccessed_run_files(run_files_info_at_start)
 
   },
 

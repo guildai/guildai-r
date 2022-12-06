@@ -106,8 +106,6 @@ r_script_guild_data <- function(r_script_path) {
     cl["flags_dest"] <- list(flags_dest) # preserve NULL
   if(!isTRUE(echo))
     cl$echo <- echo
-  if(!isTRUE(prune_on_success))
-    cl$prune_on_success <- prune_on_success
   cl <- call(":::", quote(guildai), cl)
 
   data$exec <- sprintf("%s -e %s",
