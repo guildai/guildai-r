@@ -1,12 +1,6 @@
 
 
-## TODO: need to move setup_run_dir() and teardown_run_dir() out of here and
-## into guild core run callbacks. Garret objects strongly on philosophical
-## grounds, but the workaround required from here is too big w.r.t R session
-## initialization. Specifically, sourcing .Rprofile and .Renviron (mechanism
-## renv uses, also mechanism commonly used to attach a project-local utils
-## env.).
-## https://my.guild.ai/t/guild-run-callbacks/925
+
 do_guild_run <-
 function(file = "train.R", flags_dest = file, echo = TRUE,
          prune_on_success = TRUE) {
@@ -17,9 +11,6 @@ function(file = "train.R", flags_dest = file, echo = TRUE,
   } else if (is_yml_file(flags_dest)) {
     file.copy(".guild/attrs/flags", flags_dest, overwrite = TRUE)
   }
-
-  # setup_info <- setup_run_dir()
-  # on.exit(teardown_run_dir(setup_info))
 
   # setup default plot device.
   # the default viewers work better w/ pngs than pdf.
@@ -370,74 +361,6 @@ is_run_active <- function()
   !is.na(Sys.getenv("RUN_DIR", NA_character_))
 
 
-
-setup_run_dir <- function() {
-  # populate run_dir with copies of all the contents of .guild/sourcecode/**
-  #
-  # Note, the first draft of this experimented with setting up a symlink forest
-  # in the run dir of symlinks to .guild/sourcecode, but decided on copies instead
-  # because if users attempts to modify a file / writing to a symlink, they'd be
-  # modifying the captured sourcode, which should be immutable.
-  files <- list.files(".guild/sourcecode", recursive = TRUE, all.files = TRUE)
-
-  # create subdirs as needed
-  dirs <- unique(unlist(unique(dirname(files))))
-  # sort dirs by depth
-  dirs <- dirs[order(lengths(strsplit(dirs, .Platform$file.sep, fixed = TRUE)))]
-  dirs <- dirs[!dir.exists(dirs)]
-  created_successfully <- as.logical(.mapply(
-    function(d, mode) dir.create(d, mode = mode),
-    list(dirs, file.info(file.path(".guild/sourcecode", dirs))$mode), NULL))
-  created_dirs <- dirs[created_successfully]
-
-  copied_successfully <- file.copy(file.path(".guild/sourcecode", files), files,
-                                   overwrite = FALSE, copy.date = TRUE)
-  copied_files <- files[copied_successfully]
-
-  # TODO, guild should do this when it setups up the sourcecode folder,
-  # mark captured files as immutable (it should probably tarball them too)
-  fs::file_chmod(files, "-w")
-
-  list(created_dirs = file.info(created_dirs),
-       copied_files = file.info(copied_files))
-}
-
-teardown_run_dir <- function(setup_info) {
-
-  stopifnot(is.data.frame(setup_info$copied_files),
-            is.data.frame(setup_info$created_dirs))
-
-  copied_files <- setup_info$copied_files
-
-  # filter for existing files, in case user deleted files in run
-  copied_files <- copied_files[file.exists(rownames(copied_files)), ]
-  if(!nrow(copied_files)) return(invisible())
-
-  pre_run <- copied_files
-  post_run <- file.info(rownames(pre_run))
-
-  # remove anything that we setup.
-  not_modified <- pre_run$mtime == post_run$mtime
-  if(any(not_modified))
-    unlink(rownames(copied_files)[not_modified])
-
-  # prune never-accessed captured sourcecode
-  not_accessed <- pre_run$atime == post_run$atime
-  if(any(not_accessed))
-    file.remove(file.path(
-      ".guild/sourcecode", rownames(copied_files)[not_accessed]))
-
-  # while we have it convenient, update access_time for files captured in .guild/sourcecode
-  # accessed <- post_run[!not_accessed,]
-  # fs::file_touch(rownames(accessed), access_time = accessed$atime)
-
-  # delete directories we created that are empty
-  for(d in rev(rownames(setup_info$created_dirs)))
-    if(!length(list.files(d, all.files = TRUE, no.. = TRUE)))
-      file.remove(d)
-
-  invisible()
-}
 
 #' Write run attributes
 #'
