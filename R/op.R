@@ -26,6 +26,7 @@ r_script_guild_data <- function(r_script_path) {
     "name" = r_script_path,
     "sourcecode" =
       list(dest = ".",
+           root = getwd(),
            select = list(
              list(exclude =
                     list(dir = list("renv", "env", "venv", "logs"))))),
