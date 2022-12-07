@@ -1,5 +1,5 @@
 
-add_in_run <- function() {
+add_in_guild_run <- function() {
   editor_context <- rstudioapi::getSourceEditorContext()
   editor_path <- editor_context$path
   if (isTRUE(nzchar(editor_path))) {
@@ -15,10 +15,12 @@ add_in_run <- function() {
 }
 
 
-add_in_view_runs <- function() {
+add_in_guild_view <- function() {
   rstudioapi::sendToConsole("guildai::guild_view()")
 }
 
 add_in_view_run_history <- function() {
-  rstudioapi::sendToConsole("View(guildai::ls_runs())")
+  rstudioapi::sendToConsole(
+    'View(tidyr::unpack(ls_runs(), c(flags, scalars), names_sep = "$"))'
+  )
 }

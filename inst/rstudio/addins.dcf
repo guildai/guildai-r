@@ -1,14 +1,14 @@
-Name: Training Run
+Name: Launch a Guild Run
 Description: Execute a training run with the current source document
-Binding: add_in_run
+Binding: add_in_guild_run
 Interactive: false
 
-Name: View Runs
+Name: Launch Guild View
 Description: View the most recent training runs
-Binding: add_in_view_runs
+Binding: add_in_guild_view
 Interactive: false
 
-Name: View Run History
+Name: View Guild Runs History
 Description: View all training runs
-Binding: add_in_view_run_history
+Binding: add_in_ls_runs
 Interactive: false
