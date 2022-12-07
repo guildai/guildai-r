@@ -17,36 +17,33 @@ r_script_guild_data <- function(r_script_path) {
 
   text <- readLines(r_script_path)
   # handle case of empty file
-  if(!length(text))
-    text <- ""
-  is_anno <- startsWith(trimws(text, "left"), "#|")
+  if(!length(text)) text <- ""
 
+  # op default data
   data <- yaml(
-    "flags-dest" = r_script_path,
     "name" = r_script_path,
+    "flags-dest" = r_script_path,
     "sourcecode" = list(dest = ".", root = getwd()),
     "echo" = TRUE,
     "pip-freeze" = FALSE
   )
 
-  update_data <- function(x)
-    invisible(data <<- as_yaml(config::merge(data, x)))
-
-  frontmatter <-
-    if (is_anno[1] || startsWith(text[1], "#!/") && is_anno[2]) {
-    # allow frontmatter to start on 2nd line if first line is a shebang
+  is_anno <- startsWith(trimws(text, "left"), "#|")
+  if (is_anno[1] || startsWith(text[1], "#!/") && is_anno[2]) {
+    # script has frontmatter
+    # frontmatter can start on 2nd line if first line is a shebang
 
     anno_start <- which.max(is_anno)
     anno_end <- which.min(c(TRUE, is_anno[-1L])) -1L
 
-    parse_yaml_anno(text[anno_start:anno_end])
+    frontmatter <- parse_yaml_anno(text[anno_start:anno_end])
+    # update default data w/ user values
+    data <- as_yaml(config::merge(data, frontmatter))
   }
 
-  update_data(frontmatter)
-
-
   # user supplied sourcecode select rules get appended to the default rules
-  # config::merge overwrites data$sourcecode$select otherwise
+  # We do it here because config::merge would overwrite
+  # data$sourcecode$select otherwise
   prepend(data$sourcecode$select) <-
     list(list(exclude = list(dir = list("renv", "logs"))))
 
