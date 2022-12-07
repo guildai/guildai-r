@@ -102,3 +102,6 @@ installed.packages2 <- function() {
   # only returns folder names or what are ostensibly packages
   unique(unlist(lapply(.libPaths(), list.files)))
 }
+
+
+.globals <- new.env(parent = emptyenv())

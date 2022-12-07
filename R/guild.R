@@ -100,7 +100,7 @@ as_guild_args <- function(...) {
 #' Launch a guild run
 #'
 #' @param opspec typically path to an R script, but could be an scalar
-#'   string that guild recognizes as a valid opspec.
+#'   string that guild recognizes as a valid operation specification.
 #' @param flags flag values for the run(s)
 #'
 #'   - a named list or vector like `c(noise = .3, dropout = .4)`. Lists with
@@ -202,8 +202,6 @@ guild_view <- function(runs = NULL,
   url <- sub("Running Guild View at (http.+)", "\\1", output)
   invisible(url)
 }
-
-.globals <- new.env(parent = emptyenv())
 
 
 

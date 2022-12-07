@@ -8,7 +8,7 @@ guild_run(opspec = "train.R", flags = NULL, ..., echo = TRUE)
 }
 \arguments{
 \item{opspec}{typically path to an R script, but could be an scalar
-string that guild recognizes as a valid opspec.}
+string that guild recognizes as a valid operation specification.}
 
 \item{flags}{flag values for the run(s)
 \itemize{
