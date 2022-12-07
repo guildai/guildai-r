@@ -2,7 +2,7 @@ pandoc: 2.19.2
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-12-06T22:27Z
+last_built: 2022-12-07T13:55Z
 urls:
   reference: https://t-kalinowski.github.io/guildai-r/reference
   article: https://t-kalinowski.github.io/guildai-r/articles

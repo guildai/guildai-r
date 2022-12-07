@@ -42,7 +42,15 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">guild_view</span><span class="op">(</span>runs <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span>, wait <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">guild_view</span><span class="op">(</span></span>
+<span>  runs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  host <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  port <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  include_batch <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  no_open <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  stop <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -118,11 +126,13 @@
   
 </dl></dd>
 
-
-<dt>wait</dt>
-<dd><p>whether to block the R console while the application is active.</p></dd>
-
 </dl></div>
+    <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p>The url where the Guild View application can be accessed.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
