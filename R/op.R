@@ -24,12 +24,7 @@ r_script_guild_data <- function(r_script_path) {
   data <- yaml(
     "flags-dest" = r_script_path,
     "name" = r_script_path,
-    "sourcecode" =
-      list(dest = ".",
-           root = getwd(),
-           select = list(
-             list(exclude =
-                    list(dir = list("renv", "env", "venv", "logs"))))),
+    "sourcecode" = list(dest = ".", root = getwd()),
     "echo" = TRUE,
     "pip-freeze" = FALSE
   )
@@ -47,12 +42,18 @@ r_script_guild_data <- function(r_script_path) {
     parse_yaml_anno(text[anno_start:anno_end])
   }
 
-  sourcecode_select <- frontmatter$sourcecode$select
   update_data(frontmatter)
+
 
   # user supplied sourcecode select rules get appended to the default rules
   # config::merge overwrites data$sourcecode$select otherwise
-  append(data$sourcecode$select) <- sourcecode_select
+  prepend(data$sourcecode$select) <-
+    list(list(exclude = list(dir = list("renv", "logs"))))
+
+  if(dir.exists("renv") && file.exists("renv.lock")) {
+    prepend(data$requires) <-
+      list(list(file = "renv", "target-type" = "link"))
+  }
 
   # if user supplied flags in frontmatter:
   #   use that directly, don't do any inference

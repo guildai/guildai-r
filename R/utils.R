@@ -45,6 +45,7 @@ last <- function(x) x[length(x)]
 
 `subtract<-` <- function(x, value) x - value
 `append<-` <- function(x, value) c(x, value)
+`prepend<-` <- function(x, value) c(value, x)
 
 
 
