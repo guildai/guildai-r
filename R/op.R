@@ -12,7 +12,9 @@ emit_r_script_guild_data <- function(r_script_path = commandArgs(TRUE)[1]) {
 
 r_script_guild_data <- function(r_script_path) {
 
-  r_script_path <- gsub("\\", "/", r_script_path, fixed = TRUE)
+  r_script_path <- normalizePath(r_script_path, winslash = "/")
+  if(startsWith(r_script_path, getwd()))
+    r_script_path <- paste0(".", str_drop_prefix(r_script_path, getwd()))
   r_script_path <- str_drop_prefix(r_script_path, "./")
 
   text <- readLines(r_script_path)
