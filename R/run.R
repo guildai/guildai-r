@@ -34,23 +34,28 @@ function(file = "train.R", flags_dest = file, echo = TRUE,
     digits = max(15, getOption("digits"))
   )
 
-  # initialize seed so we can save it, non-interactive sessions lazily initialize seed.
-  set.seed(NULL)
-  seed <- sample.int(.Machine$integer.max, 1L) * sample(c(-1L, 1L), 1L)
+
+  seed <- tryCatch({
+    as.integer(readLines(".guild/attrs/random_seed"))
+  }, warning = function(e) {
+    # non-interactive sessions lazily initialize seed.
+    set.seed(NULL)
+    seed <- sample.int(.Machine$integer.max, 1L) * sample(c(-1L, 1L), 1L)
+    # Garrett to patch so `random_seed` attr is int32.
+    # for now we generate or own and rewrite the attr
+    write_run_attr("random_seed", seed)
+    seed
+  })
   set.seed(seed)
 
-  write_run_attr("random_seed", data = ) # delete misleading existing attr
-  write_run_attr("r-random-seed", seed)
-
   write_run_attr("env", Sys.getenv())
-  write_run_attr("r-sys-info", Sys.info())
+  write_run_attr("r_sys_info", Sys.info())
 
   for (pkgname in setdiff(loadedNamespaces(), "base"))
     write_run_attr_pkg_loaded(pkgname)
 
   for(pkgname in installed.packages2())
     setHook(packageEvent(pkgname, "onLoad"), write_run_attr_pkg_loaded)
-
 
   source2 <- new_source_w_active_echo()
   withCallingHandlers({
@@ -68,7 +73,7 @@ function(file = "train.R", flags_dest = file, echo = TRUE,
 
   error = function(e) {
     # capture error as attr
-    write_run_attr("r-error", list(
+    write_run_attr("r_error", list(
       message = e$message,
       traceback = deparsed_call_stack()
     ))
@@ -88,7 +93,7 @@ write_run_attr_pkg_loaded <- function(pkgname, pkgpath = NULL) {
   val <- list(list(path = pkgpath,
                    version = getNamespaceVersion(ns)))
   names(val) <- pkgname
-  write_run_attr("r-packages-loaded", val, append = TRUE)
+  write_run_attr("r_packages_loaded", val, append = TRUE)
 }
 
 
