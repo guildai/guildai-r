@@ -19,8 +19,8 @@ add_in_guild_view <- function() {
   rstudioapi::sendToConsole("guildai::guild_view()")
 }
 
-add_in_view_run_history <- function() {
+add_in_ls_runs <- function() {
   rstudioapi::sendToConsole(
-    'View(tidyr::unpack(ls_runs(), c(flags, scalars), names_sep = "$"))'
+    'View(tidyr::unpack(guildai::ls_runs(), c(flags, scalars), names_sep = "$"), title = "ls_runs()")'
   )
 }

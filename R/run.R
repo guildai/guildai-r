@@ -38,10 +38,11 @@ function(file = "train.R", flags_dest = file, echo = TRUE,
   seed <- tryCatch({
     as.integer(readLines(".guild/attrs/random_seed"))
   }, warning = function(e) {
-    # non-interactive sessions lazily initialize seed.
-    set.seed(NULL)
+    # random_seed probably overflowed, doesn't fit in int32.
+
+    set.seed(NULL) # non-interactive sessions lazily initialize seed.
     seed <- sample.int(.Machine$integer.max, 1L) * sample(c(-1L, 1L), 1L)
-    # Garrett to patch so `random_seed` attr is int32.
+    # Garrett to patch core so `random_seed` attr fits in  int32.
     # for now we generate or own and rewrite the attr
     write_run_attr("random_seed", seed)
     seed
@@ -54,28 +55,33 @@ function(file = "train.R", flags_dest = file, echo = TRUE,
   for (pkgname in setdiff(loadedNamespaces(), "base"))
     write_run_attr_pkg_loaded(pkgname)
 
-  for(pkgname in installed.packages2())
+  for (pkgname in installed.packages2())
     setHook(packageEvent(pkgname, "onLoad"), write_run_attr_pkg_loaded)
 
-  source2 <- new_source_w_active_echo()
+  source <- new_source_w_active_echo()
+  formals(source) <- utils::modifyList(formals(source), list(
+    spaced = FALSE, keep.source = TRUE,
+    deparseCtrl = c("keepInteger", "showAttributes", "keepNA"),
+    max.deparse.length = Inf
+  ), keep.null = TRUE)
   withCallingHandlers({
 
-    source2(
-      file = file,
-      echo = echo,
-      spaced = FALSE,
-      max.deparse.length = Inf,
-      keep.source = TRUE,
-      deparseCtrl = c("keepInteger", "showAttributes", "keepNA")
-    )
+    source(file = file, echo = echo)
 
   },
 
   error = function(e) {
-    # capture error as attr
+    # capture error as run attr
+    calls <- sys.calls()
+    # drop some noise from the call stack and reverse it for nicer printing.
+    # First two are: do_guild_run(), withCallingHandlers()
+    # Last two are this error handler: .handleSimpleError(), simpleError()
+    calls <- calls[(length(calls) - 2L):3L]
     write_run_attr("r_error", list(
       message = e$message,
-      traceback = deparsed_call_stack()
+      call = deparse1(e$call),
+      traceback = vapply(calls, deparse1, "", collapse = "\n",
+                         width.cutoff = 100L)
     ))
 
     # re-raise error
@@ -373,13 +379,6 @@ write_run_attr <- function(name, data, ..., append = FALSE) {
 
 # TODO: scalars not detected if they're a flag. Are name collisions between
 # flags and scalars not allowed?
-
-deparsed_call_stack <- function(n = 1L) {
-  calls <- rev(sys.calls())[-seq_len(n)]
-  calls <- vapply(calls, deparse1, "",
-                  collapse = "\n", width.cutoff = 100L)
-  calls
-}
 
 
 # TODO: delete unread sourcecode files
