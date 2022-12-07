@@ -8,14 +8,13 @@ guild <- function(command = NULL, ...,
 
   args <- as_guild_args(I(command %||% character()), ...)
 
-  if(is.na(Sys.getenv("GUILD_HOME", NA_character_)))
-    args <- c("-H", shQuote(here(".guild")), args)
+  # if(is.na(Sys.getenv("GUILD_HOME", NA_character_)))
+  #   args <- c("-H", shQuote(here(".guild")), args)
   if(Sys.getenv("DEBUG") == "1")
     args <- c("-D", "5678", args)
-  system2t(find_guild(), args,
-           env = env,
-           stdout = stdout, stderr = stderr,
-           wait = wait)
+
+  exec <- if(wait) system2t else processx::process$new
+  exec(find_guild(), args, env = env, stdout = stdout, stderr = stderr)
 }
 
 
@@ -155,9 +154,14 @@ guild_run <- function(opspec = "train.R",
 #' Launch Guild Viewer
 #'
 #' @param runs an optional runs selection.
-#' @inheritDotParams guild_view_cli
-#' @param wait whether to block the R console while the application is active.
+#' @param ... passed on to `guild view`.
+#' @param host Name of host interface to listen on.
+#' @param port Port to listen on.
+#' @param include_batch (bool) Include batch runs.
+#' @param no_open (bool) Don't open Guild View in a browser.
+#' @param stop Stop the existing Guild View application.
 #'
+#' @return The url where the Guild View application can be accessed.
 #' @export
 #' @examples
 #' if(FALSE) {
@@ -171,10 +175,35 @@ guild_run <- function(opspec = "train.R",
 #'   guild_view("--port", "5678")
 #'   guild_view(c("--port", "5678"))
 #' }
-guild_view <- function(runs = NULL, ..., wait = FALSE) {
-  # TODO: use processx here?
-  guild("view", guild_view_opts(...), maybe_extract_run_ids(runs), wait = wait)
+guild_view <- function(runs = NULL,
+                       ...,
+                       host = NULL,
+                       port = NULL,
+                       include_batch = FALSE,
+                       no_open = FALSE,
+                       stop = FALSE) {
+  if(!is.null(.globals$view_process)) {
+    .globals$view_process$interrupt()
+    .globals$view_process$poll_io(500)
+    .globals$view_process$kill()
+    .globals$view_process <- NULL
+    Sys.sleep(0.05)
+  }
+  if(isTRUE(stop))
+    return(invisible())
+  .globals$view_process <- p <-
+    guild("view", list(..., mget(c("host", "port", "include_batch", "no_open"))),
+          maybe_extract_run_ids(runs),
+          wait = FALSE, stdout = "|", stderr = "|")
+  p$poll_io(1000)
+  output <- p$read_output_lines()
+  output <- str_drop_suffix(output, " (Type Ctrl-C to quit)")
+  message(output)
+  url <- sub("Running Guild View at (http.+)", "\\1", output)
+  invisible(url)
 }
+
+.globals <- new.env(parent = emptyenv())
 
 
 
@@ -193,7 +222,7 @@ guild_view <- function(runs = NULL, ..., wait = FALSE) {
 #'   guild_merge(I("--yes --replace"))
 #' }
 guild_merge <- function(run = NULL, ...) {
-  guild("merge", guild_merge_opts(...), maybe_extract_run_ids(run))
+  guild("merge", guild_merge_cli(...), maybe_extract_run_ids(run))
 }
 
 # dummy place holder, because R CMD check otherwise complains:

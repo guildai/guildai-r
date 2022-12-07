@@ -4,7 +4,15 @@
 \alias{guild_view}
 \title{Launch Guild Viewer}
 \usage{
-guild_view(runs = NULL, ..., wait = FALSE)
+guild_view(
+  runs = NULL,
+  ...,
+  host = NULL,
+  port = NULL,
+  include_batch = FALSE,
+  no_open = FALSE,
+  stop = FALSE
+)
 }
 \arguments{
 \item{runs}{an optional runs selection.}
@@ -34,8 +42,9 @@ guild_view(runs = NULL, ..., wait = FALSE)
     \item{\code{pending}}{(bool) Filter only pending runs.}
     \item{\code{staged}}{(bool) Filter only staged runs.}
   }}
-
-\item{wait}{whether to block the R console while the application is active.}
+}
+\value{
+The url where the Guild View application can be accessed.
 }
 \description{
 Launch Guild Viewer

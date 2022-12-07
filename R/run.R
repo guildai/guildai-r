@@ -58,10 +58,6 @@ function(file = "train.R", flags_dest = file, echo = TRUE,
     setHook(packageEvent(pkgname, "onLoad"), write_run_attr_pkg_loaded)
 
 
-  # TODO: figure out goldilocks default for what to record from R session state.
-  #   installed.packages() / renv::something() / on.exit(sessionInfo())
-  # write_run_attr("r_env")
-
   source2 <- new_source_w_active_echo()
 
   withCallingHandlers({

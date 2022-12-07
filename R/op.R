@@ -123,6 +123,15 @@ str_drop_prefix <- function(x, prefix) {
   substr(x, as.integer(prefix) + 1L, nchar(x))
 }
 
+str_drop_suffix <- function(x, suffix) {
+
+  end <- nchar(x)
+  if (is_string(suffix))
+    end <- ifelse(endsWith(x, suffix), end - nchar(suffix), end)
+
+  substr(x, 1, end)
+}
+
 rscript_bin <- function() {
   # do we need arch in the file path on windows?
   # TODO: build the R call directly instead of going through Rscript?
