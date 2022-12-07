@@ -1,6 +1,5 @@
 
 
-
 do_guild_run <-
 function(file = "train.R", flags_dest = file, echo = TRUE,
          prune_on_success = TRUE) {
@@ -46,11 +45,6 @@ function(file = "train.R", flags_dest = file, echo = TRUE,
   write_run_attr("env", Sys.getenv())
   write_run_attr("r-sys-info", Sys.info())
 
-  # on.exit({
-  ### waaay too verbose, includes every pkg description
-  #   write_run_attr("r-session-info", sessionInfo())
-  # })
-
   for (pkgname in setdiff(loadedNamespaces(), "base"))
     write_run_attr_pkg_loaded(pkgname)
 
@@ -59,7 +53,6 @@ function(file = "train.R", flags_dest = file, echo = TRUE,
 
 
   source2 <- new_source_w_active_echo()
-
   withCallingHandlers({
 
     source2(
@@ -79,17 +72,12 @@ function(file = "train.R", flags_dest = file, echo = TRUE,
       message = e$message,
       traceback = deparsed_call_stack()
     ))
+
     # re-raise error
     stop(e)
   })
 
   invisible()
-}
-
-installed.packages2 <- function() {
-  # faster version that doesn't attempt to read DESCRIPTIONS,
-  # only returns folder names or what are ostensibly packages
-  unique(unlist(lapply(.libPaths(), list.files)))
 }
 
 write_run_attr_pkg_loaded <- function(pkgname, pkgpath = NULL) {
@@ -302,9 +290,6 @@ is_complex_literal <- function(x) {
     is.complex(x[[3L]])
 }
 
-
-first <- function(x) x[1L]
-last <- function(x) x[length(x)]
 
 
 replace_token <- function(source_full_text, token_parse_data, new_literal_val) {

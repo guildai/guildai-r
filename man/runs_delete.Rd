@@ -15,7 +15,7 @@ runs_restore(runs = NULL, ...)
 \arguments{
 \item{runs}{a runs selection}
 
-\item{...}{passed on to \code{guild()}}
+\item{...}{passed on to \code{guild}}
 }
 \description{
 Delete runs

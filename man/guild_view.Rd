@@ -17,31 +17,17 @@ guild_view(
 \arguments{
 \item{runs}{an optional runs selection.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=guild_view_cli]{guild_view_cli}}
-  \describe{
-    \item{\code{host}}{Name of host interface to listen on.}
-    \item{\code{port}}{Port to listen on.}
-    \item{\code{include_batch}}{(bool) Include batch runs.}
-    \item{\code{no_open}}{(bool) Don't open Guild View in a browser.}
-    \item{\code{logging}}{(bool) Log requests.}
-    \item{\code{filter}}{Filter runs using a filter expression. See Filter by Expression above for details..}
-    \item{\code{operation}}{Filter runs with operations matching \code{VAL}.}
-    \item{\code{label}}{Filter runs with labels matching VAL. To show unlabeled runs, use \code{unlabeled}.}
-    \item{\code{unlabeled}}{(bool) Filter only runs without labels.}
-    \item{\code{tag}}{Filter runs with TAG.}
-    \item{\code{comment}}{Filter runs with comments matching VAL.}
-    \item{\code{marked}}{(bool) Filter only marked runs.}
-    \item{\code{unmarked}}{(bool) Filter only unmarked runs.}
-    \item{\code{started}}{Filter only runs started within RANGE. See above for valid time ranges.}
-    \item{\code{digest}}{Filter only runs with a matching source code digest.}
-    \item{\code{running}}{(bool) Filter only runs that are still running.}
-    \item{\code{completed}}{(bool) Filter only completed runs.}
-    \item{\code{error}}{(bool) Filter only runs that exited with an error.}
-    \item{\code{terminated}}{(bool) Filter only runs terminated by the user.}
-    \item{\code{pending}}{(bool) Filter only pending runs.}
-    \item{\code{staged}}{(bool) Filter only staged runs.}
-  }}
+\item{...}{passed on to \verb{guild view}.}
+
+\item{host}{Name of host interface to listen on.}
+
+\item{port}{Port to listen on.}
+
+\item{include_batch}{(bool) Include batch runs.}
+
+\item{no_open}{(bool) Don't open Guild View in a browser.}
+
+\item{stop}{Stop the existing Guild View application.}
 }
 \value{
 The url where the Guild View application can be accessed.

@@ -31,3 +31,4 @@ path to the generated html, invisibly
 \description{
 Render a Run Summary Report
 }
+\keyword{internal}

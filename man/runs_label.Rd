@@ -49,10 +49,6 @@ ls_runs(1) \%>\% runs_tag("baz", clear = TRUE)
 ls_runs(1)$tags
 
 ## pass through options to `guild tag` cli subcommand
-runs_tag(NULL, NULL, "--help")
-ls_runs(1) \%>\% runs_tag("--add" = c("foo", "bar"))
-ls_runs(1) \%>\% runs_tag("--add" = "baz", "--delete" = "bar")
-ls_runs(1)$tags
-
+runs_tag("--help")
 }
 }

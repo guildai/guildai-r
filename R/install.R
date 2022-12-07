@@ -1,7 +1,6 @@
 
 
 find_python <- function() {
-  # consider using pipenv or similar to make a truly stand-alone installation
 
   for (python in as.vector(c(
     "/usr/bin/python3",
@@ -43,7 +42,6 @@ find_python_from_registry <- function() {
 
 
 
-
 #' Install guildai core
 #'
 #' This installs the `guild` executable for use by the R package.
@@ -57,14 +55,12 @@ find_python_from_registry <- function() {
 #' @export
 #'
 #' @examples
-#' if(FALSE) {
-#' install_guild(c("-e", "~/guild/guildai"))
+#' # install_guild(c("-e", "~/guild/guildai"))
 #' # install_guild("~/guild/guildai", reticulate::install_python())
-#' install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
+#' # install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
 #' # install_guild(
 #' #   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
 #' #   python = reticulate::install_python())
-#' }
 install_guild <-
   function(guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
            python = find_python()) {
@@ -89,7 +85,8 @@ install_guild <-
 find_guild <- function() {
   if (is_windows())
     if (file.exists(guild <-
-                    file.path(rappdirs::user_data_dir("r-guildai", NULL), "Scripts", "guild.exe")))
+                    file.path(rappdirs::user_data_dir("r-guildai", NULL),
+                              "Scripts", "guild.exe")))
       return(normalizePath(as.vector(guild)))
   if (file.exists(guild <-
                   file.path(rappdirs::user_data_dir("r-guildai", NULL), "bin", "guild")))
@@ -105,7 +102,7 @@ find_guild <- function() {
 #' This function makes available the `guild` executable installed by
 #' `install_guild()` for usage in the Terminal.
 #'
-#' @param dest Where to place the `guild` executable. This should be a
+#' @param dest Directory where to place the `guild` executable. This should be a
 #'   location on the `PATH`.
 #' @param completions Whether to also install shell completion helpers.
 #'

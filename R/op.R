@@ -1,20 +1,5 @@
 
 
-#  #', #+, #- roxygen, knitr::spin
-#| quarto, rmarkdown
-#* plumbr
-#| guild ?
-#: or   #= #+ #^ #) #} #] #!
-
-
-
-parse_yaml_anno <- function(x) {
-  stopifnot(startsWith(x, "#|"))
-  x <- substr(x, 4L, .Machine$integer.max)
-  x <- parse_yaml(x)
-  x
-}
-
 
 #' @importFrom rlang %||%
 #' @importFrom utils modifyList
@@ -24,8 +9,6 @@ emit_r_script_guild_data <- function(r_script_path = commandArgs(TRUE)[1]) {
                "emitted-script-guild-op-data.yml"))
 }
 
-# TODO?: for flags w/ underscores in the name
-#   supply `arg-name: gsub("_", "-", name)` ?
 
 r_script_guild_data <- function(r_script_path) {
 
@@ -90,20 +73,15 @@ r_script_guild_data <- function(r_script_path) {
   echo <- data$echo %||% TRUE
   data$echo <- NULL
 
-  # # intercept user supplied `prune-on-success` here
-  # prune_on_success <- data[["prune-on-success"]] %||% TRUE
-  # data[["prune-on-success"]] <- NULL
-
-  # TODO: intercept `seed` or `random-seed` here?
+  cl <- call("do_guild_run", r_script_path)
 
   # don't pass through flags_dest to do_guild_run(),
   # because guild core will materialize the yml file.
   if(startsWith(flags_dest, "config:"))
     flags_dest <- NULL
-
-  cl <- call("do_guild_run", r_script_path)
   if(!identical(flags_dest, r_script_path))
     cl["flags_dest"] <- list(flags_dest) # preserve NULL
+
   if(!isTRUE(echo))
     cl$echo <- echo
   cl <- call(":::", quote(guildai), cl)
@@ -115,44 +93,11 @@ r_script_guild_data <- function(r_script_path) {
   data
 }
 
-str_drop_prefix <- function(x, prefix) {
-
-  if (is_string(prefix))
-    prefix <- ifelse(startsWith(x, prefix), nchar(prefix), 0L)
-
-  substr(x, as.integer(prefix) + 1L, nchar(x))
-}
-
-str_drop_suffix <- function(x, suffix) {
-
-  end <- nchar(x)
-  if (is_string(suffix))
-    end <- ifelse(endsWith(x, suffix), end - nchar(suffix), end)
-
-  substr(x, 1, end)
-}
 
 rscript_bin <- function() {
-  # do we need arch in the file path on windows?
-  # TODO: build the R call directly instead of going through Rscript?
-  file.path(
-    R.home("bin"),
-    if(is_windows()) "Rscript.exe" else "Rscript")
-}
-
-
-r_bin <- function() {
-  # do we need arch in the file path on windows?
-  # TODO: build the R call directly instead of going through Rscript?
-  file.path(
-    R.home("bin"),
-    if(is_windows()) "Rterm.exe" else "R")
-}
-
-r_bin_exec <- function(restore = FALSE, echo = FALSE) {
-  paste0(c(shQuote(r_bin),
-           if(!restore) "--no-restore",
-           if(!echo) "--no-echo"))
+  # TODO: do we need arch in the file path on windows?
+  file.path(R.home("bin"),
+            if(is_windows()) "Rscript.exe" else "Rscript")
 }
 
 
@@ -287,15 +232,6 @@ SIMPLE_MATH_OPS <-
   )
 
 
-is_r_file <- function(x) {
-  identical(tolower(tools::file_ext(x)), "r")
-}
-
-is_yml_file <- function(x) {
-  ext <- tools::file_ext(x)
-  identical(ext, "yml") || identical(ext, "yaml")
-}
-
 ## Q's for Garrett
 # - does guild infer an incremented 'step' when encountering a duplicate key?
 # - Can we have a nicer run_dir uuid ala timestamped sortable like tfruns::unique_run_dir()?
@@ -310,17 +246,3 @@ is_yml_file <- function(x) {
 #   guild run metadata, like model summary, metrics, etc.?
 
 
-if(getRversion() < "4")
-deparse1 <- function (expr, collapse = " ", width.cutoff = 500L, ...)
-  paste(deparse(expr, width.cutoff, ...), collapse = collapse)
-
-
-replace_val <- function(x, old, new) {
-  if(!is_scalar(new))
-    stop("Unexpected length of replacement value in replace_val().\n",
-         "`new` must be length 1, not ", length(new))
-  x[x %in% old] <- new
-  x
-}
-
-is_scalar <- function(x) identical(length(x), 1L)

@@ -392,7 +392,8 @@ runs_import <- function(runs = NULL, location, ...,
   guild("import --yes",
         if (move) "--move",
         if (copy_resources) "--copy-resources",
-        ..., location, maybe_extract_run_ids(runs))
+        list(...), location, maybe_extract_run_ids(runs))
+  invisible(runs)
 }
 
 # TODO: runs_export() and runs_import() should return something useful
@@ -414,28 +415,28 @@ runs_import <- function(runs = NULL, location, ...,
 #' deleted runs can be purged.
 #'
 #' @param runs a runs selection
-#' @param ... passed on to `guild()`
+#' @param ... passed on to `guild`
 #'
 #' @note To see deleted runs, do `guildai:::guild("runs list --deleted")`
 #'   (`ls_runs("--deleted")` supported soon)
 #'
 #' @export
 runs_delete <- function(runs = NULL, ...) {
-  guild("runs delete --yes", ..., maybe_extract_run_ids(runs))
+  guild("runs delete --yes", list(...), maybe_extract_run_ids(runs))
   invisible(runs)
 }
 
 #' @export
 #' @rdname runs_delete
 runs_purge <- function(runs = NULL, ...) {
-  guild("runs purge --yes", ..., maybe_extract_run_ids(runs))
+  guild("runs purge --yes", list(...), maybe_extract_run_ids(runs))
   invisible(runs)
 }
 
 #' @export
 #' @rdname runs_delete
 runs_restore <- function(runs = NULL, ...) {
-  guild("runs restore", ..., maybe_extract_run_ids(runs))
+  guild("runs restore", list(...), maybe_extract_run_ids(runs))
   invisible(runs)
 }
 
@@ -468,11 +469,7 @@ runs_restore <- function(runs = NULL, ...) {
 #' ls_runs(1)$tags
 #'
 #' ## pass through options to `guild tag` cli subcommand
-#' runs_tag(NULL, NULL, "--help")
-#' ls_runs(1) %>% runs_tag("--add" = c("foo", "bar"))
-#' ls_runs(1) %>% runs_tag("--add" = "baz", "--delete" = "bar")
-#' ls_runs(1)$tags
-#'
+#' runs_tag("--help")
 #' }
 runs_label <- function(runs = NULL, label = NULL, ..., clear = FALSE) {
   guild("label --yes",
@@ -526,10 +523,11 @@ is_rstudio <- function() {
   identical(.Platform$GUI, "RStudio")
 }
 
+
 edit_comment <- function() {
   # Guild will attempt to launch EDITOR (e.g., vi), which will fail in the IDE
-  # because the IDE doesn't pass through system() doesn't pass through
-  # console commands to the tty.
+  # because the IDE doesn't pass user console input to a foreground
+  # system() process (nor even run the process in a tty).
 
   fi <- tempfile("guild-comment", fileext = ".txt")
   on.exit(unlink(fi))
@@ -543,6 +541,8 @@ edit_comment <- function() {
   else
     NULL
 }
+
+# TODO: use edit_comment() in guild_run()
 
 
 #' Resolve run ids

@@ -31,3 +31,4 @@ path to the generated html, invisibly
 \description{
 compare runs
 }
+\keyword{internal}

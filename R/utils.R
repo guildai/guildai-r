@@ -8,15 +8,52 @@ is_unnamed_list <- function(x) {
   is.list(x) && is.null(names(x))
 }
 
+is_scalar <- function(x) identical(length(x), 1L)
 
 is_hashpipe <- function(x) startsWith(x, "#|")
 
-`subtract<-` <- function(x, value) x - value
+is_r_file <- function(x) {
+  identical(tolower(tools::file_ext(x)), "r")
+}
 
+is_yml_file <- function(x) {
+  ext <- tools::file_ext(x)
+  identical(ext, "yml") || identical(ext, "yaml")
+}
+
+is_windows <- function() .Platform$OS.type == "windows"
+
+
+str_drop_prefix <- function(x, prefix) {
+  if (is_string(prefix))
+    prefix <- ifelse(startsWith(x, prefix), nchar(prefix), 0L)
+
+  substr(x, as.integer(prefix) + 1L, nchar(x))
+}
+
+str_drop_suffix <- function(x, suffix) {
+  end <- nchar(x)
+  if (is_string(suffix))
+    end <- ifelse(endsWith(x, suffix), end - nchar(suffix), end)
+
+  substr(x, 1, end)
+}
+
+
+first <- function(x) x[1L]
+last <- function(x) x[length(x)]
+
+`subtract<-` <- function(x, value) x - value
 `append<-` <- function(x, value) c(x, value)
 
-is_windows <- function ()  .Platform$OS.type == "windows"
 
+
+parse_yaml_anno <- function(x) {
+  stopifnot(startsWith(x, "#|"))
+  x <- substr(x, 4L, .Machine$integer.max)
+  x <- parse_yaml(x)
+  x
+}
 
 
 new_source_w_active_echo <- function() {
@@ -39,9 +76,29 @@ new_source_w_active_echo <- function() {
 
 system2t <- function (command, args, ...) {
   if(Sys.getenv("DEBUGR") == "1") {
-    cl <- as.call(c(list(quote(system2t), command, args, ...)))
+    # cl <- as.call(c(list(quote(system2t), command, args, ...)))
     # message(paste("R>", deparse1(cl)))
-    message(paste("sys+", shQuote(command), paste0(args, collapse = " ")))
+    message(paste("+", shQuote(command), paste0(args, collapse = " ")))
   }
   system2(command, args, ...)
+}
+
+if(getRversion() < "4")
+  deparse1 <- function (expr, collapse = " ", width.cutoff = 500L, ...)
+    paste(deparse(expr, width.cutoff, ...), collapse = collapse)
+
+
+replace_val <- function(x, old, new) {
+  if(!is_scalar(new))
+    stop("Unexpected length of replacement value in replace_val().\n",
+         "`new` must be length 1, not ", length(new))
+  x[x %in% old] <- new
+  x
+}
+
+
+installed.packages2 <- function() {
+  # faster version that doesn't attempt to read DESCRIPTIONS,
+  # only returns folder names or what are ostensibly packages
+  unique(unlist(lapply(.libPaths(), list.files)))
 }
