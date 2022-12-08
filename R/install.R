@@ -108,7 +108,8 @@ find_guild <- function() {
 #'
 #' @return path to the installed guild executable, invisibly.
 #' @export
-install_guild_cli <- function(dest = "~/bin", completions = TRUE) {
+install_guild_cli <- function(dest = "~/bin",
+                              completions = basename(Sys.getenv("SHELL")) %in% c("bash", "zsh", "fish")) {
   if(!dir.exists(dest))
     dir.create(dest)
 
@@ -117,18 +118,21 @@ install_guild_cli <- function(dest = "~/bin", completions = TRUE) {
   unlink(link)
   message("Creating symlink: '", link, "' -> '", guild_exe, "'")
   file.symlink(guild_exe, link)
+
   if (completions)
     guild("completion --install", "--shell" = basename(Sys.getenv("SHELL")))
 
   paths <- normalizePath(
     strsplit(Sys.getenv("PATH"), .Platform$path.sep, fixed = TRUE)[[1]],
     mustWork = FALSE)
+
   if (!normalizePath(dest) %in% paths)
     warning(sprintf("'%s' is not on the PATH.", dest))
 
-  if (Sys.which("guild") != path.expand(link)) {
+  if (nzchar(Sys.which("guild")) &&
+      normalizePath(Sys.which("guild")) != normalizePath(path.expand(link))) {
     warning("A different 'guild' executable is first on the PATH: ",
-            "'", Sys.which("guild"), "'")
+            "'", normalizePath(Sys.which("guild")), "'")
   }
 
   invisible(link)
