@@ -28,7 +28,6 @@ view_runs_diff <-
            exclude_directory_metadata = c("yes", "no", "auto", "recursive"),
            viewer = utils::browseURL) {
 
-
   run_dirs <- ls_runs(runs)$dir
   if(length(run_dirs) > 2)
     run_dirs <- run_dirs[1:2]
