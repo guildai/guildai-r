@@ -255,7 +255,7 @@ dep = NULL, quiet = FALSE, print_cmd = FALSE, print_env = FALSE,
 print_trials = FALSE, help_model = FALSE, help_op = FALSE,
 test_output_scalars = NULL, test_sourcecode = FALSE, test_flags = FALSE)
 {
-as_guild_args(as.list.environment(environment()), ...)
+as_cli_args(as.list.environment(environment()), ...)
 }
 
 #' guild_api_runs_cli
@@ -294,7 +294,7 @@ running = FALSE, completed = FALSE, error = FALSE, terminated = FALSE,
 pending = FALSE, staged = FALSE, api_version = NULL, deleted = FALSE,
 include_batch = FALSE)
 {
-as_guild_args(as.list.environment(environment()), ...)
+as_cli_args(as.list.environment(environment()), ...)
 }
 
 #' guild_view_cli
@@ -522,7 +522,7 @@ marked = FALSE, unmarked = FALSE, started = NULL, digest = NULL,
 running = FALSE, completed = FALSE, error = FALSE, terminated = FALSE,
 pending = FALSE, staged = FALSE)
 {
-as_guild_args(as.list.environment(environment()), ...)
+as_cli_args(as.list.environment(environment()), ...)
 }
 
 #' guild_merge_cli
@@ -582,7 +582,7 @@ skip_sourcecode = FALSE, skip_deps = FALSE, exclude = NULL,
 no_summary = FALSE, summary_name = NULL, preview = FALSE,
 replace = FALSE, no_replace = FALSE)
 {
-as_guild_args(as.list.environment(environment()), ...)
+as_cli_args(as.list.environment(environment()), ...)
 }
 
 #' guild_select_cli
@@ -806,6 +806,6 @@ marked = FALSE, unmarked = FALSE, started = NULL, digest = NULL,
 running = FALSE, completed = FALSE, error = FALSE, terminated = FALSE,
 pending = FALSE, staged = FALSE)
 {
-as_guild_args(as.list.environment(environment()), ...)
+as_cli_args(as.list.environment(environment()), ...)
 }
 

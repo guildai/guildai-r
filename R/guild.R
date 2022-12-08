@@ -6,7 +6,7 @@ guild <- function(command = NULL, ...,
                   env = NULL,
                   wait = TRUE) {
 
-  args <- as_guild_args(I(command %||% character()), ...)
+  args <- as_cli_args(I(command %||% character()), ...)
 
   # if(is.na(Sys.getenv("GUILD_HOME", NA_character_)))
   #   args <- c("-H", shQuote(here(".guild")), args)
@@ -18,15 +18,15 @@ guild <- function(command = NULL, ...,
 }
 
 
-# as_guild_args(tag = c("a a" , "b", "c c"))
+# as_cli_args(tag = c("a a" , "b", "c c"))
 # "--tag" "'a a'" "--tag" "b"     "--tag" "'c c'"
 #
-#  as_guild_args(help = TRUE)
+#  as_cli_args(help = TRUE)
 #  "--help"
-as_guild_args <- function(...) {
+as_cli_args <- function(...) {
   args <- .process_args(list(...))
   # protect from shell quoting multiple times if args
-  # channel through `as_guild_args()` multiple times
+  # channel through `as_cli_args()` multiple times
   if(length(args))
     class(args) <- "AsIs"
   args
@@ -49,7 +49,7 @@ as_guild_args <- function(...) {
 
   if(inherits(x, "AsIs") && is.null(names(x)))
     # early return for args that go through
-    # as_guild_args() multiple times
+    # as_cli_args() multiple times
     return(x)
 
   # Fix up names by translating R conventions to shell conventions:
