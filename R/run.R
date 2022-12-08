@@ -50,7 +50,6 @@ function(file = "train.R", flags_dest = file, echo = TRUE,
   set.seed(seed)
 
   write_run_attr("env", Sys.getenv())
-  write_run_attr("r_sys_info", Sys.info())
 
   for (pkgname in setdiff(loadedNamespaces(), "base"))
     write_run_attr_pkg_loaded(pkgname)
