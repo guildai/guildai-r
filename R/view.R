@@ -73,7 +73,7 @@ browser_viewer <- function(viewer_dir, browser = utils::browseURL) {
     if (port <= 0)
       port <- tools::startDynamicHelp(TRUE)
     if (port <= 0) {
-      warning("Unable to view run metrics (couldn't access help server port)",
+      warning("Unable to view run html (couldn't access help server port)",
               call. = FALSE)
       return(invisible(NULL))
     }
@@ -104,7 +104,7 @@ browser_viewer <- function(viewer_dir, browser = utils::browseURL) {
 #' @keywords internal
 #'
 #' @return path to the generated html, invisibly
-view_runs_diff <- function(
+.view_runs_diff <- function(
     runs = "1:2",
     output_dir = file.path(tempdir(), paste(ids, collapse = "-")),
     template = system.file("templates/compare-runs.qmd", package = "guildai"),
