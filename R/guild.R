@@ -215,7 +215,7 @@ guild_view <- function(runs = NULL,
 #' @examples
 #' if(FALSE) {
 #' guild_merge("--help")
-#' ls_scalars() %>%
+#' runs_scalars() %>%
 #'   dplyr::slice_max("epoch_acc") %>%
 #'   guild_merge(I("--yes --replace"))
 #' }

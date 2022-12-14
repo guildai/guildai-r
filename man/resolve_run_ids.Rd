@@ -22,7 +22,7 @@ A character vector of run ids.
 \description{
 \code{guild} supports a rich syntax for runs selection throughout the api. The
 same selection syntax is shared by the \verb{ls_*} and \verb{runs_*} families of
-functions: \code{runs_info()}, \code{ls_scalars()}, \code{runs_comment()},
+functions: \code{runs_info()}, \code{runs_scalars()}, \code{runs_comment()},
 \code{runs_label()}, \code{runs_mark()}, \code{runs_tag()}
 \code{runs_delete()},\code{runs_purge()}, \code{runs_restore()}, \code{runs_export()},
 \code{runs_import()}.

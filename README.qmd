@@ -345,7 +345,7 @@ the full history of scalars observed in runs can also be accessed from R
 directly:
 
 ```{r, paged.print=FALSE}
-ls_scalars()
+runs_scalars()
 ```
 
 ## Managing runs
@@ -357,13 +357,13 @@ Guild comes with a family of functions for managing runs.
 -   Delete runs: `runs_delete()` `runs_purge()` `runs_restore()`.
 
 The `runs_*` family of functions all take `runs` as a first argument,
-and can be composed with `%>%` and `runs_info()` or `ls_scalars()`. For
+and can be composed with `%>%` and `runs_info()` or `runs_scalars()`. For
 example:
 
 ```{r paged.print=FALSE}
 library(dplyr)
 
-best <- ls_scalars() %>%
+best <- runs_scalars() %>%
   filter(tag == "test_accuracy") %>%
   slice_max(value)
 
@@ -379,7 +379,7 @@ unlink("./best-runs", recursive = TRUE)
 ```
 
 The `runs` arguments can be supplied as data frame, as returned by
-`runs_info()` or `ls_scalars()`, like in the example above. `runs` can
+`runs_info()` or `runs_scalars()`, like in the example above. `runs` can
 also be a character vector, with a flexible syntax supported for
 specifying runs selections: For example, `runs` can be an `id`, an
 integer (the n-th last run), or any combination of filter specifications

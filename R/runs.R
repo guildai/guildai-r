@@ -184,7 +184,7 @@
 #'
 #' # retrieve full scalars history from the runs of interest
 #' runs$id %>%
-#'   ls_scalars()
+#'   runs_scalars()
 #'
 #' # export the best run
 #' runs %>%
@@ -341,15 +341,15 @@ function(runs = NULL, ...,
 #' @export
 #' @examples
 #' \dontrun{
-#' ls_scalars(1) # scalars from most recent run
-#' ls_scalars(1:2) # scalars form two most recent runs
+#' runs_scalars(1) # scalars from most recent run
+#' runs_scalars(1:2) # scalars form two most recent runs
 #'
 #' # pass in a dataframe of runs
 #' runs_info() %>%
 #'   filter(flags$epochs > 5) %>%
-#'   ls_scalars()
+#'   runs_scalars()
 #' }
-ls_scalars <- function(runs = NULL, ...) {
+runs_scalars <- function(runs = NULL, ...) {
   csv <- tempfile(fileext = ".csv")
   guild("tensorboard --export-scalars", csv,
         ..., maybe_extract_run_ids(runs))
@@ -549,7 +549,7 @@ edit_comment <- function() {
 #'
 #' `guild` supports a rich syntax for runs selection throughout the api. The
 #' same selection syntax is shared by the `ls_*` and `runs_*` families of
-#' functions: `runs_info()`, `ls_scalars()`, `runs_comment()`,
+#' functions: `runs_info()`, `runs_scalars()`, `runs_comment()`,
 #' `runs_label()`, `runs_mark()`, `runs_tag()`
 #' `runs_delete()`,`runs_purge()`, `runs_restore()`, `runs_export()`,
 #' `runs_import()`.

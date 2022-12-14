@@ -229,7 +229,7 @@ runs <- runs \%>\%
 
 # retrieve full scalars history from the runs of interest
 runs$id \%>\%
-  ls_scalars()
+  runs_scalars()
 
 # export the best run
 runs \%>\%
