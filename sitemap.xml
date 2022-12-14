@@ -49,12 +49,6 @@
     <loc>https://t-kalinowski.github.io/guildai-r/reference/is_run_active.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/ls_runs.html</loc>
-  </url>
-  <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/ls_scalars.html</loc>
-  </url>
-  <url>
     <loc>https://t-kalinowski.github.io/guildai-r/reference/resolve_run_ids.html</loc>
   </url>
   <url>
@@ -64,7 +58,13 @@
     <loc>https://t-kalinowski.github.io/guildai-r/reference/runs_export.html</loc>
   </url>
   <url>
+    <loc>https://t-kalinowski.github.io/guildai-r/reference/runs_info.html</loc>
+  </url>
+  <url>
     <loc>https://t-kalinowski.github.io/guildai-r/reference/runs_label.html</loc>
+  </url>
+  <url>
+    <loc>https://t-kalinowski.github.io/guildai-r/reference/runs_scalars.html</loc>
   </url>
   <url>
     <loc>https://t-kalinowski.github.io/guildai-r/reference/view_run_report.html</loc>
