@@ -19,7 +19,7 @@ attach_eval({
   import_from(guildai, str_drop_prefix)
 })
 
-run <- guildai::ls_runs(params$run_id)
+run <- guildai::runs_info(params$run_id)
 
 langs <- system2(quarto::quarto_path(),
                  c("pandoc", "--list-highlight-languages"),

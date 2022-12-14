@@ -27,7 +27,7 @@ runs_comment(runs = NULL, comment = NULL, ..., delete = NULL, clear = FALSE)
 \item{add, remove}{a character vector of tags to add or remove}
 
 \item{delete}{integer vector, which comment(s) to delete, corresponding to
-the row number(s) in the dataframe found at \code{ls_runs()$comments}.}
+the row number(s) in the dataframe found at \code{runs_info()$comments}.}
 }
 \description{
 Annotate runs
@@ -38,15 +38,15 @@ Annotate runs
 \examples{
 if(FALSE) {
 
-ls_runs(1) \%>\% runs_tag(clear = TRUE)
-ls_runs(1) \%>\% runs_tag("foo")
-ls_runs(1)$tags
-ls_runs(1) \%>\% runs_tag("bar")
-ls_runs(1)$tags
-ls_runs(1) \%>\% runs_tag(remove = "foo")
-ls_runs(1)$tags
-ls_runs(1) \%>\% runs_tag("baz", clear = TRUE)
-ls_runs(1)$tags
+runs_info(1) \%>\% runs_tag(clear = TRUE)
+runs_info(1) \%>\% runs_tag("foo")
+runs_info(1)$tags
+runs_info(1) \%>\% runs_tag("bar")
+runs_info(1)$tags
+runs_info(1) \%>\% runs_tag(remove = "foo")
+runs_info(1)$tags
+runs_info(1) \%>\% runs_tag("baz", clear = TRUE)
+runs_info(1)$tags
 
 ## pass through options to `guild tag` cli subcommand
 runs_tag("--help")

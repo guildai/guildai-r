@@ -21,8 +21,8 @@ attach_eval({
 })
 
 
-run1 <- guildai::ls_runs(params$run_id_1)
-run2 <- guildai::ls_runs(params$run_id_2)
+run1 <- guildai::runs_info(params$run_id_1)
+run2 <- guildai::runs_info(params$run_id_2)
 
 langs <- system2(quarto::quarto_path(),
                  c("pandoc", "--list-highlight-languages"),

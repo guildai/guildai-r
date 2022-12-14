@@ -23,7 +23,7 @@ ls_scalars(1) # scalars from most recent run
 ls_scalars(1:2) # scalars form two most recent runs
 
 # pass in a dataframe of runs
-ls_runs() \%>\%
+runs_info() \%>\%
   filter(flags$epochs > 5) \%>\%
   ls_scalars()
 }

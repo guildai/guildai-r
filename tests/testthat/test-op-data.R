@@ -5,7 +5,7 @@ test_that("guild run", {
   local_project(test_resource("basic.R"))
   # Sys.setenv("DEBUGR" = 1); browser()
   guild_run("basic.R")
-  expect_equal(nrow(ls_runs()), 1L)
+  expect_equal(nrow(runs_info()), 1L)
 })
 
 
@@ -19,7 +19,7 @@ test_that("guild run", {
     noise = c(.4, .5),
     bool = c(TRUE, FALSE)
   ))
-  runs <- ls_runs()
+  runs <- runs_info()
 
   expect_s3_class(runs, "data.frame")
   expect_equal(nrow(runs), 8L)
@@ -34,7 +34,7 @@ test_that("guild run", {
     noise = c(.4, .5),
     bool = c(TRUE, FALSE)
   ))
-  runs <- ls_runs()
+  runs <- runs_info()
 
   expect_s3_class(runs, "data.frame")
   expect_equal(nrow(runs), 2L)
