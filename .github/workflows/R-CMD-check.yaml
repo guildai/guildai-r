@@ -47,7 +47,7 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           cache-version: 4
-          extra-packages: any::rcmdcheck, local::., remotes
+          extra-packages: any::rcmdcheck, local::.
           needs: check
 
       - name: install dev guild
@@ -55,7 +55,7 @@ jobs:
         shell: Rscript {0}
 
       - name: rollback testthat
-        run: remotes::install_version("testthat", "3.1.5")
+        run: install.packages("remotes"); remotes::install_version("testthat", "3.1.5")
         shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2
