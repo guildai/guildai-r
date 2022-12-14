@@ -54,4 +54,8 @@ jobs:
         run: guildai::install_guild("./core")
         shell: Rscript {0}
 
+      - name: rollback testthat
+        run: remotes::install_version("testthat", "3.1.5")
+        shell: Rscript {0}
+
       - uses: r-lib/actions/check-r-package@v2
