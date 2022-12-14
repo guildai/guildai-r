@@ -5,8 +5,8 @@ test_that("seed is recorded correctly", {
   local_project(test_resource("random.R"))
   for(i in 1:3)
     guild_run("random.R")
-  runs <- ls_runs()
-  observed <- ls_scalars()$value
+  runs <- runs_info()
+  observed <- runs_scalars()$value
   reproduced <- sapply(runs$dir, function(d) {
     rs <- yaml::read_yaml(file.path(d, ".guild/attrs/random_seed"))
     set.seed(rs)

@@ -26,7 +26,7 @@
 #' For example, to match runs with flag `batch-size` equal to 100
 #' that have `loss` less than 0.8, use:
 #'
-#'     ls_runs(filter = "batch-size = 10 and loss < 0.8")
+#'     runs_info(filter = "batch-size = 10 and loss < 0.8")
 #'
 #' Target values may be numbers, strings or lists containing numbers
 #' and strings. Lists are defined
@@ -73,7 +73,7 @@
 #' Use `started` to limit runs to those that have started within a
 #' specified time range.
 #'
-#'     ls_runs(started = 'last hour')
+#'     runs_info(started = 'last hour')
 #'
 #' You can specify a time range using several different forms:
 #'
@@ -122,11 +122,11 @@
 #' match any of the filters. For example to only include runs that
 #' were either terminated or exited with an error, use
 #'
-#'     ls_runs(terminated = TRUE, error = TRUE)
+#'     runs_info(terminated = TRUE, error = TRUE)
 #'
 #' Status filters are applied before `RUN` indexes are resolved. For
 #' example, a run index of ``1``
-#' (as in, `ls_runs(1, terminated = TRUE, error = TRUE)` is the latest run
+#' (as in, `runs_info(1, terminated = TRUE, error = TRUE)` is the latest run
 #' that matches the status filters.
 #'
 #'
@@ -163,16 +163,16 @@
 #' if(FALSE) {
 #' withr::with_package("dplyr", {
 #'
-#' ls_runs() # get the full set of runs
-#' ls_runs(1) # get the most recent run
-#' ls_runs(1:3) # get the last 3 runs
+#' runs_info() # get the full set of runs
+#' runs_info(1) # get the most recent run
+#' runs_info(1:3) # get the last 3 runs
 #'
 #' # some other examples for passing filter expressions
-#' ls_runs(staged = TRUE) # list only staged runs
-#' ls_runs(tag = c("convnet", "keras"), started = "last hour")
-#' ls_runs(error = TRUE)
+#' runs_info(staged = TRUE) # list only staged runs
+#' runs_info(tag = c("convnet", "keras"), started = "last hour")
+#' runs_info(error = TRUE)
 #'
-#' runs <- ls_runs()
+#' runs <- runs_info()
 #'
 #' # filter down the runs list to ones of interest
 #' runs <- runs %>%
@@ -184,7 +184,7 @@
 #'
 #' # retrieve full scalars history from the runs of interest
 #' runs$id %>%
-#'   ls_scalars()
+#'   runs_scalars()
 #'
 #' # export the best run
 #' runs %>%
@@ -195,7 +195,7 @@
 #' }
 #' })
 #' }
-ls_runs <-
+runs_info <-
 function(runs = NULL, ...,
          filter = NULL,
          operation = NULL,
@@ -293,9 +293,9 @@ function(runs = NULL, ...,
 }
 
 
-## Note on ls_runs()$scalars:
+## Note on runs_info()$scalars:
 ##
-## We fixup `scalars` to make it more convenient to compose ls_runs() with dplyr::filter()
+## We fixup `scalars` to make it more convenient to compose runs_info() with dplyr::filter()
 # By default, system("guild api runs") returns something that simplifies
 # to a list of dataframes that look like this:
 ## # A tibble: 4 × 14
@@ -306,8 +306,8 @@ function(runs = NULL, ...,
 ## 3 a1adb737137240bb92adf6e8bbd88ff6 train  test_accuracy    0.887         0   0.887        0  0.887       0  0.887       0  0.887 0.887     1
 ## 4 a1adb737137240bb92adf6e8bbd88ff6 train  test_loss        0.339         0   0.339        0  0.339       0  0.339       0  0.339 0.339     1
 #
-# In ls_runs() we simplify that list down to a single df with NA's for scalars in runs that don't exist,
-# (like flags), so users can write: ls_runs() %>% filter(scalars$test_loss < .1)
+# In runs_info() we simplify that list down to a single df with NA's for scalars in runs that don't exist,
+# (like flags), so users can write: runs_info() %>% filter(scalars$test_loss < .1)
 #
 # An alternative explored was to make the scalar summaries easily "hoist-able", like this:
 # df %>%
@@ -341,15 +341,15 @@ function(runs = NULL, ...,
 #' @export
 #' @examples
 #' \dontrun{
-#' ls_scalars(1) # scalars from most recent run
-#' ls_scalars(1:2) # scalars form two most recent runs
+#' runs_scalars(1) # scalars from most recent run
+#' runs_scalars(1:2) # scalars form two most recent runs
 #'
 #' # pass in a dataframe of runs
-#' ls_runs() %>%
+#' runs_info() %>%
 #'   filter(flags$epochs > 5) %>%
-#'   ls_scalars()
+#'   runs_scalars()
 #' }
-ls_scalars <- function(runs = NULL, ...) {
+runs_scalars <- function(runs = NULL, ...) {
   csv <- tempfile(fileext = ".csv")
   guild("tensorboard --export-scalars", csv,
         ..., maybe_extract_run_ids(runs))
@@ -418,7 +418,7 @@ runs_import <- function(runs = NULL, location, ...,
 #' @param ... passed on to `guild`
 #'
 #' @note To see deleted runs, do `guildai:::guild("runs list --deleted")`
-#'   (`ls_runs("--deleted")` supported soon)
+#'   (`runs_info("--deleted")` supported soon)
 #'
 #' @export
 runs_delete <- function(runs = NULL, ...) {
@@ -448,7 +448,7 @@ runs_restore <- function(runs = NULL, ...) {
 #' @param label,comment a string
 #' @param add,remove a character vector of tags to add or remove
 #' @param delete integer vector, which comment(s) to delete, corresponding to
-#'   the row number(s) in the dataframe found at `ls_runs()$comments`.
+#'   the row number(s) in the dataframe found at `runs_info()$comments`.
 #' @param clear bool, whether to clear the existing tags/comments/label.
 #' @param ...  passed on to `guild`. Pass `"--help"` to see all options.
 #'
@@ -458,15 +458,15 @@ runs_restore <- function(runs = NULL, ...) {
 #' @examples
 #' if(FALSE) {
 #'
-#' ls_runs(1) %>% runs_tag(clear = TRUE)
-#' ls_runs(1) %>% runs_tag("foo")
-#' ls_runs(1)$tags
-#' ls_runs(1) %>% runs_tag("bar")
-#' ls_runs(1)$tags
-#' ls_runs(1) %>% runs_tag(remove = "foo")
-#' ls_runs(1)$tags
-#' ls_runs(1) %>% runs_tag("baz", clear = TRUE)
-#' ls_runs(1)$tags
+#' runs_info(1) %>% runs_tag(clear = TRUE)
+#' runs_info(1) %>% runs_tag("foo")
+#' runs_info(1)$tags
+#' runs_info(1) %>% runs_tag("bar")
+#' runs_info(1)$tags
+#' runs_info(1) %>% runs_tag(remove = "foo")
+#' runs_info(1)$tags
+#' runs_info(1) %>% runs_tag("baz", clear = TRUE)
+#' runs_info(1)$tags
 #'
 #' ## pass through options to `guild tag` cli subcommand
 #' runs_tag("--help")
@@ -549,7 +549,7 @@ edit_comment <- function() {
 #'
 #' `guild` supports a rich syntax for runs selection throughout the api. The
 #' same selection syntax is shared by the `ls_*` and `runs_*` families of
-#' functions: `ls_runs()`, `ls_scalars()`, `runs_comment()`,
+#' functions: `runs_info()`, `runs_scalars()`, `runs_comment()`,
 #' `runs_label()`, `runs_mark()`, `runs_tag()`
 #' `runs_delete()`,`runs_purge()`, `runs_restore()`, `runs_export()`,
 #' `runs_import()`.
@@ -577,10 +577,10 @@ edit_comment <- function() {
 #' resolve_run_ids(c("--staged", "--running"))
 #' resolve_run_ids(I("--staged --running"))
 #'
-#' # resolve_run_ids() uses the same selection rules and syntax as ls_runs()
+#' # resolve_run_ids() uses the same selection rules and syntax as runs_info()
 #' stopifnot(identical(
 #'   resolve_run_ids(1),
-#'   ls_runs(1)$id
+#'   runs_info(1)$id
 #' ))
 #' }
 resolve_run_ids <- function(runs = NULL, ..., all = TRUE) {
@@ -609,6 +609,6 @@ maybe_extract_run_ids <- function(x) {
 
 
 # TODO: tidyr::unpack() loses data if names collide.
-# df <- ls_runs()
+# df <- runs_info()
 # df$flags$test_accuracy <- 1
-# ls_runs() %>%  select(id, flags, scalars) %>% tidyr::unpack(c(flags, scalars))
+# runs_info() %>%  select(id, flags, scalars) %>% tidyr::unpack(c(flags, scalars))

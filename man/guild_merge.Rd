@@ -47,7 +47,7 @@ Copy run files into the current project working directory
 \examples{
 if(FALSE) {
 guild_merge("--help")
-ls_scalars() \%>\%
+runs_scalars() \%>\%
   dplyr::slice_max("epoch_acc") \%>\%
   guild_merge(I("--yes --replace"))
 }

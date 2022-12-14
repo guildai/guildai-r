@@ -137,9 +137,9 @@ gen_wrapper_text <- function(command, passes_on_to = NULL, omit = NULL) {
 
   frmls <- c(alist(... = ), deframe(select(opts, name, default)))
   body <- if(is.null(passes_on_to))
-    quote(as_guild_args(as.list.environment(environment()), ...))
+    quote(as_cli_args(as.list.environment(environment()), ...))
   else
-    bquote(c(as_guild_args(as.list.environment(environment())),
+    bquote(c(as_cli_args(as.list.environment(environment())),
            .(substitute(passes_on_to))(...)))
 
   body <- substitute({body}, list(body = body))

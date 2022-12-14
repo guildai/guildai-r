@@ -10,5 +10,5 @@ Interactive: false
 
 Name: View Guild Runs History
 Description: View all training runs
-Binding: add_in_ls_runs
+Binding: add_in_runs_info
 Interactive: false
