@@ -44,10 +44,11 @@ r_script_guild_data <- function(r_script_path) {
   }
 
   # user supplied sourcecode select rules get appended to the default rules
-  # We do it here because config::merge would overwrite
+  # We do it here because config::merge() would overwrite
   # data$sourcecode$select otherwise
   prepend(data$sourcecode$select) <-
-    list(list(exclude = list(dir = list("renv", "logs"))))
+    list(list(exclude = list(dir = c("renv", "logs"))),
+         list(exclude = list(text = ".Rhistory")))
 
   if(dir.exists("renv") && file.exists("renv.lock")) {
     prepend(data$requires) <-
@@ -83,6 +84,7 @@ r_script_guild_data <- function(r_script_path) {
   # because guild core will materialize the yml file.
   if(startsWith(flags_dest, "config:"))
     flags_dest <- NULL
+
   if(!identical(flags_dest, r_script_path))
     cl["flags_dest"] <- list(flags_dest) # preserve NULL
 
