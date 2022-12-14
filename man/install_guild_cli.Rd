@@ -4,7 +4,10 @@
 \alias{install_guild_cli}
 \title{Install guild for usage in the Terminal}
 \usage{
-install_guild_cli(dest = "~/bin", completions = TRUE)
+install_guild_cli(
+  dest = "~/bin",
+  completions = basename(Sys.getenv("SHELL")) \%in\% c("bash", "zsh", "fish")
+)
 }
 \arguments{
 \item{dest}{Directory where to place the \code{guild} executable. This should be a
