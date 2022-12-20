@@ -27,7 +27,7 @@ r_script_guild_data <- function(r_script_path) {
     "flags-dest" = r_script_path,
     "sourcecode" = list(dest = ".", root = getwd()),
     "echo" = TRUE,
-    "pip-freeze" = FALSE
+    "pip-freeze" = FALSE # TODO: remove pip-freeze after dest-dir-change branch is merged
   )
 
   is_anno <- startsWith(trimws(text, "left"), "#|")
@@ -46,11 +46,14 @@ r_script_guild_data <- function(r_script_path) {
   # user supplied sourcecode select rules get appended to the default rules
   # We do it here because config::merge() would overwrite
   # data$sourcecode$select otherwise
+
   prepend(data$sourcecode$select) <-
-    list(list(exclude = list(dir = c("renv", "logs"))),
+    list(list(exclude = list(dir = "logs")),
          list(exclude = list(text = ".Rhistory")))
 
   if(dir.exists("renv") && file.exists("renv.lock")) {
+    prepend(data$sourcecode$select) <-
+      list(list(exclude = list(dir = "renv")))
     prepend(data$requires) <-
       list(list(file = "renv", "target-type" = "link"))
   }
