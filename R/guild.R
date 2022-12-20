@@ -95,7 +95,6 @@ as_cli_args <- function(...) {
 
 
 
-# TODO: support for globals injection of `!expr foo` flags
 
 #' Launch a guild run
 #'

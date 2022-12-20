@@ -254,3 +254,20 @@ test_that("guild doesn't set PYTHONPATH", {
   expect_identical(env$PYTHONPATH, pypath)
 
 })
+
+
+
+test_that("hashpipe yaml can eval !expr", {
+
+  local_project(test_resource("expr.R"))
+
+  expect_identical(unclass(guildai:::r_script_guild_data("expr.R")$tags),
+                   list("tag1", "tag2"))
+
+  guild_run("expr.R")
+
+  runs <- runs_info()
+  expect_identical(runs$tags[[1]], c("tag1", "tag2"))
+  expect_identical(runs$exit_status, 0L)
+
+})

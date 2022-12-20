@@ -20,7 +20,8 @@ read_yaml <- function(file, ...) {
 parse_yaml <-  function(string, ...) {
   yaml_load_args <- utils::modifyList(
     list(string = paste(string, collapse = "\n"),
-         handlers = list(seq = identity)), # don't simplify lists),
+         handlers = list(seq = identity), # don't simplify lists
+         eval.expr = getOption("yaml.eval.expr", TRUE)), # eval !expr by default
     list(...))
   maybe_as_yaml(do.call(yaml::yaml.load, yaml_load_args))
 }
