@@ -141,6 +141,7 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
     if (is.call(default)) {
       # allow simple exprs of basic fns and literals
       # convenient to specify some params as simple math, e.g, power of 2
+      # TODO: make SIMPLE_MATH_OPS support consistent between inference and injection
       if (!all(all.names(default) %in% SIMPLE_MATH_OPS))
         next
       default <- eval(default, envir = baseenv())

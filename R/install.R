@@ -6,8 +6,6 @@ find_python <- function() {
     "/usr/bin/python3",
     Sys.which("python3"),
     Sys.which("python")
-    # TODO: do we really want to use system python on mac?
-    #       Maybe look in /usr/bin/local first?
   )))
     if(file.exists(python))
       return(python)
