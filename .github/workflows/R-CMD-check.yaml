@@ -54,4 +54,7 @@ jobs:
         run: guildai::install_guild("./core")
         shell: Rscript {0}
 
-      - uses: r-lib/actions/check-r-package@v2
+      # incompatability between tensorboard and numpy 1.24.0
+      # hot-fix: install previous numpy until this fixed upstream
+      - name: rollback numpy
+        run: pip3 install 'numpy<1.24.0'
