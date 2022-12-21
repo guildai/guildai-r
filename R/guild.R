@@ -229,19 +229,3 @@ if(FALSE) {
   here::here()
 }
 
-
-# TODO: other subcommands to wrap + export:
-# next:
-#   download, publish, api merge
-# later:
-#   remotes, remote, pull, push, runs pull, runs push,
-#   remote start, remote stop, sys shutdown-timer, sys s3-sync
-# think on:
-#   shell?
-#   tensorboard?
-#     (integration w/ tensorflow::tensorboard()?. guild does do some convenient
-#      prep of the log dir. No daemon managment tho. Also, launchable from guild_view())
-#   tensorflow inspect?
-#
-#
-

@@ -26,8 +26,7 @@ r_script_guild_data <- function(r_script_path) {
     "name" = r_script_path,
     "flags-dest" = r_script_path,
     "sourcecode" = list(dest = ".", root = getwd()),
-    "echo" = TRUE,
-    "pip-freeze" = FALSE # TODO: remove pip-freeze after dest-dir-change branch is merged
+    "echo" = TRUE
   )
 
   is_anno <- startsWith(trimws(text, "left"), "#|")
@@ -69,11 +68,12 @@ r_script_guild_data <- function(r_script_path) {
 
     if (is_r_file(flags_dest)) {
       data$flags <- infer_global_params(text, is_anno)
-
-    } else if (is_yml_file(flags_dest)) {
-      # TODO: this file read should be done by guild core
-      data$flags <- read_yaml(str_drop_prefix(flags_dest, "config:"))
     }
+    # TODO: delete this block after confirming tests pass
+    # else if (is_yml_file(flags_dest)) {
+    #   # TODO: this file read should be done by guild core
+    #   data$flags <- read_yaml(str_drop_prefix(flags_dest, "config:"))
+    # }
   }
 
 
@@ -112,8 +112,8 @@ rscript_bin <- function() {
 
 infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"), "#|")) {
 
-  # TODO: figure out how to present a nice error message in case of parse errors
-  # from python plugin / guild
+  # TODO: (Captured on board) figure out how to present a nice error message
+  # in case of parse errors from python plugin / guild
   exprs <- parse(text = text, keep.source = TRUE)
 
   # 0-length names to force a yaml mapping if no flags.
@@ -154,7 +154,7 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
 
     param <- list(default = default,
                   type = switch(typeof(default),
-                                "double" = "float",
+                                "double" = "number",
                                 "logical" = "boolean",
                                 "character" = "string",
                                 "integer" = "int",
@@ -193,17 +193,8 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
 ## yaml::yaml.load("y: 0.0") |> dput()
 ## list(`TRUE` = 0)
 
-## TODO: a way to declare required packages that can't otherwise be easily infered?
+## TODO: a way to declare required packages that can't otherwise be easily inferred?
 ## ? #| requires: {packages: [glmnet]}  or similar
-
-## TODO:
-## if user has flags-dest: file:foo.yml
-## then give a very clean exec cmd:
-##   R (if echo:false --no-echo) --file=file.R
-##
-## Q: do we default to --no-restore?
-##   Rscript expands to:
-##   /opt/R/4.2.1/lib/R/bin/exec/R --no-echo --no-restore --file=train-basic.R
 
 ## add a yaml option:
 ##   save: true, false, or list of symbols like [x, y, model]
@@ -211,7 +202,6 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
 ##   or passed --save to the command line opts
 
 # as_flag_spec <- function(x) {
-#
 #
 #   param <- list(default = default,
 #                 type = switch(typeof(default),
@@ -242,17 +232,6 @@ SIMPLE_MATH_OPS <-
   )
 
 
-## Q's for Garrett
-# - does guild infer an incremented 'step' when encountering a duplicate key?
-# - Can we have a nicer run_dir uuid ala timestamped sortable like tfruns::unique_run_dir()?
-# - Can we change default GUILD_HOME to be "./.guild"
-# - Can we change default runs dir to be "./runs" for a project?
-# - instead of 'sourcecode: dest: '.'', what if we kept the current dest, but
-#   symlinked all the sourcecode files from the rundir pointing to the .sourcecode dest?
-#   (would need to be a change in guild)
-# - related: sourcecode files should be copied with `chmod -w` settings
-# - can a plugin define additional guild options, like --echo or --no-echo?
-# - Should guild provide a keras callback that writes additional
-#   guild run metadata, like model summary, metrics, etc.?
+
 
 

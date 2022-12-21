@@ -72,6 +72,7 @@ test_that("rscript op data inference", {
   expect_equal(op$flags$noise$min, 0)
   expect_equal(op$flags$noise$max, 1)
 
+  # TODO: delete / back out all complex flag support
   # TODO: guild does not support a "complex" type, so we have to lie
   #       here and tell guild it's a string.
   # expect_equal(op$flags$init_phase$type, "complex")

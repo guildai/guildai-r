@@ -292,6 +292,9 @@ function(runs = NULL, ...,
   df
 }
 
+# TODO: make scalars a flat namespace with "." separating dir /
+# e.g., something like runs_info()$scalars$"train/accuracy"
+# runs_info()$scalars$train.accuracy
 
 ## Note on runs_info()$scalars:
 ##
@@ -600,7 +603,6 @@ maybe_extract_run_ids <- function(x) {
   x
 }
 
-# TODO: support for multiple `flags-dest` file paths, as a yaml list
 
 # TODO: `guild api runs --operation 'train.R'` doesn't work, I think because
 # guild doesn't know about this operation in this context because it's not

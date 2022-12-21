@@ -15,9 +15,6 @@ function(file = "train.R", flags_dest = file, echo = TRUE,
   # the default viewers work better w/ pngs than pdf.
   options(
     "device" = function() {
-      # TODO: after dest.dir change, need to revisit this default plots dir location
-      # What happens if a file is overwritten? Should the default plots dir be
-      # under .guild/plots perhaps?
       plots_dir <- file.path(Sys.getenv("RUN_DIR", "."), "plots")
       if (!dir.exists(plots_dir))
         dir.create(plots_dir, recursive = TRUE)
@@ -98,6 +95,7 @@ write_run_attr_pkg_loaded <- function(pkgname, pkgpath = NULL) {
   val <- list(list(path = pkgpath,
                    version = getNamespaceVersion(ns)))
   names(val) <- pkgname
+  # TODO: consider not appending
   write_run_attr("r_packages_loaded", val, append = TRUE)
 }
 
@@ -376,10 +374,6 @@ write_run_attr <- function(name, data, ..., append = FALSE) {
   invisible(data)
 }
 
-# TODO: scalars not detected if they're a flag. Are name collisions between
-# flags and scalars not allowed?
 
-
-# TODO: delete unread sourcecode files
-# TODO: guild run should cast intergerish
+# TODO: guild run should cast intergerish (pass int as "number")
 #   floats to int if the flag type is int
