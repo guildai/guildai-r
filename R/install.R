@@ -1,7 +1,6 @@
 
 
 find_python <- function() {
-
   for (python in as.vector(c(
     "/usr/bin/python3",
     Sys.which("python3"),
@@ -13,7 +12,6 @@ find_python <- function() {
   if (is_windows() &&
       file.exists(python <- find_python_from_registry()))
     return(python)
-
 
   stop(
 "python executable not found. Please:
@@ -42,35 +40,46 @@ find_python_from_registry <- function() {
 
 #' Install guildai core
 #'
-#' This installs the `guild` executable for use by the R package.
+#' This installs the `guild` executable for use by the R package. It creates
+#' a python virtual environment private to the R package and installs
+#' guildai into it. Repeated calls to `install_guild()` result in a
+#' fresh installation.
+#'
+#' It require that a suitable python version is
+#' available on the system.
 #'
 #' @param guildai Character vector of arguments passed directly to `pip
 #'   install`. To install the release version of guildai, this can be
 #'   `"guildai"`.
 #' @param python Path to a python binary, used to create a private venv.
 #'
-#' @return path to the guild binary
+#' @return path to the `guild` executable
 #' @export
 #'
 #' @examples
-#' # install_guild(c("-e", "~/guild/guildai"))
-#' # install_guild("~/guild/guildai", reticulate::install_python())
-#' # install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
+#' ## Install release version:
+#' # install_guild("guildai", python = reticulate::install_python())
+#'
+#' ## Install development version
 #' # install_guild(
 #' #   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
 #' #   python = reticulate::install_python())
+#'
+#' ## Install local development version:
+#' # install_guild(c("-e", "~/guild/guildai"))
 install_guild <-
   function(guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
            python = find_python()) {
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL), mustWork = FALSE)
   unlink(venv, recursive = TRUE)
   python <- normalizePath(python)
-  system2t(python, c("-m", "venv", shQuote(venv)))
+  system2t(python, c("-m", "venv", shQuote(venv)), echo_cmd = TRUE)
   python <- if (is_windows())
    file.path(venv, "Scripts", "python.exe", fsep = "\\") else
    file.path(venv, "bin", "python")
   pip_install <- function(...)
-    system2t(python, c("-m", "pip", "install", "--upgrade", "--no-user", ...))
+    system2t(python, c("-m", "pip", "install", "--upgrade", "--no-user", ...),
+             echo_cmd = TRUE)
   pip_install("pip", "wheel", "setuptools")
   pip_install(guildai)
   if (is_windows())
@@ -135,4 +144,3 @@ install_guild_cli <- function(dest = "~/bin",
 
   invisible(link)
 }
-

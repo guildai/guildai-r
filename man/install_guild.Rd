@@ -16,16 +16,27 @@ install_guild(
 \item{python}{Path to a python binary, used to create a private venv.}
 }
 \value{
-path to the guild binary
+path to the \code{guild} executable
 }
 \description{
-This installs the \code{guild} executable for use by the R package.
+This installs the \code{guild} executable for use by the R package. It creates
+a python virtual environment private to the R package and installs
+guildai into it. Repeated calls to \code{install_guild()} result in a
+fresh installation.
+}
+\details{
+It require that a suitable python version is
+available on the system.
 }
 \examples{
-# install_guild(c("-e", "~/guild/guildai"))
-# install_guild("~/guild/guildai", reticulate::install_python())
-# install_guild("https://api.github.com/repos/guildai/guildai/tarball/HEAD")
+## Install release version:
+# install_guild("guildai", python = reticulate::install_python())
+
+## Install development version
 # install_guild(
 #   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
 #   python = reticulate::install_python())
+
+## Install local development version:
+# install_guild(c("-e", "~/guild/guildai"))
 }

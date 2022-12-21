@@ -75,11 +75,12 @@ new_source_w_active_echo <- function() {
 }
 
 
-system2t <- function (command, args, ...) {
-  if(Sys.getenv("DEBUGR") == "1") {
+system2t <- function (command, args, ...,
+                      echo_cmd = Sys.getenv("DEBUGR") == "1") {
+  if(echo_cmd) {
     # cl <- as.call(c(list(quote(system2t), command, args, ...)))
     # message(paste("R>", deparse1(cl)))
-    message(paste("+", shQuote(command), paste0(args, collapse = " ")))
+    message(paste("Running:", shQuote(command), paste0(args, collapse = " ")))
   }
   system2(command, args, ...)
 }
