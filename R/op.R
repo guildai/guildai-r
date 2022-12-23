@@ -68,12 +68,10 @@ r_script_guild_data <- function(r_script_path) {
 
     if (is_r_file(flags_dest)) {
       data$flags <- infer_global_params(text, is_anno)
+    } else if (is_yml_file(flags_dest)) {
+      # TODO(gs/tk): this file read should be done by guild core
+      data$flags <- read_yaml(str_drop_prefix(flags_dest, "config:"))
     }
-    # TODO: delete this block after confirming tests pass
-    # else if (is_yml_file(flags_dest)) {
-    #   # TODO: this file read should be done by guild core
-    #   data$flags <- read_yaml(str_drop_prefix(flags_dest, "config:"))
-    # }
   }
 
 

@@ -108,7 +108,7 @@ test_that("rscript op data inference", {
 test_that("guild run w/ flags-dest: config:flags.yml", {
 
   local_project(test_resource("flags-from-config-yml.R", "flags.yml"))
-
+  # browser()
   file <- "flags-from-config-yml.R"
   # confirm the defaults are in the run dir, flags.yml is resolved
   default_flags <- read_yaml("flags.yml")
