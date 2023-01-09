@@ -139,28 +139,17 @@ modify_r_file_flags <- function(filename, flags, overwrite = FALSE,
     if (!name %in% names(flags))
       next
 
-    # yaml::yaml.load()/parse_command_line() leaves complex literals as strings
-    # meanwhile, `parse()` returns complex literals as `+` calls
-    # resolve the actual complex value for both
+    # "+1", "-1", "1+1i", etc. all get parsed as calls. Eval to resolve the val.
+    if(is.call(l[[3L]]) && all(all.names(l[[3]]) %in% c("+", "-")))
+      l[[3L]] <- eval(l[[3L]], baseenv())
+
 
     if(is_complex_literal(l[[3L]]) &&
        typeof(flags[[name]]) != "complex") {
-      l[[3L]] <- eval(l[[3L]], baseenv())
-      flags[[name]] <-
-        as.complex(eval(str2lang(flags[[name]]), baseenv()))
+      # yaml/guild doesn't have a 'complex' flag type. Resolve the correct
+      # R val for the flag type as well if needed.
+      flags[[name]] <- as.complex(eval(str2lang(flags[[name]]), baseenv()))
         # eval(str2lang()) first because as.complex("1i") fails, returns NA
-    }
-
-    if(is.call(l[[3L]])) {
-      cl <- l[[3L]][[1L]]
-      if (identical(cl, quote(`+`)) || identical(cl, quote(`-`)) &&
-          length(l[[3L]]) == 2L &&
-          is.numeric(l[[3L]][[2L]])) {
-        # it's a literal numeric with a unary + or - call
-        # this is the way negative literals are parsed.
-        # eval it so we can do comparisons on the actual val.
-        l[[3L]] <- eval(l[[3L]], baseenv())
-      }
     }
 
     if (identical(flags[[name]], l[[3L]])) {
@@ -179,9 +168,10 @@ modify_r_file_flags <- function(filename, flags, overwrite = FALSE,
     # [.expression will slice out the srcref specific to this expression
     e <- exprs[i]
 
-    # if the user defined multiple globals one one line,
-    # parse_data$col1/col2 might be incorrect.
+    # if the user defined multiple globals on one line,
+    # parse_data${col1,col2} might be incorrect.
     # Just reparse the full text in its partially modified current state.
+    # This is relatively expensive but should only happen rarely.
     if(last_line_modified >= getSrcLocation(e, "line")) {
       exprs <- parse(text = text, keep.source = TRUE)
       parse_data <- getParseData(exprs)
@@ -196,7 +186,6 @@ modify_r_file_flags <- function(filename, flags, overwrite = FALSE,
     if(is.complex(flags[[name]])) {
       ## complex numbers are parsed as two NUM_CONST tokens and a '+' token,
       ## so we special case them. (they may be split across multiple lines)
-      ## Otherwise, all other flags are scalar literals always parsed as one token
 
       # slice out the lines w /this expression
       df <- parse_data
@@ -258,8 +247,6 @@ modify_r_file_flags <- function(filename, flags, overwrite = FALSE,
       }
     }
 
-    # TODO: support for injecting flags for expressions like `foo <- get_foo()`?
-    # TODO: ensure/force type-stable flag injections? NULLable flag values?
 
     if(Sys.getenv("DEBUGR") == 1) {
       # emit message about the magic we just did
@@ -274,7 +261,7 @@ modify_r_file_flags <- function(filename, flags, overwrite = FALSE,
   }
 
   if(length(flags) && Sys.getenv("DEBUGR") == 1)
-    message("Additional flags: \n",
+    message("Additional flags not injected: \n",
             paste("  ", encode_yaml(flags), collapse = "\n"))
 
   if(isTRUE(overwrite))

@@ -137,10 +137,9 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
 
     default <- e[[3L]]
     if (is.call(default)) {
-      # allow simple exprs of basic fns and literals
-      # convenient to specify some params as simple math, e.g, power of 2
-      # TODO: make SIMPLE_MATH_OPS support consistent between inference and injection
-      if (!all(all.names(default) %in% SIMPLE_MATH_OPS))
+      # constants like "+1" and "-1", "1+1i", etc.
+      # parsed as calls of "+" and "-"
+      if (!all(all.names(default) %in% c("+", "-")))
         next
       default <- eval(default, envir = baseenv())
     }
@@ -148,7 +147,6 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
     if(!typeof(default) %in% c("double", "integer", "character", "logical", "complex") ||
        !identical(length(default), 1L))
       next
-
 
     param <- list(default = default,
                   type = switch(typeof(default),
@@ -166,7 +164,7 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
       while (isTRUE(is_anno[anno_start - 1L]))
         subtract(anno_start) <- 1L
       # TODO: add test if lineno==1L to ensure no error
-      # TODO: expand check to make sure we don't falsly pickup frontmatter as flag anno.
+      # TODO: expand check to make sure we don't falsely pickup frontmatter as flag anno.
       #1  #| echo: false
       #2  y <- 0
 
@@ -212,23 +210,6 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
 #
 #
 # }
-
-
-SIMPLE_MATH_OPS <-
-  c( ## Math
-    "abs", "sign", "sqrt", "floor", "ceiling", "trunc", "round",
-    "signif", "exp", "log", "expm1", "log1p", "cos", "sin", "tan",
-    "cospi", "sinpi", "tanpi", "acos", "asin", "atan", "cosh", "sinh",
-    "tanh", "acosh", "asinh", "atanh", "lgamma", "gamma", "digamma",
-    "trigamma", "cumsum", "cumprod", "cummax", "cummin",
-
-    ## Ops
-    "+", "-", "*", "/", "^", "%%", "%/%",
-
-    ## Summary
-    "sum", "prod", "min", "max"
-  )
-
 
 
 
