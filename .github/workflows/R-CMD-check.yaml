@@ -22,11 +22,11 @@ jobs:
           - { os: windows-latest, r: release , python: 3.x }
           - { os: ubuntu-latest , r: release , python: 3.x }
 
-          - { os: ubuntu-latest, r: oldrel   , python: '3.10' }
-          - { os: ubuntu-latest, r: oldrel-1 , python: '3.9'  }
-          - { os: ubuntu-latest, r: oldrel-2 , python: '3.8'  }
-          - { os: ubuntu-latest, r: oldrel-3 , python: '3.7'  }
-          - { os: ubuntu-latest, r: oldrel-4 , python: '3.6'  }
+          - { os: ubuntu-latest , r: oldrel   , python: '3.10' }
+          - { os: ubuntu-latest , r: oldrel-1 , python: '3.9'  }
+          - { os: ubuntu-latest , r: oldrel-2 , python: '3.8'  }
+          - { os: 'ubuntu-20.04', r: oldrel-3 , python: '3.7'  }
+          - { os: 'ubuntu-20.04', r: oldrel-4 , python: '3.6'  }
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
