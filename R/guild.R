@@ -36,7 +36,7 @@ as_cli_args <- function(...) {
 
 #' @importFrom rlang names2
 .process_args <- function(x, name = "") {
-  if(is.list(x)) # recurse
+  if(is.list(x) && length(x)) # recurse
     return(unlist(.mapply(
       .process_args,
       list(x, names(x) %||% ""),
@@ -44,7 +44,7 @@ as_cli_args <- function(...) {
     ), use.names = FALSE))
 
 
-  if(is.null(x))
+  if(!length(x))
     return(x)
 
   if(inherits(x, "AsIs") && is.null(names(x)))
