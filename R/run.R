@@ -4,6 +4,8 @@ do_guild_run <-
 function(file = "train.R", flags_dest = file, echo = TRUE,
          prune_on_success = TRUE) {
 
+  fix_flags_yaml(".guild/attrs/flags")
+
   if (is_r_file(flags_dest)) {
     modify_r_file_flags(flags_dest, read_yaml(".guild/attrs/flags"),
                         overwrite = TRUE)
@@ -364,3 +366,20 @@ write_run_attr <- function(name, data, ..., append = FALSE) {
 
 # TODO: guild run should cast intergerish (pass int as "number")
 #   floats to int if the flag type is int
+
+fix_flags_yaml <- function(file) {
+  # guild core / python 'yaml' module doesn't quote some keys correctly
+  # esp, 'n', 'y', which need to be quoted to not be interpreted as bools.
+  # flags.yml is guaranteed to be a mapping where all keys are strings, so we
+  # modify the file to make sure all keys are single quoted.
+  # This probably falls flat on its face if there is an escaped ":" in
+  # the key, or the key spans multiple lines, but those are probably not valid
+  # flag keys anyway.
+  txt <- readLines(file)
+  first_char <- substr(txt, 1, 1)
+  key_needs_quoting <- !(first_char %in% c("'", " "))
+  txt[key_needs_quoting] <- paste0("'",  txt[key_needs_quoting])
+  txt[key_needs_quoting] <- sub(": ", "': ", txt[key_needs_quoting],
+                                fixed = TRUE)
+  writeLines(txt, file)
+}
