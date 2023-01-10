@@ -22,12 +22,14 @@ formals(expect_no_error)$regexp <- NA
 # cat("Using guild:", guildai:::find_guild(), "\n")
 
 
-local_project <- function(files, envir = parent.frame(), name = NULL) {
-  # Similar in semantics to all the withr::local_* functions
-  # It changes the working directory to a temporary directory w/ copies of the
-  # requested files present. Exiting the `envir` scope switches back to the old working directory.
-  # The directory is automatically cleaned up when the R session terminates.
-  files <- normalizePath(files)
+local_project <- function(files, envir = parent.frame(), name = NULL,
+                          delete_on_success = !interactive()) {
+  # Similar in semantics to all the withr::local_* functions. It changes the
+  # working directory to a temporary directory w/ copies of the requested
+  # files present. Exiting the `envir` scope switches back to the old
+  # working directory. The directory is automatically cleaned up when the R
+  # session terminates.
+  files <- normalizePath(files, mustWork = TRUE)
   dir.create(nwd <- tempfile(paste0(
     c("guildai-test-project", name, ""), collapse = "-")))
 
@@ -37,6 +39,13 @@ local_project <- function(files, envir = parent.frame(), name = NULL) {
       Sys.unsetenv("GUILD_HOME")
     else
       Sys.setenv("GUILD_HOME" = old_guild_home)
+    # clean up if running non-interactively and scope finished without error
+    if(delete_on_success)
+       # &&
+       # !identical(returnValue(quote(.__no_return_value_sentinal__.)),
+       #            quote(.__no_return_value_sentinal__.)))
+      unlink(nwd, recursive = TRUE) else
+        cat("Directory remaining:", nwd, "\n")
   })
 
   owd <- setwd(nwd)
@@ -74,5 +83,17 @@ registerS3method("[", "yaml", `[.yaml`)
 registerS3method("str", "yaml", str.yaml)
 
 
-# if(interactive() && dir.exists("~/guild/fashion-mnist"))
-#   Sys.setenv("GUILD_HOME" = path.expand("~/guild/fashion-mnist/.guild"))
+import_from <- function(x, ..., .into = parent.frame()) {
+  ns <- getNamespace(substitute(x))
+  dots <- eval(substitute(alist(...)))
+  if(!is.null(names(dots))) stop("renaming not implemented")
+  for(obj in dots) {
+    stopifnot(is.symbol(obj))
+    assign(as.character(obj), eval(obj, ns), .into)
+  }
+}
+
+import_from(withr,
+            local_envvar, with_envvar,
+            local_path, with_path)
+
