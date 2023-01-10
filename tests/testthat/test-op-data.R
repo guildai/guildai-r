@@ -238,7 +238,7 @@ test_that("guild doesn't set PYTHONPATH", {
   local_project(test_resource("env.R"))
 
   guild_run("env.R")
-  env <- guild("cat --output", stdout = TRUE) |> guildai:::parse_yaml()
+  env <- guildai:::parse_yaml(guild("cat --output", stdout = TRUE))
   expect_false("PYTHONPATH" %in% names(env))
   # expect_false(any(grepl("^PYTHONPATH", out)))
 
@@ -251,7 +251,7 @@ test_that("guild doesn't set PYTHONPATH", {
   # expect_identical(as.character(out), pypath)
 
   guild_run("env.R")
-  env <- guild("cat --output", stdout = TRUE) |> guildai:::parse_yaml()
+  env <- guildai:::parse_yaml(guild("cat --output", stdout = TRUE))
   expect_identical(env$PYTHONPATH, pypath)
 
 })

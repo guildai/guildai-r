@@ -219,9 +219,9 @@ function(runs = NULL, ...,
   df <- guild("api runs", list(...),
               mget(setdiff(ls(), "runs")),
               maybe_extract_run_ids(runs),
-              stdout = TRUE) |>
-    paste0(collapse = "") |>
-    parse_json(simplifyVector = TRUE)
+              stdout = TRUE)
+  df <- parse_json(paste0(df, collapse = ""),
+                   simplifyVector = TRUE)
 
   if(identical(df, list()))
     return()

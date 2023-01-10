@@ -14,7 +14,7 @@
 
 cat(commandArgs(), "\n")
 cat(getwd(), "\n")
-list.files() |> print()
+print(list.files())
 
 writeLines(readLines("mtcars.csv", 3))
 
