@@ -89,6 +89,14 @@ if(getRversion() < "4")
   deparse1 <- function (expr, collapse = " ", width.cutoff = 500L, ...)
     paste(deparse(expr, width.cutoff, ...), collapse = collapse)
 
+if(getRversion() < "3.6.0")
+str2lang <- function (s) {
+  stopifnot(length(s) == 1L)
+  ex <- parse(text = s, keep.source = FALSE)
+  stopifnot(length(ex) == 1L)
+  ex[[1L]]
+}
+
 
 replace_val <- function(x, old, new) {
   if(!is_scalar(new))
