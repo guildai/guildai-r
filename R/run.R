@@ -376,8 +376,8 @@ fix_flags_yaml <- function(file) {
   # the key, or the key spans multiple lines, but those are probably not valid
   # flag keys anyway.
   txt <- readLines(file)
-  first_char <- substr(txt, 1, 1)
-  key_needs_quoting <- !(first_char %in% c("'", " "))
+  first_char <- substr(txt, 1L, 1L)
+  key_needs_quoting <- !(first_char %in% c("'", " ", ""))
   txt[key_needs_quoting] <- paste0("'",  txt[key_needs_quoting])
   txt[key_needs_quoting] <- sub(": ", "': ", txt[key_needs_quoting],
                                 fixed = TRUE)
