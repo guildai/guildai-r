@@ -4,6 +4,8 @@ do_guild_run <-
 function(file = "train.R", flags_dest = file, echo = TRUE,
          prune_on_success = TRUE) {
 
+  # browser()
+
   fix_flags_yaml(".guild/attrs/flags")
 
   if (is_r_file(flags_dest)) {
@@ -377,6 +379,8 @@ fix_flags_yaml <- function(file) {
   # flag keys anyway.
   txt <- readLines(file)
   first_char <- substr(txt, 1L, 1L)
+  if (identical(first_char[[1]], "{"))
+    return() # it's either json or an empty mapping '{}', do nothing
   key_needs_quoting <- !(first_char %in% c("'", " ", ""))
   txt[key_needs_quoting] <- paste0("'",  txt[key_needs_quoting])
   txt[key_needs_quoting] <- sub(": ", "': ", txt[key_needs_quoting],

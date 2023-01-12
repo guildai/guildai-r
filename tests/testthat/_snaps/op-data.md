@@ -1,4 +1,4 @@
-# guild run w/ flags-dest: globals
+# guild run w/ flags-dest: globals; R < 4.0
 
     > #| echo: true
     > 
@@ -14,10 +14,10 @@
     > # a comment after
     > #
     > #
-    >     s2 <- r"(foo)"
-    >       s3 <- r"(
+    >     s2 <- "foo"
+    >       s3 <- "
     +     foobarbaz
-    +     )"
+    +     "
     > cx <- 0 +
     +       0i
     >     # comment
@@ -43,7 +43,7 @@
     > {
     +   cat("R exprs:\n")
     +   for (nm in names(globals))
-    +     cat("  ", nm, " = ", deparse1(get(nm)), "\n", sep = "")
+    +     cat("  ", nm, " = ", deparse(get(nm)), "\n", sep = "")
     + }
     R exprs:
       b = FALSE
@@ -124,7 +124,7 @@
     > {
     +   cat("R exprs:\n")
     +   for (nm in names(globals))
-    +     cat("  ", nm, " = ", deparse1(get(nm)), "\n", sep = "")
+    +     cat("  ", nm, " = ", deparse(get(nm)), "\n", sep = "")
     + }
     R exprs:
       b = TRUE
@@ -178,10 +178,10 @@
     > # a comment after
     > #
     > #
-    >     s2 <- r"(foo)"
-    >       s3 <- r"(
+    >     s2 <- "foo"
+    >       s3 <- "
     +     foobarbaz
-    +     )"
+    +     "
     > cx <- 0 +
     +       0i
     >     # comment
@@ -207,7 +207,7 @@
     > {
     +   cat("R exprs:\n")
     +   for (nm in names(globals))
-    +     cat("  ", nm, " = ", deparse1(get(nm)), "\n", sep = "")
+    +     cat("  ", nm, " = ", deparse(get(nm)), "\n", sep = "")
     + }
     R exprs:
       b = FALSE

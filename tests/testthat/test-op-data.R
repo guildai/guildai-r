@@ -47,8 +47,6 @@ test_that("rscript op data inference", {
   for(f in list.files(test_resource(),
                       pattern = "\\.R$",
                       full.names = TRUE)) {
-    if(basename(f) == "train-flags-yml.R")
-      next
     op <- capture.output(guildai:::emit_r_script_guild_data(f))
     expect_no_error(yaml::yaml.load(op))
   }
@@ -192,11 +190,54 @@ test_that("guild run w/ flags-dest: flags.yml", {
 
 })
 
-
+if(getRversion() >= "4.0")
 test_that("guild run w/ flags-dest: globals", {
 
   file <- "flags-from-globals.R"
   local_project(test_resource(file))
+
+  guild_run(file)
+  output <- expect_snapshot_guild_cat_last_output()
+
+  invisible(capture.output(source(file, default_flags <- new.env())))
+  default_flags <- as.list(default_flags)
+  default_flags$globals      <- NULL
+  default_flags$nm           <- NULL
+  default_flags$not_a_global <- NULL
+  default_flags$duplicated_flag <- 1L
+
+  guild_run(file, flags = default_flags)
+  output2 <-guild("cat --output", stdout = TRUE)
+  expect_identical(output, output2)
+
+  flags <- list(
+    b = TRUE,
+    i = 456L, f = 4.56,
+    s = "Howdy Back",  s2 = "abc", s3 = "def",
+    s4 = "A loooooooonger string",
+    s5 = "a different string",
+    cx = 1+1i, cx1 = 2+2i, cx2 = 22+22i, cx3 = 33+33i,
+    duplicated_flag = 99L,
+    i2 = 123L, i3 = -123L
+  )
+
+  guild_run(file, flags = flags)
+  expect_snapshot_guild_cat_last_output()
+
+  guild_run(file, flags = list(s = "foo\nbar\nbaz", s4 = "s"))
+  expect_snapshot_guild_cat_last_output()
+
+})
+
+
+
+
+test_that("guild run w/ flags-dest: globals; R < 4.0", {
+  # test string literals introduced in R 4.0 r"(...)"
+
+  file <- "flags-from-globals-pre-r40.R"
+  local_project(test_resource(file))
+  # browser(); Sys.setenv(DEBUGR=1)
 
   guild_run(file)
   output <- expect_snapshot_guild_cat_last_output()
