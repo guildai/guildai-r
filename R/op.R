@@ -29,6 +29,16 @@ r_script_guild_data <- function(r_script_path) {
     "echo" = TRUE
   )
 
+  if(is_windows()) {
+    # need winslashs in file paths
+    for(potential_path in list("name", "flags-dest",
+                               c("sourcecode", "root"),
+                               c("sourcecode", "dest")))
+      data[[potential_path]] <-
+        gsub("/", "\\", data[[potential_path]], fixed = TRUE)
+  }
+
+
   is_anno <- startsWith(trimws(text, "left"), "#|")
   if (is_anno[1] || startsWith(text[1], "#!/") && is_anno[2]) {
     # script has frontmatter
@@ -94,17 +104,18 @@ r_script_guild_data <- function(r_script_path) {
   cl <- call(":::", quote(guildai), cl)
 
   data$exec <- sprintf("%s -e %s",
-                       rscript_bin(),
+                       shQuote(rscript_exe()),
                        shQuote(deparse1(cl)))
 
   data
 }
 
 
-rscript_bin <- function() {
+rscript_exe <- function() {
   # TODO: do we need arch in the file path on windows?
-  file.path(R.home("bin"),
-            if(is_windows()) "Rscript.exe" else "Rscript")
+  normalizePath(
+    file.path(R.home("bin"),
+            if(is_windows()) "Rscript.exe" else "Rscript"))
 }
 
 
