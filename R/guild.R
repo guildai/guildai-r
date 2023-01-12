@@ -145,8 +145,12 @@ guild_run <- function(opspec = "train.R",
     flags <- sprintf("%s=%s", names(flags), unname(flags))
   }
 
+  if(length(echo) == 1)
+    echo <- c(echo, TRUE)
+
   guild("run --yes", list(...), opspec, flags,
-        stdout = if(isTRUE(echo)) "" else FALSE)
+        stdout = if(isTRUE(echo[[1L]])) "" else FALSE,
+        stderr = if(isTRUE(echo[[2L]])) "" else FALSE)
 }
 
 
