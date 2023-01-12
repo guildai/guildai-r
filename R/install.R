@@ -73,6 +73,10 @@ install_guild <-
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL), mustWork = FALSE)
   unlink(venv, recursive = TRUE)
   python <- normalizePath(python)
+  # notable venv args we could add:
+  # --clear  alternative to 'unlink()' call above
+  # --upgrade-deps alternative to the 'pip install pip' call below,
+  #                 only added in Py version 3.9 though
   system2t(python, c("-m", "venv", shQuote(venv)), echo_cmd = TRUE)
   python <- if (is_windows())
    file.path(venv, "Scripts", "python.exe", fsep = "\\") else
