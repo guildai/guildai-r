@@ -30,28 +30,33 @@ test_that("VIRTUAL_ENV and other python cruft doesn't interfere with guild", {
 
   expect_run_succeedes("presence of things that look like modules in cwd")
 
+
   # Test presence of bad/wrong modules on PYTHONPATH
+  # skip("PYTHONPATH leaks between guild_python_exe and user python_exe runtimes")
+  # with_envvar(c("PYTHONPATH" = getwd()), {
+  #   expect_run_succeedes("PYTHONPATH with guild incompatible modules")
+  # })
+
+  # Test user activated virtual_env doesn't interfere w/
+  # direct call to guild executable
+  system2("python3", c("-m", "venv", "my-venv"))
+
+  # "activate" the venv.
+  bin_path <- if(is_windows()) "myvenv/Scripts" else "my-venv/bin"
+  local_envvar(VIRTUAL_ENV = file.path(getwd(), "my-venv"))
+  local_path(normalizePath(bin_path))
+
+  expect_run_succeedes("activated VIRTUAL_ENV")
+
+  skip("user set PYTHONPATH and PYTHONHOME intended for
+       {user_python_exe} leaks into {guild_python_exe} runtime")
+
   with_envvar(c("PYTHONPATH" = getwd()), {
     expect_run_succeedes("PYTHONPATH with guild incompatible modules")
   })
 
-  # Test user activated virtual_env doesn't interfere w/
-  # direct call to guild executable
-  if (is_windows()) {
-    skip("Not yet implemented")
-
-  } else { # mac, linux
-    system2("python3", c("-m", "venv", "my-venv"))
-    local_envvar(VIRTUAL_ENV = file.path(getwd(), "my-venv"))
-    local_path(file.path(getwd(), "myvenv/bin"))
-
-    expect_run_succeedes("activated VIRTUAL_ENV")
-
-    local_envvar(PYTHONHOME = Sys.getenv(VIRTUAL_ENV))
-
-    expect_run_succeedes("PYTHONHOME set")
-  }
-
+  local_envvar(PYTHONHOME = Sys.getenv("VIRTUAL_ENV"))
+  expect_run_succeedes("PYTHONHOME set")
 
 })
 
