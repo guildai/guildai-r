@@ -58,8 +58,10 @@ local_project <- function(files, envir = parent.frame(), name = NULL,
 
 
 # don't echo during tests unless interactively
-if(!interactive())
+if(!interactive()) {
   formals(guild_run)$echo <- FALSE
+  Sys.setenv(LOG_LEVEL = 30)
+}
 
 expect_snapshot_guild_cat_last_output <- function() {
   output <- guild("cat --output", stdout = TRUE)
