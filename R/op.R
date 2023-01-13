@@ -25,7 +25,6 @@ r_script_guild_data <- function(r_script_path) {
   data <- yaml(
     "name" = r_script_path,
     "flags-dest" = r_script_path,
-    "sourcecode" = list(dest = ".", root = getwd()),
     "echo" = TRUE
   )
 
