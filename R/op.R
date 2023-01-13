@@ -1,7 +1,7 @@
 
 
 
-#' @importFrom rlang %||%
+#' @importFrom rlang %||% is_string
 #' @importFrom utils modifyList
 emit_r_script_guild_data <- function(r_script_path = commandArgs(TRUE)[1]) {
   print.yaml(r_script_guild_data(r_script_path),
@@ -29,13 +29,19 @@ r_script_guild_data <- function(r_script_path) {
     "echo" = TRUE
   )
 
-  if(is_windows()) {
+  if (is_windows()) {
     # need winslashs in file paths
-    for(potential_path in list("name", "flags-dest",
-                               c("sourcecode", "root"),
-                               c("sourcecode", "dest")))
+    for (potential_path in list("name",
+                                "flags-dest",
+                                c("sourcecode", "root"),
+                                c("sourcecode", "dest"))) {
+      path <- tryCatch(data[[potential_path]], error = function(e) NULL)
+      if (!is_string(path))
+        next
+
       data[[potential_path]] <-
         gsub("/", "\\", data[[potential_path]], fixed = TRUE)
+    }
   }
 
 
