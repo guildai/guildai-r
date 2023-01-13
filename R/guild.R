@@ -15,6 +15,10 @@ guild <- function(command = NULL, ...,
 
   exec <- if(wait) system2t else processx::process$new
   exec(find_guild(), args, env = env, stdout = stdout, stderr = stderr)
+  # python <- file.path(dirname(find_guild()), "python")
+  # exec(python, c("-Im", "guild.main_bootstrap", args),
+  #      env = env, stdout = stdout, stderr = stderr)
+
 }
 
 

@@ -67,11 +67,14 @@ find_python_from_registry <- function() {
 #'
 #' ## Install local development version:
 #' # install_guild(c("-e", "~/guild/guildai"))
+
+
+
 install_guild <-
   function(guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
            python = find_python()) {
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL), mustWork = FALSE)
-  unlink(venv, recursive = TRUE)
+  unlink(venv, recursive = TRUE, force = TRUE)
   python <- normalizePath(python)
   # notable venv args we could add:
   # --clear  alternative to 'unlink()' call above
@@ -81,18 +84,30 @@ install_guild <-
   python <- if (is_windows())
    file.path(venv, "Scripts", "python.exe", fsep = "\\") else
    file.path(venv, "bin", "python")
+
   pip_install <- function(...)
-    system2t(python, c("-m", "pip", "install", "--upgrade", "--no-user", ...),
+    system2t(python, c("-I", "-m", "pip", "install",
+                       "--no-user", "--upgrade",
+                       "--no-warn-script-location",
+                       "--disable-pip-version-check",
+                       ...),
+                       #"--force-reinstall", ...), #  "--isolated", -IE
              echo_cmd = TRUE)
-  pip_install("pip", "wheel", "setuptools")
+  pip_install("--ignore-installed", "pip", "wheel", "setuptools")
   pip_install(guildai)
+  isolated_sys_path <-
+    system2(python, c("-I", "-c",
+                      shQuote("import sys; [print(p) for p in sys.path]")),
+            stdout = TRUE)
+  writeLines(isolated_sys_path, sprintf("%s._pth",sub("\\.exe$", "", python)))
   if (is_windows())
     file.path(venv, "Scripts", "guild.exe", fsep = "\\") else
     file.path(venv, "bin", "guild")
 }
 
 
-
+# install_guild(c("-e", normalizePath("~/guild/guildai")), reticulate::install_python())
+# install_guild(c(normalizePath("~/guild/guildai")), reticulate::install_python())
 find_guild <- function() {
   if (is_windows())
     if (file.exists(guild <-
