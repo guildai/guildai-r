@@ -41,7 +41,7 @@ find_python_from_registry <- function() {
 #' Install guildai core
 #'
 #' This installs the `guild` executable for use by the R package. It creates
-#' a python virtual environment private to the R package and installs
+#' an isolated python virtual environment private to the R package and installs
 #' guildai into it. Repeated calls to `install_guild()` result in a
 #' fresh installation.
 #'
@@ -63,19 +63,15 @@ find_python_from_registry <- function() {
 #' ## Install development version
 #' # install_guild(
 #' #   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
-#' #   python = reticulate::install_python())
+#' #   python = reticulate::install_python("3.10:latest"))
 #'
 #' ## Install local development version:
 #' # install_guild(c("-e", "~/guild/guildai"))
-
-
-
 install_guild <-
   function(guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
            python = find_python()) {
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL), mustWork = FALSE)
   unlink(venv, recursive = TRUE, force = TRUE)
-  python <- normalizePath(python)
   # notable venv args we could add:
   # --clear  alternative to 'unlink()' call above
   # --upgrade-deps alternative to the 'pip install pip' call below,
@@ -86,7 +82,7 @@ install_guild <-
    file.path(venv, "bin", "python")
 
   pip_install <- function(...)
-    system2t(python, c("-I", "-m", "pip", "install",
+    system2t(python, c("-Im", "pip", "install",
                        "--no-user", "--upgrade",
                        "--no-warn-script-location",
                        "--disable-pip-version-check",
@@ -95,11 +91,27 @@ install_guild <-
              echo_cmd = TRUE)
   pip_install("--ignore-installed", "pip", "wheel", "setuptools")
   pip_install(guildai)
+
+  # write out a ._pth file to ensure this python installation is isolated.
+  # Meaning, user set VIRTUAL_ENV, PYTHONPATH, and similar don't
+  # leak into the guild core internal python runtime.
   isolated_sys_path <-
     system2(python, c("-I", "-c",
                       shQuote("import sys; [print(p) for p in sys.path]")),
             stdout = TRUE)
   writeLines(isolated_sys_path, sprintf("%s._pth",sub("\\.exe$", "", python)))
+
+  # ._pth files don't work correctly on non-Windows prior to Python 3.11.
+  # For this reason we also modify the shebang on non-Windows platforms.
+  # As an alternative, we could in `guild()` call `python -I -m guild.main_bootstrap`
+  # instead of the console_script entry point `guild`.
+  if(!is_windows()) {
+    guild <- file.path(venv, "bin/guild")
+    shebang_txt <- readLines(guild)
+    shebang_txt[1] <- paste(shebang_txt[1], "-I")
+    writeLines(shebang_txt, guild)
+  }
+
   if (is_windows())
     file.path(venv, "Scripts", "guild.exe", fsep = "\\") else
     file.path(venv, "bin", "guild")
@@ -108,7 +120,10 @@ install_guild <-
 
 # install_guild(c("-e", normalizePath("~/guild/guildai")), reticulate::install_python())
 # install_guild(c(normalizePath("~/guild/guildai")), reticulate::install_python())
+
 find_guild <- function() {
+  if (file.exists(guild <- Sys.which("guild")))
+    return(normalizePath(as.vector(guild)))
   if (is_windows())
     if (file.exists(guild <-
                     file.path(rappdirs::user_data_dir("r-guildai", NULL),
@@ -117,10 +132,9 @@ find_guild <- function() {
   if (file.exists(guild <-
                   file.path(rappdirs::user_data_dir("r-guildai", NULL), "bin", "guild")))
     return(normalizePath(as.vector(guild)))
-  if (file.exists(guild <- Sys.which("guild")))
-    return(normalizePath(as.vector(guild)))
   install_guild()
 }
+
 
 
 #' Install guild for usage in the Terminal
@@ -128,8 +142,14 @@ find_guild <- function() {
 #' This function makes available the `guild` executable installed by
 #' `install_guild()` for usage in the Terminal.
 #'
-#' @param dest Directory where to place the `guild` executable. This should be a
-#'   location on the `PATH`.
+#' Note that the guild executable installed by the R function
+#' `install_guild()` is not able to run python operations. To run python
+#' operations with guild, you must install guild into the target python
+#' installation with `pip install guildai`, and ensure that the desired guild
+#' executable is on the `PATH`.
+#'
+#' @param dest Directory where to place the `guild` executable. This should
+#'   be a location on the `PATH`.
 #' @param completions Whether to also install shell completion helpers.
 #'
 #' @return path to the installed guild executable, invisibly.

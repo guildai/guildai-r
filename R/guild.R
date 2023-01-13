@@ -14,7 +14,15 @@ guild <- function(command = NULL, ...,
     args <- c("-D", "5678", args)
 
   exec <- if(wait) system2t else processx::process$new
+  # exe <- Sys.which("guild")
+  # if(!nzchar(exe)) {
+  #   exe <- file.path(dirname(find_guild()),
+  #                    if(is_windows()) "python.exe" else "python")
+  #   args <- c("-Im guild.main_bootstrap", args)
+  # }
+  # exec(exe, args, env = env, stdout = stdout, stderr = stderr)
   exec(find_guild(), args, env = env, stdout = stdout, stderr = stderr)
+
   # python <- file.path(dirname(find_guild()), "python")
   # exec(python, c("-Im", "guild.main_bootstrap", args),
   #      env = env, stdout = stdout, stderr = stderr)

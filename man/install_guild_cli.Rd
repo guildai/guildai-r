@@ -10,8 +10,8 @@ install_guild_cli(
 )
 }
 \arguments{
-\item{dest}{Directory where to place the \code{guild} executable. This should be a
-location on the \code{PATH}.}
+\item{dest}{Directory where to place the \code{guild} executable. This should
+be a location on the \code{PATH}.}
 
 \item{completions}{Whether to also install shell completion helpers.}
 }
@@ -21,4 +21,11 @@ path to the installed guild executable, invisibly.
 \description{
 This function makes available the \code{guild} executable installed by
 \code{install_guild()} for usage in the Terminal.
+}
+\details{
+Note that the guild executable installed by the R function
+\code{install_guild()} is not able to run python operations. To run python
+operations with guild, you must install guild into the target python
+installation with \verb{pip install guildai}, and ensure that the desired guild
+executable is on the \code{PATH}.
 }

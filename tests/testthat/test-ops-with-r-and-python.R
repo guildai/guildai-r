@@ -4,30 +4,32 @@
 test_that("VIRTUAL_ENV and other python cruft doesn't interfere with guild", {
 
   local_project(test_resource("use-python.R"))
-   # browser(); Sys.setenv(DEBUGR=1)
+  # browser(); Sys.setenv(DEBUGR=1)
 
   if(!nzchar(Sys.which("python")) && !nzchar(guildai:::find_python()))
     withr::local_path(guildai:::find_python())
 
-  skip_if(!nzchar(Sys.which("python")))
+  skip_if(!nzchar(Sys.which("python")), message = "no python on PATH")
 
   expect_single_run_succeedes <- function(info = NULL) {
     guild_run("use-python.R")
     expect_identical(runs_info(1L)$exit_status, 0L,
                      info = info)
-    runs_delete()
+    guild("runs delete", stderr = FALSE)
   }
 
   expect_batch_run_succeedes <- function(info = NULL) {
     guild_run("use-python.R", flags = list(n = 1:3))
     expect_identical(runs_info(1:3)$exit_status, c(0L, 0L, 0L),
                      info = info)
-    runs_delete()
+    guild("runs delete", stderr = FALSE)
   }
 
+  do_test_batch <- TRUE
   expect_run_succeedes <- function(info) {
     expect_single_run_succeedes(info)
-    expect_batch_run_succeedes(info)
+    if(do_test_batch)
+      expect_batch_run_succeedes(info)
   }
 
   expect_run_succeedes("base case")
@@ -40,8 +42,16 @@ test_that("VIRTUAL_ENV and other python cruft doesn't interfere with guild", {
     writeLines('raise Exception("I should not be evaluated")', file.path("click", fi))
   }
 
-  expect_run_succeedes("presence of things that look like modules in cwd")
+  do_test_batch <- is_windows() || local({
+    # ._pth files only work correctly in Python >= 3.11 on non-Windows
+    shebang <- readLines(guildai:::find_guild(), 1)
+    python <- str_drop_prefix(shebang, "#!")
+    py_ver <- system(paste(python, "--version"), intern = TRUE)
+    py_ver <- numeric_version(str_drop_prefix(py_ver, "Python "))
+    isTRUE(py_ver >= "3.11")
+  })
 
+  expect_run_succeedes("presence of things that look like modules in cwd")
 
   # Test presence of bad/wrong modules on PYTHONPATH
   with_envvar(c("PYTHONPATH" = getwd()), {
@@ -63,6 +73,8 @@ test_that("VIRTUAL_ENV and other python cruft doesn't interfere with guild", {
     expect_run_succeedes("PYTHONPATH set")
   })
 
+  if(!do_test_batch)
+    skip("user set PYTHON* vars leak into guild_python_exe runtime on this platform")
 
   # skip("user set PYTHONHOME leaks into guild_python_exe runtime")
   # local_envvar(PYTHONHOME = Sys.getenv("VIRTUAL_ENV"))
