@@ -7,6 +7,7 @@ Authors@R: c(
          email = "tomasz.kalinowski@rstudio.com"))
 Description: R interface to guildai.
 License: Apache License 2.0
+SystemRequirements: Python (>= 3.6.0)
 Imports:
   jsonlite,
   rappdirs,
