@@ -108,7 +108,23 @@ install_guild <-
   if(!is_windows()) {
     guild <- file.path(venv, "bin/guild")
     shebang_txt <- readLines(guild)
-    shebang_txt[1] <- paste(shebang_txt[1], "-I")
+    if(grepl("/python[0-9.]*$", shebang_txt[1]))
+      shebang_txt[1] <- paste(shebang_txt[1], "-I")
+    else if(grepl("exec", shebang_txt[2])) {
+      # on macOS, the console_script entry point looks like this:
+      ## #!/bin/sh
+      ## '''exec' "/Users/tomasz/Library/Application Support/r-guildai/bin/python" "$0" "$@"
+      ## ' '''
+      ## -*- coding: utf-8 -*-
+      ## import re
+      ## ...
+      x <- shebang_txt[2]
+      if(endsWith(x, ' "$0" "$@"')) {
+        x <- str_drop_suffix(x, ' "$0" "$@"')
+        x <- paste(x, "-I", '"$0" "$@"')
+        shebang_txt[2] <- x
+      }
+    }
     writeLines(shebang_txt, guild)
   }
 
