@@ -99,7 +99,9 @@ install_guild <-
     system2(python, c("-I", "-c",
                       shQuote("import sys; [print(p) for p in sys.path]")),
             stdout = TRUE)
-  writeLines(isolated_sys_path, sprintf("%s._pth",sub("\\.exe$", "", python)))
+  python._pth <- sprintf("%s._pth",sub("\\.exe$", "", python))
+  message("Writing: ", python._pth)
+  writeLines(isolated_sys_path, python._pth)
 
   # ._pth files don't work correctly on non-Windows prior to Python 3.11.
   # For this reason we also modify the shebang on non-Windows platforms.
@@ -128,9 +130,11 @@ install_guild <-
     writeLines(shebang_txt, guild)
   }
 
-  if (is_windows())
+  guild_exe <- if (is_windows())
     file.path(venv, "Scripts", "guild.exe", fsep = "\\") else
     file.path(venv, "bin", "guild")
+
+  guild_exe
 }
 
 
