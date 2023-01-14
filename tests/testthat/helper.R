@@ -51,6 +51,8 @@ local_project <- function(files, envir = parent.frame(), name = NULL,
   owd <- setwd(nwd)
   file.copy(files, basename(files))
 
+  guild_home <- file.path(getwd(), ".guild")
+  dir.create(guild_home)
   old_guild_home <- Sys.getenv("GUILD_HOME", NA_character_)
   Sys.setenv("GUILD_HOME" = file.path(getwd(), ".guild"))
   invisible()
