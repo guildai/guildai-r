@@ -28,20 +28,20 @@ r_script_guild_data <- function(r_script_path) {
     "echo" = TRUE
   )
 
-  if (is_windows()) {
-    # need winslashs in file paths
-    for (potential_path in list("name",
-                                "flags-dest",
-                                c("sourcecode", "root"),
-                                c("sourcecode", "dest"))) {
-      path <- tryCatch(data[[potential_path]], error = function(e) NULL)
-      if (!is_string(path))
-        next
-
-      data[[potential_path]] <-
-        gsub("/", "\\", data[[potential_path]], fixed = TRUE)
-    }
-  }
+  # if (is_windows()) {
+  #   # need winslashs in file paths
+  #   for (potential_path in list("name",
+  #                               "flags-dest",
+  #                               c("sourcecode", "root"),
+  #                               c("sourcecode", "dest"))) {
+  #     path <- tryCatch(data[[potential_path]], error = function(e) NULL)
+  #     if (!is_string(path))
+  #       next
+  #
+  #     data[[potential_path]] <-
+  #       gsub("/", "\\", data[[potential_path]], fixed = TRUE)
+  #   }
+  # }
 
 
   is_anno <- startsWith(trimws(text, "left"), "#|")
@@ -108,19 +108,17 @@ r_script_guild_data <- function(r_script_path) {
     cl$echo <- echo
   cl <- call(":::", quote(guildai), cl)
 
-  data$exec <- sprintf("%s -e %s",
-                       shQuote(rscript_exe()),
-                       shQuote(deparse1(cl)))
+  data$exec <- sprintf('%s -e %s',
+                       shQuote(rscript_exe(), type = "sh"),
+                       shQuote(deparse1(cl), type = "sh"))
 
   data
 }
 
 
 rscript_exe <- function() {
-  # TODO: do we need arch in the file path on windows?
-  normalizePath(
-    file.path(R.home("bin"),
-            if(is_windows()) "Rscript.exe" else "Rscript"))
+  file.path(R.home("bin"),
+            if (is_windows()) "Rscript.exe" else "Rscript")
 }
 
 
