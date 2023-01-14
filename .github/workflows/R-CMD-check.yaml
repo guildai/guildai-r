@@ -68,8 +68,8 @@ jobs:
         shell: Rscript {0}
         run: guildai::install_guild("./core")
 
-      - if: runner.os == 'Windows'
-        uses: mxschmitt/action-tmate@v3
+      # - if: runner.os == 'Windows'
+      #   uses: mxschmitt/action-tmate@v3
 
       - uses: r-lib/actions/check-r-package@v2
         with:
