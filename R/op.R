@@ -13,8 +13,15 @@ emit_r_script_guild_data <- function(r_script_path = commandArgs(TRUE)[1]) {
 r_script_guild_data <- function(r_script_path) {
 
   r_script_path <- normalizePath(r_script_path, winslash = "/")
-  if(startsWith(r_script_path, getwd()))
-    r_script_path <- paste0(".", str_drop_prefix(r_script_path, getwd()))
+  # we need to convert this to a relative path to the guild cwd/project root.
+  # for now we assume that the sourcecode.root == cwd() and sourcecode.dest == "."
+  # TODO: make sure the deparsed call in the exec string contains a relative path
+  # to the script in the RUN_DIR, if user supplied non-default 'root' or 'dest' or
+  # launched from not the project dir.
+  cwd <- normalizePath(getwd(), winslash = "/")
+  if(!startsWith(r_script_path, cwd))
+    stop("the script path must be under the current working directory")
+  r_script_path <- paste0(".", str_drop_prefix(r_script_path, cwd))
   r_script_path <- str_drop_prefix(r_script_path, "./")
 
   text <- readLines(r_script_path)

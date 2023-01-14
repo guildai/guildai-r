@@ -92,8 +92,9 @@ test_that("rscript op data inference", {
 
   # test frontmatter parsing works the same w/o shebang
   writeLines(readLines(test_resource("hash-pipe-anno.R"))[-1],
-             w_o_shebang <- tempfile(fileext = ".R"))
+             w_o_shebang <- tempfile(tmpdir = ".", fileext = ".R"))
   op2 <- r_script_guild_data(w_o_shebang)
+  unlink(w_o_shebang)
   class(op2) <- NULL
   op $exec <- op $name <- op $`flags-dest` <-
   op2$exec <- op2$name <- op2$`flags-dest` <-
