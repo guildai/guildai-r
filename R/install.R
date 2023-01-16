@@ -45,7 +45,7 @@ find_python_from_registry <- function() {
 #' guildai into it. Repeated calls to `install_guild()` result in a
 #' fresh installation.
 #'
-#' It require that a suitable python version is
+#' It requires that a suitable python version is
 #' available on the system.
 #'
 #' @param guildai Character vector of arguments passed directly to `pip
@@ -72,6 +72,7 @@ install_guild <-
            python = find_python()) {
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL), mustWork = FALSE)
   unlink(venv, recursive = TRUE, force = TRUE)
+
   # notable venv args we could add:
   # --clear  alternative to 'unlink()' call above
   # --upgrade-deps alternative to the 'pip install pip' call below,
@@ -87,7 +88,8 @@ install_guild <-
                        "--no-warn-script-location",
                        "--disable-pip-version-check",
                        ...),
-                       #"--force-reinstall", ...), #  "--isolated", -IE
+                       #"--force-reinstall", ...),
+                       #  "--isolated", -I
              echo_cmd = TRUE)
   pip_install("--ignore-installed", "pip", "wheel", "setuptools")
   pip_install(guildai)
@@ -137,7 +139,9 @@ install_guild <-
   guild_exe
 }
 
-
+# install_guild(
+#   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
+#   python = reticulate::install_python("3.11:latest"))
 # install_guild(c("-e", normalizePath("~/guild/guildai")), reticulate::install_python())
 # install_guild(c(normalizePath("~/guild/guildai")), reticulate::install_python())
 
@@ -174,8 +178,9 @@ find_guild <- function() {
 #'
 #' @return path to the installed guild executable, invisibly.
 #' @export
-install_guild_cli <- function(dest = "~/bin",
-                              completions = basename(Sys.getenv("SHELL")) %in% c("bash", "zsh", "fish")) {
+install_guild_cli <-
+function(dest = "~/bin",
+         completions = basename(Sys.getenv("SHELL")) %in% c("bash", "zsh", "fish")) {
   if(!dir.exists(dest))
     dir.create(dest)
 

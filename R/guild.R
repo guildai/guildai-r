@@ -14,18 +14,7 @@ guild <- function(command = NULL, ...,
     args <- c("-D", "5678", args)
 
   exec <- if(wait) system2t else processx::process$new
-  # exe <- Sys.which("guild")
-  # if(!nzchar(exe)) {
-  #   exe <- file.path(dirname(find_guild()),
-  #                    if(is_windows()) "python.exe" else "python")
-  #   args <- c("-Im guild.main_bootstrap", args)
-  # }
-  # exec(exe, args, env = env, stdout = stdout, stderr = stderr)
   exec(find_guild(), args, env = env, stdout = stdout, stderr = stderr)
-
-  # python <- file.path(dirname(find_guild()), "python")
-  # exec(python, c("-Im", "guild.main_bootstrap", args),
-  #      env = env, stdout = stdout, stderr = stderr)
 
 }
 
@@ -110,24 +99,25 @@ as_cli_args <- function(...) {
 
 #' Launch a guild run
 #'
-#' @param opspec typically path to an R script, but could be an scalar
-#'   string that guild recognizes as a valid operation specification.
-#' @param flags flag values for the run(s)
+#' @param opspec typically a path to an R script, but could be any scalar
+#'   string that guild recognizes as a valid operation.
+#' @param flags flag values for the run(s).
 #'
-#'   - a named list or vector like `c(noise = .3, dropout = .4)`. Lists with
+#'   - A named list or vector like `c(noise = .3, dropout = .4)`. Lists with
 #'   vectors of length greater than 1 are automatically expanded into a grid
 #'   of combinations for a batch of runs. For example, `list(noise = c(.2,
 #'   .3), dropout = c(.4, .5)` expands to a batch of 4 runs.
 #'
-#'   - a dataframe of flags for a batch of runs.
+#'   - A dataframe of flags for a batch of runs, one row per run.
 #'
-#'   - a scalar string like `"noise=.3 dropout=.4"`. Any flags specification
+#'   - A scalar string like `"noise=.3 dropout=.4"`. Any flags specification
 #'   accepted at the terminal is valid here as well.
 #'
 #' @param echo whether output from the run is shown in the current R
 #'   console. Note, this has no effect on whether expressions are echoed in
 #'   the guild run stdout log. To disable echoing of expression in the run
 #'   logs, specify `#| echo: false` in the run script frontmatter.
+#'
 #' @param ... passed on to `guild run`
 #' @inheritDotParams guild_run_cli
 #'

@@ -25,7 +25,7 @@ guildai into it. Repeated calls to \code{install_guild()} result in a
 fresh installation.
 }
 \details{
-It require that a suitable python version is
+It requires that a suitable python version is
 available on the system.
 }
 \examples{

@@ -10,7 +10,8 @@ test_that("guild run", {
 
 
 test_that("guild run", {
-  # flags an be passed in as a bare R list, gets auto grid expanded,
+  # flags can be passed in as a bare R list,
+  # list gets expanded to form a grid,
   # one run per combination
   local_project(test_resource("basic.R"))
   # Sys.setenv("DEBUGR" = 1); browser()
@@ -121,9 +122,6 @@ test_that("guild run w/ flags-dest: config:flags.yml", {
   run_observed_flags <- parse_yaml(guild("cat --output", stdout = TRUE))
   expect_mapequal(modifyList(default_flags, list(b = !default_flags$b)),
                   run_observed_flags)
-
-  ## add tests to support for promotion of `_` to `-`
-  ## do we do the inverse on the way out too?
 
   # because boolean flags are tricky, test the inverse default too
   default_flags$b <- TRUE

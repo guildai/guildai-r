@@ -19,9 +19,6 @@ formals(expect_no_error)$regexp <- NA
 
 
 
-# cat("Using guild:", guildai:::find_guild(), "\n")
-
-
 local_project <- function(files, envir = parent.frame(), name = NULL,
                           delete_on_success = !interactive()) {
   # Similar in semantics to all the withr::local_* functions. It changes the
@@ -59,10 +56,17 @@ local_project <- function(files, envir = parent.frame(), name = NULL,
 }
 
 
+
+if(interactive()) {
+
+  message("Using guild:", guildai:::find_guild())
+
+} else { #if(!interactive()) {
+
 # don't echo during tests unless interactively
-if(!interactive()) {
   formals(guild_run)$echo <- FALSE
   Sys.setenv(LOG_LEVEL = 30)
+
 }
 
 expect_snapshot_guild_cat_last_output <- function() {
@@ -71,9 +75,6 @@ expect_snapshot_guild_cat_last_output <- function() {
   invisible(output)
 }
 
-
-
-# TODO: does guild have away to distinguish between stdout and stderr output?
 
 ll <- function(..., all.files = TRUE, recursive = TRUE, no.. = TRUE) {
   list.files(..., all.files = all.files, recursive = recursive, no.. = no..)

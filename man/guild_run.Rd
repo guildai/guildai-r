@@ -7,16 +7,16 @@
 guild_run(opspec = "train.R", flags = NULL, ..., echo = TRUE)
 }
 \arguments{
-\item{opspec}{typically path to an R script, but could be an scalar
-string that guild recognizes as a valid operation specification.}
+\item{opspec}{typically a path to an R script, but could be any scalar
+string that guild recognizes as a valid operation.}
 
-\item{flags}{flag values for the run(s)
+\item{flags}{flag values for the run(s).
 \itemize{
-\item a named list or vector like \code{c(noise = .3, dropout = .4)}. Lists with
+\item A named list or vector like \code{c(noise = .3, dropout = .4)}. Lists with
 vectors of length greater than 1 are automatically expanded into a grid
 of combinations for a batch of runs. For example, \verb{list(noise = c(.2,   .3), dropout = c(.4, .5)} expands to a batch of 4 runs.
-\item a dataframe of flags for a batch of runs.
-\item a scalar string like \code{"noise=.3 dropout=.4"}. Any flags specification
+\item A dataframe of flags for a batch of runs, one row per run.
+\item A scalar string like \code{"noise=.3 dropout=.4"}. Any flags specification
 accepted at the terminal is valid here as well.
 }}
 
