@@ -8,8 +8,8 @@ guild <- function(command = NULL, ...,
 
   args <- as_cli_args(I(command %||% character()), ...)
 
-  # if(is.na(Sys.getenv("GUILD_HOME", NA_character_)))
-  #   args <- c("-H", shQuote(here(".guild")), args)
+  # TODO: find guild home, maybe emit a warning if none exists.
+
   if(Sys.getenv("DEBUG") == "1")
     args <- c("-D", "5678", args)
 
@@ -237,11 +237,3 @@ guild_view <- function(runs = NULL,
 guild_merge <- function(run = NULL, ...) {
   guild("merge", guild_merge_cli(...), maybe_extract_run_ids(run))
 }
-
-# dummy place holder, because R CMD check otherwise complains:
-#   Namespace in Imports field not imported from: ‘here’
-#     All declared Imports should be used.
-if(FALSE) {
-  here::here()
-}
-
