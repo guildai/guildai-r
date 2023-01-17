@@ -1,5 +1,4 @@
 
-#' @importFrom here here
 #' @importFrom rlang is_string
 guild <- function(command = NULL, ...,
                   stdout = "", stderr = "",
