@@ -48,16 +48,16 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>opspec</dt>
-<dd><p>typically path to an R script, but could be an scalar
-string that guild recognizes as a valid operation specification.</p></dd>
+<dd><p>typically a path to an R script, but could be any scalar
+string that guild recognizes as a valid operation.</p></dd>
 
 
 <dt>flags</dt>
-<dd><p>flag values for the run(s)</p><ul><li><p>a named list or vector like <code>c(noise = .3, dropout = .4)</code>. Lists with
+<dd><p>flag values for the run(s).</p><ul><li><p>A named list or vector like <code>c(noise = .3, dropout = .4)</code>. Lists with
 vectors of length greater than 1 are automatically expanded into a grid
 of combinations for a batch of runs. For example, <code>list(noise = c(.2,   .3), dropout = c(.4, .5)</code> expands to a batch of 4 runs.</p></li>
-<li><p>a dataframe of flags for a batch of runs.</p></li>
-<li><p>a scalar string like <code>"noise=.3 dropout=.4"</code>. Any flags specification
+<li><p>A dataframe of flags for a batch of runs, one row per run.</p></li>
+<li><p>A scalar string like <code>"noise=.3 dropout=.4"</code>. Any flags specification
 accepted at the terminal is valid here as well.</p></li>
 </ul></dd>
 
