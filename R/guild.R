@@ -116,15 +116,20 @@ as_cli_args <- function(...) {
 #'   the guild run stdout log. To disable echoing of expression in the run
 #'   logs, specify `#| echo: false` in the run script frontmatter.
 #'
+#' @param as_job Run the operation as an RStudio background job. This is
+#'   ignored outside of RStudio.
+#'
 #' @param ... passed on to `guild run`
 #' @inheritDotParams guild_run_cli
 #'
 #' @return the return value from `system2()`, invisibly. This function is
 #'   primarily called for its side effect.
 #' @export
-guild_run <- function(opspec = "train.R",
-                      flags = NULL, ...,
-                      echo = TRUE) {
+guild_run <-
+function(opspec = "train.R",
+         flags = NULL, ...,
+         echo = TRUE,
+         as_job = getOption("guildai.run_as_job", TRUE)) {
 
   if (is.data.frame(flags)) {
     fi <- tempfile("guild-batch-flags-", fileext = ".yml")
@@ -148,9 +153,20 @@ guild_run <- function(opspec = "train.R",
   if(length(echo) == 1)
     echo <- c(echo, TRUE)
 
-  guild("run --yes", list(...), opspec, flags,
-        stdout = if(isTRUE(echo[[1L]])) "" else FALSE,
-        stderr = if(isTRUE(echo[[2L]])) "" else FALSE)
+  cl <- call("guild", "run --yes", list(...), opspec, flags,
+              stdout = if(isTRUE(echo[[1L]])) "" else FALSE,
+              stderr = if(isTRUE(echo[[2L]])) "" else FALSE)
+  if(as_job && rstudioapi::isAvailable()) {
+    script <- tempfile("guildai-rstudio-job-", fileext = ".R")
+    cat("guildai:::", deparse1(cl),
+        sep = "", file = script)
+    message(readLines(script))
+    # TODO: pregenerate label for display job name
+    rstudioapi::jobRunScript(script, name = paste("guild run", opspec),
+                             workingDir = getwd())
+    return(invisible())
+  }
+  eval(cl)
 }
 
 
