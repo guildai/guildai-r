@@ -3,7 +3,7 @@
 
 test_that("guild run", {
   local_project(test_resource("basic.R"))
-  # Sys.setenv("DEBUGR" = 1); browser()
+  # Sys.setenv("GUILD_DEBUG_R" = 1); browser()
   guild_run("basic.R")
   expect_equal(nrow(runs_info()), 1L)
 })
@@ -14,7 +14,7 @@ test_that("guild run", {
   # list gets expanded to form a grid,
   # one run per combination
   local_project(test_resource("basic.R"))
-  # Sys.setenv("DEBUGR" = 1); browser()
+  # Sys.setenv("GUILD_DEBUG_R" = 1); browser()
   guild_run("basic.R", flags = list(
     x = c(.1, .2),
     noise = c(.4, .5),
@@ -29,7 +29,7 @@ test_that("guild run", {
 test_that("guild run", {
   # flags an be passed in as a data.frame, one run per row
   local_project(test_resource("basic.R"))
-  # Sys.setenv("DEBUGR" = 1); browser()
+  # Sys.setenv("GUILD_DEBUG_R" = 1); browser()
   guild_run("basic.R", flags = data.frame(
     x = c(.1, .2),
     noise = c(.4, .5),
@@ -236,7 +236,7 @@ test_that("guild run w/ flags-dest: globals; R < 4.0", {
 
   file <- "flags-from-globals-pre-r40.R"
   local_project(test_resource(file))
-  # browser(); Sys.setenv(DEBUGR=1)
+  # browser(); Sys.setenv(GUILD_DEBUG_R=1)
 
   guild_run(file)
   output <- expect_snapshot_guild_cat_last_output()

@@ -4,8 +4,7 @@
 test_that("VIRTUAL_ENV and other python cruft doesn't interfere with guild", {
 
   local_project(test_resource("use-python.R"))
-  # browser();
-  # Sys.setenv(DEBUGR=1)
+  # browser(); Sys.setenv(GUILD_DEBUG_R=1)
 
   if(!nzchar(Sys.which("python")) && !nzchar(guildai:::find_python()))
       withr::local_path(guildai:::find_python())
@@ -85,4 +84,3 @@ test_that("VIRTUAL_ENV and other python cruft doesn't interfere with guild", {
   # expect_run_succeedes("PYTHONHOME set")
 
 })
-

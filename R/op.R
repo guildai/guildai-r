@@ -3,11 +3,9 @@
 
 #' @importFrom rlang %||% is_string
 #' @importFrom utils modifyList
-emit_r_script_guild_data <- function(r_script_path = commandArgs(TRUE)[1]) {
-  print.yaml(r_script_guild_data(r_script_path),
-             c("", if(Sys.getenv("DEBUGR") == "1")
-               "emitted-script-guild-op-data.yml"))
-}
+emit_r_script_guild_data <- function(r_script_path = commandArgs(TRUE)[1])
+  print.yaml(r_script_guild_data(r_script_path))
+
 
 
 r_script_guild_data <- function(r_script_path) {
@@ -231,7 +229,3 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
 #
 #
 # }
-
-
-
-

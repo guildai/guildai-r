@@ -10,12 +10,11 @@ guild <- function(command = NULL, ...,
 
   # TODO: find guild home, maybe emit a warning if none exists.
 
-  if(Sys.getenv("DEBUG") == "1")
+  if(Sys.getenv("GUILD_DEBUG_ATTACH") == "1")
     args <- c("-D", "5678", args)
 
   exec <- if(wait) system2t else processx::process$new
   exec(find_guild(), args, env = env, stdout = stdout, stderr = stderr)
-
 }
 
 

@@ -1,7 +1,7 @@
 test_that("flag names that need quoting work", {
   file <- "tricky-flag-names.R"
   local_project(test_resource(file))
-  # browser(); Sys.setenv(DEBUGR=1)
+  # browser(); Sys.setenv(GUILD_DEBUG_R=1)
 
   guild_run(file)
   expect_snapshot_guild_cat_last_output()

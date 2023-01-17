@@ -252,7 +252,7 @@ modify_r_file_flags <- function(filename, flags, overwrite = FALSE,
     }
 
 
-    if(Sys.getenv("DEBUGR") == 1) {
+    if(Sys.getenv("GUILD_DEBUG_R") == 1) {
       # emit message about the magic we just did
       old_l <- l
       l[[3L]] <- flags[[name]] # replace the value in node
@@ -264,7 +264,7 @@ modify_r_file_flags <- function(filename, flags, overwrite = FALSE,
 
   }
 
-  if(length(flags) && Sys.getenv("DEBUGR") == 1)
+  if(length(flags) && Sys.getenv("GUILD_DEBUG_R") == 1)
     message("Additional flags not injected: \n",
             paste("  ", encode_yaml(flags), collapse = "\n"))
 
