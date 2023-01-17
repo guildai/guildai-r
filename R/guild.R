@@ -117,7 +117,7 @@ as_cli_args <- function(...) {
 #'   logs, specify `#| echo: false` in the run script frontmatter.
 #'
 #' @param as_job Run the operation as an RStudio background job. This is
-#'   ignored outside of RStudio.
+#'   ignored outside of the RStudio IDE.
 #'
 #' @param ... passed on to `guild run`
 #' @inheritDotParams guild_run_cli
@@ -130,6 +130,19 @@ function(opspec = "train.R",
          flags = NULL, ...,
          echo = TRUE,
          as_job = getOption("guildai.run_as_job", TRUE)) {
+
+  if(as_job && rstudioapi::isAvailable()) {
+    cl <- as.call(c(quote(guildai::guild_run),
+                    as.list.environment(environment()),
+                    ...))
+    script <- tempfile("guildai-rstudio-job-", fileext = ".R")
+    writeLines(deparse(cl), script)
+    message(paste0(readLines(script), collapse = "\n"))
+    # TODO: pre-generate label for display job name
+    rstudioapi::jobRunScript(script, name = paste("guild run", opspec),
+                             workingDir = getwd())
+    return(invisible())
+  }
 
   if (is.data.frame(flags)) {
     fi <- tempfile("guild-batch-flags-", fileext = ".yml")
@@ -153,20 +166,9 @@ function(opspec = "train.R",
   if(length(echo) == 1)
     echo <- c(echo, TRUE)
 
-  cl <- call("guild", "run --yes", list(...), opspec, flags,
-              stdout = if(isTRUE(echo[[1L]])) "" else FALSE,
-              stderr = if(isTRUE(echo[[2L]])) "" else FALSE)
-  if(as_job && rstudioapi::isAvailable()) {
-    script <- tempfile("guildai-rstudio-job-", fileext = ".R")
-    cat("guildai:::", deparse1(cl),
-        sep = "", file = script)
-    message(readLines(script))
-    # TODO: pregenerate label for display job name
-    rstudioapi::jobRunScript(script, name = paste("guild run", opspec),
-                             workingDir = getwd())
-    return(invisible())
-  }
-  eval(cl)
+  guild("run --yes", list(...), opspec, flags,
+        stdout = if(isTRUE(echo[[1L]])) "" else FALSE,
+        stderr = if(isTRUE(echo[[2L]])) "" else FALSE)
 }
 
 

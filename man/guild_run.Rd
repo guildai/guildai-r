@@ -4,7 +4,13 @@
 \alias{guild_run}
 \title{Launch a guild run}
 \usage{
-guild_run(opspec = "train.R", flags = NULL, ..., echo = TRUE)
+guild_run(
+  opspec = "train.R",
+  flags = NULL,
+  ...,
+  echo = TRUE,
+  as_job = getOption("guildai.run_as_job", TRUE)
+)
 }
 \arguments{
 \item{opspec}{typically a path to an R script, but could be any scalar
@@ -76,6 +82,9 @@ accepted at the terminal is valid here as well.
 console. Note, this has no effect on whether expressions are echoed in
 the guild run stdout log. To disable echoing of expression in the run
 logs, specify \verb{#| echo: false} in the run script frontmatter.}
+
+\item{as_job}{Run the operation as an RStudio background job. This is
+ignored outside of the RStudio IDE.}
 }
 \value{
 the return value from \code{system2()}, invisibly. This function is
