@@ -132,6 +132,8 @@ install_guild <-
     writeLines(shebang_txt, guild)
   }
 
+  message("Finished installing guildai!")
+
   guild_exe <- if (is_windows())
     file.path(venv, "Scripts", "guild.exe", fsep = "\\") else
     file.path(venv, "bin", "guild")

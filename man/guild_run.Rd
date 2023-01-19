@@ -32,8 +32,6 @@ accepted at the terminal is valid here as well.
     \item{\code{label}}{Set a label for the run.}
     \item{\code{tag}}{Associate TAG with run. May be used multiple times.}
     \item{\code{comment}}{Comment associated with the run.}
-    \item{\code{edit_comment}}{(bool) Use an editor to type a comment.}
-    \item{\code{edit_flags}}{(bool) Use an editor to review and modify flags.}
     \item{\code{run_dir}}{Use alternative run directory DIR. Cannot be used with \code{stage}.}
     \item{\code{stage}}{(bool) Stage an operation.}
     \item{\code{start}}{Start a staged run or restart an existing run. Cannot be used with \code{proto} or \code{run_dir}.}
@@ -45,7 +43,6 @@ accepted at the terminal is valid here as well.
     \item{\code{batch_label}}{Label to use for batch runs. Ignored for non-batch runs.}
     \item{\code{batch_tag}}{Associate TAG with batch. Ignored for non-batch runs. May be used multiple times.}
     \item{\code{batch_comment}}{Comment associated with batch.}
-    \item{\code{edit_batch_comment}}{(bool) Use an editor to type a batch comment.}
     \item{\code{optimizer}}{Optimize the run using the specified algorithm. See Optimizing Runs for more information.}
     \item{\code{optimize}}{(bool) Optimize the run using the default optimizer.}
     \item{\code{minimize}}{Column to minimize when running with an optimizer. See help for compare command for details specifying a column. May not be used with \code{maximize}.}

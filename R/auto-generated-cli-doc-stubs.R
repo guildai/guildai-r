@@ -196,8 +196,6 @@
 #' @param label Set a label for the run.
 #' @param tag Associate TAG with run. May be used multiple times.
 #' @param comment Comment associated with the run.
-#' @param edit_comment (bool) Use an editor to type a comment.
-#' @param edit_flags (bool) Use an editor to review and modify flags.
 #' @param run_dir Use alternative run directory DIR. Cannot be used with `stage`.
 #' @param stage (bool) Stage an operation.
 #' @param start Start a staged run or restart an existing run. Cannot be used with `proto` or `run_dir`.
@@ -209,7 +207,6 @@
 #' @param batch_label Label to use for batch runs. Ignored for non-batch runs.
 #' @param batch_tag Associate TAG with batch. Ignored for non-batch runs. May be used multiple times.
 #' @param batch_comment Comment associated with batch.
-#' @param edit_batch_comment (bool) Use an editor to type a batch comment.
 #' @param optimizer Optimize the run using the specified algorithm. See Optimizing Runs for more information.
 #' @param optimize (bool) Optimize the run using the default optimizer.
 #' @param minimize Column to minimize when running with an optimizer. See help for compare command for details specifying a column. May not be used with `maximize`.
@@ -241,19 +238,19 @@
 #' @param test_sourcecode (bool) Test source code selection.
 #' @param test_flags (bool) Test flag configuration.
 guild_run_cli <-
-function (..., label = NULL, tag = NULL, comment = NULL, edit_comment = FALSE,
-edit_flags = FALSE, run_dir = NULL, stage = FALSE, start = NULL,
-restart = NULL, proto = NULL, force_sourcecode = FALSE, gpus = NULL,
-no_gpus = FALSE, batch_label = NULL, batch_tag = NULL, batch_comment = NULL,
-edit_batch_comment = FALSE, optimizer = NULL, optimize = FALSE,
-minimize = NULL, maximize = NULL, opt_flag = NULL, max_trials = NULL,
-trials = NULL, stage_trials = FALSE, remote = NULL, force_flags = FALSE,
-force_deps = FALSE, stop_after = NULL, fail_on_trial_error = FALSE,
-needed = FALSE, background = FALSE, pidfile = NULL, no_wait = FALSE,
-save_trials = NULL, keep_run = FALSE, keep_batch = FALSE,
-dep = NULL, quiet = FALSE, print_cmd = FALSE, print_env = FALSE,
-print_trials = FALSE, help_model = FALSE, help_op = FALSE,
-test_output_scalars = NULL, test_sourcecode = FALSE, test_flags = FALSE)
+function (..., label = NULL, tag = NULL, comment = NULL, run_dir = NULL,
+stage = FALSE, start = NULL, restart = NULL, proto = NULL,
+force_sourcecode = FALSE, gpus = NULL, no_gpus = FALSE, batch_label = NULL,
+batch_tag = NULL, batch_comment = NULL, optimizer = NULL,
+optimize = FALSE, minimize = NULL, maximize = NULL, opt_flag = NULL,
+max_trials = NULL, trials = NULL, stage_trials = FALSE, remote = NULL,
+force_flags = FALSE, force_deps = FALSE, stop_after = NULL,
+fail_on_trial_error = FALSE, needed = FALSE, background = FALSE,
+pidfile = NULL, no_wait = FALSE, save_trials = NULL, keep_run = FALSE,
+keep_batch = FALSE, dep = NULL, quiet = FALSE, print_cmd = FALSE,
+print_env = FALSE, print_trials = FALSE, help_model = FALSE,
+help_op = FALSE, test_output_scalars = NULL, test_sourcecode = FALSE,
+test_flags = FALSE)
 {
 as_cli_args(as.list.environment(environment()), ...)
 }
@@ -782,6 +779,7 @@ as_cli_args(as.list.environment(environment()), ...)
 #' @param short_id (bool) Use short ID.
 #' @param attr Show specified run attribute rather than run ID.
 #' @param path (bool) Show run path.
+#' @param dir (bool) Show run path.
 #' @param filter Filter runs using a filter expression. See Filter by Expression above for details..
 #' @param operation Filter runs with operations matching `VAL`.
 #' @param label Filter runs with labels matching VAL. To show unlabeled runs, use `unlabeled`.
@@ -800,7 +798,7 @@ as_cli_args(as.list.environment(environment()), ...)
 #' @param staged (bool) Filter only staged runs.
 guild_select_cli <-
 function (..., all = FALSE, min = NULL, max = NULL, short_id = FALSE,
-attr = NULL, path = FALSE, filter = NULL, operation = NULL,
+attr = NULL, path = FALSE, dir = FALSE, filter = NULL, operation = NULL,
 label = NULL, unlabeled = FALSE, tag = NULL, comment = NULL,
 marked = FALSE, unmarked = FALSE, started = NULL, digest = NULL,
 running = FALSE, completed = FALSE, error = FALSE, terminated = FALSE,

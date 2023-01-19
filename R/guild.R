@@ -138,7 +138,6 @@ function(opspec = "train.R",
     script <- tempfile("guildai-rstudio-job-", fileext = ".R")
     writeLines(deparse(cl), script)
     message(paste0(readLines(script), collapse = "\n"))
-    # TODO: pre-generate label for display job name
     rstudioapi::jobRunScript(script, name = paste("guild run", opspec),
                              workingDir = getwd())
     return(invisible())

@@ -13,6 +13,7 @@ guild_select_cli(
   short_id = FALSE,
   attr = NULL,
   path = FALSE,
+  dir = FALSE,
   filter = NULL,
   operation = NULL,
   label = NULL,
@@ -45,6 +46,8 @@ guild_select_cli(
 \item{attr}{Show specified run attribute rather than run ID.}
 
 \item{path}{(bool) Show run path.}
+
+\item{dir}{(bool) Show run path.}
 
 \item{filter}{Filter runs using a filter expression. See Filter by Expression above for details..}
 

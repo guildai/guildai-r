@@ -163,7 +163,11 @@ gen_wrapper_text <- function(command, passes_on_to = NULL, omit = NULL) {
 writeLines(c %(% {
 
   gen_wrapper_text("run", omit = c(
-    "break", "break_on_error", "random_seed", "debug_sourcecode"))
+    # python specific options
+    "break", "break_on_error", "random_seed", "debug_sourcecode",
+
+    # launching EDITOR in the IDE R console doesn't work well.
+    "edit_comment", "edit_flags", "edit_batch_comment"))
   gen_wrapper_text("api runs")
   gen_wrapper_text("view")
   gen_wrapper_text("merge")

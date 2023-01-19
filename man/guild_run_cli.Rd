@@ -10,8 +10,6 @@ guild_run_cli(
   label = NULL,
   tag = NULL,
   comment = NULL,
-  edit_comment = FALSE,
-  edit_flags = FALSE,
   run_dir = NULL,
   stage = FALSE,
   start = NULL,
@@ -23,7 +21,6 @@ guild_run_cli(
   batch_label = NULL,
   batch_tag = NULL,
   batch_comment = NULL,
-  edit_batch_comment = FALSE,
   optimizer = NULL,
   optimize = FALSE,
   minimize = NULL,
@@ -65,10 +62,6 @@ guild_run_cli(
 
 \item{comment}{Comment associated with the run.}
 
-\item{edit_comment}{(bool) Use an editor to type a comment.}
-
-\item{edit_flags}{(bool) Use an editor to review and modify flags.}
-
 \item{run_dir}{Use alternative run directory DIR. Cannot be used with \code{stage}.}
 
 \item{stage}{(bool) Stage an operation.}
@@ -90,8 +83,6 @@ guild_run_cli(
 \item{batch_tag}{Associate TAG with batch. Ignored for non-batch runs. May be used multiple times.}
 
 \item{batch_comment}{Comment associated with batch.}
-
-\item{edit_batch_comment}{(bool) Use an editor to type a batch comment.}
 
 \item{optimizer}{Optimize the run using the specified algorithm. See Optimizing Runs for more information.}
 
