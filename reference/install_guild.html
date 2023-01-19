@@ -51,21 +51,18 @@ fresh installation.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">install_guild</span><span class="op">(</span></span>
-<span>  guildai <span class="op">=</span> <span class="st">"https://api.github.com/repos/guildai/guildai/tarball/HEAD"</span>,</span>
-<span>  python <span class="op">=</span> <span class="fu">find_python</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">install_guild</span><span class="op">(</span>guildai <span class="op">=</span> <span class="st">"dev"</span>, python <span class="op">=</span> <span class="fu">find_python</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>guildai</dt>
 <dd><p>Character vector of arguments passed directly to <code>pip install</code>. To install the release version of guildai, this can be
-<code>"guildai"</code>.</p></dd>
+<code>"guildai"</code>. Special values of <code>"release"</code> and <code>"dev"</code> are also accepted.</p></dd>
 
 
 <dt>python</dt>
-<dd><p>Path to a python binary, used to create a private venv.</p></dd>
+<dd><p>Path to a python binary, used to create a private isolated venv.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -78,6 +75,13 @@ fresh installation.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>It requires that a suitable python version is
 available on the system.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
+    <p><code>install_guild()</code> installs guild as an isolated VM. For guild to
+run a python operation, the python package <code>guildai</code> must be installed
+in the python library where it will be used, E.g., with <code>pip install guildai</code>
+or <code>reticulate::py_install()</code>.</p>
     </div>
 
     <div class="section level2">
