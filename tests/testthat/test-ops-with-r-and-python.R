@@ -1,5 +1,4 @@
 
-# TODO: should flags go in ... ? e.g. guild_run(op, flagx = 1, flagy = 2)?
 
 test_that("VIRTUAL_ENV and other python cruft doesn't interfere with guild", {
 

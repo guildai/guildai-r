@@ -48,10 +48,15 @@ find_python_from_registry <- function() {
 #' It requires that a suitable python version is
 #' available on the system.
 #'
+#' @note `install_guild()` installs guild as an isolated VM. For guild to
+#' run a python operation, the python package `guildai` must be installed
+#' in the python library where it will be used, E.g., with `pip install guildai`
+#' or `reticulate::py_install()`.
+#'
 #' @param guildai Character vector of arguments passed directly to `pip
 #'   install`. To install the release version of guildai, this can be
-#'   `"guildai"`.
-#' @param python Path to a python binary, used to create a private venv.
+#'   `"guildai"`. Special values of `"release"` and `"dev"` are also accepted.
+#' @param python Path to a python binary, used to create a private isolated venv.
 #'
 #' @return path to the `guild` executable
 #' @export
@@ -68,7 +73,7 @@ find_python_from_registry <- function() {
 #' ## Install local development version:
 #' # install_guild(c("-e", "~/guild/guildai"))
 install_guild <-
-  function(guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
+  function(guildai = "dev",
            python = find_python()) {
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL), mustWork = FALSE)
   unlink(venv, recursive = TRUE, force = TRUE)
@@ -82,6 +87,16 @@ install_guild <-
    file.path(venv, "Scripts", "python.exe", fsep = "\\") else
    file.path(venv, "bin", "python")
 
+  if (identical(length(guildai), 1L)) {
+    guildai <- switch(guildai,
+        "development" = ,
+        "dev" = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
+        "release" = ,
+        "rel" = "guildai",
+        guildai
+      )
+  }
+
   pip_install <- function(...)
     system2t(python, c("-Im", "pip", "install",
                        "--no-user", "--upgrade",
@@ -91,6 +106,7 @@ install_guild <-
                        #"--force-reinstall", ...),
                        #  "--isolated", -I
              echo_cmd = TRUE)
+
   pip_install("--ignore-installed", "pip", "wheel", "setuptools")
   pip_install(guildai)
 

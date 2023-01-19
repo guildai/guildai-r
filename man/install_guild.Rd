@@ -4,16 +4,13 @@
 \alias{install_guild}
 \title{Install guildai core}
 \usage{
-install_guild(
-  guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
-  python = find_python()
-)
+install_guild(guildai = "dev", python = find_python())
 }
 \arguments{
 \item{guildai}{Character vector of arguments passed directly to \verb{pip install}. To install the release version of guildai, this can be
-\code{"guildai"}.}
+\code{"guildai"}. Special values of \code{"release"} and \code{"dev"} are also accepted.}
 
-\item{python}{Path to a python binary, used to create a private venv.}
+\item{python}{Path to a python binary, used to create a private isolated venv.}
 }
 \value{
 path to the \code{guild} executable
@@ -27,6 +24,12 @@ fresh installation.
 \details{
 It requires that a suitable python version is
 available on the system.
+}
+\note{
+\code{install_guild()} installs guild as an isolated VM. For guild to
+run a python operation, the python package \code{guildai} must be installed
+in the python library where it will be used, E.g., with \verb{pip install guildai}
+or \code{reticulate::py_install()}.
 }
 \examples{
 ## Install release version:

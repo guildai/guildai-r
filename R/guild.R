@@ -7,8 +7,6 @@ guild <- function(command = NULL, ...,
 
   args <- as_cli_args(I(command %||% character()), ...)
 
-  # TODO: find guild home, maybe emit a warning if none exists.
-
   if(Sys.getenv("GUILD_DEBUG_ATTACH") == "1")
     args <- c("-D", "5678", args)
 
