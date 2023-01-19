@@ -55,7 +55,7 @@ test_that("VIRTUAL_ENV and other python cruft doesn't interfere with guild", {
   expect_run_succeedes("presence of things that look like modules in cwd")
 
   # Test presence of bad/wrong modules on PYTHONPATH
-  with_envvar(c("PYTHONPATH" = getwd()), {
+  with_envvar(c("PYTHONPATH" = normalizePath(getwd())), {
     expect_run_succeedes("PYTHONPATH with guild incompatible modules")
   })
 
