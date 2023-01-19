@@ -192,8 +192,8 @@
 #'   runs_tag("best") %>%
 #'   runs_export("./my-best-runs")
 #'
-#' }
 #' })
+#' }
 #' }
 runs_info <-
 function(runs = NULL, ...,
