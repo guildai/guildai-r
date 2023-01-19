@@ -30,5 +30,5 @@ Suggests:
     testthat (>= 3.0.0),
     withr
 Config/testthat/edition: 3
-URL: https://t-kalinowski.github.io/guildai-r/
+URL: https://t-kalinowski.github.io/guildai-r/, https://github.com/t-kalinowski/guildai-r
 Roxygen: list(markdown = TRUE)

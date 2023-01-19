@@ -2,11 +2,11 @@
 
 #' list guild runs
 #'
-#' Returns a dataframe with information about the known guild runs stored at
-#' the location:
-#' ```r
-#'  Sys.getenv("GUILD_HOME", here::here(".guild"))
-#' ```
+#' Returns a dataframe with information about the guild runs stored in guild
+#' home. Guild home is determined either by consulting env var
+#' `Sys.getenv("GUILD_HOME")`, or if unset, by looking for a `.guild`
+#' directory, starting from the current working directory and walking up
+#' parent directories up to `~` or `/`.
 #'
 #' @details
 #'
@@ -291,6 +291,7 @@ function(runs = NULL, ...,
 
   df
 }
+
 
 # TODO: make scalars a flat namespace with "." separating dir /
 # e.g., something like runs_info()$scalars$"train/accuracy"

@@ -73,11 +73,11 @@ only included if any part of its full operation name matches the value.}
 a dataframe of runs
 }
 \description{
-Returns a dataframe with information about the known guild runs stored at
-the location:
-
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{ Sys.getenv("GUILD_HOME", here::here(".guild"))
-}\if{html}{\out{</div>}}
+Returns a dataframe with information about the guild runs stored in guild
+home. Guild home is determined either by consulting env var
+\code{Sys.getenv("GUILD_HOME")}, or if unset, by looking for a \code{.guild}
+directory, starting from the current working directory and walking up
+parent directories up to \code{~} or \code{/}.
 }
 \details{
 Guild has support for a custom filter expression syntax. This syntax is

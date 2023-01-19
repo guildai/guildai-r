@@ -115,3 +115,20 @@ installed.packages2 <- function() {
 
 
 .globals <- new.env(parent = emptyenv())
+
+find_guild_home <- function() {
+  ghome <- Sys.getenv("GUILD_HOME", NA_character_)
+  if(!is.na(ghome))
+    return(ghome)
+
+  dir <- getwd()
+  repeat {
+    ghome <- file.path(dir, ".guild")
+    if(dir.exists(ghome) ||
+       dir == path.expand("~") || # HOME/.guild
+       dirname(dir) %in% c(dir, ".")) # filesystem root: e.g. /.guild or C:/.guild)
+      return(ghome)
+    dir <- dirname(dir)
+  }
+}
+
