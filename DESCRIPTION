@@ -6,6 +6,9 @@ Authors@R: c(
   person("Tomasz", "Kalinowski", role = c("aut", "cph", "cre"),
          email = "tomasz.kalinowski@rstudio.com"))
 Description: R interface to guildai.
+URL: https://t-kalinowski.github.io/guildai-r/,
+    https://github.com/t-kalinowski/guildai-r
+BugReports: https://github.com/t-kalinowski/guildai-r/issues
 License: Apache License 2.0
 SystemRequirements: Python (>= 3.6.0)
 Imports:
@@ -30,5 +33,4 @@ Suggests:
     testthat (>= 3.0.0),
     withr
 Config/testthat/edition: 3
-URL: https://t-kalinowski.github.io/guildai-r/, https://github.com/t-kalinowski/guildai-r
 Roxygen: list(markdown = TRUE)
