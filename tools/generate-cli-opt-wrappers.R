@@ -24,10 +24,15 @@ parse_opt_term_field <- function(term) {
   # '-n, --no-open'       switch, short + long name
   # '--logging'           switch, only long name
   # '--start, --restart RUN'  multiple long_name + val
+  # -Sr, --running / --not-running   short_name, long_name / negated_long_name
 
   term %>%
     strsplit(",?\\s+") %>%
+    # strsplit("\\s*[,/]?\\s+") %>%
     map(function(x) {
+
+      # if(any(grepl("running", x))) # %in% x)
+      #   browser()
 
       if (startsWith(x[1], "-") && !startsWith(x[1], "--")) {
         short_name <- x[1]
@@ -41,11 +46,12 @@ parse_opt_term_field <- function(term) {
         x <- x[-1]
       }
 
-      if (length(x))
-        default <- NULL
-      else
+      if (!length(x) ||
+          (isTRUE(x[[1]] == "/") && startsWith(x[[2]], "--not-")))
         # it's a bool switch
-        default <- FALSE
+        default <- NA
+      else
+        default <- NULL
 
       tibble(short_name, name, default = list(default))
     })

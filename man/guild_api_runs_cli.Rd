@@ -7,26 +7,26 @@ Show runs as JSON.}
 \usage{
 guild_api_runs_cli(
   ...,
-  format = FALSE,
+  format = NA,
   filter = NULL,
   operation = NULL,
   label = NULL,
-  unlabeled = FALSE,
+  unlabeled = NA,
   tag = NULL,
   comment = NULL,
-  marked = FALSE,
-  unmarked = FALSE,
+  marked = NA,
+  unmarked = NA,
   started = NULL,
   digest = NULL,
-  running = FALSE,
-  completed = FALSE,
-  error = FALSE,
-  terminated = FALSE,
-  pending = FALSE,
-  staged = FALSE,
+  running = NA,
+  completed = NA,
+  error = NA,
+  terminated = NA,
+  pending = NA,
+  staged = NA,
   api_version = NULL,
-  deleted = FALSE,
-  include_batch = FALSE
+  deleted = NA,
+  include_batch = NA
 )
 }
 \arguments{

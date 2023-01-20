@@ -60,11 +60,18 @@ as_cli_args <- function(...) {
   nms[needs_prefix] <- paste0("--", nms[needs_prefix])
   nms <- gsub("_", "-", nms, fixed = TRUE)
 
-  # boolean values are assumed to be switches in the cli
-  if(isTRUE(x) && nzchar(nms))
-    return(nms)
-  if(isFALSE(x) && nzchar(nms))
-    return(NULL)
+  # boolean values are assumed to be negatable switches in the cli
+  # so foo=TRUE becomes `--foo`
+  # so foo=FALSE becomes `--not-foo`
+  # so foo=NA becomes ``
+  if (length(x) == 1 && isTRUE(nzchar(nms))) {
+    if(is.na(x))
+      return(NULL)
+    if (isTRUE(x))
+      return(nms)
+    if (isFALSE(x))
+      return(paste0("--not-", str_drop_prefix(nms, "--")))
+  }
 
   # cast to char, but preserve class and names
   storage.mode(x) <- "character"

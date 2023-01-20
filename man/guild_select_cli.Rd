@@ -7,29 +7,29 @@ Select a run and shows its ID.}
 \usage{
 guild_select_cli(
   ...,
-  all = FALSE,
+  all = NA,
   min = NULL,
   max = NULL,
-  short_id = FALSE,
+  short_id = NA,
   attr = NULL,
-  path = FALSE,
-  dir = FALSE,
+  path = NA,
+  dir = NA,
   filter = NULL,
   operation = NULL,
   label = NULL,
-  unlabeled = FALSE,
+  unlabeled = NA,
   tag = NULL,
   comment = NULL,
-  marked = FALSE,
-  unmarked = FALSE,
+  marked = NA,
+  unmarked = NA,
   started = NULL,
   digest = NULL,
-  running = FALSE,
-  completed = FALSE,
-  error = FALSE,
-  terminated = FALSE,
-  pending = FALSE,
-  staged = FALSE
+  running = NA,
+  completed = NA,
+  error = NA,
+  terminated = NA,
+  pending = NA,
+  staged = NA
 )
 }
 \arguments{

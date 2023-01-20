@@ -239,18 +239,16 @@
 #' @param test_flags (bool) Test flag configuration.
 guild_run_cli <-
 function (..., label = NULL, tag = NULL, comment = NULL, run_dir = NULL,
-stage = FALSE, start = NULL, restart = NULL, proto = NULL,
-force_sourcecode = FALSE, gpus = NULL, no_gpus = FALSE, batch_label = NULL,
-batch_tag = NULL, batch_comment = NULL, optimizer = NULL,
-optimize = FALSE, minimize = NULL, maximize = NULL, opt_flag = NULL,
-max_trials = NULL, trials = NULL, stage_trials = FALSE, remote = NULL,
-force_flags = FALSE, force_deps = FALSE, stop_after = NULL,
-fail_on_trial_error = FALSE, needed = FALSE, background = FALSE,
-pidfile = NULL, no_wait = FALSE, save_trials = NULL, keep_run = FALSE,
-keep_batch = FALSE, dep = NULL, quiet = FALSE, print_cmd = FALSE,
-print_env = FALSE, print_trials = FALSE, help_model = FALSE,
-help_op = FALSE, test_output_scalars = NULL, test_sourcecode = FALSE,
-test_flags = FALSE)
+stage = NA, start = NULL, restart = NULL, proto = NULL, force_sourcecode = NA,
+gpus = NULL, no_gpus = NA, batch_label = NULL, batch_tag = NULL,
+batch_comment = NULL, optimizer = NULL, optimize = NA, minimize = NULL,
+maximize = NULL, opt_flag = NULL, max_trials = NULL, trials = NULL,
+stage_trials = NA, remote = NULL, force_flags = NA, force_deps = NA,
+stop_after = NULL, fail_on_trial_error = NA, needed = NA,
+background = NA, pidfile = NULL, no_wait = NA, save_trials = NULL,
+keep_run = NA, keep_batch = NA, dep = NULL, quiet = NA, print_cmd = NA,
+print_env = NA, print_trials = NA, help_model = NA, help_op = NA,
+test_output_scalars = NULL, test_sourcecode = NA, test_flags = NA)
 {
 as_cli_args(as.list.environment(environment()), ...)
 }
@@ -284,12 +282,12 @@ as_cli_args(as.list.environment(environment()), ...)
 #' @param deleted (bool) Show deleted runs.
 #' @param include_batch (bool) Include batch runs.
 guild_api_runs_cli <-
-function (..., format = FALSE, filter = NULL, operation = NULL,
-label = NULL, unlabeled = FALSE, tag = NULL, comment = NULL,
-marked = FALSE, unmarked = FALSE, started = NULL, digest = NULL,
-running = FALSE, completed = FALSE, error = FALSE, terminated = FALSE,
-pending = FALSE, staged = FALSE, api_version = NULL, deleted = FALSE,
-include_batch = FALSE)
+function (..., format = NA, filter = NULL, operation = NULL,
+label = NULL, unlabeled = NA, tag = NULL, comment = NULL,
+marked = NA, unmarked = NA, started = NULL, digest = NULL,
+running = NA, completed = NA, error = NA, terminated = NA,
+pending = NA, staged = NA, api_version = NULL, deleted = NA,
+include_batch = NA)
 {
 as_cli_args(as.list.environment(environment()), ...)
 }
@@ -512,12 +510,12 @@ as_cli_args(as.list.environment(environment()), ...)
 #' @param pending (bool) Filter only pending runs.
 #' @param staged (bool) Filter only staged runs.
 guild_view_cli <-
-function (..., host = NULL, port = NULL, include_batch = FALSE,
-no_open = FALSE, logging = FALSE, filter = NULL, operation = NULL,
-label = NULL, unlabeled = FALSE, tag = NULL, comment = NULL,
-marked = FALSE, unmarked = FALSE, started = NULL, digest = NULL,
-running = FALSE, completed = FALSE, error = FALSE, terminated = FALSE,
-pending = FALSE, staged = FALSE)
+function (..., host = NULL, port = NULL, include_batch = NA,
+no_open = NA, logging = NA, filter = NULL, operation = NULL,
+label = NULL, unlabeled = NA, tag = NULL, comment = NULL,
+marked = NA, unmarked = NA, started = NULL, digest = NULL,
+running = NA, completed = NA, error = NA, terminated = NA,
+pending = NA, staged = NA)
 {
 as_cli_args(as.list.environment(environment()), ...)
 }
@@ -571,13 +569,12 @@ as_cli_args(as.list.environment(environment()), ...)
 #' @param no_replace (bool) Fail if any target file would be replaced, even if that file is committed to the project VCS. Cannot be used with ``replace``.
 guild_merge_cli <-
 function (..., filter = NULL, operation = NULL, label = NULL,
-unlabeled = FALSE, tag = NULL, comment = NULL, marked = FALSE,
-unmarked = FALSE, started = NULL, digest = NULL, running = FALSE,
-completed = FALSE, error = FALSE, terminated = FALSE, pending = FALSE,
-staged = FALSE, target_dir = NULL, sourcecode = FALSE, all = FALSE,
-skip_sourcecode = FALSE, skip_deps = FALSE, exclude = NULL,
-no_summary = FALSE, summary_name = NULL, preview = FALSE,
-replace = FALSE, no_replace = FALSE)
+unlabeled = NA, tag = NULL, comment = NULL, marked = NA,
+unmarked = NA, started = NULL, digest = NULL, running = NA,
+completed = NA, error = NA, terminated = NA, pending = NA,
+staged = NA, target_dir = NULL, sourcecode = NA, all = NA,
+skip_sourcecode = NA, skip_deps = NA, exclude = NULL, no_summary = NA,
+summary_name = NULL, preview = NA, replace = NA, no_replace = NA)
 {
 as_cli_args(as.list.environment(environment()), ...)
 }
@@ -797,12 +794,12 @@ as_cli_args(as.list.environment(environment()), ...)
 #' @param pending (bool) Filter only pending runs.
 #' @param staged (bool) Filter only staged runs.
 guild_select_cli <-
-function (..., all = FALSE, min = NULL, max = NULL, short_id = FALSE,
-attr = NULL, path = FALSE, dir = FALSE, filter = NULL, operation = NULL,
-label = NULL, unlabeled = FALSE, tag = NULL, comment = NULL,
-marked = FALSE, unmarked = FALSE, started = NULL, digest = NULL,
-running = FALSE, completed = FALSE, error = FALSE, terminated = FALSE,
-pending = FALSE, staged = FALSE)
+function (..., all = NA, min = NULL, max = NULL, short_id = NA,
+attr = NULL, path = NA, dir = NA, filter = NULL, operation = NULL,
+label = NULL, unlabeled = NA, tag = NULL, comment = NULL,
+marked = NA, unmarked = NA, started = NULL, digest = NULL,
+running = NA, completed = NA, error = NA, terminated = NA,
+pending = NA, staged = NA)
 {
 as_cli_args(as.list.environment(environment()), ...)
 }
