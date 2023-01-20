@@ -2,3 +2,17 @@ url: https://t-kalinowski.github.io/guildai-r/
 template:
   bootstrap: 5
 
+navbar:
+  structure:
+    left:  [intro, reference, examples, tutorials, news]
+    right: [search, github]
+  components:
+    examples:
+      text: Examples
+      menu:
+        - text: keras
+          href: articles/examples/keras.html
+
+
+development:
+  mode: auto
