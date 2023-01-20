@@ -200,29 +200,32 @@ function(runs = NULL, ...,
          filter = NULL,
          operation = NULL,
          label = NULL,
-         unlabeled = FALSE,
+         unlabeled = NA,
          tag = NULL,
          comment = NULL,
-         marked = FALSE,
-         unmarked = FALSE,
+         marked = NA,
+         unmarked = NA,
          started = NULL,
          digest = NULL,
-         running = FALSE,
-         completed = FALSE,
-         error = FALSE,
-         terminated = FALSE,
-         pending = FALSE,
-         staged = FALSE,
-         deleted = FALSE,
-         include_batch = FALSE) {
+         running = NA,
+         completed = NA,
+         error = NA,
+         terminated = NA,
+         pending = NA,
+         staged = NA,
+         deleted = NA,
+         include_batch = NA) {
 
   df <- guild("api runs", list(...),
               mget(setdiff(ls(), "runs")),
               maybe_extract_run_ids(runs),
               stdout = TRUE)
+
+  if(!is.null(attr(df, "status", TRUE)))
+    stop("guild error (status code ", attr(df, "status", TRUE), ")")
+
   df <- parse_json(paste0(df, collapse = ""),
                    simplifyVector = TRUE)
-
   if(identical(df, list()))
     return()
 

@@ -10,21 +10,21 @@ runs_info(
   filter = NULL,
   operation = NULL,
   label = NULL,
-  unlabeled = FALSE,
+  unlabeled = NA,
   tag = NULL,
   comment = NULL,
-  marked = FALSE,
-  unmarked = FALSE,
+  marked = NA,
+  unmarked = NA,
   started = NULL,
   digest = NULL,
-  running = FALSE,
-  completed = FALSE,
-  error = FALSE,
-  terminated = FALSE,
-  pending = FALSE,
-  staged = FALSE,
-  deleted = FALSE,
-  include_batch = FALSE
+  running = NA,
+  completed = NA,
+  error = NA,
+  terminated = NA,
+  pending = NA,
+  staged = NA,
+  deleted = NA,
+  include_batch = NA
 )
 }
 \arguments{
