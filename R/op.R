@@ -66,6 +66,11 @@ r_script_guild_data <- function(r_script_path) {
   # We do it here because config::merge() would overwrite
   # data$sourcecode$select otherwise
 
+  # directories that start with a . prefix like ".Rproj.user" are
+  # automatically excluded by default.
+  #
+  # "logs" is the default write location for
+  # tfevents::log_event() and keras::callback_tensorboard()
   prepend(data$sourcecode$select) <-
     list(list(exclude = list(dir = "logs")),
          list(exclude = list(text = ".Rhistory")))

@@ -1,6 +1,0 @@
-my-pipeline:
-  description: Runs model pipeline
-  steps:
-   - prepare-data.R
-   - train.R
-   - test.R
