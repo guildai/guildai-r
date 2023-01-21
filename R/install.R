@@ -78,6 +78,7 @@ install_guild <-
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL), mustWork = FALSE)
   unlink(venv, recursive = TRUE, force = TRUE)
 
+  message("Installing guildai core.")
   # notable venv args we could add:
   # --clear  alternative to 'unlink()' call above
   # --upgrade-deps alternative to the 'pip install pip' call below,
@@ -154,7 +155,7 @@ install_guild <-
     file.path(venv, "Scripts", "guild.exe", fsep = "\\") else
     file.path(venv, "bin", "guild")
 
-  guild_exe
+  invisible(guild_exe)
 }
 
 # install_guild(
