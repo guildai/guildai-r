@@ -8,6 +8,8 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^vignettes$
+^vignettes-src$
 ^vignettes/articles$
 ^vignettes/articles/\.guild$
 ^README\.qmd$
