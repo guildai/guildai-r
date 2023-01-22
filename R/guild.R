@@ -12,6 +12,10 @@ guild <- function(command = NULL, ...,
 
   exec <- if(wait) system2t else processx::process$new
   exec(find_guild(), args, env = env, stdout = stdout, stderr = stderr)
+  # exec <- if(wait) processx::run else processx::process$new
+  # invisible(exec(find_guild(), args,
+  #                echo = TRUE, echo_cmd = TRUE,
+  #                env = env, stdout = stdout, stderr = stderr))
 }
 
 
@@ -76,6 +80,7 @@ as_cli_args <- function(...) {
   # cast to char, but preserve class and names
   storage.mode(x) <- "character"
 
+  # TODO: we shouldn't quote if using  processx::process$new() or processx::run()
   if (!inherits(x, "AsIs")) {
     needs_quoting <- !grepl("^[[:alnum:]_-]+$", x)
     x[needs_quoting] <- shQuote(x[needs_quoting])
@@ -170,7 +175,7 @@ function(opspec = "train.R",
   if(length(echo) == 1)
     echo <- c(echo, TRUE)
 
-  guild("run --yes", list(...), opspec, flags,
+  guild("run", "--yes", list(...), opspec, flags,
         stdout = if(isTRUE(echo[[1L]])) "" else FALSE,
         stderr = if(isTRUE(echo[[2L]])) "" else FALSE)
 }

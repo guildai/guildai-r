@@ -4,7 +4,6 @@ do_guild_run <-
 function(file = "train.R", flags_dest = file, echo = TRUE,
          prune_on_success = TRUE) {
 
-
   fix_flags_yaml(".guild/attrs/flags")
 
   if (is_r_file(flags_dest)) {
