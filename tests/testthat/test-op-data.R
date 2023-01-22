@@ -195,15 +195,35 @@ test_that("guild run w/ flags-dest: globals", {
   file <- "flags-from-globals.R"
   local_project(test_resource(file))
 
+  # browser(); Sys.setenv(GUILD_DEBUG_R=1)
+
   guild_run(file)
   output <- expect_snapshot_guild_cat_last_output()
 
-  invisible(capture.output(source(file, default_flags <- new.env())))
-  default_flags <- as.list(default_flags)
-  default_flags$globals      <- NULL
-  default_flags$nm           <- NULL
-  default_flags$not_a_global <- NULL
-  default_flags$duplicated_flag <- 1L
+  # invisible(capture.output(source(file, default_flags <- new.env())))
+  # default_flags <- as.list(default_flags)
+  # default_flags$globals      <- NULL
+  # default_flags$nm           <- NULL
+  # default_flags$not_a_global <- NULL
+  # default_flags$duplicated_flag <- 1L
+  # dput(default_flags)
+  default_flags <- list(
+    s = "Howdy Guild",
+    s2 = "foo",
+    s3 = "\n    foobarbaz\n    ",
+    s4 = "A string",
+    s5 = "Another string",
+    b = FALSE,
+    b2 = TRUE,
+    f = 1.123,
+    i = 123L,
+    i2 = -123L,
+    i3 = 123L,
+    cx = 0 + 0i,
+    cx1 = 1 + 1i,
+    cx2 = 2 + 2i,
+    cx3 = 3 + 3i
+  )
 
   guild_run(file, flags = default_flags)
   output2 <-guild("cat --output", stdout = TRUE)
