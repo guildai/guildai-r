@@ -88,8 +88,8 @@ r_script_guild_data <- function(r_script_path) {
   #   walk script ast looking for symbols assigned
   #   at top level values of length-1 atomic literals
 
+  flags_dest <- data$`flags-dest`
   if (is.null(data$flags)) {
-    flags_dest <- data$`flags-dest`
 
     if (is_r_file(flags_dest)) {
       data$flags <- infer_global_params(text, is_anno)

@@ -4,7 +4,6 @@ do_guild_run <-
 function(file = "train.R", flags_dest = file, echo = TRUE,
          prune_on_success = TRUE) {
 
-  # browser()
 
   fix_flags_yaml(".guild/attrs/flags")
 
@@ -377,6 +376,9 @@ fix_flags_yaml <- function(file) {
   # This probably falls flat on its face if there is an escaped ":" in
   # the key, or the key spans multiple lines, but those are probably not valid
   # flag keys anyway.
+  # Also, guild core / python 'yaml' module does not correctly
+  # write a final trailing newline,
+  # which causes R's yaml::read_yaml() to emit a warning.
   txt <- readLines(file)
   first_char <- substr(txt, 1L, 1L)
   if (identical(first_char[[1]], "{"))

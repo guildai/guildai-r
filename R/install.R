@@ -79,10 +79,6 @@ install_guild <-
   unlink(venv, recursive = TRUE, force = TRUE)
 
   message("Installing guildai core.")
-  # notable venv args we could add:
-  # --clear  alternative to 'unlink()' call above
-  # --upgrade-deps alternative to the 'pip install pip' call below,
-  #                 only added in Py version 3.9 though
   system2t(python, c("-m", "venv", shQuote(venv)), echo_cmd = TRUE)
   python <- if (is_windows())
    file.path(venv, "Scripts", "python.exe", fsep = "\\") else
@@ -104,8 +100,6 @@ install_guild <-
                        "--no-warn-script-location",
                        "--disable-pip-version-check",
                        ...),
-                       #"--force-reinstall", ...),
-                       #  "--isolated", -I
              echo_cmd = TRUE)
 
   pip_install("--ignore-installed", "pip", "wheel", "setuptools")
