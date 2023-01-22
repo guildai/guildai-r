@@ -83,24 +83,10 @@
 <div class="section level2">
 <h2 id="guildai">guildai<a class="anchor" aria-label="anchor" href="#guildai"></a>
 </h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">opts_chunk</a></span><span class="op">$</span><span class="fu">set</span><span class="op">(</span></span>
-<span>  collapse <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  comment <span class="op">=</span> <span class="st">"#&gt;"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/knitr/man/opts_knit.html" class="external-link">opts_knit</a></span><span class="op">$</span><span class="fu">set</span><span class="op">(</span></span>
-<span>  root.dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">local</a></span><span class="op">(</span><span class="op">{</span></span>
-<span>    <span class="va">root</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span><span class="st">"guildai-intro-sample-project-"</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">root</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">root</span>, <span class="st">".guild"</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="va">root</span></span>
-<span>  <span class="op">}</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://t-kalinowski.github.io/guildai-r/">guildai</a></span><span class="op">)</span></span></code></pre></div>
 <!-- TODO a nice screenshot image here-->
 <p><em>guildai</em> provides a suite of tools for tracking, visualizing,
-and managing machine learning experiments. The {guildai} R package is a
-successor to the {tfruns} package.</p>
+and managing machine learning experiments. The <em>guildai</em> R
+package is a successor to the <em>tfruns</em> package.</p>
 <ul>
 <li><p>Track the hyperparameters, metrics, output, and source code of
 every training run.</p></li>
@@ -116,7 +102,7 @@ performing model.</p></li>
 automatically download and install Guild AI Core on first use, or you
 can call <code><a href="../reference/install_guild.html">install_guild()</a></code> directly to customize the
 installation.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("guildai")</span></span>
 <span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span>, repos <span class="op">=</span> <span class="st">"https://cran.rstudio.com"</span><span class="op">)</span></span>
@@ -132,9 +118,9 @@ demonstrating how to use guild with common machine learning frameworks,
 including xgboost, tensorFlow and keras, torch, and tidymodels.</p>
 <p>In this introductory example, we’ll start by showing guild with no
 framework at all, on a very simple (and somewhat contrived) example.</p>
-<p>Lets say we have an R script named <code>"train.R"</code> where we
-are fitting a smoother line, like so:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>Say we have an R script named <code>"train.R"</code> where we are
+fitting a smoother line, like so:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span><span class="op">)</span></span>
@@ -143,8 +129,14 @@ are fitting a smoother line, like so:</p>
 <p>To train a model with guildai, use the <code><a href="../reference/guild_run.html">guild_run()</a></code>
 function in place of the <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code> function to execute your
 R script. For example:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://t-kalinowski.github.io/guildai-r/">guildai</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span><span class="op">)</span></span>
+<span><span class="co">## &gt; model &lt;- loess(dist ~ speed, data = cars)</span></span>
+<span><span class="co">## &gt; plot(dist ~ speed, data = cars)</span></span>
+<span><span class="co">## &gt; lines(x = 3:30, y = predict(model, 3:30), col = "blue")</span></span>
+<span><span class="co">## &gt; </span></span>
+<span><span class="co">## &gt;</span></span></code></pre></div>
 <p>This will launch a new R process in an isolated run directory using
 the provided script. By default, the output stream from the run will be
 shown at the R console (the same output stream you would see with
@@ -162,7 +154,7 @@ application, which you can use to visualize and manage your runs. You
 can use it to search, filter, visualize, compare run source code and
 output, and more! It also bundles TensorBoard as an additional
 visualization tool for viewing runs.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_view.html">guild_view</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="guild-view-screenshot.png"></p>
 </div>
@@ -171,32 +163,32 @@ visualization tool for viewing runs.</p>
 </h3>
 <p>Retrieve a data frame with run information in R using
 <code><a href="../reference/runs_info.html">runs_info()</a></code>:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">run</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runs_info.html">runs_info</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Rows: 1</span></span>
-<span><span class="co">#&gt; Columns: 15</span></span>
-<span><span class="co">#&gt; $ label       &lt;chr&gt; ""</span></span>
-<span><span class="co">#&gt; $ tags        &lt;list&gt; &lt;&gt;</span></span>
-<span><span class="co">#&gt; $ marked      &lt;lgl&gt; FALSE</span></span>
-<span><span class="co">#&gt; $ flags       &lt;tibble[,0]&gt; &lt;tbl_df[1 x 0]&gt;</span></span>
-<span><span class="co">#&gt; $ scalars     &lt;tibble[,0]&gt; &lt;tbl_df[1 x 0]&gt;</span></span>
-<span><span class="co">#&gt; $ operation   &lt;chr&gt; "train.R"</span></span>
-<span><span class="co">#&gt; $ started     &lt;dttm&gt; 2023-01-21 15:52:14</span></span>
-<span><span class="co">#&gt; $ stopped     &lt;dttm&gt; 2023-01-21 15:52:14</span></span>
-<span><span class="co">#&gt; $ comments    &lt;list&gt; [&lt;tbl_df[0 x 4]&gt;]</span></span>
-<span><span class="co">#&gt; $ status      &lt;chr&gt; "completed"</span></span>
-<span><span class="co">#&gt; $ exit_status &lt;int&gt; 0</span></span>
-<span><span class="co">#&gt; $ deps        &lt;list&gt; []</span></span>
-<span><span class="co">#&gt; $ project_dir &lt;chr&gt; "/tmp/RtmpBqbw9Z/guildai-intro-sample-project-37c6818ad480…</span></span>
-<span><span class="co">#&gt; $ dir         &lt;chr&gt; "/tmp/RtmpBqbw9Z/guildai-intro-sample-project-37c6818ad48…</span></span>
-<span><span class="co">#&gt; $ id          &lt;chr&gt; "60f23bf4609d4e6691900864328c30a8"</span></span></code></pre></div>
+<span><span class="co">## Rows: 1</span></span>
+<span><span class="co">## Columns: 15</span></span>
+<span><span class="co">## $ label       &lt;chr&gt; ""</span></span>
+<span><span class="co">## $ tags        &lt;list&gt; &lt;&gt;</span></span>
+<span><span class="co">## $ marked      &lt;lgl&gt; FALSE</span></span>
+<span><span class="co">## $ flags       &lt;tibble[,0]&gt; &lt;tbl_df[1 x 0]&gt;</span></span>
+<span><span class="co">## $ scalars     &lt;tibble[,0]&gt; &lt;tbl_df[1 x 0]&gt;</span></span>
+<span><span class="co">## $ operation   &lt;chr&gt; "train.R"</span></span>
+<span><span class="co">## $ started     &lt;dttm&gt; 2023-01-22 11:38:11</span></span>
+<span><span class="co">## $ stopped     &lt;dttm&gt; 2023-01-22 11:38:12</span></span>
+<span><span class="co">## $ comments    &lt;list&gt; [&lt;tbl_df[0 x 4]&gt;]</span></span>
+<span><span class="co">## $ status      &lt;chr&gt; "completed"</span></span>
+<span><span class="co">## $ exit_status &lt;int&gt; 0</span></span>
+<span><span class="co">## $ deps        &lt;list&gt; []</span></span>
+<span><span class="co">## $ project_dir &lt;chr&gt; "/tmp/Rtmp2OhSO5/guildai-intro-sample-project-129661329263…</span></span>
+<span><span class="co">## $ dir         &lt;chr&gt; "/tmp/Rtmp2OhSO5/guildai-intro-sample-project-12966132926…</span></span>
+<span><span class="co">## $ id          &lt;chr&gt; "631b2e2cd30e4123830beeda2571d4bd"</span></span></code></pre></div>
 <p><code><a href="../reference/runs_info.html">runs_info()</a></code> returns a data frame with information about
 runs, one row per run. In this introduction so far, we’ve only launched
 1 run, so so <code><a href="../reference/runs_info.html">runs_info()</a></code> returns a 1-row data frame.</p>
 <p><code><a href="../reference/runs_info.html">runs_info()</a></code> supports a rich set of filter options that
 can be conveniently supplied. For example:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ls_runs</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>            <span class="co"># get the most recent run</span></span>
 <span><span class="fu">ls_runs</span><span class="op">(</span>error <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="co"># get only runs that returned an error</span></span></code></pre></div>
 <p>See <code>?runs_info()</code> for more information.</p>
@@ -213,37 +205,37 @@ about the runs that guild recorded under the “.guild” folder. There
 you’ll find plain text (yaml) files with information like the starting
 random seed, environment variables, information about the package
 versions, and other metadata frequently useful for reproducability.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">fs</span><span class="fu">::</span><span class="fu"><a href="https://fs.r-lib.org/reference/dir_tree.html" class="external-link">dir_tree</a></span><span class="op">(</span><span class="va">run</span><span class="op">$</span><span class="va">dir</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; /tmp/RtmpBqbw9Z/guildai-intro-sample-project-37c6818ad4801/.guild/runs/60f23bf4609d4e6691900864328c30a8</span></span>
-<span><span class="co">#&gt; ├── .guild</span></span>
-<span><span class="co">#&gt; │   ├── attrs</span></span>
-<span><span class="co">#&gt; │   │   ├── cmd</span></span>
-<span><span class="co">#&gt; │   │   ├── deps</span></span>
-<span><span class="co">#&gt; │   │   ├── env</span></span>
-<span><span class="co">#&gt; │   │   ├── exit_status</span></span>
-<span><span class="co">#&gt; │   │   ├── flags</span></span>
-<span><span class="co">#&gt; │   │   ├── host</span></span>
-<span><span class="co">#&gt; │   │   ├── id</span></span>
-<span><span class="co">#&gt; │   │   ├── initialized</span></span>
-<span><span class="co">#&gt; │   │   ├── op</span></span>
-<span><span class="co">#&gt; │   │   ├── platform</span></span>
-<span><span class="co">#&gt; │   │   ├── plugins</span></span>
-<span><span class="co">#&gt; │   │   ├── r_packages_loaded</span></span>
-<span><span class="co">#&gt; │   │   ├── random_seed</span></span>
-<span><span class="co">#&gt; │   │   ├── run_params</span></span>
-<span><span class="co">#&gt; │   │   ├── sourcecode_digest</span></span>
-<span><span class="co">#&gt; │   │   ├── started</span></span>
-<span><span class="co">#&gt; │   │   ├── stopped</span></span>
-<span><span class="co">#&gt; │   │   ├── user</span></span>
-<span><span class="co">#&gt; │   │   └── user_flags</span></span>
-<span><span class="co">#&gt; │   ├── manifest</span></span>
-<span><span class="co">#&gt; │   ├── opref</span></span>
-<span><span class="co">#&gt; │   ├── output</span></span>
-<span><span class="co">#&gt; │   └── output.index</span></span>
-<span><span class="co">#&gt; ├── plots</span></span>
-<span><span class="co">#&gt; │   └── Rplot001.png</span></span>
-<span><span class="co">#&gt; └── train.R</span></span></code></pre></div>
+<span><span class="co">## /tmp/Rtmp2OhSO5/guildai-intro-sample-project-129661329263c/.guild/runs/631b2e2cd30e4123830beeda2571d4bd</span></span>
+<span><span class="co">## ├── .guild</span></span>
+<span><span class="co">## │   ├── attrs</span></span>
+<span><span class="co">## │   │   ├── cmd</span></span>
+<span><span class="co">## │   │   ├── deps</span></span>
+<span><span class="co">## │   │   ├── env</span></span>
+<span><span class="co">## │   │   ├── exit_status</span></span>
+<span><span class="co">## │   │   ├── flags</span></span>
+<span><span class="co">## │   │   ├── host</span></span>
+<span><span class="co">## │   │   ├── id</span></span>
+<span><span class="co">## │   │   ├── initialized</span></span>
+<span><span class="co">## │   │   ├── op</span></span>
+<span><span class="co">## │   │   ├── platform</span></span>
+<span><span class="co">## │   │   ├── plugins</span></span>
+<span><span class="co">## │   │   ├── r_packages_loaded</span></span>
+<span><span class="co">## │   │   ├── random_seed</span></span>
+<span><span class="co">## │   │   ├── run_params</span></span>
+<span><span class="co">## │   │   ├── sourcecode_digest</span></span>
+<span><span class="co">## │   │   ├── started</span></span>
+<span><span class="co">## │   │   ├── stopped</span></span>
+<span><span class="co">## │   │   ├── user</span></span>
+<span><span class="co">## │   │   └── user_flags</span></span>
+<span><span class="co">## │   ├── manifest</span></span>
+<span><span class="co">## │   ├── opref</span></span>
+<span><span class="co">## │   ├── output</span></span>
+<span><span class="co">## │   └── output.index</span></span>
+<span><span class="co">## ├── plots</span></span>
+<span><span class="co">## │   └── Rplot001.png</span></span>
+<span><span class="co">## └── train.R</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -254,22 +246,25 @@ versions, and other metadata frequently useful for reproducability.</p>
 <code><a href="../reference/guild_view.html">guild_view()</a></code> and <code><a href="../reference/runs_info.html">runs_info()</a></code> make it easy to
 compare flags across runs. Any scalar literal assigned at the top level
 of a run script is automatically identified as a <em>flag</em>.</p>
-<p>To illustrate, we’ll modify our script “train.R” to use the
-<code>span</code> and <code>family</code> arguments to the
-<code><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess()</a></code> smoother:.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="section level3">
+<h3 id="supplying-run-flag-values">Supplying run flag values<a class="anchor" aria-label="anchor" href="#supplying-run-flag-values"></a>
+</h3>
+<p>To illustrate, we’ll modify our script “train.R” by adding flags
+<code>span</code> and <code>family</code>, which we pass as arguments to
+the <code><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess()</a></code> smoother:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">span</span> <span class="op">&lt;-</span> <span class="fl">.75</span></span>
 <span><span class="va">family</span> <span class="op">&lt;-</span> <span class="st">"gaussian"</span></span>
 <span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span>, </span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span>,</span>
 <span>               span <span class="op">=</span> <span class="va">span</span>, family <span class="op">=</span> <span class="va">family</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">30</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></code></pre></div>
 <p>You can launch a run with different flag values like this:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>, flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  span <span class="op">=</span> <span class="fl">1.5</span>, </span>
+<span>  span <span class="op">=</span> <span class="fl">1.5</span>,</span>
 <span>  family <span class="op">=</span> <span class="st">"symmetric"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/guild_run.html">guild_run()</a></code> will modify the script file with the
@@ -282,40 +277,47 @@ the filesystem).</p>
 optimization. At it’s simplest, you can iterate over the set of flag
 values you want and pass them to separate calls of
 <code><a href="../reference/guild_run.html">guild_run()</a></code>:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">span</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">1</span>, <span class="fl">1.25</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>span <span class="op">=</span> <span class="va">span</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>You can also pass multiple values for each flag, and guild will
-automatically expand the combinations to a grid search. For example,
-this will launch 4 training runs, each a unique pairing of flags.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+automatically expand the combinations to a grid. For example, this will
+launch 4 training runs, each a unique pairing of flags.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>, flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>  span <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>,</span>
 <span>  family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gaussian"</span>, <span class="st">"symmetric"</span><span class="op">)</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Another way to launch a batch of runs is to pass a data frame of
 flags values, with each row corresponding to a run.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">flags_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>span <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>, </span>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">flags_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>span <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span>,</span>
 <span>                        family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gaussian"</span>, <span class="st">"symmetric"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">flags_df</span></span>
-<span><span class="co">#&gt;   span    family</span></span>
-<span><span class="co">#&gt; 1 0.50  gaussian</span></span>
-<span><span class="co">#&gt; 2 0.75  gaussian</span></span>
-<span><span class="co">#&gt; 3 0.50 symmetric</span></span>
-<span><span class="co">#&gt; 4 0.75 symmetric</span></span></code></pre></div>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>, flags <span class="op">=</span> <span class="va">flags_df</span><span class="op">)</span></span></code></pre></div>
-<div class="section level4">
-<h4 id="retreiving-run-flags">Retreiving Run Flags<a class="anchor" aria-label="anchor" href="#retreiving-run-flags"></a>
-</h4>
+<span><span class="co">##   span    family</span></span>
+<span><span class="co">## 1 0.50  gaussian</span></span>
+<span><span class="co">## 2 0.75  gaussian</span></span>
+<span><span class="co">## 3 0.50 symmetric</span></span>
+<span><span class="co">## 4 0.75 symmetric</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>, flags <span class="op">=</span> <span class="va">flags_df</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="retreiving-run-flags">Retreiving run flags<a class="anchor" aria-label="anchor" href="#retreiving-run-flags"></a>
+</h3>
 <p>The flags and flag values associated with each runs are returned by
 <code><a href="../reference/runs_info.html">runs_info()</a></code> as a packed dataframe under the
 <code>flags</code> name.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runs_info.html">runs_info</a></span><span class="op">(</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runs_info.html">runs_info</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span> <span class="co"># retrieve the last 4 runs</span></span>
 <span><span class="va">runs</span><span class="op">$</span><span class="va">flags</span></span>
-<span><span class="co">#&gt; # A tibble: 1 × 0</span></span></code></pre></div>
+<span><span class="co">## # A tibble: 4 × 2</span></span>
+<span><span class="co">##   family     span</span></span>
+<span><span class="co">##   &lt;chr&gt;     &lt;dbl&gt;</span></span>
+<span><span class="co">## 1 symmetric  0.75</span></span>
+<span><span class="co">## 2 symmetric  0.5 </span></span>
+<span><span class="co">## 3 gaussian   0.75</span></span>
+<span><span class="co">## 4 gaussian   0.5</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -328,27 +330,53 @@ can help manage.</p>
 <p>Any lines printed to stdout matching this pattern are identified as a
 scalar:</p>
 <pre class="verbatim"><code>key: &lt;numeric&gt;</code></pre>
-<p>To illustrate, here is “train.R” updated to output a scalar named
-<code>rmse</code>.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<p>To illustrate, here is “train.R” updated to output two scalars,
+<code>rmse</code> and <code>mse</code>.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">span</span> <span class="op">&lt;-</span> <span class="fl">.75</span></span>
 <span><span class="va">family</span> <span class="op">&lt;-</span> <span class="st">"gaussian"</span></span>
 <span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span>, </span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span>,</span>
 <span>               span <span class="op">=</span> <span class="va">span</span>, family <span class="op">=</span> <span class="va">family</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">3</span><span class="op">:</span><span class="fl">30</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">30</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">rmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">rmse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">mse</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"mse:"</span>, <span class="va">mse</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"rmse:"</span>, <span class="va">rmse</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
-<p>We can retrieve scalar results from runs with
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span><span class="op">)</span></span>
+<span><span class="co">## &gt; span &lt;- .75</span></span>
+<span><span class="co">## &gt; family &lt;- "gaussian"</span></span>
+<span><span class="co">## &gt; model &lt;- loess(dist ~ speed, data = cars,</span></span>
+<span><span class="co">## +                span = span, family = family)</span></span>
+<span><span class="co">## &gt; plot(dist ~ speed, data = cars)</span></span>
+<span><span class="co">## &gt; lines(x = 3:30, y = predict(model, 3:30), col = "blue")</span></span>
+<span><span class="co">## &gt; mse &lt;- mean(residuals(model)^2)</span></span>
+<span><span class="co">## &gt; rmse &lt;- sqrt(mse)</span></span>
+<span><span class="co">## &gt; cat("mse:", mse, "\n")</span></span>
+<span><span class="co">## mse: 207.274320377417 </span></span>
+<span><span class="co">## &gt; cat("rmse:", rmse, "\n")</span></span>
+<span><span class="co">## rmse: 14.3970247057306 </span></span>
+<span><span class="co">## &gt; </span></span>
+<span><span class="co">## &gt;</span></span></code></pre></div>
+<p>When the script is run, these two lines in the printed output are
+identified by guild as scalars:</p>
+<pre class="verbatim"><code><span><span class="va">mse</span><span class="op">:</span> <span class="fl">207.274320377417</span></span>
+<span><span class="va">rmse</span><span class="op">:</span> <span class="fl">14.3970247057306</span></span></code></pre>
+<p>We can retrieve the scalar results from runs with
 <code><a href="../reference/runs_info.html">runs_info()</a></code>:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/runs_info.html">runs_info</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">$</span><span class="va">scalars</span></span>
-<span><span class="co">#&gt; # A tibble: 1 × 0</span></span></code></pre></div>
+<span><span class="co">## # A tibble: 1 × 2</span></span>
+<span><span class="co">##     mse  rmse</span></span>
+<span><span class="co">##   &lt;dbl&gt; &lt;dbl&gt;</span></span>
+<span><span class="co">## 1  207.  14.4</span></span></code></pre></div>
 <p>Here we see that guild has automatically identified <code>rmse</code>
-as a scalar.</p>
+and <code>mse</code> as scalars.</p>
 <p>If you are printing values for the same scalar <code>key</code>
 multiple times during a run (e.g, <code>loss</code> during a training
 loop), then be sure to also print a <code>step</code> scalar in between,
@@ -357,7 +385,7 @@ metrics with Guild View and TensorBoard).</p>
 <p><code><a href="../reference/runs_info.html">runs_info()</a></code> returns the last observed value for each run
 scalar key, but the full history of scalars observed in runs can also be
 accessed from R directly via <code><a href="../reference/runs_scalars.html">runs_scalars()</a></code>.</p>
-<p>If the run produces tfevent records (e.g., via
+<p>If the run produces tfevent records in the run directory (e.g., via
 <code>keras::callback_tensorboard()</code> or
 <code>tfevents::log_event()</code>), those are also automatically
 identified by guild as run scalars, and included in
@@ -382,7 +410,7 @@ should not echo the R expressions in the stdout log by supplying
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#| echo: no</span></span>
 <span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span>, </span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span>,</span>
 <span>               span <span class="op">=</span> <span class="va">span</span>, family <span class="op">=</span> <span class="va">family</span><span class="op">)</span></span></code></pre></div>
 <p>A comprehensive listing of all the operation configuration options
 that can be supplied to guild via script frontmatter can be found <a href="https://my.guild.ai/t/guild-file-reference/197#operation-attributes-6" class="external-link">here</a>.</p>
@@ -396,7 +424,11 @@ by placing hashpipe yaml annotations above the flag expression.</p>
 <h4 id="flag-constraints">Flag constraints<a class="anchor" aria-label="anchor" href="#flag-constraints"></a>
 </h4>
 <p>For example, we can update our “train.R” script to add constraints to
-the <code>span</code> flag.</p>
+the <code>span</code> and <code>family</code> flags. For
+<code>span</code> we’ll set a range of valid values from 0.3–3.0. For
+<code>family</code> we’ll define a set of two valid string values
+<code>family</code> can take, <code>"gaussian"</code> or
+<code>"symmetric"</code>.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#| echo: no</span></span>
 <span></span>
@@ -406,7 +438,7 @@ the <code>span</code> flag.</p>
 <span><span class="co">#| choices: [gaussian, symmetric]</span></span>
 <span><span class="va">family</span> <span class="op">&lt;-</span> <span class="st">"gaussian"</span></span>
 <span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span>, </span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span>,</span>
 <span>               span <span class="op">=</span> <span class="va">span</span>, family <span class="op">=</span> <span class="va">family</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span><span class="op">)</span></span>
@@ -416,8 +448,9 @@ the <code>span</code> flag.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"rmse:"</span>, <span class="va">rmse</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <p>Now if you attempt to launch the run with a flag value that’s outside
 the constraints defined, guild will throw an error:</p>
+<!-- TODO: this gives a non-informative error -->
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"trian.R"</span>, flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>span <span class="op">=</span> <span class="fl">99</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"trian.R"</span>, flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>span <span class="op">=</span> <span class="fl">99</span><span class="op">)</span><span class="op">)</span> <span class="co"># error</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="flag-destinations">Flag destinations<a class="anchor" aria-label="anchor" href="#flag-destinations"></a>
@@ -433,8 +466,8 @@ can read in the flag values in the main R script using
 <span></span>
 <span><span class="va">FLAGS</span> <span class="op">&lt;-</span> <span class="fu">envir</span><span class="fu">::</span><span class="fu"><a href="https://t-kalinowski.github.io/envir/reference/include.html" class="external-link">include</a></span><span class="op">(</span><span class="st">"flags.R"</span>, <span class="fu"><a href="https://rdrr.io/r/base/environment.html" class="external-link">new.env</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span>, </span>
-<span>               span <span class="op">=</span> <span class="va">FLAGS</span><span class="op">$</span><span class="va">span</span>, </span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span>,</span>
+<span>               span <span class="op">=</span> <span class="va">FLAGS</span><span class="op">$</span><span class="va">span</span>,</span>
 <span>               family <span class="op">=</span> <span class="va">FLAGS</span><span class="op">$</span><span class="va">family</span><span class="op">)</span></span></code></pre></div>
 <p>YAML files are also supported as a flags destination:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
@@ -442,8 +475,8 @@ can read in the flag values in the main R script using
 <span></span>
 <span><span class="va">FLAGS</span> <span class="op">&lt;-</span> <span class="fu">yaml</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/yaml/man/read_yaml.html" class="external-link">read_yaml</a></span><span class="op">(</span><span class="st">"flags.yml"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span>, </span>
-<span>               span <span class="op">=</span> <span class="va">FLAGS</span><span class="op">$</span><span class="va">span</span>, </span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span>,</span>
+<span>               span <span class="op">=</span> <span class="va">FLAGS</span><span class="op">$</span><span class="va">span</span>,</span>
 <span>               family <span class="op">=</span> <span class="va">FLAGS</span><span class="op">$</span><span class="va">family</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -466,7 +499,7 @@ to minimize or maximize.</p>
 <span><span class="co">#| choices: [gaussian, symmetric]</span></span>
 <span><span class="va">family</span> <span class="op">&lt;-</span> <span class="st">"gaussian"</span></span>
 <span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span>, </span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/loess.html" class="external-link">loess</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span>,</span>
 <span>               span <span class="op">=</span> <span class="va">span</span>, family <span class="op">=</span> <span class="va">family</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dist</span> <span class="op">~</span> <span class="va">speed</span>, data <span class="op">=</span> <span class="va">cars</span><span class="op">)</span></span>
@@ -476,10 +509,48 @@ to minimize or maximize.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"rmse:"</span>, <span class="va">rmse</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <p>You can use an optimizer with this operation like so:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>, </span>
-<span>          optimizer <span class="op">=</span> <span class="st">"bayesian"</span>, </span>
-<span>          minimize <span class="op">=</span> <span class="st">"rmse"</span>, </span>
-<span>          max_trials <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>,</span>
+<span>          optimizer <span class="op">=</span> <span class="st">"bayesian"</span>,</span>
+<span>          minimize <span class="op">=</span> <span class="st">"rmse"</span>,</span>
+<span>          max_trials <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">## INFO: [guild] Random start for optimization (1 of 3)</span></span>
+<span><span class="co">## INFO: [guild] Running trial 5ce0a82eb26b4f72bc072ea6ec208041: train.R (family=gaussian, span=0.75)</span></span>
+<span><span class="co">## rmse: 14.3970247057306 </span></span>
+<span><span class="co">## INFO: [guild] Random start for optimization (2 of 3)</span></span>
+<span><span class="co">## INFO: [guild] Running trial a77c58bf57cf40b1aca4f0ac8d36189f: train.R (family=symmetric, span=1.4102052882818001)</span></span>
+<span><span class="co">## rmse: 14.9689486015253 </span></span>
+<span><span class="co">## INFO: [guild] Random start for optimization (3 of 3)</span></span>
+<span><span class="co">## INFO: [guild] Running trial 9f5084fbcb044a53bfa938228b7fee61: train.R (family=symmetric, span=0.8445813960919828)</span></span>
+<span><span class="co">## rmse: 14.7822893407812 </span></span>
+<span><span class="co">## INFO: [guild] Found 3 previous trial(s) for use in optimization</span></span>
+<span><span class="co">## INFO: [guild] Running trial b292e01c3fc44dedb9badf338d29b03e: train.R (family=gaussian, span=0.32493440147494623)</span></span>
+<span><span class="co">## rmse: 12.6548263015391 </span></span>
+<span><span class="co">## INFO: [guild] Found 4 previous trial(s) for use in optimization</span></span>
+<span><span class="co">## INFO: [guild] Running trial 63f36851d55740058d657ed8894b9d56: train.R (family=gaussian, span=3.0)</span></span>
+<span><span class="co">## rmse: 14.6929214549524</span></span></code></pre></div>
+<p>You can launch an optimizer multiple times, and it will automatically
+pick up where it left off, using results from all previous runs to
+select the flag values for the next run.</p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>,</span>
+<span>          optimizer <span class="op">=</span> <span class="st">"bayesian"</span>,</span>
+<span>          minimize <span class="op">=</span> <span class="st">"rmse"</span>,</span>
+<span>          max_trials <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">## INFO: [guild] Random start for optimization (1 of 3)</span></span>
+<span><span class="co">## INFO: [guild] Running trial c265b0eaa4434766b1b5d8675982da0a: train.R (family=gaussian, span=0.75)</span></span>
+<span><span class="co">## rmse: 14.3970247057306 </span></span>
+<span><span class="co">## INFO: [guild] Random start for optimization (2 of 3)</span></span>
+<span><span class="co">## INFO: [guild] Running trial e6d529d74cfd49b3812234cdcda646e4: train.R (family=symmetric, span=2.7761685076681646)</span></span>
+<span><span class="co">## rmse: 15.049358414109 </span></span>
+<span><span class="co">## INFO: [guild] Random start for optimization (3 of 3)</span></span>
+<span><span class="co">## INFO: [guild] Running trial 18e2db0bae8542d49f1d3a3d9c5fc808: train.R (family=gaussian, span=1.2980501724689373)</span></span>
+<span><span class="co">## rmse: 14.627311220132 </span></span>
+<span><span class="co">## INFO: [guild] Found 3 previous trial(s) for use in optimization</span></span>
+<span><span class="co">## INFO: [guild] Running trial 1eca86d7f02d4d32aea8dc2de6ff6713: train.R (family=symmetric, span=0.3)</span></span>
+<span><span class="co">## rmse: 12.5758081076474 </span></span>
+<span><span class="co">## INFO: [guild] Found 4 previous trial(s) for use in optimization</span></span>
+<span><span class="co">## INFO: [guild] Running trial 9a14fa59ebe5426ea6d20bd5b10f4fec: train.R (family=symmetric, span=0.3)</span></span>
+<span><span class="co">## rmse: 12.5758081076474</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="managing-runs">Managing runs<a class="anchor" aria-label="anchor" href="#managing-runs"></a>
@@ -495,43 +566,89 @@ and <code><a href="../reference/runs_label.html">runs_tag()</a></code>.</li>
 </ul>
 <p>The <code>runs_*</code> family of functions all take
 <code>runs</code> as a first argument, and can be composed with
-<code>|&gt;</code>. For example, lets investigate the results from the
-last 10 hyperparameter optimization runs:</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter, lag</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
-<span></span>
-<span><span class="va">best</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runs_info.html">runs_info</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span><span class="va">scalars</span><span class="op">$</span><span class="va">rmse</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">best</span></span>
-<span><span class="co">#&gt; # A tibble: 1 × 15</span></span>
-<span><span class="co">#&gt;   label                 tags  marked flags…¹ scala…² opera…³ started            </span></span>
-<span><span class="co">#&gt;   &lt;chr&gt;                 &lt;lis&gt; &lt;lgl&gt;  &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;dttm&gt;             </span></span>
-<span><span class="co">#&gt; 1 family=symmetric spa… &lt;chr&gt; FALSE  symmet…    14.8 train.R 2023-01-21 15:52:18</span></span>
-<span><span class="co">#&gt; # … with 9 more variables: flags$span &lt;dbl&gt;, stopped &lt;dttm&gt;, comments &lt;list&gt;,</span></span>
-<span><span class="co">#&gt; #   status &lt;chr&gt;, exit_status &lt;int&gt;, deps &lt;list&gt;, project_dir &lt;chr&gt;, dir &lt;chr&gt;,</span></span>
-<span><span class="co">#&gt; #   id &lt;chr&gt;, and abbreviated variable names ¹​flags$family, ²​scalars$rmse,</span></span>
-<span><span class="co">#&gt; #   ³​operation</span></span>
-<span></span>
-<span><span class="va">best</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/runs_label.html">runs_tag</a></span><span class="op">(</span><span class="st">"best"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="../reference/runs_export.html">runs_export</a></span><span class="op">(</span><span class="st">"./best-runs"</span><span class="op">)</span></span></code></pre></div>
-<p>The <code>runs</code> arguments can be supplied as data frame, as
-returned by <code><a href="../reference/runs_info.html">runs_info()</a></code> or <code><a href="../reference/runs_scalars.html">runs_scalars()</a></code>,
-like in the example above. <code>runs</code> can also be a character
+<code>|&gt;</code>. The <code>runs</code> arguments can be supplied as
+data frame, as returned by <code><a href="../reference/runs_info.html">runs_info()</a></code> or
+<code><a href="../reference/runs_scalars.html">runs_scalars()</a></code>. <code>runs</code> can also be a character
 vector, with a flexible syntax supported for specifying runs selections:
 For example, <code>runs</code> can be an <code>id</code>, an integer
 (the n-th last run), or any combination of filter specifications like
 <code>running = TRUE</code> and <code>started  = 'last hour'</code>. See
 <code>?runs_info()</code> for details.</p>
+<p>To illustrate, lets launch a few runs and then investigate the
+results from all our previous runs (including the 10 hyperparameter
+optimization runs, as well as the runs with flag values we manually
+launched earlier in this guide):</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>, echo <span class="op">=</span> <span class="cn">FALSE</span>, flags <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>  span <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">.3</span>, <span class="fl">1.5</span>, length.out <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>,</span>
+<span>  family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"symmetric"</span>, <span class="st">"gaussian"</span><span class="op">)</span></span>
+<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runs_info.html">runs_info</a></span><span class="op">(</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">runs</span></span>
+<span><span class="co">## # A tibble: 26 × 15</span></span>
+<span><span class="co">##    label                tags  marked flags…¹ scala…² opera…³ started            </span></span>
+<span><span class="co">##    &lt;chr&gt;                &lt;lis&gt; &lt;lgl&gt;  &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;   &lt;dttm&gt;             </span></span>
+<span><span class="co">##  1 family=gaussian spa… &lt;chr&gt; FALSE  gaussi…    14.6 train.R 2023-01-22 11:38:39</span></span>
+<span><span class="co">##  2 family=gaussian spa… &lt;chr&gt; FALSE  gaussi…    14.6 train.R 2023-01-22 11:38:38</span></span>
+<span><span class="co">##  3 family=gaussian spa… &lt;chr&gt; FALSE  gaussi…    14.5 train.R 2023-01-22 11:38:38</span></span>
+<span><span class="co">##  4 family=gaussian spa… &lt;chr&gt; FALSE  gaussi…    14.2 train.R 2023-01-22 11:38:37</span></span>
+<span><span class="co">##  5 family=gaussian spa… &lt;chr&gt; FALSE  gaussi…    12.4 train.R 2023-01-22 11:38:37</span></span>
+<span><span class="co">##  6 family=symmetric sp… &lt;chr&gt; FALSE  symmet…    15.0 train.R 2023-01-22 11:38:36</span></span>
+<span><span class="co">##  7 family=symmetric sp… &lt;chr&gt; FALSE  symmet…    14.9 train.R 2023-01-22 11:38:35</span></span>
+<span><span class="co">##  8 family=symmetric sp… &lt;chr&gt; FALSE  symmet…    14.8 train.R 2023-01-22 11:38:35</span></span>
+<span><span class="co">##  9 family=symmetric sp… &lt;chr&gt; FALSE  symmet…    14.6 train.R 2023-01-22 11:38:34</span></span>
+<span><span class="co">## 10 family=symmetric sp… &lt;chr&gt; FALSE  symmet…    12.6 train.R 2023-01-22 11:38:33</span></span>
+<span><span class="co">## # … with 16 more rows, 10 more variables: flags$span &lt;dbl&gt;, scalars$mse &lt;dbl&gt;,</span></span>
+<span><span class="co">## #   stopped &lt;dttm&gt;, comments &lt;list&gt;, status &lt;chr&gt;, exit_status &lt;int&gt;,</span></span>
+<span><span class="co">## #   deps &lt;list&gt;, project_dir &lt;chr&gt;, dir &lt;chr&gt;, id &lt;chr&gt;, and abbreviated</span></span>
+<span><span class="co">## #   variable names ¹​flags$family, ²​scalars$rmse, ³​operation</span></span>
+<span></span>
+<span><span class="va">runs</span> <span class="op">&lt;-</span> <span class="va">runs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="co"># filter out runs that didn't print 'rmse: &lt;numeric&gt;' </span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">scalars</span><span class="op">$</span><span class="va">rmse</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="co"># filter out runs where the flag `span` was over 1.5</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">flags</span><span class="op">$</span><span class="va">span</span> <span class="op">&lt;=</span> <span class="fl">1.5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">runs</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">flags</span><span class="op">$</span><span class="va">span</span>, y <span class="op">=</span> <span class="va">scalars</span><span class="op">$</span><span class="va">rmse</span>,</span>
+<span>             color <span class="op">=</span> <span class="va">flags</span><span class="op">$</span><span class="va">family</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_smooth</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="guildai_files/figure-commonmark/unnamed-chunk-28-1.png"></p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">best_run</span> <span class="op">&lt;-</span> <span class="va">runs</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">flags</span><span class="op">$</span><span class="va">family</span> <span class="op">==</span> <span class="st">"gaussian"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_max</a></span><span class="op">(</span><span class="va">scalars</span><span class="op">$</span><span class="va">rmse</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="va">best_run</span><span class="op">)</span></span>
+<span><span class="co">## Rows: 1</span></span>
+<span><span class="co">## Columns: 15</span></span>
+<span><span class="co">## $ label       &lt;chr&gt; "family=gaussian span=1.5"</span></span>
+<span><span class="co">## $ tags        &lt;list&gt; &lt;&gt;</span></span>
+<span><span class="co">## $ marked      &lt;lgl&gt; FALSE</span></span>
+<span><span class="co">## $ flags       &lt;tibble[,2]&gt; &lt;tbl_df[1 x 2]&gt;</span></span>
+<span><span class="co">## $ scalars     &lt;tibble[,2]&gt; &lt;tbl_df[1 x 2]&gt;</span></span>
+<span><span class="co">## $ operation   &lt;chr&gt; "train.R"</span></span>
+<span><span class="co">## $ started     &lt;dttm&gt; 2023-01-22 11:38:39</span></span>
+<span><span class="co">## $ stopped     &lt;dttm&gt; 2023-01-22 11:38:40</span></span>
+<span><span class="co">## $ comments    &lt;list&gt; [&lt;tbl_df[0 x 4]&gt;]</span></span>
+<span><span class="co">## $ status      &lt;chr&gt; "completed"</span></span>
+<span><span class="co">## $ exit_status &lt;int&gt; 0</span></span>
+<span><span class="co">## $ deps        &lt;list&gt; []</span></span>
+<span><span class="co">## $ project_dir &lt;chr&gt; "/tmp/Rtmp2OhSO5/guildai-intro-sample-project-129661329263…</span></span>
+<span><span class="co">## $ dir         &lt;chr&gt; "/tmp/Rtmp2OhSO5/guildai-intro-sample-project-12966132926…</span></span>
+<span><span class="co">## $ id          &lt;chr&gt; "3e2a92d351ee4b32ac66ed6f542981c6"</span></span>
+<span></span>
+<span><span class="va">best_run</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/runs_label.html">runs_tag</a></span><span class="op">(</span><span class="st">"best"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/runs_export.html">runs_export</a></span><span class="op">(</span><span class="st">"./best-runs"</span><span class="op">)</span></span>
+<span><span class="co">## Modified tags for 1 run(s)</span></span>
+<span><span class="co">## Copying 3e2a92d351ee4b32ac66ed6f542981c6</span></span>
+<span><span class="co">## Exported 1 run(s) to ./best-runs</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="using-guild-from-the-terminal">Using guild from the terminal<a class="anchor" aria-label="anchor" href="#using-guild-from-the-terminal"></a>
 </h3>
@@ -539,19 +656,19 @@ For example, <code>runs</code> can be an <code>id</code>, an integer
 the R function <code><a href="../reference/install_guild_cli.html">install_guild_cli()</a></code> to place the
 <code>guild</code> executable installed by
 <code><a href="../reference/install_guild.html">guildai::install_guild()</a></code> on your PATH:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">export_guild_cli</span><span class="op">(</span>dest <span class="op">=</span> <span class="st">"~/bin"</span><span class="op">)</span></span></code></pre></div>
 <p>Then you can launch runs and perform other guild operations from the
 terminal:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="ex">guild</span> run train.R</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="ex">guild</span> run train.R batch_size=<span class="st">'[32,64]'</span></span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="ex">guild</span> run train.R</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="ex">guild</span> run train.R batch_size=<span class="st">'[32,64]'</span></span></code></pre></div>
 <p>As you move between the terminal and the R console, almost all of the
 same syntax supported at the terminal can be used in R by passing
 strings to the respective R functions.</p>
 <p>By default, R character vectors supplied to <code>...</code>
 throughout most R functions are quoted for the system shell and passed
 through to guild. This enables usage like:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train.R"</span>, <span class="st">"batch_size=[32,64]"</span><span class="op">)</span></span></code></pre></div>
 <p>There are some additional conveniences provided for passing through
 command line options from R.</p>
@@ -586,7 +703,7 @@ vector</li>
 </ul>
 <p>Here are a few different R expressions that invoke <code>guild</code>
 with identical system calls.</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/runs_info.html">runs_info</a></span><span class="op">(</span>marked <span class="op">=</span> <span class="cn">TRUE</span>, started <span class="op">=</span> <span class="st">'last hour'</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/runs_info.html">runs_info</a></span><span class="op">(</span><span class="st">"--marked"</span>, <span class="st">"--started"</span> <span class="op">=</span> <span class="st">"last hour"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/runs_info.html">runs_info</a></span><span class="op">(</span><span class="st">"--marked"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"--started"</span>, <span class="st">"last hour"</span><span class="op">)</span><span class="op">)</span></span>
@@ -604,9 +721,16 @@ which provides quick access to frequently used functions from the Addins
 menu:</p>
 <p>Note that you can use <strong>Tools</strong> -&gt; <strong>Modify
 Keyboard Shortcuts</strong> within RStudio to assign a keyboard shortcut
-to one or more of the addin commands. It’s recomended that the action
-for “Launch <code><a href="../reference/guild_run.html">guild_run()</a></code>” be assigned to
-Ctrl/Cmd+Alt+Enter.</p>
+to one or more of the addin commands.</p>
+<p>Specifically three addins are provided:</p>
+<ul>
+<li>Launch a <code><a href="../reference/guild_run.html">guild_run()</a></code> with the current source
+document.</li>
+<li>Launch <code><a href="../reference/guild_view.html">guild_view()</a></code>.</li>
+<li>View <code><a href="../reference/runs_info.html">runs_info()</a></code> in the interactive table viewer.</li>
+</ul>
+<p>It’s recomended that the action for “Launch <code><a href="../reference/guild_run.html">guild_run()</a></code>”
+be assigned to keyboard shortcut Ctrl/Cmd + Alt + Enter.</p>
 </div>
 <div class="section level4">
 <h4 id="background-training">Background Training<a class="anchor" aria-label="anchor" href="#background-training"></a>
@@ -614,9 +738,16 @@ Ctrl/Cmd+Alt+Enter.</p>
 <p>Since training runs can become quite lengthy, it’s often useful to
 run them in the background in order to keep the R console free for other
 work. In the RStudio IDE, <code><a href="../reference/guild_run.html">guild_run()</a></code> automatically
-launches runs as background jobs.</p>
+launches runs as background jobs. To disable this feature, set
+<code>options(guildai.run_as_job = FALSE)</code>.</p>
 </div>
 </div>
+</div>
+<div class="section level2">
+<h2 id="learn-more">Learn More<a class="anchor" aria-label="anchor" href="#learn-more"></a>
+</h2>
+<p>See <a href="https://my.guild.ai/t/guild-ai-documentation/64" class="external-link uri">https://my.guild.ai/t/guild-ai-documentation/64</a> for more
+information.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
