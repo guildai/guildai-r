@@ -1,29 +1,11 @@
 guildai
 ================
 
-``` r
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-knitr::opts_knit$set(
-  root.dir = local({
-    root <- tempfile("guildai-intro-sample-project-")
-    dir.create(root)
-    dir.create(file.path(root, ".guild"))
-    root
-  }))
-```
-
-``` r
-library(guildai)
-```
-
 <!-- TODO a nice screenshot image here-->
 
 *guildai* provides a suite of tools for tracking, visualizing, and
-managing machine learning experiments. The {guildai} R package is a
-successor to the {tfruns} package.
+managing machine learning experiments. The *guildai* R package is a
+successor to the *tfruns* package.
 
 - Track the hyperparameters, metrics, output, and source code of every
   training run.
@@ -58,7 +40,7 @@ tensorFlow and keras, torch, and tidymodels.
 In this introductory example, we’ll start by showing guild with no
 framework at all, on a very simple (and somewhat contrived) example.
 
-Lets say we have an R script named `"train.R"` where we are fitting a
+Say we have an R script named `"train.R"` where we are fitting a
 smoother line, like so:
 
 ``` r
@@ -74,7 +56,13 @@ To train a model with guildai, use the `guild_run()` function in place
 of the `source()` function to execute your R script. For example:
 
 ``` r
+library(guildai)
 guild_run("train.R")
+## > model <- loess(dist ~ speed, data = cars)
+## > plot(dist ~ speed, data = cars)
+## > lines(x = 3:30, y = predict(model, 3:30), col = "blue")
+## > 
+## >
 ```
 
 This will launch a new R process in an isolated run directory using the
@@ -106,23 +94,23 @@ Retrieve a data frame with run information in R using `runs_info()`:
 ``` r
 run <- runs_info()
 tibble::glimpse(run)
-#> Rows: 1
-#> Columns: 15
-#> $ label       <chr> ""
-#> $ tags        <list> <>
-#> $ marked      <lgl> FALSE
-#> $ flags       <tibble[,0]> <tbl_df[1 x 0]>
-#> $ scalars     <tibble[,0]> <tbl_df[1 x 0]>
-#> $ operation   <chr> "train.R"
-#> $ started     <dttm> 2023-01-21 15:52:14
-#> $ stopped     <dttm> 2023-01-21 15:52:14
-#> $ comments    <list> [<tbl_df[0 x 4]>]
-#> $ status      <chr> "completed"
-#> $ exit_status <int> 0
-#> $ deps        <list> []
-#> $ project_dir <chr> "/tmp/RtmpBqbw9Z/guildai-intro-sample-project-37c6818ad480…
-#> $ dir         <chr> "/tmp/RtmpBqbw9Z/guildai-intro-sample-project-37c6818ad48…
-#> $ id          <chr> "60f23bf4609d4e6691900864328c30a8"
+## Rows: 1
+## Columns: 15
+## $ label       <chr> ""
+## $ tags        <list> <>
+## $ marked      <lgl> FALSE
+## $ flags       <tibble[,0]> <tbl_df[1 x 0]>
+## $ scalars     <tibble[,0]> <tbl_df[1 x 0]>
+## $ operation   <chr> "train.R"
+## $ started     <dttm> 2023-01-22 11:38:11
+## $ stopped     <dttm> 2023-01-22 11:38:12
+## $ comments    <list> [<tbl_df[0 x 4]>]
+## $ status      <chr> "completed"
+## $ exit_status <int> 0
+## $ deps        <list> []
+## $ project_dir <chr> "/tmp/Rtmp2OhSO5/guildai-intro-sample-project-129661329263…
+## $ dir         <chr> "/tmp/Rtmp2OhSO5/guildai-intro-sample-project-12966132926…
+## $ id          <chr> "631b2e2cd30e4123830beeda2571d4bd"
 ```
 
 `runs_info()` returns a data frame with information about runs, one row
@@ -153,35 +141,35 @@ frequently useful for reproducability.
 
 ``` r
 fs::dir_tree(run$dir[1], all = TRUE)
-#> /tmp/RtmpBqbw9Z/guildai-intro-sample-project-37c6818ad4801/.guild/runs/60f23bf4609d4e6691900864328c30a8
-#> ├── .guild
-#> │   ├── attrs
-#> │   │   ├── cmd
-#> │   │   ├── deps
-#> │   │   ├── env
-#> │   │   ├── exit_status
-#> │   │   ├── flags
-#> │   │   ├── host
-#> │   │   ├── id
-#> │   │   ├── initialized
-#> │   │   ├── op
-#> │   │   ├── platform
-#> │   │   ├── plugins
-#> │   │   ├── r_packages_loaded
-#> │   │   ├── random_seed
-#> │   │   ├── run_params
-#> │   │   ├── sourcecode_digest
-#> │   │   ├── started
-#> │   │   ├── stopped
-#> │   │   ├── user
-#> │   │   └── user_flags
-#> │   ├── manifest
-#> │   ├── opref
-#> │   ├── output
-#> │   └── output.index
-#> ├── plots
-#> │   └── Rplot001.png
-#> └── train.R
+## /tmp/Rtmp2OhSO5/guildai-intro-sample-project-129661329263c/.guild/runs/631b2e2cd30e4123830beeda2571d4bd
+## ├── .guild
+## │   ├── attrs
+## │   │   ├── cmd
+## │   │   ├── deps
+## │   │   ├── env
+## │   │   ├── exit_status
+## │   │   ├── flags
+## │   │   ├── host
+## │   │   ├── id
+## │   │   ├── initialized
+## │   │   ├── op
+## │   │   ├── platform
+## │   │   ├── plugins
+## │   │   ├── r_packages_loaded
+## │   │   ├── random_seed
+## │   │   ├── run_params
+## │   │   ├── sourcecode_digest
+## │   │   ├── started
+## │   │   ├── stopped
+## │   │   ├── user
+## │   │   └── user_flags
+## │   ├── manifest
+## │   ├── opref
+## │   ├── output
+## │   └── output.index
+## ├── plots
+## │   └── Rplot001.png
+## └── train.R
 ```
 
 # Flags
@@ -192,14 +180,16 @@ make it easy to compare flags across runs. Any scalar literal assigned
 at the top level of a run script is automatically identified as a
 *flag*.
 
-To illustrate, we’ll modify our script “train.R” to use the `span` and
-`family` arguments to the `loess()` smoother:.
+## Supplying run flag values
+
+To illustrate, we’ll modify our script “train.R” by adding flags `span`
+and `family`, which we pass as arguments to the `loess()` smoother:
 
 ``` r
 span <- .75
 family <- "gaussian"
 
-model <- loess(dist ~ speed, data = cars, 
+model <- loess(dist ~ speed, data = cars,
                span = span, family = family)
 
 plot(dist ~ speed, data = cars)
@@ -210,7 +200,7 @@ You can launch a run with different flag values like this:
 
 ``` r
 guild_run("train.R", flags = list(
-  span = 1.5, 
+  span = 1.5,
   family = "symmetric"
 ))
 ```
@@ -231,8 +221,8 @@ for (span in c(0.5, 0.75, 1, 1.25))
 ```
 
 You can also pass multiple values for each flag, and guild will
-automatically expand the combinations to a grid search. For example,
-this will launch 4 training runs, each a unique pairing of flags.
+automatically expand the combinations to a grid. For example, this will
+launch 4 training runs, each a unique pairing of flags.
 
 ``` r
 guild_run("train.R", flags = list(
@@ -245,29 +235,35 @@ Another way to launch a batch of runs is to pass a data frame of flags
 values, with each row corresponding to a run.
 
 ``` r
-flags_df <- expand.grid(span = c(0.5, 0.75), 
+flags_df <- expand.grid(span = c(0.5, 0.75),
                         family = c("gaussian", "symmetric"))
 flags_df
-#>   span    family
-#> 1 0.50  gaussian
-#> 2 0.75  gaussian
-#> 3 0.50 symmetric
-#> 4 0.75 symmetric
+##   span    family
+## 1 0.50  gaussian
+## 2 0.75  gaussian
+## 3 0.50 symmetric
+## 4 0.75 symmetric
 ```
 
 ``` r
-guild_run("train.R", flags = flags_df)
+guild_run("train.R", flags = flags_df, echo = FALSE)
 ```
 
-### Retreiving Run Flags
+## Retreiving run flags
 
 The flags and flag values associated with each runs are returned by
 `runs_info()` as a packed dataframe under the `flags` name.
 
 ``` r
-runs <- runs_info()
+runs <- runs_info(1:4) # retrieve the last 4 runs
 runs$flags
-#> # A tibble: 1 × 0
+## # A tibble: 4 × 2
+##   family     span
+##   <chr>     <dbl>
+## 1 symmetric  0.75
+## 2 symmetric  0.5 
+## 3 gaussian   0.75
+## 4 gaussian   0.5
 ```
 
 # Scalars
@@ -283,31 +279,64 @@ scalar:
 key: <numeric>
 ```
 
-To illustrate, here is “train.R” updated to output a scalar named
-`rmse`.
+To illustrate, here is “train.R” updated to output two scalars, `rmse`
+and `mse`.
 
 ``` r
 span <- .75
 family <- "gaussian"
 
-model <- loess(dist ~ speed, data = cars, 
+model <- loess(dist ~ speed, data = cars,
                span = span, family = family)
 
 plot(dist ~ speed, data = cars)
 lines(x = 3:30, y = predict(model, 3:30), col = "blue")
 
-rmse <- sqrt(mean(residuals(model)^2))
+mse <- mean(residuals(model)^2)
+rmse <- sqrt(mse)
+
+cat("mse:", mse, "\n")
 cat("rmse:", rmse, "\n")
 ```
 
-We can retrieve scalar results from runs with `runs_info()`:
+``` r
+guild_run("train.R")
+## > span <- .75
+## > family <- "gaussian"
+## > model <- loess(dist ~ speed, data = cars,
+## +                span = span, family = family)
+## > plot(dist ~ speed, data = cars)
+## > lines(x = 3:30, y = predict(model, 3:30), col = "blue")
+## > mse <- mean(residuals(model)^2)
+## > rmse <- sqrt(mse)
+## > cat("mse:", mse, "\n")
+## mse: 207.274320377417 
+## > cat("rmse:", rmse, "\n")
+## rmse: 14.3970247057306 
+## > 
+## >
+```
+
+When the script is run, these two lines in the printed output are
+identified by guild as scalars:
+
+``` verbatim
+mse: 207.274320377417
+rmse: 14.3970247057306
+```
+
+We can retrieve the scalar results from runs with `runs_info()`:
 
 ``` r
 runs_info(1)$scalars
-#> # A tibble: 1 × 0
+## # A tibble: 1 × 2
+##     mse  rmse
+##   <dbl> <dbl>
+## 1  207.  14.4
 ```
 
-Here we see that guild has automatically identified `rmse` as a scalar.
+Here we see that guild has automatically identified `rmse` and `mse` as
+scalars.
 
 If you are printing values for the same scalar `key` multiple times
 during a run (e.g, `loss` during a training loop), then be sure to also
@@ -319,7 +348,7 @@ TensorBoard).
 but the full history of scalars observed in runs can also be accessed
 from R directly via `runs_scalars()`.
 
-If the run produces tfevent records (e.g., via
+If the run produces tfevent records in the run directory (e.g., via
 `keras::callback_tensorboard()` or `tfevents::log_event()`), those are
 also automatically identified by guild as run scalars, and included in
 `runs_info()` (and `guild_view()`, and TensorBoard and other run views).
@@ -341,7 +370,7 @@ should not echo the R expressions in the stdout log by supplying
 ``` r
 #| echo: no
 
-model <- loess(dist ~ speed, data = cars, 
+model <- loess(dist ~ speed, data = cars,
                span = span, family = family)
 ```
 
@@ -357,7 +386,9 @@ placing hashpipe yaml annotations above the flag expression.
 ### Flag constraints
 
 For example, we can update our “train.R” script to add constraints to
-the `span` flag.
+the `span` and `family` flags. For `span` we’ll set a range of valid
+values from 0.3–3.0. For `family` we’ll define a set of two valid string
+values `family` can take, `"gaussian"` or `"symmetric"`.
 
 ``` r
 #| echo: no
@@ -368,7 +399,7 @@ span <- .75
 #| choices: [gaussian, symmetric]
 family <- "gaussian"
 
-model <- loess(dist ~ speed, data = cars, 
+model <- loess(dist ~ speed, data = cars,
                span = span, family = family)
 
 plot(dist ~ speed, data = cars)
@@ -381,8 +412,10 @@ cat("rmse:", rmse, "\n")
 Now if you attempt to launch the run with a flag value that’s outside
 the constraints defined, guild will throw an error:
 
+<!-- TODO: this gives a non-informative error -->
+
 ``` r
-guild_run("trian.R", flags = list(span = 99))
+guild_run("trian.R", flags = list(span = 99)) # error
 ```
 
 ### Flag destinations
@@ -398,8 +431,8 @@ the flag values in the main R script using `source()` or similar.
 
 FLAGS <- envir::include("flags.R", new.env())
 
-model <- loess(dist ~ speed, data = cars, 
-               span = FLAGS$span, 
+model <- loess(dist ~ speed, data = cars,
+               span = FLAGS$span,
                family = FLAGS$family)
 ```
 
@@ -410,8 +443,8 @@ YAML files are also supported as a flags destination:
 
 FLAGS <- yaml::read_yaml("flags.yml")
 
-model <- loess(dist ~ speed, data = cars, 
-               span = FLAGS$span, 
+model <- loess(dist ~ speed, data = cars,
+               span = FLAGS$span,
                family = FLAGS$family)
 ```
 
@@ -433,7 +466,7 @@ span <- .75
 #| choices: [gaussian, symmetric]
 family <- "gaussian"
 
-model <- loess(dist ~ speed, data = cars, 
+model <- loess(dist ~ speed, data = cars,
                span = span, family = family)
 
 plot(dist ~ speed, data = cars)
@@ -446,10 +479,51 @@ cat("rmse:", rmse, "\n")
 You can use an optimizer with this operation like so:
 
 ``` r
-guild_run("train.R", 
-          optimizer = "bayesian", 
-          minimize = "rmse", 
-          max_trials = 10)
+guild_run("train.R",
+          optimizer = "bayesian",
+          minimize = "rmse",
+          max_trials = 5)
+## INFO: [guild] Random start for optimization (1 of 3)
+## INFO: [guild] Running trial 5ce0a82eb26b4f72bc072ea6ec208041: train.R (family=gaussian, span=0.75)
+## rmse: 14.3970247057306 
+## INFO: [guild] Random start for optimization (2 of 3)
+## INFO: [guild] Running trial a77c58bf57cf40b1aca4f0ac8d36189f: train.R (family=symmetric, span=1.4102052882818001)
+## rmse: 14.9689486015253 
+## INFO: [guild] Random start for optimization (3 of 3)
+## INFO: [guild] Running trial 9f5084fbcb044a53bfa938228b7fee61: train.R (family=symmetric, span=0.8445813960919828)
+## rmse: 14.7822893407812 
+## INFO: [guild] Found 3 previous trial(s) for use in optimization
+## INFO: [guild] Running trial b292e01c3fc44dedb9badf338d29b03e: train.R (family=gaussian, span=0.32493440147494623)
+## rmse: 12.6548263015391 
+## INFO: [guild] Found 4 previous trial(s) for use in optimization
+## INFO: [guild] Running trial 63f36851d55740058d657ed8894b9d56: train.R (family=gaussian, span=3.0)
+## rmse: 14.6929214549524
+```
+
+You can launch an optimizer multiple times, and it will automatically
+pick up where it left off, using results from all previous runs to
+select the flag values for the next run.
+
+``` r
+guild_run("train.R",
+          optimizer = "bayesian",
+          minimize = "rmse",
+          max_trials = 5)
+## INFO: [guild] Random start for optimization (1 of 3)
+## INFO: [guild] Running trial c265b0eaa4434766b1b5d8675982da0a: train.R (family=gaussian, span=0.75)
+## rmse: 14.3970247057306 
+## INFO: [guild] Random start for optimization (2 of 3)
+## INFO: [guild] Running trial e6d529d74cfd49b3812234cdcda646e4: train.R (family=symmetric, span=2.7761685076681646)
+## rmse: 15.049358414109 
+## INFO: [guild] Random start for optimization (3 of 3)
+## INFO: [guild] Running trial 18e2db0bae8542d49f1d3a3d9c5fc808: train.R (family=gaussian, span=1.2980501724689373)
+## rmse: 14.627311220132 
+## INFO: [guild] Found 3 previous trial(s) for use in optimization
+## INFO: [guild] Running trial 1eca86d7f02d4d32aea8dc2de6ff6713: train.R (family=symmetric, span=0.3)
+## rmse: 12.5758081076474 
+## INFO: [guild] Found 4 previous trial(s) for use in optimization
+## INFO: [guild] Running trial 9a14fa59ebe5426ea6d20bd5b10f4fec: train.R (family=symmetric, span=0.3)
+## rmse: 12.5758081076474
 ```
 
 # Managing runs
@@ -461,45 +535,96 @@ Guild comes with a family of functions for managing runs.
 - Delete runs: `runs_delete()` `runs_purge()` `runs_restore()`.
 
 The `runs_*` family of functions all take `runs` as a first argument,
-and can be composed with `|>`. For example, lets investigate the results
-from the last 10 hyperparameter optimization runs:
-
-``` r
-library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
-
-best <- runs_info(10) %>%
-  slice_max(scalars$rmse)
-
-best
-#> # A tibble: 1 × 15
-#>   label                 tags  marked flags…¹ scala…² opera…³ started            
-#>   <chr>                 <lis> <lgl>  <chr>     <dbl> <chr>   <dttm>             
-#> 1 family=symmetric spa… <chr> FALSE  symmet…    14.8 train.R 2023-01-21 15:52:18
-#> # … with 9 more variables: flags$span <dbl>, stopped <dttm>, comments <list>,
-#> #   status <chr>, exit_status <int>, deps <list>, project_dir <chr>, dir <chr>,
-#> #   id <chr>, and abbreviated variable names ¹​flags$family, ²​scalars$rmse,
-#> #   ³​operation
-
-best %>%
-  runs_tag("best") %>%
-  runs_export("./best-runs")
-```
-
-The `runs` arguments can be supplied as data frame, as returned by
-`runs_info()` or `runs_scalars()`, like in the example above. `runs` can
+and can be composed with `|>`. The `runs` arguments can be supplied as
+data frame, as returned by `runs_info()` or `runs_scalars()`. `runs` can
 also be a character vector, with a flexible syntax supported for
 specifying runs selections: For example, `runs` can be an `id`, an
 integer (the n-th last run), or any combination of filter specifications
 like `running = TRUE` and `started  = 'last hour'`. See `?runs_info()`
 for details.
+
+To illustrate, lets launch a few runs and then investigate the results
+from all our previous runs (including the 10 hyperparameter optimization
+runs, as well as the runs with flag values we manually launched earlier
+in this guide):
+
+``` r
+guild_run("train.R", echo = FALSE, flags = list(
+  span = seq(.3, 1.5, length.out = 5),
+  family = c("symmetric", "gaussian")
+))
+```
+
+``` r
+library(dplyr, warn.conflicts = FALSE)
+library(ggplot2)
+
+runs <- runs_info() 
+
+runs
+## # A tibble: 26 × 15
+##    label                tags  marked flags…¹ scala…² opera…³ started            
+##    <chr>                <lis> <lgl>  <chr>     <dbl> <chr>   <dttm>             
+##  1 family=gaussian spa… <chr> FALSE  gaussi…    14.6 train.R 2023-01-22 11:38:39
+##  2 family=gaussian spa… <chr> FALSE  gaussi…    14.6 train.R 2023-01-22 11:38:38
+##  3 family=gaussian spa… <chr> FALSE  gaussi…    14.5 train.R 2023-01-22 11:38:38
+##  4 family=gaussian spa… <chr> FALSE  gaussi…    14.2 train.R 2023-01-22 11:38:37
+##  5 family=gaussian spa… <chr> FALSE  gaussi…    12.4 train.R 2023-01-22 11:38:37
+##  6 family=symmetric sp… <chr> FALSE  symmet…    15.0 train.R 2023-01-22 11:38:36
+##  7 family=symmetric sp… <chr> FALSE  symmet…    14.9 train.R 2023-01-22 11:38:35
+##  8 family=symmetric sp… <chr> FALSE  symmet…    14.8 train.R 2023-01-22 11:38:35
+##  9 family=symmetric sp… <chr> FALSE  symmet…    14.6 train.R 2023-01-22 11:38:34
+## 10 family=symmetric sp… <chr> FALSE  symmet…    12.6 train.R 2023-01-22 11:38:33
+## # … with 16 more rows, 10 more variables: flags$span <dbl>, scalars$mse <dbl>,
+## #   stopped <dttm>, comments <list>, status <chr>, exit_status <int>,
+## #   deps <list>, project_dir <chr>, dir <chr>, id <chr>, and abbreviated
+## #   variable names ¹​flags$family, ²​scalars$rmse, ³​operation
+
+runs <- runs %>%
+  # filter out runs that didn't print 'rmse: <numeric>' 
+  filter(!is.na(scalars$rmse)) %>% 
+  # filter out runs where the flag `span` was over 1.5
+  filter(flags$span <= 1.5)
+
+runs %>%
+  ggplot(aes(x = flags$span, y = scalars$rmse,
+             color = flags$family)) +
+  geom_point() + geom_smooth()
+```
+
+![](guildai_files/figure-commonmark/unnamed-chunk-28-1.png)
+
+``` r
+best_run <- runs |>
+  filter(flags$family == "gaussian") |>
+  slice_max(scalars$rmse)
+
+tibble::glimpse(best_run)
+## Rows: 1
+## Columns: 15
+## $ label       <chr> "family=gaussian span=1.5"
+## $ tags        <list> <>
+## $ marked      <lgl> FALSE
+## $ flags       <tibble[,2]> <tbl_df[1 x 2]>
+## $ scalars     <tibble[,2]> <tbl_df[1 x 2]>
+## $ operation   <chr> "train.R"
+## $ started     <dttm> 2023-01-22 11:38:39
+## $ stopped     <dttm> 2023-01-22 11:38:40
+## $ comments    <list> [<tbl_df[0 x 4]>]
+## $ status      <chr> "completed"
+## $ exit_status <int> 0
+## $ deps        <list> []
+## $ project_dir <chr> "/tmp/Rtmp2OhSO5/guildai-intro-sample-project-129661329263…
+## $ dir         <chr> "/tmp/Rtmp2OhSO5/guildai-intro-sample-project-12966132926…
+## $ id          <chr> "3e2a92d351ee4b32ac66ed6f542981c6"
+
+best_run |>
+  runs_tag("best") |>
+  runs_export("./best-runs")
+## Modified tags for 1 run(s)
+## Copying 3e2a92d351ee4b32ac66ed6f542981c6
+## Exported 1 run(s) to ./best-runs
+```
 
 ## Using guild from the terminal
 
@@ -575,12 +700,26 @@ quick access to frequently used functions from the Addins menu:
 
 Note that you can use **Tools** -\> **Modify Keyboard Shortcuts** within
 RStudio to assign a keyboard shortcut to one or more of the addin
-commands. It’s recomended that the action for “Launch `guild_run()`” be
-assigned to Ctrl/Cmd+Alt+Enter.
+commands.
+
+Specifically three addins are provided:
+
+- Launch a `guild_run()` with the current source document.
+- Launch `guild_view()`.
+- View `runs_info()` in the interactive table viewer.
+
+It’s recomended that the action for “Launch `guild_run()`” be assigned
+to keyboard shortcut Ctrl/Cmd + Alt + Enter.
 
 ### Background Training
 
 Since training runs can become quite lengthy, it’s often useful to run
 them in the background in order to keep the R console free for other
 work. In the RStudio IDE, `guild_run()` automatically launches runs as
-background jobs.
+background jobs. To disable this feature, set
+`options(guildai.run_as_job = FALSE)`.
+
+# Learn More
+
+See https://my.guild.ai/t/guild-ai-documentation/64 for more
+information.
