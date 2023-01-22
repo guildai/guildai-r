@@ -58,18 +58,21 @@ parse_yaml_anno <- function(x) {
 
 
 new_source_w_active_echo <- function() {
+  # returns a modified version of `base::source()` that respects
+  # 'options(echo=)' values being changed mid-run.
   # R CMD check complains if a copy of base::source lives in the
   # namespace because of forbidden .Internal() calls, so we
   # have to do this patch at runtime.
   source2 <- base::source
   body(source2) <- substitute({
-    options(echo = echo)
+    orig_echo <- options(echo = echo)
     rm(echo)
-    makeActiveBinding("echo", function(x) {
-      if (missing(x)) getOption("echo")
-      else options(echo = x)
-    }, environment())
-    SOURCE_BODY
+    makeActiveBinding("echo", function(x)
+      if (missing(x)) getOption("echo") else options(echo = x),
+      environment())
+    out <- SOURCE_BODY
+    options(orig_echo) # can't use on.exit() because base::source() uses it.
+    invisible(out)
   }, env = list(SOURCE_BODY = body(source)))
   source2
 }

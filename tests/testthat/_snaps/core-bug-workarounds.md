@@ -9,8 +9,6 @@
     > .no  <- 6L   # invalid prefix
     > `_x` <- 7L   # invalid prefix
     > `_y` <- 9L   # invalid prefix
-    > 
-    > 
 
 ---
 
@@ -23,6 +21,4 @@
     > .no  <- 106L   # invalid prefix
     > `_x` <- 107L   # invalid prefix
     > `_y` <- 109L   # invalid prefix
-    > 
-    > 
 
