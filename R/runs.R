@@ -359,7 +359,7 @@ function(runs = NULL, ...,
 runs_scalars <- function(runs = NULL, ...) {
   csv <- tempfile(fileext = ".csv")
   guild("tensorboard --export-scalars", csv,
-        ..., maybe_extract_run_ids(runs))
+        list(...), maybe_extract_run_ids(runs))
   out <- readr::read_csv(csv, col_types = "cccdd", na = character())
   path <- out$path
   path[path == ".guild"] <- NA_character_
@@ -385,9 +385,9 @@ runs_scalars <- function(runs = NULL, ...) {
 runs_export <- function(runs = NULL, location, ...,
                         move = FALSE, copy_resources = FALSE) {
   guild("export --yes",
-        if (move) "--move",
-        if (copy_resources) "--copy-resources",
-        ..., location, maybe_extract_run_ids(runs))
+        if (isTRUE(move)) "--move",
+        if (isTRUE(copy_resources)) "--copy_resources",
+        list(...), location, maybe_extract_run_ids(runs))
   invisible(runs)
 }
 
@@ -397,8 +397,8 @@ runs_export <- function(runs = NULL, location, ...,
 runs_import <- function(runs = NULL, location, ...,
                         move = FALSE, copy_resources = FALSE) {
   guild("import --yes",
-        if (move) "--move",
-        if (copy_resources) "--copy-resources",
+        if (isTRUE(move)) "--move",
+        if (isTRUE(copy_resources)) "--copy_resources",
         list(...), location, maybe_extract_run_ids(runs))
   invisible(runs)
 }
@@ -482,7 +482,7 @@ runs_label <- function(runs = NULL, label = NULL, ..., clear = FALSE) {
   guild("label --yes",
         if (clear) "--clear",
         "--set" = label,
-        ..., maybe_extract_run_ids(runs))
+        list(...), maybe_extract_run_ids(runs))
   invisible(runs)
   # TODO: update label if `runs` is a df
 }
@@ -492,10 +492,10 @@ runs_label <- function(runs = NULL, label = NULL, ..., clear = FALSE) {
 #' @rdname runs_label
 runs_tag <- function(runs = NULL, add = NULL, ..., remove = NULL, clear = FALSE) {
   guild("tag --yes",
-        if(clear) "--clear",
+        if (clear) "--clear",
         "--delete" = remove,
         "--add" = add,
-        ..., maybe_extract_run_ids(runs))
+        list(...), maybe_extract_run_ids(runs))
   invisible(runs)
 }
 
@@ -503,7 +503,8 @@ runs_tag <- function(runs = NULL, add = NULL, ..., remove = NULL, clear = FALSE)
 #' @export
 #' @rdname runs_label
 runs_mark <- function(runs = NULL, ..., clear = FALSE) {
-  guild("mark --yes", if (clear) "--clear", ..., maybe_extract_run_ids(runs))
+  guild("mark --yes", if (clear) "--clear", list(...),
+        maybe_extract_run_ids(runs))
   invisible(runs)
 }
 
@@ -521,7 +522,8 @@ runs_comment <- function(runs = NULL, comment = NULL, ...,
   if(length(comment) > 1)
     comment <- paste0(comment, collapse = "\n")
   guild("runs comment --yes",
-        list(clear = clear, delete = delete, add = comment, ...),
+        if (clear) "--clear",
+        list(delete = delete, add = comment, ...),
         maybe_extract_run_ids(runs))
   invisible(runs)
 }
@@ -593,7 +595,8 @@ edit_comment <- function() {
 resolve_run_ids <- function(runs = NULL, ..., all = TRUE) {
   selection <- maybe_extract_run_ids(runs)
   if(...length() || identical(selection, runs))
-    selection <- guild("select", list(all = all, ..., selection),
+    selection <- guild("select", if(isTRUE(all)) "--all",
+                       list(..., selection),
                        stdout = TRUE)
   selection
 }

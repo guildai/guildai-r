@@ -59,7 +59,7 @@ local_project <- function(files, envir = parent.frame(), name = NULL,
 
 if(interactive()) {
 
-  message("Using guild:", guildai:::find_guild())
+  message("Using guild: ", guildai:::find_guild())
 
 } else { #if(!interactive()) {
 
