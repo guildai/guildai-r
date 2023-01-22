@@ -140,11 +140,12 @@ function(opspec = "train.R",
     cl <- as.call(c(quote(guildai::guild_run),
                     as.list.environment(environment()),
                     ...))
+    cl$as_job <- FALSE
     script <- tempfile("guildai-rstudio-job-", fileext = ".R")
     writeLines(deparse(cl), script)
-    rstudioapi::jobRunScript(script, name = paste("guild run", opspec),
-                             workingDir = getwd())
-    return(invisible())
+    return(invisible(rstudioapi::jobRunScript(
+      script, name = paste("guild run", opspec),
+      workingDir = getwd())))
   }
 
   if (is.data.frame(flags)) {
