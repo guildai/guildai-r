@@ -1,6 +1,9 @@
+library(tensorflow)
 library(keras)
+use_virtualenv("r-tensorflow")
 
-# Prepare data ----
+
+# Prepare data --------------------------------------------------------
 
 fashion_mnist <- dataset_fashion_mnist()
 
@@ -10,15 +13,15 @@ c(test_images, test_labels) %<-% fashion_mnist$test
 train_images <- train_images / 255
 test_images <- test_images / 255
 
-# Define model ----
+# Define model --------------------------------------------------------
 
 units <- 64
 
-model <- keras_model_sequential(input_shape = c(28, 28)) %>%
+model <-
+  keras_model_sequential(input_shape = c(28, 28)) %>%
   layer_flatten() %>%
   layer_dense(units = units, activation = 'relu') %>%
   layer_dense(units = 10, activation = 'softmax')
-
 
 learning_rate <- 0.001
 
@@ -30,7 +33,7 @@ model %>% compile(
 
 model
 
-# Fit model ----
+# Fit model -----------------------------------------------------------
 
 batch_size <- 32
 epochs <- 10
@@ -40,11 +43,12 @@ history <- model %>%
       validation_split = 0.2,
       batch_size = batch_size,
       epochs = epochs,
+      callbacks = list(callback_tensorboard()),
       verbose = 2)
 
 plot(history)
 
-# Evaluate model ----
+# Evaluate model ------------------------------------------------------
 
 score <- model %>%
   evaluate(test_images, test_labels,
@@ -54,5 +58,8 @@ score <- model %>%
 cat('test_loss:', score$loss, "\n")
 cat('test_accuracy:', score$accuracy, "\n")
 
-# save_model_tf(model, "model.keras")
-# saveRDS(history, "history.rds")
+
+# Save model ----------------------------------------------------------
+
+save_model_tf(model, "model.keras")
+saveRDS(history, "history.rds")

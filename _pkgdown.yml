@@ -13,6 +13,5 @@ navbar:
         - text: keras
           href: articles/examples/keras.html
 
-
 development:
   mode: auto
