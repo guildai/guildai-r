@@ -98,7 +98,8 @@ write_run_attr_pkg_loaded <- function(pkgname, pkgpath = NULL) {
   val <- list(list(path = pkgpath,
                    version = getNamespaceVersion(ns)))
   names(val) <- pkgname
-  # TODO: consider not appending
+  # TODO: consider not appending to existing attr
+  # instead do a full read -> modify -> write each invocation
   write_run_attr("r_packages_loaded", val, append = TRUE)
 }
 
@@ -199,10 +200,10 @@ modify_r_file_flags <- function(filename, flags, overwrite = FALSE,
       df <- df[df$token == "NUM_CONST", ]
       stopifnot(nrow(df) %in% c(1L, 2L))
 
-      ### TODO:
+      # TODO: cleanup complex flags injection
       ## either user wrote "1i", "-1i", "1+1i" "-1+1i"
-      # df <- df[df$token %in% c("NUM_CONST", "'+'", "'-'"), ]
-      # stopifnot(nrow(df) %in% c(1L, 2L, 3L, 4L))
+      ## df <- df[df$token %in% c("NUM_CONST", "'+'", "'-'"), ]
+      ## stopifnot(nrow(df) %in% c(1L, 2L, 3L, 4L))
 
       if (length(unique(c(df$line1, df$line2))) == 1) {
         # both NUM_CONSTS of the complex are on the same line.
@@ -366,8 +367,6 @@ write_run_attr <- function(name, data, ..., append = FALSE) {
 }
 
 
-# TODO: guild run should cast intergerish (pass int as "number")
-#   floats to int if the flag type is int
 
 fix_flags_yaml <- function(file) {
   # guild core / python 'yaml' module doesn't quote some keys correctly

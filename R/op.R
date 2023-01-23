@@ -143,8 +143,6 @@ rscript_exe <- function() {
 
 infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"), "#|")) {
 
-  # TODO: (Captured on board) figure out how to present a nice error message
-  # in case of parse errors from python plugin / guild
   exprs <- parse(text = text, keep.source = TRUE)
 
   # 0-length names to force a yaml mapping if no flags.
@@ -216,33 +214,7 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
 
 }
 
-## TODO: guild bug in the way it writes out flags
-## If `y` is a flag, guild writes out this to attrs, which is not valid yaml:
-## y: 0.0
-## It should be
-## 'y': 0.0
-## Otherwise, this get's parsed into R as
-## yaml::yaml.load("y: 0.0") |> dput()
-## list(`TRUE` = 0)
-
-## TODO: a way to declare required packages that can't otherwise be easily inferred?
-## ? #| requires: {packages: [glmnet]}  or similar
-
-## add a yaml option:
+# TODO (maybe): add a yaml option 'save' for post-run save.image():
 ##   save: true, false, or list of symbols like [x, y, model]
 ##   determines if `save.image()` is called at the end of the R run
 ##   or passed --save to the command line opts
-
-# as_flag_spec <- function(x) {
-#
-#   param <- list(default = default,
-#                 type = switch(typeof(default),
-#                               "double" = "float",
-#                               "logical" = "bool",
-#                               "character" = "string",
-#                               "integer" = "int",
-#                               "complex" = "complex"))
-#
-#
-#
-# }

@@ -255,12 +255,6 @@ function(runs = NULL, ...,
       out <- as.list(run_scalars$lastVal)
       names(out) <- run_scalars$tag
       path <- str_drop_prefix(run_scalars$prefix, "logs/")
-      # TODO?: include `step` as another scalar in this context,
-      # maybe only if the user output it in stdout
-      # if((step <- max(run_scalars$maxStep[run_scalars$prefix == ".guild"])) >= 0L) {
-      #   out[["step"]] <- step
-      #   append(path) <- ".guild"
-      # }
       lapply(split.default(out, path), as_tibble)
     }))
 
@@ -268,8 +262,11 @@ function(runs = NULL, ...,
   # leave scalars from run generated tfevent records packed
   from_stdout <- scalars[[".guild"]]
   scalars[[".guild"]] <- NULL
-  ## TODO: check for name collisions between stdout keys and tfevent record paths,
-  ## figure out something elegant. Right now ti
+  # TODO: better solution for name collisions in scalars between stdout
+  # keys and tfevent record paths. Current behavior is ugly, but not
+  # catastrophic. dplyr::bind_cols() automatically renames vars as
+  # needed to make everything unique.
+  #
   # if(length(colliding_names <-
   #      intersect(names(from_stdout), names(scalars))) {
   #   ???
@@ -296,7 +293,7 @@ function(runs = NULL, ...,
 }
 
 
-# TODO: make scalars a flat namespace with "." separating dir /
+# TODO(maybe): make scalars a flat namespace with "." separating dir /
 # e.g., something like runs_info()$scalars$"train/accuracy"
 # runs_info()$scalars$train.accuracy
 
@@ -621,13 +618,7 @@ maybe_extract_run_ids <- function(x) {
 }
 
 
-# TODO: `guild api runs --operation 'train.R'` doesn't work, I think because
-# guild doesn't know about this operation in this context because it's not
-# listed in the guildfile. Not sure what the best way to resolve this is, or
-# even if we should...
-
-
 # TODO: tidyr::unpack() loses data if names collide.
 # df <- runs_info()
 # df$flags$test_accuracy <- 1
-# runs_info() %>%  select(id, flags, scalars) %>% tidyr::unpack(c(flags, scalars))
+# runs_info() %>% select(id, flags, scalars) %>% tidyr::unpack(c(flags, scalars))

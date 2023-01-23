@@ -20,7 +20,7 @@ knitr::opts_knit$set(
 # help knitr capture stdout
 ns <- asNamespace("guildai")
 unlockBinding("system2t", ns)
-ns$system2t <- function(command, args, ..., stdout = "", stderr = "" ) {
+ns$system2t <- function(command, args, ..., stdout = "", stderr = "", echo_cmd) {
   if(stdout == "" && stderr == "") {
     stdout <- stderr <- TRUE
     on.exit(writeLines(out))
@@ -383,10 +383,8 @@ cat("rmse:", rmse, "\\n")
 Now if you attempt to launch the run with a flag value that's outside
 the constraints defined, guild will throw an error:
 
-<!-- TODO: this gives a non-informative error -->
-
-```{r, eval = FALSE}
-guild_run("trian.R", flags = list(span = 99)) # error
+```{r, warning = FALSE}
+guild_run("train.R", flags = list(span = 99)) # error
 ```
 
 ### Flag destinations
@@ -518,7 +516,7 @@ runs <- runs %>%
 runs %>%
   ggplot(aes(x = flags$span, y = scalars$rmse,
              color = flags$family)) +
-  geom_point() + geom_smooth()
+  geom_point() + geom_smooth(se = FALSE)
 ```
 
 ```{r paged.print=FALSE}

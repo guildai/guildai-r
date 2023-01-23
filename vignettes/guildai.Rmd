@@ -100,15 +100,15 @@ tibble::glimpse(run)
 ## $ flags       <tibble[,0]> <tbl_df[1 x 0]>
 ## $ scalars     <tibble[,0]> <tbl_df[1 x 0]>
 ## $ operation   <chr> "train.R"
-## $ started     <dttm> 2023-01-22 18:31:51
-## $ stopped     <dttm> 2023-01-22 18:31:52
+## $ started     <dttm> 2023-01-23 14:26:57
+## $ stopped     <dttm> 2023-01-23 14:26:57
 ## $ comments    <list> [<tbl_df[0 x 4]>]
 ## $ status      <chr> "completed"
 ## $ exit_status <int> 0
 ## $ deps        <list> []
-## $ project_dir <chr> "/tmp/RtmpObMwkC/guildai-intro-sample-project-267db1b27f98…
-## $ dir         <chr> "/tmp/RtmpObMwkC/guildai-intro-sample-project-267db1b27f9…
-## $ id          <chr> "ef4d508873c24dbaa9688f5e54a4bf56"
+## $ project_dir <chr> "/tmp/RtmpFPIYnO/guildai-intro-sample-project-55c96033312c"
+## $ dir         <chr> "/tmp/RtmpFPIYnO/guildai-intro-sample-project-55c96033312c…
+## $ id          <chr> "5e5e44188aed47abaf4045e1265903d2"
 ```
 
 `runs_info()` returns a data frame with information about runs, one row
@@ -139,7 +139,7 @@ frequently useful for reproducability.
 
 ``` r
 fs::dir_tree(run$dir[1], all = TRUE)
-## /tmp/RtmpObMwkC/guildai-intro-sample-project-267db1b27f980/.guild/runs/ef4d508873c24dbaa9688f5e54a4bf56
+## /tmp/RtmpFPIYnO/guildai-intro-sample-project-55c96033312c/.guild/runs/5e5e44188aed47abaf4045e1265903d2
 ## ├── .guild
 ## │   ├── attrs
 ## │   │   ├── cmd
@@ -408,10 +408,9 @@ cat("rmse:", rmse, "\n")
 Now if you attempt to launch the run with a flag value that’s outside
 the constraints defined, guild will throw an error:
 
-<!-- TODO: this gives a non-informative error -->
-
 ``` r
-guild_run("trian.R", flags = list(span = 99)) # error
+guild_run("train.R", flags = list(span = 99)) # error
+## guild: invalid value 99.0 for span: out of range (greater than max 3)
 ```
 
 ### Flag destinations
@@ -480,19 +479,19 @@ guild_run("train.R",
           minimize = "rmse",
           max_trials = 5)
 ## INFO: [guild] Random start for optimization (1 of 3)
-## INFO: [guild] Running trial 1362c9c1b2de4aaa885a3e8847ae5104: train.R (family=gaussian, span=0.75)
+## INFO: [guild] Running trial 91b58ee08a304abe9eb2cbe982d348d9: train.R (family=gaussian, span=0.75)
 ## rmse: 14.3970247057306 
 ## INFO: [guild] Random start for optimization (2 of 3)
-## INFO: [guild] Running trial b4aeb632fe4140f0a4017daa5dd51233: train.R (family=gaussian, span=2.8902713411966174)
-## rmse: 14.6917177224245 
+## INFO: [guild] Running trial e4075d78a34d4ce79cde65697c3111fd: train.R (family=gaussian, span=0.4613701275679095)
+## rmse: 13.4371638129709 
 ## INFO: [guild] Random start for optimization (3 of 3)
-## INFO: [guild] Running trial 5d0eea2717a84e1e98ff692c6f6d8ed2: train.R (family=symmetric, span=1.8048455059911397)
-## rmse: 15.0075159560132 
+## INFO: [guild] Running trial 745788b26b104e17b6f1a024ccdd5d87: train.R (family=gaussian, span=2.9358734155658364)
+## rmse: 14.6922317061996 
 ## INFO: [guild] Found 3 previous trial(s) for use in optimization
-## INFO: [guild] Running trial 067e6177e7c943728a35bc11da8c30c1: train.R (family=gaussian, span=0.3)
-## rmse: 12.3620973783366 
+## INFO: [guild] Running trial 6dc979bc06bf462292be2a6476b9f7b7: train.R (family=symmetric, span=0.3)
+## rmse: 12.5758081076474 
 ## INFO: [guild] Found 4 previous trial(s) for use in optimization
-## INFO: [guild] Running trial 1e9f0284d37543a5a78d81954fad1c53: train.R (family=symmetric, span=0.3)
+## INFO: [guild] Running trial cb2ca712b8df4b86a9e5cf546d16d885: train.R (family=symmetric, span=0.3)
 ## rmse: 12.5758081076474
 ```
 
@@ -506,20 +505,20 @@ guild_run("train.R",
           minimize = "rmse",
           max_trials = 5)
 ## INFO: [guild] Random start for optimization (1 of 3)
-## INFO: [guild] Running trial b86bab56e0cf4c1ea774df5bf45e8e25: train.R (family=gaussian, span=0.75)
-## rmse: 14.3970247057306 
+## INFO: [guild] Running trial b20befa1f89a453298df5990fa3ac6c4: train.R (family=symmetric, span=0.75)
+## rmse: 14.8273317139021 
 ## INFO: [guild] Random start for optimization (2 of 3)
-## INFO: [guild] Running trial 7187487b820e4014afdc9af5f3f24132: train.R (family=symmetric, span=2.6403597783933916)
-## rmse: 15.0465495941782 
+## INFO: [guild] Running trial eb5bcc22ef584f7bab5bca8f5956d316: train.R (family=symmetric, span=1.6954198435104118)
+## rmse: 14.9997865558885 
 ## INFO: [guild] Random start for optimization (3 of 3)
-## INFO: [guild] Running trial 95ef983882c94f41844067e1fd778ed4: train.R (family=symmetric, span=0.35886498233477176)
-## rmse: 12.9401892499076 
+## INFO: [guild] Running trial c47c77fd80504d78a76a5dddf8ef1c80: train.R (family=symmetric, span=1.0690820637467267)
+## rmse: 14.8622567980811 
 ## INFO: [guild] Found 3 previous trial(s) for use in optimization
-## INFO: [guild] Running trial f93de91eae5d443787b165ac82620291: train.R (family=symmetric, span=0.3)
-## rmse: 12.5758081076474 
+## INFO: [guild] Running trial 9e140c569824405ab61265a3bf6d591f: train.R (family=gaussian, span=0.3001633342512856)
+## rmse: 12.3620973783366 
 ## INFO: [guild] Found 4 previous trial(s) for use in optimization
-## INFO: [guild] Running trial aa27061b43c84d91805d733a95e21d0e: train.R (family=symmetric, span=0.3)
-## rmse: 12.5758081076474
+## INFO: [guild] Running trial dcf8b4ff97924fffab227db5a19afe59: train.R (family=gaussian, span=0.3)
+## rmse: 12.3620973783366
 ```
 
 # Managing runs
@@ -561,16 +560,16 @@ runs
 ## # A tibble: 26 × 15
 ##    label                tags  marked flags…¹ scala…² opera…³ started            
 ##    <chr>                <lis> <lgl>  <chr>     <dbl> <chr>   <dttm>             
-##  1 family=gaussian spa… <chr> FALSE  gaussi…    14.6 train.R 2023-01-22 18:32:21
-##  2 family=gaussian spa… <chr> FALSE  gaussi…    14.6 train.R 2023-01-22 18:32:20
-##  3 family=gaussian spa… <chr> FALSE  gaussi…    14.5 train.R 2023-01-22 18:32:19
-##  4 family=gaussian spa… <chr> FALSE  gaussi…    14.2 train.R 2023-01-22 18:32:18
-##  5 family=gaussian spa… <chr> FALSE  gaussi…    12.4 train.R 2023-01-22 18:32:18
-##  6 family=symmetric sp… <chr> FALSE  symmet…    15.0 train.R 2023-01-22 18:32:16
-##  7 family=symmetric sp… <chr> FALSE  symmet…    14.9 train.R 2023-01-22 18:32:15
-##  8 family=symmetric sp… <chr> FALSE  symmet…    14.8 train.R 2023-01-22 18:32:15
-##  9 family=symmetric sp… <chr> FALSE  symmet…    14.6 train.R 2023-01-22 18:32:14
-## 10 family=symmetric sp… <chr> FALSE  symmet…    12.6 train.R 2023-01-22 18:32:13
+##  1 family=gaussian spa… <chr> FALSE  gaussi…    14.6 train.R 2023-01-23 14:27:29
+##  2 family=gaussian spa… <chr> FALSE  gaussi…    14.6 train.R 2023-01-23 14:27:28
+##  3 family=gaussian spa… <chr> FALSE  gaussi…    14.5 train.R 2023-01-23 14:27:27
+##  4 family=gaussian spa… <chr> FALSE  gaussi…    14.2 train.R 2023-01-23 14:27:27
+##  5 family=gaussian spa… <chr> FALSE  gaussi…    12.4 train.R 2023-01-23 14:27:26
+##  6 family=symmetric sp… <chr> FALSE  symmet…    15.0 train.R 2023-01-23 14:27:25
+##  7 family=symmetric sp… <chr> FALSE  symmet…    14.9 train.R 2023-01-23 14:27:25
+##  8 family=symmetric sp… <chr> FALSE  symmet…    14.8 train.R 2023-01-23 14:27:24
+##  9 family=symmetric sp… <chr> FALSE  symmet…    14.6 train.R 2023-01-23 14:27:23
+## 10 family=symmetric sp… <chr> FALSE  symmet…    12.6 train.R 2023-01-23 14:27:23
 ## # … with 16 more rows, 10 more variables: flags$span <dbl>, scalars$mse <dbl>,
 ## #   stopped <dttm>, comments <list>, status <chr>, exit_status <int>,
 ## #   deps <list>, project_dir <chr>, dir <chr>, id <chr>, and abbreviated
@@ -585,7 +584,7 @@ runs <- runs %>%
 runs %>%
   ggplot(aes(x = flags$span, y = scalars$rmse,
              color = flags$family)) +
-  geom_point() + geom_smooth()
+  geom_point() + geom_smooth(se = FALSE)
 ```
 
 ![](guildai_files/figure-commonmark/unnamed-chunk-28-1.png)
@@ -593,33 +592,35 @@ runs %>%
 ``` r
 best_run <- runs |>
   filter(flags$family == "gaussian") |>
-  slice_max(scalars$rmse)
+  slice_min(scalars$rmse)
 
 tibble::glimpse(best_run)
-## Rows: 1
+## Rows: 3
 ## Columns: 15
-## $ label       <chr> "family=gaussian span=1.5"
-## $ tags        <list> <>
-## $ marked      <lgl> FALSE
-## $ flags       <tibble[,2]> <tbl_df[1 x 2]>
-## $ scalars     <tibble[,2]> <tbl_df[1 x 2]>
-## $ operation   <chr> "train.R"
-## $ started     <dttm> 2023-01-22 18:32:21
-## $ stopped     <dttm> 2023-01-22 18:32:21
-## $ comments    <list> [<tbl_df[0 x 4]>]
-## $ status      <chr> "completed"
-## $ exit_status <int> 0
-## $ deps        <list> []
-## $ project_dir <chr> "/tmp/RtmpObMwkC/guildai-intro-sample-project-267db1b27f98…
-## $ dir         <chr> "/tmp/RtmpObMwkC/guildai-intro-sample-project-267db1b27f9…
-## $ id          <chr> "823bfa568a7d4d6bb5dd239f7bde3f15"
+## $ label       <chr> "family=gaussian span=0.3", "family=gaussian span=0.3", "f…
+## $ tags        <list> <>, <>, <>
+## $ marked      <lgl> FALSE, FALSE, FALSE
+## $ flags       <tibble[,2]> <tbl_df[3 x 2]>
+## $ scalars     <tibble[,2]> <tbl_df[3 x 2]>
+## $ operation   <chr> "train.R", "train.R", "train.R"
+## $ started     <dttm> 2023-01-23 14:27:26, 2023-01-23 14:27:21, 2023-01-23 14:2…
+## $ stopped     <dttm> 2023-01-23 14:27:27, 2023-01-23 14:27:21, 2023-01-23 14:27…
+## $ comments    <list> [<tbl_df[0 x 4]>], [<tbl_df[0 x 4]>], [<tbl_df[0 x 4]>]
+## $ status      <chr> "completed", "completed", "completed"
+## $ exit_status <int> 0, 0, 0
+## $ deps        <list> [], [], []
+## $ project_dir <chr> "/tmp/RtmpFPIYnO/guildai-intro-sample-project-55c96…
+## $ dir         <chr> "/tmp/RtmpFPIYnO/guildai-intro-sample-project-55c96…
+## $ id          <chr> "8208874738454b5eb7199b643cdb03e2", "dcf8b4ff97924fffab227…
 
 best_run |>
   runs_tag("best") |>
   runs_export("./best-runs")
-## Modified tags for 1 run(s)
-## Copying 823bfa568a7d4d6bb5dd239f7bde3f15
-## Exported 1 run(s) to ./best-runs
+## Modified tags for 3 run(s)
+## Copying 8208874738454b5eb7199b643cdb03e2
+## Copying dcf8b4ff97924fffab227db5a19afe59
+## Copying 9e140c569824405ab61265a3bf6d591f
+## Exported 3 run(s) to ./best-runs
 ```
 
 ## Using guild from the terminal
