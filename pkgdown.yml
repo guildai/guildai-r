@@ -2,8 +2,9 @@ pandoc: 2.19.2
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
+  keras: examples/keras.html
   guildai: guildai.html
-last_built: 2023-01-22T19:26Z
+last_built: 2023-01-23T00:05Z
 urls:
   reference: https://t-kalinowski.github.io/guildai-r/reference
   article: https://t-kalinowski.github.io/guildai-r/articles
