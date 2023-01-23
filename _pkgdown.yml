@@ -13,6 +13,7 @@ navbar:
         - {text: keras     , href: articles/examples/keras.html}
         - {text: xgboost   , href: articles/examples/xgboost.html}
         - {text: tidymodels, href: articles/examples/tidymodels.html}
+        - {text: mlr3      , href: articles/examples/mlr3.html}
 
 development:
   mode: auto
@@ -42,5 +43,3 @@ reference:
       - runs_delete
       - resolve_run_ids
       - guild_merge
-
-

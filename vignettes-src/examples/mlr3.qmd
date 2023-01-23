@@ -1,0 +1,75 @@
+---
+title: "example_tidymodels"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+
+# set up a "project" directory for render
+root.dir <- tempfile("guildai-example-mlr3-project-")
+dir.create(root.dir)
+dir.create(file.path(root.dir, ".guild"))
+file.copy("train-mlr3.R", root.dir)
+knitr::opts_knit$set(root.dir = root.dir)
+
+# help knitr capture stdout
+ns <- asNamespace("guildai")
+unlockBinding("system2t", ns)
+ns$system2t <- function(command, args, ..., stdout = "", stderr = "", echo_cmd) {
+  if(stdout == "" && stderr == "") {
+    stdout <- stderr <- TRUE
+    on.exit(writeLines(out))
+  }
+  out <- base::system2(command, args, stdout = stdout, stderr = stderr, ...)
+  invisible(out)
+}
+options(guildai.run_as_job = FALSE)
+```
+
+Here is an example showing how to use *guildai* with ml3r in R.
+
+If this is your first exposure to *guildai*, we recommend starting with
+the framework agnostic "Getting Started" guide. This example assumes
+familiarity with guild concepts like *flags* and *scalars*.
+
+We'll start with an example R script, named "train-mlr3.R", that trains,
+evaluates, and saves an tidymodels model using the "Palmer Penguins"
+dataset. Here is what it looks like:
+
+```{r, file = "train-mlr3.R", eval = FALSE}
+```
+
+A few things to note about the script:
+
+-   There is no 'guildai' specific configuration in the script code.
+    It's a regular R script, that you can safely `source()` or work with
+    interactively at the REPL.
+-   We define one hyperparameter flag: `cp`
+-   At the end of the run, we print metric scalars.
+
+With our script defined, we can launch a guild run and view it:
+
+```{r}
+library(guildai)
+guild_run("train-mlr3.R")
+```
+
+```{r, eval = FALSE}
+guild_view()
+```
+
+Launch a batch of runs with different flag values:
+
+```{r}
+guild_run("train-mlr3.R", echo = FALSE, flags = list(
+  cp = c(0.01, 0.05, 0.1)
+))
+```
+
+Retrieve run results:
+
+```{r, paged.print = FALSE}
+library(dplyr, warn.conflicts = FALSE)
+runs_info() %>% 
+  select(flags, scalars) 
+```
