@@ -113,14 +113,14 @@ is what it looks like:</p>
 <span><span class="va">units</span> <span class="op">&lt;-</span> <span class="fl">64</span></span>
 <span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu">keras_model_sequential</span><span class="op">(</span>input_shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">28</span>, <span class="fl">28</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">layer_flatten</span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu">layer_dense</span><span class="op">(</span>units <span class="op">=</span> <span class="va">units</span>, activation <span class="op">=</span> <span class="st">'relu'</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">keras_model_sequential</span><span class="op">(</span>input_shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">28</span>, <span class="fl">28</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">layer_flatten</span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span>  <span class="fu">layer_dense</span><span class="op">(</span>units <span class="op">=</span> <span class="va">units</span>, activation <span class="op">=</span> <span class="st">'relu'</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">layer_dense</span><span class="op">(</span>units <span class="op">=</span> <span class="fl">10</span>, activation <span class="op">=</span> <span class="st">'softmax'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">learning_rate</span> <span class="op">&lt;-</span> <span class="fl">0.001</span></span>
 <span></span>
-<span><span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu">compile</span><span class="op">(</span></span>
+<span><span class="va">model</span> <span class="op">%&gt;%</span> <span class="fu">compile</span><span class="op">(</span></span>
 <span>  optimizer <span class="op">=</span> <span class="fu">optimizer_adam</span><span class="op">(</span><span class="va">learning_rate</span><span class="op">)</span>,</span>
 <span>  loss <span class="op">=</span> <span class="st">'sparse_categorical_crossentropy'</span>,</span>
 <span>  metrics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'accuracy'</span><span class="op">)</span></span>
@@ -133,7 +133,7 @@ is what it looks like:</p>
 <span><span class="va">batch_size</span> <span class="op">&lt;-</span> <span class="fl">32</span></span>
 <span><span class="va">epochs</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span></span>
-<span><span class="va">history</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">history</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">fit</span><span class="op">(</span><span class="va">train_images</span>, <span class="va">train_labels</span>,</span>
 <span>      validation_split <span class="op">=</span> <span class="fl">0.2</span>,</span>
 <span>      batch_size <span class="op">=</span> <span class="va">batch_size</span>,</span>
@@ -145,9 +145,9 @@ is what it looks like:</p>
 <span></span>
 <span><span class="co"># Evaluate model ------------------------------------------------------</span></span>
 <span></span>
-<span><span class="va">score</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="va">score</span> <span class="op">&lt;-</span> <span class="va">model</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu">evaluate</span><span class="op">(</span><span class="va">test_images</span>, <span class="va">test_labels</span>,</span>
-<span>           verbose <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>           verbose <span class="op">=</span> <span class="fl">0</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">'test_loss:'</span>, <span class="va">score</span><span class="op">$</span><span class="va">loss</span>, <span class="st">"\n"</span><span class="op">)</span></span>

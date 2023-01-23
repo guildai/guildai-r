@@ -84,8 +84,8 @@
 <span class="r-in"><span><span class="fu">runs_scalars</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span> <span class="co"># scalars form two most recent runs</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># pass in a dataframe of runs</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="runs_info.html">runs_info</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">flags</span><span class="op">$</span><span class="va">epochs</span> <span class="op">&gt;</span> <span class="fl">5</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span><span class="fu"><a href="runs_info.html">runs_info</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">flags</span><span class="op">$</span><span class="va">epochs</span> <span class="op">&gt;</span> <span class="fl">5</span><span class="op">)</span> <span class="op">%&gt;%</span></span></span>
 <span class="r-in"><span>  <span class="fu">runs_scalars</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
