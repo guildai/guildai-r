@@ -75,7 +75,8 @@ find_python_from_registry <- function() {
 install_guild <-
   function(guildai = "dev",
            python = find_python()) {
-  venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL), mustWork = FALSE)
+  venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL),
+                        mustWork = FALSE)
   unlink(venv, recursive = TRUE, force = TRUE)
 
   message("Installing guildai core.")
@@ -103,7 +104,8 @@ install_guild <-
              echo_cmd = TRUE)
 
   pip_install("--ignore-installed", "pip", "wheel", "setuptools")
-  # pip_install("click==8.0.0")
+  if('-e' %in% guildai)
+    guildai <- c("--no-use-pep517", guildai)
   pip_install(guildai)
 
   # write out a ._pth file to ensure this python installation is isolated.
@@ -121,21 +123,32 @@ install_guild <-
   # For this reason we also modify the shebang on non-Windows platforms.
   # As an alternative, we could in `guild()` call `python -I -m guild.main_bootstrap`
   # instead of the console_script entry point `guild`.
-  if(!is_windows()) {
+  if (!is_windows()) {
     guild <- file.path(venv, "bin/guild")
     shebang_txt <- readLines(guild)
-    if(grepl("/python[0-9.]*$", shebang_txt[1]))
+    if ('-e' %in% guildai) {
+      shebang <- c(
+        "#!/bin/sh",
+        sprintf("'''exec' \"%s\" -I -Xfrozen_modules=off \"$0\" \"$@\"",
+                file.path(venv, "bin/python")),
+        "' '''"
+      )
+      shebang_txt <-
+        c(shebang,
+          shebang_txt[-(if (grepl("python", shebang_txt[1])) 1 else 1:3)])
+
+    } else if (grepl("/python[0-9.]*$", shebang_txt[1]))
       shebang_txt[1] <- paste(shebang_txt[1], "-I")
-    else if(grepl("exec", shebang_txt[2])) {
+    else if (grepl("exec", shebang_txt[2])) {
       # on macOS, the console_script entry point looks like this:
       ## #!/bin/sh
       ## '''exec' "/Users/tomasz/Library/Application Support/r-guildai/bin/python" "$0" "$@"
       ## ' '''
-      ## -*- coding: utf-8 -*-
+      ## # -*- coding: utf-8 -*-
       ## import re
       ## ...
       x <- shebang_txt[2]
-      if(endsWith(x, ' "$0" "$@"')) {
+      if (endsWith(x, ' "$0" "$@"')) {
         x <- str_drop_suffix(x, ' "$0" "$@"')
         x <- paste(x, "-I", '"$0" "$@"')
         shebang_txt[2] <- x
@@ -151,7 +164,14 @@ install_guild <-
     file.path(venv, "bin", "guild")
 
   invisible(guild_exe)
-}
+  }
+
+# install_guild(c("-e", "~/guild/guildai"), reticulate::install_python("3.11:latest"))
+# #!/bin/sh
+# '''exec' "/home/tomasz/.local/share/r-guildai/bin/python" -I -Xfrozen_modules=off "$0" "$@"
+# ' '''
+# # -*- coding: utf-8 -*-
+# import re
 
 # install_guild(
 #   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
