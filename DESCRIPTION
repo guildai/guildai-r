@@ -4,7 +4,8 @@ Title: R interface to guildai
 Version: 0.0.0.9001
 Authors@R: c(
   person("Tomasz", "Kalinowski", role = c("aut", "cph", "cre"),
-         email = "tomasz.kalinowski@rstudio.com"))
+         email = "tomasz@posit.co"),
+  person("Posit, PBC", role = c("cph", "fnd")))
 Description: R interface to guildai.
 URL: https://t-kalinowski.github.io/guildai-r/,
     https://github.com/t-kalinowski/guildai-r
