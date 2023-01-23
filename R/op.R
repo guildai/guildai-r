@@ -6,7 +6,11 @@
 emit_r_script_guild_data <- function(r_script_path = commandArgs(TRUE)[1])
   print.yaml(r_script_guild_data(r_script_path))
 
-
+# TODO: provide a user api for programmatically inspecting flags for
+# a given opspec.
+# It most likely should be through this interface:
+#   parse_json(guild("api help-op train.R", stdout=T))
+# but that api endpoint needs to be patched first.
 
 r_script_guild_data <- function(r_script_path) {
 

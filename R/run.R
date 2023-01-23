@@ -58,7 +58,8 @@ function(file = "train.R", flags_dest = file, echo = TRUE,
 
   source <- new_source_w_active_echo()
   formals(source) <- utils::modifyList(formals(source), list(
-    spaced = FALSE, keep.source = TRUE,
+    spaced = FALSE,
+    keep.source = TRUE,
     deparseCtrl = c("keepInteger", "showAttributes", "keepNA"),
     max.deparse.length = Inf
   ), keep.null = TRUE)
