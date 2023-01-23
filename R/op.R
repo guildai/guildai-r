@@ -71,13 +71,18 @@ r_script_guild_data <- function(r_script_path) {
   # data$sourcecode$select otherwise
 
   # directories that start with a . prefix like ".Rproj.user" are
-  # automatically excluded by default.
-  #
+  # automatically excluded by default. But not .files
+  if (file.exists(".Rhistory")) {
+    prepend(data$sourcecode$select) <-
+      list(list(exclude = list(text = ".Rhistory")))
+  }
+
   # "logs" is the default write location for
   # tfevents::log_event() and keras::callback_tensorboard()
-  prepend(data$sourcecode$select) <-
-    list(list(exclude = list(dir = "logs")),
-         list(exclude = list(text = ".Rhistory")))
+  if (dir.exists("logs")) {
+    prepend(data$sourcecode$select) <-
+      list(list(exclude = list(dir = "logs")))
+  }
 
   if(dir.exists("renv") && file.exists("renv.lock")) {
     prepend(data$sourcecode$select) <-
