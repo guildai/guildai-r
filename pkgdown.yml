@@ -3,9 +3,10 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   keras: examples/keras.html
+  tidymodels: examples/tidymodels.html
   xgboost: examples/xgboost.html
   guildai: guildai.html
-last_built: 2023-01-23T17:20Z
+last_built: 2023-01-23T17:58Z
 urls:
   reference: https://t-kalinowski.github.io/guildai-r/reference
   article: https://t-kalinowski.github.io/guildai-r/articles
