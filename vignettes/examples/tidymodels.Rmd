@@ -1,0 +1,667 @@
+example_tidymodels
+================
+
+Here is an example showing how to use *guildai* with tidymodels in R.
+
+If this is your first exposure to *guildai*, we recommend starting with
+the framework agnostic “Getting Started” guide. This example assumes
+familiarity with guild concepts like *flags* and *scalars*.
+
+We’ll start with an example R script, named “train-tidymodels.R”, that
+trains, evaluates, and saves an tidymodels model using the “Ames
+Housing” dataset. Here is what it looks like:
+
+``` r
+library(tidymodels)
+library(butcher)
+library(bestNormalize)
+library(sessioninfo)
+
+# Boilerplate options -------------------------------------------------
+tidymodels_prefer()
+theme_set(theme_bw())
+options(pillar.advice = FALSE, pillar.min_title_chars = Inf)
+
+# Setup and partition data --------------------------------------------
+data(ames)
+
+ames <-
+  ames %>%
+  mutate(Sale_Price = log10(Sale_Price)) %>%
+  select(-contains("_Cond"))
+
+ames_split <- initial_split(ames, strata = Sale_Price)
+ames_not_test <- training(ames_split)
+ames_test <- testing(ames_split)
+
+ames_rs <- validation_split(ames_not_test, strata = Sale_Price)
+ames_train <- analysis(ames_rs$splits[[1]])
+ames_val <- assessment(ames_rs$splits[[1]])
+
+# Flags ---------------------------------------------------------------
+
+#| description: spline degrees of freedom for longitude
+#| min: 2
+#| max: 50
+longitude_df <- 40L
+
+#| description: spline degrees of freedom for latitude
+#| min: 2
+#| max: 50
+latitude_df <- 40L
+
+#| description: L2 penalty
+#| min: 0.0
+#| max: 1.0
+pen_val <- 0.001
+
+#| description: Mixture of L1 and L2 penalty
+#| min: 0.0
+#| max: 1.0
+mix_val <- 1.0
+
+# Recipe and Workflow -------------------------------------------------
+
+ames_rec <-
+  recipe(Sale_Price ~ ., data = ames_train) %>%
+  step_other(MS_SubClass, MS_Zoning, Neighborhood, threshold = 0.05) %>%
+  step_orderNorm(Lot_Area, ends_with("_SF"), Gr_Liv_Area) %>%
+  step_dummy(all_nominal_predictors()) %>%
+  step_interact(~ starts_with("Central"):Year_Built) %>%
+  # NOTE We splice the values in via !! so that the step uses their values
+  # and not a reference to global variables (a very bad idea)
+  step_spline_natural(Longitude, deg_free = !!longitude_df) %>%
+  step_spline_natural(Latitude, deg_free = !!latitude_df)
+
+glmn_spec <-
+  linear_reg(penalty = pen_val, mixture = mix_val) %>%
+  set_engine("glmnet")
+
+ames_wflow <-
+  workflow() %>%
+  add_model(glmn_spec) %>%
+  add_recipe(ames_rec)
+
+ames_fit <- fit(ames_wflow, data = ames_train)
+ames_fit
+
+# fit -----------------------------------------------------------------
+
+glmnet_fit <-
+  ames_fit %>%
+  extract_fit_engine()
+
+glmnet_pred <-
+  glmnet_fit %>%
+  coef(s = pen_val) %>%
+  apply(2, function(x) sum(x != 0))
+
+glmnet_fit %>% autoplot(best_penalty = pen_val)
+
+
+# Validation set results ----------------------------------------------
+
+ames_pred <- augment(ames_fit, ames_val)
+
+ames_pred %>%
+  ggplot(aes(Sale_Price, .pred)) +
+  geom_abline(col = "green", lty = 2) +
+  geom_point(alpha = 1 / 3) +
+  coord_obs_pred() +
+  labs(x = "Observed (log-10)", y = "Predicted (log-10)")
+
+val_results <- ames_pred %>% metrics(Sale_Price, .pred)
+
+cat('validation_rmse:', val_results$.estimate[1], "\n")
+cat('validation_R2:', val_results$.estimate[2], "\n")
+cat('num_predictors:', glmnet_pred, "\n")
+
+# Save object ---------------------------------------------------------
+
+# butcher the objects to make their install sizes smaller
+ames_fit <- butcher(ames_fit)
+
+# Save objects in the current working directory
+save(ames_fit, val_results, file = ".RData",
+     compress = TRUE)
+
+# ---------------------------------------------------------------------
+
+session_info()
+```
+
+A few things to note about the script:
+
+- There is no ‘guildai’ specific configuration in the script code. It’s
+  a regular R script, that you can safely `source()` or work with
+  interactively at the REPL.
+- We declare some constraints on the flag values we’ve defined.
+- At the end of the run, we save the model. This file artifacts will be
+  stored as part of the run, enabling us to restore a trained model.
+
+With our script defined, we can launch a guild run and view it:
+
+``` r
+library(guildai)
+guild_run("train-tidymodels.R")
+## > library(tidymodels)
+## ── Attaching packages ────────────────────────────────────── tidymodels 1.0.0 ──
+## ✔ broom        1.0.2      ✔ recipes      1.0.4 
+## ✔ dials        1.1.0      ✔ rsample      1.1.1 
+## ✔ dplyr        1.0.10     ✔ tibble       3.1.8 
+## ✔ ggplot2      3.4.0      ✔ tidyr        1.2.1 
+## ✔ infer        1.0.4      ✔ tune         1.0.1 
+## ✔ modeldata    1.0.1      ✔ workflows    1.1.2 
+## ✔ parsnip      1.0.3      ✔ workflowsets 1.0.0 
+## ✔ purrr        1.0.1      ✔ yardstick    1.1.0 
+## ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
+## ✖ purrr::discard() masks scales::discard()
+## ✖ dplyr::filter()  masks stats::filter()
+## ✖ dplyr::lag()     masks stats::lag()
+## ✖ recipes::step()  masks stats::step()
+## • Search for functions across packages at https://www.tidymodels.org/find/
+## > library(butcher)
+## > library(bestNormalize)
+## > library(sessioninfo)
+## > # Boilerplate options -------------------------------------------------
+## > tidymodels_prefer()
+## > theme_set(theme_bw())
+## > options(pillar.advice = FALSE, pillar.min_title_chars = Inf)
+## > # Setup and partition data --------------------------------------------
+## > data(ames)
+## > ames <-
+## +   ames %>%
+## +   mutate(Sale_Price = log10(Sale_Price)) %>%
+## +   select(-contains("_Cond"))
+## > ames_split <- initial_split(ames, strata = Sale_Price)
+## > ames_not_test <- training(ames_split)
+## > ames_test <- testing(ames_split)
+## > ames_rs <- validation_split(ames_not_test, strata = Sale_Price)
+## > ames_train <- analysis(ames_rs$splits[[1]])
+## > ames_val <- assessment(ames_rs$splits[[1]])
+## > # Flags ---------------------------------------------------------------
+## > 
+## > #| description: spline degrees of freedom for longitude
+## > #| min: 2
+## > #| max: 50
+## > longitude_df <- 40L
+## > #| description: spline degrees of freedom for latitude
+## > #| min: 2
+## > #| max: 50
+## > latitude_df <- 40L
+## > #| description: L2 penalty
+## > #| min: 0.0
+## > #| max: 1.0
+## > pen_val <- 0.001
+## > #| description: Mixture of L1 and L2 penalty
+## > #| min: 0.0
+## > #| max: 1.0
+## > mix_val <- 1.0
+## > # Recipe and Workflow -------------------------------------------------
+## > 
+## > ames_rec <-
+## +   recipe(Sale_Price ~ ., data = ames_train) %>%
+## +   step_other(MS_SubClass, MS_Zoning, Neighborhood, threshold = 0.05) %>%
+## +   step_orderNorm(Lot_Area, ends_with("_SF"), Gr_Liv_Area) %>%
+## +   step_dummy(all_nominal_predictors()) %>%
+## +   step_interact(~ starts_with("Central"):Year_Built) %>%
+## +   # NOTE We splice the values in via !! so that the step uses their values
+## +   # and not a reference to global variables (a very bad idea)
+## +   step_spline_natural(Longitude, deg_free = !!longitude_df) %>%
+## +   step_spline_natural(Latitude, deg_free = !!latitude_df)
+## > glmn_spec <-
+## +   linear_reg(penalty = pen_val, mixture = mix_val) %>%
+## +   set_engine("glmnet")
+## > ames_wflow <-
+## +   workflow() %>%
+## +   add_model(glmn_spec) %>%
+## +   add_recipe(ames_rec)
+## > ames_fit <- fit(ames_wflow, data = ames_train)
+## > ames_fit
+## ══ Workflow [trained] ══════════════════════════════════════════════════════════
+## Preprocessor: Recipe
+## Model: linear_reg()
+## 
+## ── Preprocessor ────────────────────────────────────────────────────────────────
+## 6 Recipe Steps
+## 
+## • step_other()
+## • step_orderNorm()
+## • step_dummy()
+## • step_interact()
+## • step_spline_natural()
+## • step_spline_natural()
+## 
+## ── Model ───────────────────────────────────────────────────────────────────────
+## 
+## Call:  glmnet::glmnet(x = maybe_matrix(x), y = y, family = "gaussian",      alpha = ~mix_val) 
+## 
+##     Df  %Dev           Lambda
+## 1    0  0.00 0.12676844223500
+## 2    1  9.17 0.11550668321600
+## 3    2 17.31 0.10524538782900
+## 4    3 26.20 0.09589567764230
+## 5    4 35.13 0.08737656994010
+## 6    4 42.80 0.07961427628660
+## 7    4 49.16 0.07254156340740
+## 8    4 54.44 0.06609717084720
+## 9    5 58.90 0.06022528036060
+## 10   5 62.81 0.05487503244120
+## 11   5 66.04 0.05000008580100
+## 12   5 68.73 0.04555821598450
+## 13   6 70.98 0.04151094964010
+## 14   6 72.84 0.03782323128310
+## 15   7 74.59 0.03446311966110
+## 16   7 76.09 0.03140151109470
+## 17   8 77.34 0.02861188739530
+## 18   8 78.43 0.02607008617670
+## 19   8 79.34 0.02375409157300
+## 20   9 80.11 0.02164384354660
+## 21  12 80.88 0.01972106413890
+## 22  14 81.75 0.01796909915430
+## 23  14 82.51 0.01637277391040
+## 24  15 83.15 0.01491826180140
+## 25  15 83.74 0.01359296453940
+## 26  20 84.33 0.01238540303350
+## 27  22 84.90 0.01128511796360
+## 28  26 85.42 0.01028257918680
+## 29  28 86.02 0.00936910319185
+## 30  28 86.54 0.00853677788662
+## 31  31 86.99 0.00777839406752
+## 32  33 87.41 0.00708738297671
+## 33  33 87.77 0.00645775940670
+## 34  37 88.10 0.00588406985934
+## 35  41 88.45 0.00536134531022
+## 36  44 88.79 0.00488505816934
+## 37  47 89.11 0.00445108306536
+## 38  49 89.39 0.00405566111354
+## 39  52 89.64 0.00369536735808
+## 40  55 89.87 0.00336708110685
+## 41  56 90.07 0.00306795890138
+## 42  60 90.25 0.00279540988823
+## 43  69 90.44 0.00254707337823
+## 44  70 90.62 0.00232079839934
+## 45  71 90.78 0.00211462506593
+## 46  74 90.91 0.00192676760322
+## 
+## ...
+## and 45 more lines.
+## > # fit -----------------------------------------------------------------
+## > 
+## > glmnet_fit <-
+## +   ames_fit %>%
+## +   extract_fit_engine()
+## > glmnet_pred <-
+## +   glmnet_fit %>%
+## +   coef(s = pen_val) %>%
+## +   apply(2, function(x) sum(x != 0))
+## > glmnet_fit %>% autoplot(best_penalty = pen_val)
+## > # Validation set results ----------------------------------------------
+## > 
+## > ames_pred <- augment(ames_fit, ames_val)
+## > ames_pred %>%
+## +   ggplot(aes(Sale_Price, .pred)) +
+## +   geom_abline(col = "green", lty = 2) +
+## +   geom_point(alpha = 1 / 3) +
+## +   coord_obs_pred() +
+## +   labs(x = "Observed (log-10)", y = "Predicted (log-10)")
+## > val_results <- ames_pred %>% metrics(Sale_Price, .pred)
+## > cat('validation_rmse:', val_results$.estimate[1], "\n")
+## validation_rmse: 0.0754700452208367 
+## > cat('validation_R2:', val_results$.estimate[2], "\n")
+## validation_R2: 0.828298950423991 
+## > cat('num_predictors:', glmnet_pred, "\n")
+## num_predictors: 129 
+## > # Save object ---------------------------------------------------------
+## > 
+## > # butcher the objects to make their install sizes smaller
+## > ames_fit <- butcher(ames_fit)
+## > # Save objects in the current working directory
+## > save(ames_fit, val_results, file = ".RData",
+## +      compress = TRUE)
+## > # ---------------------------------------------------------------------
+## > 
+## > session_info()
+## ─ Session info ───────────────────────────────────────────────────────────────
+##  setting  value
+##  version  R version 4.2.2 Patched (2022-11-10 r83330)
+##  os       Ubuntu 20.04.5 LTS
+##  system   x86_64, linux-gnu
+##  ui       X11
+##  language (EN)
+##  collate  en_US.UTF-8
+##  ctype    en_US.UTF-8
+##  tz       America/New_York
+##  date     2023-01-23
+##  pandoc   2.5 @ /usr/bin/pandoc
+## 
+## ─ Packages ───────────────────────────────────────────────────────────────────
+##  package       * version    date (UTC) lib source
+##  assertthat      0.2.1      2019-03-21 [1] CRAN (R 4.2.0)
+##  backports       1.4.1      2021-12-13 [1] CRAN (R 4.2.0)
+##  bestNormalize * 1.8.3      2022-06-13 [1] CRAN (R 4.2.2)
+##  broom         * 1.0.2      2022-12-15 [1] CRAN (R 4.2.2)
+##  butcher       * 0.3.1      2022-12-14 [1] CRAN (R 4.2.2)
+##  cachem          1.0.6      2021-08-19 [1] CRAN (R 4.2.0)
+##  class           7.3-21     2023-01-23 [1] CRAN (R 4.2.2)
+##  cli             3.6.0      2023-01-09 [1] CRAN (R 4.2.2)
+##  codetools       0.2-18     2020-11-04 [4] CRAN (R 4.0.3)
+##  colorspace      2.1-0      2023-01-23 [1] CRAN (R 4.2.2)
+##  conflicted      1.1.0      2021-11-26 [1] CRAN (R 4.2.1)
+##  DBI             1.1.3      2022-06-18 [1] CRAN (R 4.2.1)
+##  dials         * 1.1.0      2022-11-04 [1] CRAN (R 4.2.2)
+##  DiceDesign      1.9        2021-02-13 [1] CRAN (R 4.2.1)
+##  digest          0.6.31     2022-12-11 [1] CRAN (R 4.2.2)
+##  doParallel      1.0.17     2022-02-07 [1] CRAN (R 4.2.2)
+##  doRNG           1.8.6      2023-01-16 [1] CRAN (R 4.2.2)
+##  dplyr         * 1.0.10     2022-09-01 [1] RSPM (R 4.2.0)
+##  ellipsis        0.3.2      2021-04-29 [1] CRAN (R 4.2.0)
+##  fansi           1.0.4      2023-01-22 [1] CRAN (R 4.2.2)
+##  farver          2.1.1      2022-07-06 [1] CRAN (R 4.2.1)
+##  fastmap         1.1.0      2021-01-25 [1] CRAN (R 4.2.0)
+##  foreach         1.5.2      2022-02-02 [1] CRAN (R 4.2.1)
+##  furrr           0.3.1      2022-08-15 [1] RSPM (R 4.2.0)
+##  future          1.30.0     2022-12-16 [1] CRAN (R 4.2.2)
+##  future.apply    1.10.0     2022-11-05 [1] CRAN (R 4.2.2)
+##  generics        0.1.3      2022-07-05 [1] CRAN (R 4.2.0)
+##  ggplot2       * 3.4.0      2022-11-04 [1] CRAN (R 4.2.2)
+##  ggrepel         0.9.2      2022-11-06 [1] CRAN (R 4.2.2)
+##  glmnet          4.1-6      2022-11-27 [1] CRAN (R 4.2.2)
+##  globals         0.16.2     2022-11-21 [1] CRAN (R 4.2.2)
+##  glue            1.6.2      2022-02-24 [1] CRAN (R 4.2.0)
+##  gower           1.0.1      2022-12-22 [1] CRAN (R 4.2.2)
+##  GPfit           1.0-8      2019-02-08 [1] CRAN (R 4.2.1)
+##  gtable          0.3.1      2022-09-01 [1] RSPM (R 4.2.0)
+##  guildai         0.0.0.9001 2023-01-23 [1] local
+##  hardhat         1.2.0      2022-06-30 [1] CRAN (R 4.2.1)
+##  infer         * 1.0.4      2022-12-02 [1] CRAN (R 4.2.2)
+##  ipred           0.9-13     2022-06-02 [1] CRAN (R 4.2.1)
+##  iterators       1.0.14     2022-02-05 [1] CRAN (R 4.2.1)
+##  jsonlite        1.8.4      2022-12-06 [1] CRAN (R 4.2.2)
+##  labeling        0.4.2      2020-10-20 [1] CRAN (R 4.2.0)
+##  lattice         0.20-45    2021-09-22 [4] CRAN (R 4.2.0)
+##  lava            1.7.1      2023-01-06 [1] CRAN (R 4.2.2)
+##  lhs             1.1.6      2022-12-17 [1] CRAN (R 4.2.2)
+##  lifecycle       1.0.3      2022-10-07 [1] CRAN (R 4.2.2)
+##  listenv         0.9.0      2022-12-16 [1] CRAN (R 4.2.2)
+##  lubridate       1.9.0      2022-11-06 [1] CRAN (R 4.2.2)
+##  magrittr        2.0.3      2022-03-30 [1] CRAN (R 4.2.0)
+##  MASS            7.3-58.2   2023-01-23 [1] CRAN (R 4.2.2)
+##  Matrix          1.5-3      2022-11-11 [1] CRAN (R 4.2.2)
+##  memoise         2.0.1      2021-11-26 [1] CRAN (R 4.2.0)
+##  modeldata     * 1.0.1      2022-09-06 [1] RSPM (R 4.2.0)
+##  munsell         0.5.0      2018-06-12 [1] CRAN (R 4.2.0)
+##  nnet            7.3-18     2022-09-28 [4] CRAN (R 4.2.1)
+##  nortest         1.0-4      2015-07-30 [1] CRAN (R 4.2.2)
+##  parallelly      1.34.0     2023-01-13 [1] CRAN (R 4.2.2)
+##  parsnip       * 1.0.3      2022-11-11 [1] CRAN (R 4.2.2)
+##  pillar          1.8.1      2022-08-19 [1] RSPM (R 4.2.0)
+##  pkgconfig       2.0.3      2019-09-22 [1] CRAN (R 4.2.0)
+##  prodlim         2019.11.13 2019-11-17 [1] CRAN (R 4.2.1)
+##  purrr         * 1.0.1      2023-01-10 [1] CRAN (R 4.2.2)
+##  R6              2.5.1      2021-08-19 [1] CRAN (R 4.2.0)
+##  Rcpp            1.0.10     2023-01-22 [1] CRAN (R 4.2.2)
+##  recipes       * 1.0.4      2023-01-11 [1] CRAN (R 4.2.2)
+##  rlang           1.0.6      2022-09-24 [1] CRAN (R 4.2.1)
+##  rngtools        1.5.2      2021-09-20 [1] CRAN (R 4.2.2)
+##  rpart           4.1.19     2022-10-21 [4] CRAN (R 4.2.1)
+##  rsample       * 1.1.1      2022-12-07 [1] CRAN (R 4.2.2)
+##  rstudioapi      0.14       2022-08-22 [1] RSPM (R 4.2.0)
+##  scales        * 1.2.1      2022-08-20 [1] RSPM (R 4.2.0)
+##  sessioninfo   * 1.2.2      2021-12-06 [1] CRAN (R 4.2.0)
+##  shape           1.4.6      2021-05-19 [1] CRAN (R 4.2.2)
+##  splines2        0.4.7      2023-01-14 [1] CRAN (R 4.2.2)
+##  survival        3.5-0      2023-01-09 [1] CRAN (R 4.2.2)
+##  tibble        * 3.1.8      2022-07-22 [1] CRAN (R 4.2.1)
+##  tidymodels    * 1.0.0      2022-07-13 [1] CRAN (R 4.2.2)
+##  tidyr         * 1.2.1      2022-09-08 [1] RSPM (R 4.2.0)
+##  tidyselect      1.2.0      2022-10-10 [1] CRAN (R 4.2.2)
+##  timechange      0.2.0      2023-01-11 [1] CRAN (R 4.2.2)
+##  timeDate        4022.108   2023-01-07 [1] CRAN (R 4.2.2)
+##  tune          * 1.0.1      2022-10-09 [1] CRAN (R 4.2.2)
+##  utf8            1.2.2      2021-07-24 [1] CRAN (R 4.2.0)
+##  vctrs           0.5.2      2023-01-23 [1] CRAN (R 4.2.2)
+##  withr           2.5.0      2022-03-03 [1] CRAN (R 4.2.0)
+##  workflows     * 1.1.2      2022-11-16 [1] CRAN (R 4.2.2)
+##  workflowsets  * 1.0.0      2022-07-12 [1] CRAN (R 4.2.1)
+##  yaml            2.3.6      2022-10-18 [1] CRAN (R 4.2.2)
+##  yardstick     * 1.1.0      2022-09-07 [1] RSPM (R 4.2.0)
+## 
+##  [1] /home/tomasz/R/x86_64-pc-linux-gnu-library/4.2
+##  [2] /usr/local/lib/R/site-library
+##  [3] /usr/lib/R/site-library
+##  [4] /usr/lib/R/library
+## 
+## ──────────────────────────────────────────────────────────────────────────────
+```
+
+``` r
+guild_view()
+```
+
+We can use the flags and flag constraints to run an optimizer. We could
+use one of the guildai built-in optimizers, or manually define a grid
+using tidymodels functions, like this:
+
+``` r
+# Use existing tidymodels code to generate a space-filling design for 
+# new hyperparameter combinations
+library(tidymodels)
+## ── Attaching packages ────────────────────────────────────── tidymodels 1.0.0 ──
+## ✔ broom        1.0.2      ✔ recipes      1.0.4 
+## ✔ dials        1.1.0      ✔ rsample      1.1.1 
+## ✔ dplyr        1.0.10     ✔ tibble       3.1.8 
+## ✔ ggplot2      3.4.0      ✔ tidyr        1.2.1 
+## ✔ infer        1.0.4      ✔ tune         1.0.1 
+## ✔ modeldata    1.0.1      ✔ workflows    1.1.2 
+## ✔ parsnip      1.0.3      ✔ workflowsets 1.0.0 
+## ✔ purrr        1.0.1      ✔ yardstick    1.1.0
+## ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
+## ✖ purrr::discard() masks scales::discard()
+## ✖ dplyr::filter()  masks stats::filter()
+## ✖ dplyr::lag()     masks stats::lag()
+## ✖ recipes::step()  masks stats::step()
+## • Search for functions across packages at https://www.tidymodels.org/find/
+params <- parameters(list(
+  pen_val = penalty(),
+  mix_val = mixture(),
+  latitude_df = spline_degree(c(2L, 50L)),
+  longitude_df = spline_degree(c(2L, 50L))
+))
+
+set.seed(1)
+grid <- grid_latin_hypercube(params, size = 19)
+grid
+## # A tibble: 19 × 4
+##     pen_val mix_val latitude_df longitude_df
+##       <dbl>   <dbl>       <int>        <int>
+##  1 1.10e- 8  0.915           21           31
+##  2 3.88e- 3  0.289           29            2
+##  3 1.11e- 7  0.996           25            5
+##  4 1.57e- 4  0.480           37           26
+##  5 1.00e- 3  0.568           47           29
+##  6 3.10e- 9  0.0644           4           12
+##  7 2.54e-10  0.841            6           37
+##  8 1.13e- 1  0.401           50           44
+##  9 6.15e- 7  0.633           15           38
+## 10 1.81e- 5  0.254           41           49
+## 11 5.81e- 5  0.363           32            7
+## 12 6.53e- 1  0.0346          19           24
+## 13 4.48e- 4  0.879           38           42
+## 14 4.15e- 2  0.613           14           13
+## 15 1.06e- 9  0.457           11           35
+## 16 1.83e- 2  0.777            8           21
+## 17 2.96e- 6  0.174           42           46
+## 18 2.81e- 8  0.690           34           16
+## 19 3.40e- 7  0.157           26           20
+
+# Launch a batch of run defined by the grid flags.
+guild_run(
+  "train-tidymodels.R",
+  flags = grid,
+  echo = c(FALSE, FALSE) # ignore stdout *and* stderr
+)
+```
+
+Find the best run:
+
+``` r
+runs <- runs_info(operation = "train-tidymodels.R")
+
+runs$scalars
+## # A tibble: 20 × 3
+##    num_predictors validation_R2 validation_rmse
+##             <dbl>         <dbl>           <dbl>
+##  1            201         0.847          0.0743
+##  2            206         0.844          0.0670
+##  3            204         0.917          0.0508
+##  4             23         0.841          0.0738
+##  5            204         0.850          0.0697
+##  6             12         0.832          0.0789
+##  7            162         0.865          0.0651
+##  8             50         0.854          0.0996
+##  9            201         0.841          0.0719
+## 10            203         0.877          0.0631
+## 11            205         0.786          0.0833
+## 12             11         0.837          0.102 
+## 13            202         0.890          0.0603
+## 14            207         0.900          0.0575
+## 15            163         0.896          0.0587
+## 16            194         0.876          0.0631
+## 17            201         0.842          0.0718
+## 18            114         0.882          0.0634
+## 19            208         0.890          0.0583
+## 20            129         0.828          0.0755
+```
+
+``` r
+best_run <- runs %>%
+  slice_min(scalars$validation_rmse)
+```
+
+Recover the fitted model and validation from the best run:
+
+``` r
+best_run_saved_objects <- new.env(parent = emptyenv())
+load(file.path(best_run$dir, ".RData"),
+     envir = best_run_saved_objects)
+
+best_run_saved_objects$ames_fit
+## ══ Workflow [trained] ══════════════════════════════════════════════════════════
+## Preprocessor: Recipe
+## Model: linear_reg()
+## 
+## ── Preprocessor ────────────────────────────────────────────────────────────────
+## 6 Recipe Steps
+## 
+## • step_other()
+## • step_orderNorm()
+## • step_dummy()
+## • step_interact()
+## • step_spline_natural()
+## • step_spline_natural()
+## 
+## ── Model ───────────────────────────────────────────────────────────────────────
+##   [[ suppressing 92 column names 's0', 's1', 's2' ... ]]
+## $a0
+##       s0       s1       s2       s3       s4       s5       s6       s7 
+## 5.218522 5.217654 5.141383 5.014386 4.773120 4.530481 4.314826 4.107660 
+##       s8       s9      s10      s11      s12      s13      s14      s15 
+## 3.906833 3.712322 3.535298 3.388675 3.248158 3.116998 3.001106 2.913377 
+##      s16      s17      s18      s19      s20      s21      s22      s23 
+## 2.832164 2.771357 2.715313 2.665678 2.622287 2.588259 2.558751 2.535047 
+##      s24      s25      s26      s27      s28      s29      s30      s31 
+## 2.513904 2.499224 2.478459 2.462802 2.456381 2.447585 2.446049 2.421178 
+##      s32      s33      s34      s35      s36      s37      s38      s39 
+## 2.403677 2.397739 2.390532 2.383002 2.374963 2.364017 2.350218 2.335342 
+##      s40      s41      s42      s43      s44      s45      s46      s47 
+## 2.315803 2.299297 2.401694 2.562162 2.714862 2.863474 3.020326 3.162124 
+##      s48      s49      s50      s51      s52      s53      s54      s55 
+## 3.304442 3.451649 3.579247 3.665573 3.747476 3.842037 3.945825 4.038163 
+##      s56      s57      s58      s59      s60      s61      s62      s63 
+## 4.128638 4.222940 4.285866 4.358876 4.420064 4.474594 4.519049 4.578983 
+##      s64      s65      s66      s67      s68      s69      s70      s71 
+## 4.618848 4.653250 4.684685 4.722390 4.763791 4.807102 4.842698 4.873765 
+##      s72      s73      s74      s75      s76      s77      s78      s79 
+## 4.910653 4.947488 4.982691 5.017765 5.050313 5.079742 5.107390 5.131346 
+##      s80      s81      s82      s83      s84      s85      s86      s87 
+## 5.153281 5.176234 5.194172 5.210404 5.225377 5.239461 5.254153 5.267496 
+##      s88      s89      s90      s91 
+## 5.281134 5.292579 5.314062 5.319247 
+## 
+## $beta
+## 216 x 92 sparse Matrix of class "dgCMatrix"
+##                                                                             
+## Lot_Frontage                                     . .            .           
+## Lot_Area                                         . .            .           
+## Year_Built                                       . .            3.502984e-05
+## Year_Remod_Add                                   . .            .           
+## Mas_Vnr_Area                                     . .            .           
+## BsmtFin_SF_1                                     . .            .           
+## BsmtFin_SF_2                                     . .            .           
+## Bsmt_Unf_SF                                      . .            .           
+## Total_Bsmt_SF                                    . .            8.093675e-04
+## First_Flr_SF                                     . .            .           
+## Second_Flr_SF                                    . .            .           
+## Gr_Liv_Area                                      . 0.0027267517 5.047359e-03
+## Bsmt_Full_Bath                                   . .            .           
+## Bsmt_Half_Bath                                   . .            .           
+## Full_Bath                                        . .            .           
+## Half_Bath                                        . .            .           
+## Bedroom_AbvGr                                    . .            .           
+## Kitchen_AbvGr                                    . .            .           
+## TotRms_AbvGrd                                    . .            .           
+## Fireplaces                                       . .            .           
+## Garage_Cars                                      . 0.0004956624 2.897431e-03
+## 
+## ...
+## and 10032 more lines.
+
+best_run_saved_objects$val_results
+## # A tibble: 3 × 3
+##   .metric .estimator .estimate
+##   <chr>   <chr>          <dbl>
+## 1 rmse    standard      0.0508
+## 2 rsq     standard      0.917 
+## 3 mae     standard      0.0367
+```
+
+For reproducability, (or preparing to deploy a model) it can be helpful
+to know some additional run metadata, like the starting random seed or a
+log of which R packages were loaded during the R session. This
+information is all stored under the `RUN_DIR/.guild` directory.
+
+To recover the seed:
+
+``` r
+run <- best_run
+seed <- yaml::read_yaml(file.path(run$dir, ".guild/attrs/random_seed"))
+seed
+## [1] 1135943621
+set.seed(seed) # restore the starting seed.
+```
+
+To access the log of R loaded packages:
+
+``` r
+packages_loaded <- yaml::read_yaml(
+  file.path(run$dir, ".guild/attrs/r_packages_loaded"))
+str(packages_loaded, list.len = 5)
+## List of 100
+##  $ guildai      :List of 2
+##   ..$ path   : chr "/home/tomasz/R/x86_64-pc-linux-gnu-library/4.2/guildai"
+##   ..$ version: chr "0.0.0.9001"
+##  $ grDevices    :List of 2
+##   ..$ path   : chr "/usr/lib/R/library/grDevices"
+##   ..$ version: chr "4.2.2"
+##  $ fansi        :List of 2
+##   ..$ path   : chr "/home/tomasz/R/x86_64-pc-linux-gnu-library/4.2/fansi"
+##   ..$ version: chr "1.0.4"
+##  $ assertthat   :List of 2
+##   ..$ path   : chr "/home/tomasz/R/x86_64-pc-linux-gnu-library/4.2/assertthat"
+##   ..$ version: chr "0.2.1"
+##  $ utf8         :List of 2
+##   ..$ path   : chr "/home/tomasz/R/x86_64-pc-linux-gnu-library/4.2/utf8"
+##   ..$ version: chr "1.2.2"
+##   [list output truncated]
+```

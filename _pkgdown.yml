@@ -10,8 +10,9 @@ navbar:
     examples:
       text: Examples
       menu:
-        - {text: keras  , href: articles/examples/keras.html}
-        - {text: xgboost, href: articles/examples/xgboost.html}
+        - {text: keras     , href: articles/examples/keras.html}
+        - {text: xgboost   , href: articles/examples/xgboost.html}
+        - {text: tidymodels, href: articles/examples/tidymodels.html}
 
 development:
   mode: auto

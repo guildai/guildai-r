@@ -1,0 +1,135 @@
+---
+title: "example_tidymodels"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+
+# set up a "project" directory for render
+root.dir <- tempfile("guildai-example-tidymodels-project-")
+dir.create(root.dir)
+dir.create(file.path(root.dir, ".guild"))
+file.copy("train-tidymodels.R", root.dir)
+knitr::opts_knit$set(root.dir = root.dir)
+
+# help knitr capture stdout
+ns <- asNamespace("guildai")
+unlockBinding("system2t", ns)
+ns$system2t <- function(command, args, ..., stdout = "", stderr = "", echo_cmd) {
+  if(stdout == "" && stderr == "") {
+    stdout <- stderr <- TRUE
+    on.exit(writeLines(out))
+  }
+  out <- base::system2(command, args, stdout = stdout, stderr = stderr, ...)
+  invisible(out)
+}
+options(guildai.run_as_job = FALSE)
+```
+
+Here is an example showing how to use *guildai* with tidymodels in R.
+
+If this is your first exposure to *guildai*, we recommend starting with
+the framework agnostic "Getting Started" guide. This example assumes
+familiarity with guild concepts like *flags* and *scalars*.
+
+We'll start with an example R script, named "train-tidymodels.R", that
+trains, evaluates, and saves an tidymodels model using the "Ames
+Housing" dataset. Here is what it looks like:
+
+```{r, file = "train-tidymodels.R", eval = FALSE}
+```
+
+A few things to note about the script:
+
+-   There is no 'guildai' specific configuration in the script code.
+    It's a regular R script, that you can safely `source()` or work with
+    interactively at the REPL.
+-   We declare some constraints on the flag values we've defined.
+-   At the end of the run, we save the model. This file artifacts will
+    be stored as part of the run, enabling us to restore a trained
+    model.
+
+With our script defined, we can launch a guild run and view it:
+
+```{r}
+library(guildai)
+guild_run("train-tidymodels.R")
+```
+
+```{r, eval = FALSE}
+guild_view()
+```
+
+We can use the flags and flag constraints to run an optimizer. We could
+use one of the guildai built-in optimizers, or manually define a grid
+using tidymodels functions, like this:
+
+```{r, paged.print = FALSE}
+# Use existing tidymodels code to generate a space-filling design for 
+# new hyperparameter combinations
+library(tidymodels)
+params <- parameters(list(
+  pen_val = penalty(),
+  mix_val = mixture(),
+  latitude_df = spline_degree(c(2L, 50L)),
+  longitude_df = spline_degree(c(2L, 50L))
+))
+
+set.seed(1)
+grid <- grid_latin_hypercube(params, size = 19)
+grid
+
+# Launch a batch of run defined by the grid flags.
+guild_run(
+  "train-tidymodels.R",
+  flags = grid,
+  echo = c(FALSE, FALSE) # ignore stdout *and* stderr
+)
+```
+
+Find the best run:
+
+```{r, paged.print = FALSE}
+runs <- runs_info(operation = "train-tidymodels.R")
+
+runs$scalars
+```
+
+```{r, paged.print = FALSE}
+best_run <- runs %>%
+  slice_min(scalars$validation_rmse)
+```
+
+Recover the fitted model and validation from the best run:
+
+```{r, paged.print = FALSE}
+best_run_saved_objects <- new.env(parent = emptyenv())
+load(file.path(best_run$dir, ".RData"),
+     envir = best_run_saved_objects)
+
+best_run_saved_objects$ames_fit
+
+best_run_saved_objects$val_results
+```
+
+For reproducability, (or preparing to deploy a model) it can be helpful
+to know some additional run metadata, like the starting random seed or a
+log of which R packages were loaded during the R session. This
+information is all stored under the `RUN_DIR/.guild` directory.
+
+To recover the seed:
+
+```{r}
+run <- best_run
+seed <- yaml::read_yaml(file.path(run$dir, ".guild/attrs/random_seed"))
+seed
+set.seed(seed) # restore the starting seed.
+```
+
+To access the log of R loaded packages:
+
+```{r}
+packages_loaded <- yaml::read_yaml(
+  file.path(run$dir, ".guild/attrs/r_packages_loaded"))
+str(packages_loaded, list.len = 5)
+```
