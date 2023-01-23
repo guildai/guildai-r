@@ -11,7 +11,8 @@ guild <- function(command = NULL, ...,
     args <- c("-D", "5678", args)
 
   exec <- if(wait) system2t else processx::process$new
-  exec(find_guild(), args, env = env, stdout = stdout, stderr = stderr)
+  exec(find_guild(), args, env = env, stdout = stdout, stderr = stderr,
+       echo_cmd = Sys.getenv("GUILD_DEBUG_R") == "1")
   # exec <- if(wait) processx::run else processx::process$new
   # invisible(exec(find_guild(), args,
   #                echo = TRUE, echo_cmd = TRUE,
@@ -68,6 +69,7 @@ as_cli_args <- function(...) {
   # so foo=TRUE becomes `--foo`
   # so foo=FALSE becomes `--not-foo`
   # so foo=NA becomes ``
+  # use NA_if_FALSE() to treat foo=FALSE as ``
   if (length(x) == 1 && isTRUE(nzchar(nms))) {
     if(is.na(x))
       return(NULL)
@@ -102,7 +104,10 @@ as_cli_args <- function(...) {
 }
 
 
-
+NA_if_FALSE <- function(x) {
+  rapply(list(x), function(e) if(isFALSE(e)) NA else e,
+         how = "replace")[[1L]]
+}
 
 
 #' Launch a guild run
@@ -222,9 +227,12 @@ guild_view <- function(runs = NULL,
   if(isTRUE(stop))
     return(invisible())
   .globals$view_process <- p <-
-    guild("view", list(..., mget(c("host", "port", "include_batch", "no_open"))),
-          maybe_extract_run_ids(runs),
-          wait = FALSE, stdout = "|", stderr = "|")
+    guild("view", list(
+      NA_if_FALSE(mget(c("host", "port", "include_batch", "no_open"))),
+      ...),
+      maybe_extract_run_ids(runs),
+      wait = FALSE, stdout = "|", stderr = "|"
+    )
   p$poll_io(1000)
   output <- p$read_output_lines()
   output <- str_drop_suffix(output, " (Type Ctrl-C to quit)")
