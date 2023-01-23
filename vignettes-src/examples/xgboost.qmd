@@ -15,7 +15,7 @@ knitr::opts_knit$set(root.dir = root.dir)
 # help knitr capture stdout
 ns <- asNamespace("guildai")
 unlockBinding("system2t", ns)
-ns$system2t <- function(command, args, ..., stdout = "", stderr = "" ) {
+ns$system2t <- function(command, args, ..., stdout = "", stderr = "", echo_cmd) {
   if(stdout == "" && stderr == "") {
     stdout <- stderr <- TRUE
     on.exit(writeLines(out))
@@ -43,15 +43,15 @@ Here is what it looks like:
 
 A few things to note about the script:
 
--   There is no 'guildai' specific configuration anywhere in the script
-    code. It's a regular R script, that you can safely `source()` or
-    work with interactively at the REPL.
+-   There is no 'guildai' specific configuration in the script code.
+    It's a regular R script, that you can safely `source()` or work with
+    interactively at the REPL.
 -   We declare two custom `output-scalars` patterns in the scripts
     comment frontmatter. This informs guild how to parse the default
     xgboost stdout output and extract scalar values from it.
--   At the end of the run, we save the model. This file artifacts will
-    be stored as part of the run, enabling us to restore a trained
-    model.
+-   At the end of the run, we save the model to the current working
+    directory. This file artifacts will be stored as part of the run,
+    enabling us to later recover the trained model.
 
 With our script defined, we can launch a guild run:
 

@@ -15,7 +15,7 @@ knitr::opts_knit$set(root.dir = root.dir)
 # help knitr capture stdout
 ns <- asNamespace("guildai")
 unlockBinding("system2t", ns)
-ns$system2t <- function(command, args, ..., stdout = "", stderr = "" ) {
+ns$system2t <- function(command, args, ..., stdout = "", stderr = "", echo_cmd) {
   if(stdout == "" && stderr == "") {
     stdout <- stderr <- TRUE
     on.exit(writeLines(out))

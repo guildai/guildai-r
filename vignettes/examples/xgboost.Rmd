@@ -50,14 +50,15 @@ xgb.save(bst, "xgboost.model")
 
 A few things to note about the script:
 
-- There is no ‘guildai’ specific configuration anywhere in the script
-  code. It’s a regular R script, that you can safely `source()` or work
-  with interactively at the REPL.
+- There is no ‘guildai’ specific configuration in the script code. It’s
+  a regular R script, that you can safely `source()` or work with
+  interactively at the REPL.
 - We declare two custom `output-scalars` patterns in the scripts comment
   frontmatter. This informs guild how to parse the default xgboost
   stdout output and extract scalar values from it.
-- At the end of the run, we save the model. This file artifacts will be
-  stored as part of the run, enabling us to restore a trained model.
+- At the end of the run, we save the model to the current working
+  directory. This file artifacts will be stored as part of the run,
+  enabling us to later recover the trained model.
 
 With our script defined, we can launch a guild run:
 
@@ -139,16 +140,16 @@ scalars
 ## # A tibble: 80 × 5
 ##    run                              path  tag            value  step
 ##    <chr>                            <chr> <chr>          <dbl> <dbl>
-##  1 e85e1ba939634e32979d8c3567ab80cf <NA>  test-error    0.0428     1
-##  2 e85e1ba939634e32979d8c3567ab80cf <NA>  test-logloss  0.543      1
-##  3 e85e1ba939634e32979d8c3567ab80cf <NA>  train-error   0.0465     1
-##  4 e85e1ba939634e32979d8c3567ab80cf <NA>  train-logloss 0.545      1
-##  5 e85e1ba939634e32979d8c3567ab80cf <NA>  test-error    0.0403     2
-##  6 e85e1ba939634e32979d8c3567ab80cf <NA>  test-logloss  0.440      2
-##  7 e85e1ba939634e32979d8c3567ab80cf <NA>  train-error   0.0416     2
-##  8 e85e1ba939634e32979d8c3567ab80cf <NA>  train-logloss 0.442      2
-##  9 e85e1ba939634e32979d8c3567ab80cf <NA>  test-error    0.0248     3
-## 10 e85e1ba939634e32979d8c3567ab80cf <NA>  test-logloss  0.368      3
+##  1 7c35e6870ec145fb8a748f0b9efe3304 <NA>  test-error    0.0428     1
+##  2 7c35e6870ec145fb8a748f0b9efe3304 <NA>  test-logloss  0.543      1
+##  3 7c35e6870ec145fb8a748f0b9efe3304 <NA>  train-error   0.0465     1
+##  4 7c35e6870ec145fb8a748f0b9efe3304 <NA>  train-logloss 0.545      1
+##  5 7c35e6870ec145fb8a748f0b9efe3304 <NA>  test-error    0.0403     2
+##  6 7c35e6870ec145fb8a748f0b9efe3304 <NA>  test-logloss  0.440      2
+##  7 7c35e6870ec145fb8a748f0b9efe3304 <NA>  train-error   0.0416     2
+##  8 7c35e6870ec145fb8a748f0b9efe3304 <NA>  train-logloss 0.442      2
+##  9 7c35e6870ec145fb8a748f0b9efe3304 <NA>  test-error    0.0248     3
+## 10 7c35e6870ec145fb8a748f0b9efe3304 <NA>  test-logloss  0.368      3
 ## # … with 70 more rows
 ```
 

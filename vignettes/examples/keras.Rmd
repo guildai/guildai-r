@@ -150,26 +150,26 @@ guild_run("train-keras.R")
 ## +       callbacks = list(callback_tensorboard()),
 ## +       verbose = 2)
 ## Epoch 1/10
-## WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0024s vs `on_train_batch_end` time: 0.0044s). Check your callbacks.
-## 1500/1500 - 5s - loss: 0.5415 - accuracy: 0.8112 - val_loss: 0.4634 - val_accuracy: 0.8332 - 5s/epoch - 3ms/step
+## WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0019s vs `on_train_batch_end` time: 0.0049s). Check your callbacks.
+## 1500/1500 - 4s - loss: 0.5326 - accuracy: 0.8170 - val_loss: 0.4381 - val_accuracy: 0.8476 - 4s/epoch - 3ms/step
 ## Epoch 2/10
-## 1500/1500 - 3s - loss: 0.4054 - accuracy: 0.8564 - val_loss: 0.3880 - val_accuracy: 0.8604 - 3s/epoch - 2ms/step
+## 1500/1500 - 3s - loss: 0.4070 - accuracy: 0.8548 - val_loss: 0.4061 - val_accuracy: 0.8588 - 3s/epoch - 2ms/step
 ## Epoch 3/10
-## 1500/1500 - 3s - loss: 0.3644 - accuracy: 0.8692 - val_loss: 0.3783 - val_accuracy: 0.8632 - 3s/epoch - 2ms/step
+## 1500/1500 - 3s - loss: 0.3638 - accuracy: 0.8700 - val_loss: 0.3824 - val_accuracy: 0.8643 - 3s/epoch - 2ms/step
 ## Epoch 4/10
-## 1500/1500 - 3s - loss: 0.3390 - accuracy: 0.8775 - val_loss: 0.3675 - val_accuracy: 0.8683 - 3s/epoch - 2ms/step
+## 1500/1500 - 2s - loss: 0.3413 - accuracy: 0.8771 - val_loss: 0.3512 - val_accuracy: 0.8742 - 2s/epoch - 2ms/step
 ## Epoch 5/10
-## 1500/1500 - 2s - loss: 0.3209 - accuracy: 0.8830 - val_loss: 0.3457 - val_accuracy: 0.8753 - 2s/epoch - 2ms/step
+## 1500/1500 - 3s - loss: 0.3234 - accuracy: 0.8814 - val_loss: 0.3615 - val_accuracy: 0.8708 - 3s/epoch - 2ms/step
 ## Epoch 6/10
-## 1500/1500 - 2s - loss: 0.3033 - accuracy: 0.8890 - val_loss: 0.3347 - val_accuracy: 0.8819 - 2s/epoch - 2ms/step
+## 1500/1500 - 4s - loss: 0.3087 - accuracy: 0.8856 - val_loss: 0.3392 - val_accuracy: 0.8787 - 4s/epoch - 3ms/step
 ## Epoch 7/10
-## 1500/1500 - 3s - loss: 0.2937 - accuracy: 0.8917 - val_loss: 0.3313 - val_accuracy: 0.8819 - 3s/epoch - 2ms/step
+## 1500/1500 - 3s - loss: 0.2958 - accuracy: 0.8914 - val_loss: 0.3629 - val_accuracy: 0.8721 - 3s/epoch - 2ms/step
 ## Epoch 8/10
-## 1500/1500 - 3s - loss: 0.2817 - accuracy: 0.8964 - val_loss: 0.3273 - val_accuracy: 0.8828 - 3s/epoch - 2ms/step
+## 1500/1500 - 3s - loss: 0.2829 - accuracy: 0.8956 - val_loss: 0.3445 - val_accuracy: 0.8765 - 3s/epoch - 2ms/step
 ## Epoch 9/10
-## 1500/1500 - 3s - loss: 0.2707 - accuracy: 0.9000 - val_loss: 0.3288 - val_accuracy: 0.8842 - 3s/epoch - 2ms/step
+## 1500/1500 - 3s - loss: 0.2726 - accuracy: 0.8998 - val_loss: 0.3572 - val_accuracy: 0.8708 - 3s/epoch - 2ms/step
 ## Epoch 10/10
-## 1500/1500 - 2s - loss: 0.2651 - accuracy: 0.9019 - val_loss: 0.3378 - val_accuracy: 0.8788 - 2s/epoch - 2ms/step
+## 1500/1500 - 3s - loss: 0.2656 - accuracy: 0.9018 - val_loss: 0.3453 - val_accuracy: 0.8790 - 3s/epoch - 2ms/step
 ## > plot(history)
 ## > # Evaluate model ------------------------------------------------------
 ## > 
@@ -178,9 +178,9 @@ guild_run("train-keras.R")
 ## +            verbose = 0) %>%
 ## +   as.list()
 ## > cat('test_loss:', score$loss, "\n")
-## test_loss: 0.370381832122803 
+## test_loss: 0.366027534008026 
 ## > cat('test_accuracy:', score$accuracy, "\n")
-## test_accuracy: 0.868600010871887 
+## test_accuracy: 0.868799984455109 
 ## > # Save model ----------------------------------------------------------
 ## > 
 ## > save_model_tf(model, "model.keras")
@@ -200,38 +200,38 @@ str(run$flags)
 str(run$scalars)
 ## tibble [1 × 4] (S3: tbl_df/tbl/data.frame)
 ##  $ test_accuracy: num 0.869
-##  $ test_loss    : num 0.37
+##  $ test_loss    : num 0.366
 ##  $ train        : tibble [1 × 2] (S3: tbl_df/tbl/data.frame)
 ##   ..$ epoch_accuracy: num 0.902
-##   ..$ epoch_loss    : num 0.265
+##   ..$ epoch_loss    : num 0.266
 ##  $ validation   : tibble [1 × 4] (S3: tbl_df/tbl/data.frame)
 ##   ..$ epoch_accuracy                   : num 0.879
-##   ..$ epoch_loss                       : num 0.338
+##   ..$ epoch_loss                       : num 0.345
 ##   ..$ evaluation_accuracy_vs_iterations: num 0.869
-##   ..$ evaluation_loss_vs_iterations    : num 0.37
+##   ..$ evaluation_loss_vs_iterations    : num 0.366
 ```
 
 `runs_info()` returns the last value for each scalar. The full history
 of scalars emitted is available with `runs_scalars()`.
 
 ``` r
-all_scalars <- runs_scalars(1) 
+all_scalars <- runs_scalars(1)
 
 all_scalars |>
   dplyr::arrange(step)
 ## # A tibble: 64 × 5
 ##    run                              path       tag            value  step
 ##    <chr>                            <chr>      <chr>          <dbl> <dbl>
-##  1 29af1c87e5454ee3a300f2e25d827a31 <NA>       test_loss      0.370     0
-##  2 29af1c87e5454ee3a300f2e25d827a31 <NA>       test_accuracy  0.869     0
-##  3 29af1c87e5454ee3a300f2e25d827a31 validation epoch_loss     0.463     0
-##  4 29af1c87e5454ee3a300f2e25d827a31 validation epoch_accuracy 0.833     0
-##  5 29af1c87e5454ee3a300f2e25d827a31 train      epoch_loss     0.541     0
-##  6 29af1c87e5454ee3a300f2e25d827a31 train      epoch_accuracy 0.811     0
-##  7 29af1c87e5454ee3a300f2e25d827a31 validation epoch_loss     0.388     1
-##  8 29af1c87e5454ee3a300f2e25d827a31 validation epoch_accuracy 0.860     1
-##  9 29af1c87e5454ee3a300f2e25d827a31 train      epoch_loss     0.405     1
-## 10 29af1c87e5454ee3a300f2e25d827a31 train      epoch_accuracy 0.856     1
+##  1 27be6d49aa384099aa325d0e25f1c1b5 <NA>       test_loss      0.366     0
+##  2 27be6d49aa384099aa325d0e25f1c1b5 <NA>       test_accuracy  0.869     0
+##  3 27be6d49aa384099aa325d0e25f1c1b5 validation epoch_loss     0.438     0
+##  4 27be6d49aa384099aa325d0e25f1c1b5 validation epoch_accuracy 0.848     0
+##  5 27be6d49aa384099aa325d0e25f1c1b5 train      epoch_loss     0.533     0
+##  6 27be6d49aa384099aa325d0e25f1c1b5 train      epoch_accuracy 0.817     0
+##  7 27be6d49aa384099aa325d0e25f1c1b5 validation epoch_loss     0.406     1
+##  8 27be6d49aa384099aa325d0e25f1c1b5 validation epoch_accuracy 0.859     1
+##  9 27be6d49aa384099aa325d0e25f1c1b5 train      epoch_loss     0.407     1
+## 10 27be6d49aa384099aa325d0e25f1c1b5 train      epoch_accuracy 0.855     1
 ## # … with 54 more rows
 ```
 

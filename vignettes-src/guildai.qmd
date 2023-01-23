@@ -524,7 +524,7 @@ runs %>%
 ```{r paged.print=FALSE}
 best_run <- runs |>
   filter(flags$family == "gaussian") |>
-  slice_max(scalars$rmse)
+  slice_min(scalars$rmse)
 
 tibble::glimpse(best_run)
 

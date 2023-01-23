@@ -46,7 +46,8 @@ guildai::install_guild()
 ```
 
 Guild AI can be used with any machine learning framework, or even no
-framework at all. For this introductory example, we'll start with a
-Keras model applied to the fashion mnist dataset.
+framework at all.
 
-[Get Started](https://t-kalinowski.github.io/guildai-r/articles/guildai.html)
+[Get
+Started](https://t-kalinowski.github.io/guildai-r/articles/guildai.html)
+
