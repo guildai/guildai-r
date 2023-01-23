@@ -130,15 +130,15 @@ R Tutorial</a>. Here is what it looks like:</p>
 <span><span class="fu">xgb.save</span><span class="op">(</span><span class="va">bst</span>, <span class="st">"xgboost.model"</span><span class="op">)</span></span></code></pre></div>
 <p>A few things to note about the script:</p>
 <ul>
-<li>There is no ‘guildai’ specific configuration anywhere in the script
-code. It’s a regular R script, that you can safely <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code>
-or work with interactively at the REPL.</li>
+<li>There is no ‘guildai’ specific configuration in the script code.
+It’s a regular R script, that you can safely <code><a href="https://rdrr.io/r/base/source.html" class="external-link">source()</a></code> or
+work with interactively at the REPL.</li>
 <li>We declare two custom <code>output-scalars</code> patterns in the
 scripts comment frontmatter. This informs guild how to parse the default
 xgboost stdout output and extract scalar values from it.</li>
-<li>At the end of the run, we save the model. This file artifacts will
-be stored as part of the run, enabling us to restore a trained
-model.</li>
+<li>At the end of the run, we save the model to the current working
+directory. This file artifacts will be stored as part of the run,
+enabling us to later recover the trained model.</li>
 </ul>
 <p>With our script defined, we can launch a guild run:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -214,16 +214,16 @@ full history of scalars emitted is available with
 <span><span class="co">## # A tibble: 80 × 5</span></span>
 <span><span class="co">##    run                              path  tag            value  step</span></span>
 <span><span class="co">##    &lt;chr&gt;                            &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">##  1 e85e1ba939634e32979d8c3567ab80cf &lt;NA&gt;  test-error    0.0428     1</span></span>
-<span><span class="co">##  2 e85e1ba939634e32979d8c3567ab80cf &lt;NA&gt;  test-logloss  0.543      1</span></span>
-<span><span class="co">##  3 e85e1ba939634e32979d8c3567ab80cf &lt;NA&gt;  train-error   0.0465     1</span></span>
-<span><span class="co">##  4 e85e1ba939634e32979d8c3567ab80cf &lt;NA&gt;  train-logloss 0.545      1</span></span>
-<span><span class="co">##  5 e85e1ba939634e32979d8c3567ab80cf &lt;NA&gt;  test-error    0.0403     2</span></span>
-<span><span class="co">##  6 e85e1ba939634e32979d8c3567ab80cf &lt;NA&gt;  test-logloss  0.440      2</span></span>
-<span><span class="co">##  7 e85e1ba939634e32979d8c3567ab80cf &lt;NA&gt;  train-error   0.0416     2</span></span>
-<span><span class="co">##  8 e85e1ba939634e32979d8c3567ab80cf &lt;NA&gt;  train-logloss 0.442      2</span></span>
-<span><span class="co">##  9 e85e1ba939634e32979d8c3567ab80cf &lt;NA&gt;  test-error    0.0248     3</span></span>
-<span><span class="co">## 10 e85e1ba939634e32979d8c3567ab80cf &lt;NA&gt;  test-logloss  0.368      3</span></span>
+<span><span class="co">##  1 7c35e6870ec145fb8a748f0b9efe3304 &lt;NA&gt;  test-error    0.0428     1</span></span>
+<span><span class="co">##  2 7c35e6870ec145fb8a748f0b9efe3304 &lt;NA&gt;  test-logloss  0.543      1</span></span>
+<span><span class="co">##  3 7c35e6870ec145fb8a748f0b9efe3304 &lt;NA&gt;  train-error   0.0465     1</span></span>
+<span><span class="co">##  4 7c35e6870ec145fb8a748f0b9efe3304 &lt;NA&gt;  train-logloss 0.545      1</span></span>
+<span><span class="co">##  5 7c35e6870ec145fb8a748f0b9efe3304 &lt;NA&gt;  test-error    0.0403     2</span></span>
+<span><span class="co">##  6 7c35e6870ec145fb8a748f0b9efe3304 &lt;NA&gt;  test-logloss  0.440      2</span></span>
+<span><span class="co">##  7 7c35e6870ec145fb8a748f0b9efe3304 &lt;NA&gt;  train-error   0.0416     2</span></span>
+<span><span class="co">##  8 7c35e6870ec145fb8a748f0b9efe3304 &lt;NA&gt;  train-logloss 0.442      2</span></span>
+<span><span class="co">##  9 7c35e6870ec145fb8a748f0b9efe3304 &lt;NA&gt;  test-error    0.0248     3</span></span>
+<span><span class="co">## 10 7c35e6870ec145fb8a748f0b9efe3304 &lt;NA&gt;  test-logloss  0.368      3</span></span>
 <span><span class="co">## # … with 70 more rows</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
