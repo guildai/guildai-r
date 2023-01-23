@@ -102,6 +102,11 @@ test_that("rscript op data inference", {
     NULL
   expect_identical(op, op2)
 
+  op <- r_script_guild_data(test_resource("flags-adjacent-to-frontmatter.R"))
+  expect_null(op$flags$y$description)
+  expect_null(op$flags$n$description)
+  expect_equal(op$description, "op desc, not flag desc")
+
 })
 
 

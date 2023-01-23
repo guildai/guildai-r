@@ -191,13 +191,16 @@ infer_global_params <- function(text, is_anno = startsWith(trimws(text, "left"),
       anno_start <- anno_end <- lineno - 1L
       while (isTRUE(is_anno[anno_start - 1L]))
         subtract(anno_start) <- 1L
-      # TODO: add test if lineno==1L to ensure no error
-      # TODO: expand check to make sure we don't falsely pickup frontmatter as flag anno.
+      # Make sure we aren't confusing op config for flag config
+      # i.e., we didn't pick up frontmatter anno and treat it as flag anno
+      # if user did something like:
       #1  #| echo: false
       #2  y <- 0
-
-      anno <- parse_yaml_anno(text[anno_start:anno_end])
-      append(param) <- anno
+      if (!(anno_start == 1L ||
+            (anno_start == 2L && startsWith(text, "#!/")))) {
+        anno <- parse_yaml_anno(text[anno_start:anno_end])
+        append(param) <- anno
+      }
     }
 
     params[[name]] <- param
