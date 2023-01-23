@@ -1,0 +1,98 @@
+---
+title: "example_xgboost"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+
+# set up a "project" directory for render
+root.dir <- tempfile("guildai-sample-xgboost-project-")
+dir.create(root.dir)
+dir.create(file.path(root.dir, ".guild"))
+file.copy("train-xgboost.R", root.dir)
+knitr::opts_knit$set(root.dir = root.dir)
+
+# help knitr capture stdout
+ns <- asNamespace("guildai")
+unlockBinding("system2t", ns)
+ns$system2t <- function(command, args, ..., stdout = "", stderr = "" ) {
+  if(stdout == "" && stderr == "") {
+    stdout <- stderr <- TRUE
+    on.exit(writeLines(out))
+  }
+  out <- base::system2(command, args, stdout = stdout, stderr=stderr, ...)
+  invisible(out)
+}
+options(guildai.run_as_job = FALSE)
+```
+
+Here is an example showing how to use *guildai* with xgboost in R.
+
+If this is your first exposure to *guildai*, we recommend starting with
+the framework agnostic "Getting Started" guide. This example assumes
+familiarity with guild concepts like *flags* and *scalars*.
+
+We'll start with an example R script, named "train-xgboost.R", that
+trains, evaluates, and saves an xgboost model using the "agaricus"
+dataset. The script is adapted from the [XGBoost R
+Tutorial](https://xgboost.readthedocs.io/en/stable/R-package/xgboostPresentation.html).
+Here is what it looks like:
+
+```{r, file = "train-xgboost.R", eval = FALSE}
+```
+
+A few things to note about the script:
+
+-   There is no 'guildai' specific configuration anywhere in the script
+    code. It's a regular R script, that you can safely `source()` or
+    work with interactively at the REPL.
+-   We declare two custom `output-scalars` patterns in the scripts
+    comment frontmatter. This informs guild how to parse the default
+    xgboost stdout output and extract scalar values from it.
+-   At the end of the run, we save the model. This file artifacts will
+    be stored as part of the run, enabling us to restore a trained
+    model.
+
+With our script defined, we can launch a guild run:
+
+```{r}
+library(guildai)
+guild_run("train-xgboost.R")
+```
+
+Inspecting the run flags and scalars:
+
+```{r, paged.print = FALSE}
+run <- runs_info(1)
+str(run$flags)
+str(run$scalars)
+```
+
+`runs_info()` returns the last value for each scalar. The full history
+of scalars emitted is available with `runs_scalars()`.
+
+```{r, paged.print = FALSE}
+scalars <- runs_scalars(1)
+scalars
+```
+
+```{r, message = FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+
+scalars %>%
+  select(-path) %>% 
+  tidyr::separate(tag, c("data", "metric")) %>% 
+  ggplot(aes(x = step, y = value, color = data)) +
+  facet_grid(rows = vars(metric), switch = 'y', scales = 'free_y') +
+  geom_point() + geom_smooth(se = FALSE)
+```
+
+Finally, we can load the model trained during the run by accessing the
+saved file from the `run$dir`.
+
+```{r}
+model <- xgboost::xgb.load(file.path(run$dir, "xgboost.model"))
+model
+```

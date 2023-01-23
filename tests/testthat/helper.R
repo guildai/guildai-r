@@ -59,11 +59,12 @@ local_project <- function(files, envir = parent.frame(), name = NULL,
 
 if(interactive()) {
 
+  options(guildai.run_as_job = FALSE)
   message("Using guild: ", guildai:::find_guild())
 
 } else { #if(!interactive()) {
 
-# don't echo during tests unless interactively
+  # don't echo during tests unless interactively
   formals(guild_run)$echo <- FALSE
   Sys.setenv(LOG_LEVEL = 30)
 
