@@ -33,3 +33,4 @@ the written lines, invisibly.
 \description{
 This function does nothing if \code{is_run_active()} is \code{FALSE}.
 }
+\keyword{internal}

@@ -4,7 +4,7 @@ template:
 
 navbar:
   structure:
-    left:  [intro, reference, examples, tutorials, news]
+    left:  [intro, reference, examples, news]
     right: [search, github]
   components:
     examples:
@@ -15,3 +15,31 @@ navbar:
 
 development:
   mode: auto
+
+
+reference:
+
+  - title: Install
+    contents:
+      - starts_with("install_")
+
+  - title: Create Runs
+  - contents:
+      - guild_run
+      - is_run_active
+
+  - title: Analyze Runs
+    contents:
+      - guild_view
+      - runs_info
+      - runs_scalars
+
+  - title: "Manage Runs"
+    contents:
+      - runs_label
+      - runs_export
+      - runs_delete
+      - resolve_run_ids
+      - guild_merge
+
+

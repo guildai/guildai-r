@@ -96,13 +96,14 @@ install_guild <-
 
   pip_install <- function(...)
     system2t(python, c("-Im", "pip", "install",
-                       "--no-user", "--upgrade",
+                       "--no-user",
                        "--no-warn-script-location",
                        "--disable-pip-version-check",
                        ...),
              echo_cmd = TRUE)
 
   pip_install("--ignore-installed", "pip", "wheel", "setuptools")
+  # pip_install("click==8.0.0")
   pip_install(guildai)
 
   # write out a ._pth file to ensure this python installation is isolated.

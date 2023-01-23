@@ -7,25 +7,37 @@
 resolve_run_ids(runs = NULL, ..., all = TRUE)
 }
 \arguments{
-\item{runs}{a runs selection. If a data.frame, the columns \code{id} or \code{run}
-are used as the run id. Otherwise, the argument is coerced to character
-vector, and passed on to \code{guild} as a runs filter selection. Wrap the
-string in \code{I()} to avoid quoting the argument for the shell.}
+\item{runs}{a runs selection. If a data.frame, the columns \code{id} or
+\code{run} are used as the run id. Otherwise, the arguments are
+transformed into a character vector of cli arguments, and passed on
+to \code{guild} as a runs filter selection. Wrap the string in \code{I()} to
+avoid quoting the argument for the shell.}
 
 \item{...}{Other arguments passed on to \code{guild}}
 
-\item{all}{Return all matching runs, not just the latest.}
+\item{all}{Return all matching runs. If \code{FALSE}, it returns the
+singly most recent run matching the selection criteria.}
 }
 \value{
 A character vector of run ids.
 }
 \description{
-\code{guild} supports a rich syntax for runs selection throughout the api. The
-same selection syntax is shared by the \verb{ls_*} and \verb{runs_*} families of
+This is a equivalent to \code{runs_info(...)$id}, implemented more
+efficiently.
+}
+\details{
+guild supports a rich syntax for runs selection throughout the api.
+The same selection syntax is shared by the \verb{runs_*} family of
 functions: \code{runs_info()}, \code{runs_scalars()}, \code{runs_comment()},
 \code{runs_label()}, \code{runs_mark()}, \code{runs_tag()}
 \code{runs_delete()},\code{runs_purge()}, \code{runs_restore()}, \code{runs_export()},
 \code{runs_import()}.
+}
+\note{
+You can call \code{Sys.setenv(GUILD_DEBUG_R = 1)} to see what system
+calls to the \code{guild} executable are made. This is useful when
+looking to understand how R arguments are transformed into a cli
+system call.
 }
 \examples{
 if(FALSE) {
@@ -42,8 +54,8 @@ resolve_run_ids(I("--staged --running"))
 
 # resolve_run_ids() uses the same selection rules and syntax as runs_info()
 stopifnot(identical(
-  resolve_run_ids(1),
-  runs_info(1)$id
+  resolve_run_ids(),
+  runs_info()$id
 ))
 }
 }

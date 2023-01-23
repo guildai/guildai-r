@@ -351,6 +351,7 @@ is_run_active <- function()
 #' @param append whether to append to the existing attr file.
 #' @inheritDotParams yaml::as.yaml -x
 #'
+#' @keywords internal
 #' @return the written lines, invisibly.
 write_run_attr <- function(name, data, ..., append = FALSE) {
   if(!is_run_active())

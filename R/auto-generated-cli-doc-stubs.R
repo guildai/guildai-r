@@ -237,6 +237,7 @@
 #' @param test_output_scalars Test output scalars on output. Use '-' to read from standard intput.
 #' @param test_sourcecode (bool) Test source code selection.
 #' @param test_flags (bool) Test flag configuration.
+#' @keywords internal
 guild_run_cli <-
 function (..., label = NULL, tag = NULL, comment = NULL, run_dir = NULL,
 stage = NA, start = NULL, restart = NULL, proto = NULL, force_sourcecode = NA,
@@ -262,25 +263,26 @@ as_cli_args(as.list.environment(environment()), ...)
 #'
 #' @param ... passed on to the `guild` executable. Arguments are automatically quoted with `shQuote()`, unless they are protected with `I()`. Pass `'--help'` or `help = TRUE` to see all options.
 #' @param format (bool) Format the JSON outout.
-#' @param filter Filter runs using a filter expression. See Filter by Expression above for details..
+#' @param filter Filter runs using a filter expression. See Filter by Expression above for details.
 #' @param operation Filter runs with operations matching `VAL`.
 #' @param label Filter runs with labels matching VAL. To show unlabeled runs, use `unlabeled`.
-#' @param unlabeled (bool) Filter only runs without labels.
+#' @param unlabeled (bool) Filter runs without labels.
 #' @param tag Filter runs with TAG.
 #' @param comment Filter runs with comments matching VAL.
-#' @param marked (bool) Filter only marked runs.
-#' @param unmarked (bool) Filter only unmarked runs.
-#' @param started Filter only runs started within RANGE. See above for valid time ranges.
-#' @param digest Filter only runs with a matching source code digest.
-#' @param running (bool) Filter only runs that are still running.
-#' @param completed (bool) Filter only completed runs.
-#' @param error (bool) Filter only runs that exited with an error.
-#' @param terminated (bool) Filter only runs terminated by the user.
-#' @param pending (bool) Filter only pending runs.
-#' @param staged (bool) Filter only staged runs.
+#' @param marked (bool) Filter marked runs.
+#' @param unmarked (bool) Filter unmarked runs.
+#' @param started Filter runs started within RANGE. See above for valid time ranges.
+#' @param digest Filter runs with a matching source code digest.
+#' @param running (bool) Filter runs that are still running.
+#' @param completed (bool) Filter completed runs.
+#' @param error (bool) Filter runs that exited with an error.
+#' @param terminated (bool) Filter runs terminated by the user.
+#' @param pending (bool) Filter pending runs.
+#' @param staged (bool) Filter staged runs.
 #' @param api_version API version.
 #' @param deleted (bool) Show deleted runs.
 #' @param include_batch (bool) Include batch runs.
+#' @keywords internal
 guild_api_runs_cli <-
 function (..., format = NA, filter = NULL, operation = NULL,
 label = NULL, unlabeled = NA, tag = NULL, comment = NULL,
@@ -493,22 +495,23 @@ as_cli_args(as.list.environment(environment()), ...)
 #' @param include_batch (bool) Include batch runs.
 #' @param no_open (bool) Don't open Guild View in a browser.
 #' @param logging (bool) Log requests.
-#' @param filter Filter runs using a filter expression. See Filter by Expression above for details..
+#' @param filter Filter runs using a filter expression. See Filter by Expression above for details.
 #' @param operation Filter runs with operations matching `VAL`.
 #' @param label Filter runs with labels matching VAL. To show unlabeled runs, use `unlabeled`.
-#' @param unlabeled (bool) Filter only runs without labels.
+#' @param unlabeled (bool) Filter runs without labels.
 #' @param tag Filter runs with TAG.
 #' @param comment Filter runs with comments matching VAL.
-#' @param marked (bool) Filter only marked runs.
-#' @param unmarked (bool) Filter only unmarked runs.
-#' @param started Filter only runs started within RANGE. See above for valid time ranges.
-#' @param digest Filter only runs with a matching source code digest.
-#' @param running (bool) Filter only runs that are still running.
-#' @param completed (bool) Filter only completed runs.
-#' @param error (bool) Filter only runs that exited with an error.
-#' @param terminated (bool) Filter only runs terminated by the user.
-#' @param pending (bool) Filter only pending runs.
-#' @param staged (bool) Filter only staged runs.
+#' @param marked (bool) Filter marked runs.
+#' @param unmarked (bool) Filter unmarked runs.
+#' @param started Filter runs started within RANGE. See above for valid time ranges.
+#' @param digest Filter runs with a matching source code digest.
+#' @param running (bool) Filter runs that are still running.
+#' @param completed (bool) Filter completed runs.
+#' @param error (bool) Filter runs that exited with an error.
+#' @param terminated (bool) Filter runs terminated by the user.
+#' @param pending (bool) Filter pending runs.
+#' @param staged (bool) Filter staged runs.
+#' @keywords internal
 guild_view_cli <-
 function (..., host = NULL, port = NULL, include_batch = NA,
 no_open = NA, logging = NA, filter = NULL, operation = NULL,
@@ -540,22 +543,22 @@ as_cli_args(as.list.environment(environment()), ...)
 #'
 #'
 #' @param ... passed on to the `guild` executable. Arguments are automatically quoted with `shQuote()`, unless they are protected with `I()`. Pass `'--help'` or `help = TRUE` to see all options.
-#' @param filter Filter runs using a filter expression. See Filter by Expression above for details..
+#' @param filter Filter runs using a filter expression. See Filter by Expression above for details.
 #' @param operation Filter runs with operations matching `VAL`.
 #' @param label Filter runs with labels matching VAL. To show unlabeled runs, use `unlabeled`.
-#' @param unlabeled (bool) Filter only runs without labels.
+#' @param unlabeled (bool) Filter runs without labels.
 #' @param tag Filter runs with TAG.
 #' @param comment Filter runs with comments matching VAL.
-#' @param marked (bool) Filter only marked runs.
-#' @param unmarked (bool) Filter only unmarked runs.
-#' @param started Filter only runs started within RANGE. See above for valid time ranges.
-#' @param digest Filter only runs with a matching source code digest.
-#' @param running (bool) Filter only runs that are still running.
-#' @param completed (bool) Filter only completed runs.
-#' @param error (bool) Filter only runs that exited with an error.
-#' @param terminated (bool) Filter only runs terminated by the user.
-#' @param pending (bool) Filter only pending runs.
-#' @param staged (bool) Filter only staged runs.
+#' @param marked (bool) Filter marked runs.
+#' @param unmarked (bool) Filter unmarked runs.
+#' @param started Filter runs started within RANGE. See above for valid time ranges.
+#' @param digest Filter runs with a matching source code digest.
+#' @param running (bool) Filter runs that are still running.
+#' @param completed (bool) Filter completed runs.
+#' @param error (bool) Filter runs that exited with an error.
+#' @param terminated (bool) Filter runs terminated by the user.
+#' @param pending (bool) Filter pending runs.
+#' @param staged (bool) Filter staged runs.
 #' @param target_dir Directory to merge run files to (required if project directory cannot be determined for the run).
 #' @param sourcecode (bool) Only copy run source code. Implies use of ``skip_deps``. Cannot be used with ``skip_sourcecode``.
 #' @param all (bool) Copy all run files. May be used with ``skip_sourcecode``, ``skip_deps``, and ``exclude`` to copy all but the skipped/excluded files.
@@ -567,6 +570,7 @@ as_cli_args(as.list.environment(environment()), ...)
 #' @param preview (bool) Show what would happen on a merge.
 #' @param replace (bool) Allow replacement of existing files. Cannot be used with `no_replace`
 #' @param no_replace (bool) Fail if any target file would be replaced, even if that file is committed to the project VCS. Cannot be used with ``replace``.
+#' @keywords internal
 guild_merge_cli <-
 function (..., filter = NULL, operation = NULL, label = NULL,
 unlabeled = NA, tag = NULL, comment = NULL, marked = NA,
@@ -769,6 +773,16 @@ as_cli_args(as.list.environment(environment()), ...)
 #' status filters.
 #'
 #'
+#'
+#' ### Select remote rnus
+#'
+#' To apply `select` to remote runs, specify `remote REMOTE`. Use
+#' ``guild remotes`` to list available remotes.
+#'
+#' For information on configuring remotes, see ``guild remotes
+#' help``.
+#'
+#'
 #' @param ... passed on to the `guild` executable. Arguments are automatically quoted with `shQuote()`, unless they are protected with `I()`. Pass `'--help'` or `help = TRUE` to see all options.
 #' @param all (bool) Select all matching runs, not just the latest.
 #' @param min Select the run with the lowest value for the specified COLSPEC.
@@ -777,29 +791,31 @@ as_cli_args(as.list.environment(environment()), ...)
 #' @param attr Show specified run attribute rather than run ID.
 #' @param path (bool) Show run path.
 #' @param dir (bool) Show run path.
-#' @param filter Filter runs using a filter expression. See Filter by Expression above for details..
+#' @param filter Filter runs using a filter expression. See Filter by Expression above for details.
 #' @param operation Filter runs with operations matching `VAL`.
 #' @param label Filter runs with labels matching VAL. To show unlabeled runs, use `unlabeled`.
-#' @param unlabeled (bool) Filter only runs without labels.
+#' @param unlabeled (bool) Filter runs without labels.
 #' @param tag Filter runs with TAG.
 #' @param comment Filter runs with comments matching VAL.
-#' @param marked (bool) Filter only marked runs.
-#' @param unmarked (bool) Filter only unmarked runs.
-#' @param started Filter only runs started within RANGE. See above for valid time ranges.
-#' @param digest Filter only runs with a matching source code digest.
-#' @param running (bool) Filter only runs that are still running.
-#' @param completed (bool) Filter only completed runs.
-#' @param error (bool) Filter only runs that exited with an error.
-#' @param terminated (bool) Filter only runs terminated by the user.
-#' @param pending (bool) Filter only pending runs.
-#' @param staged (bool) Filter only staged runs.
+#' @param marked (bool) Filter marked runs.
+#' @param unmarked (bool) Filter unmarked runs.
+#' @param started Filter runs started within RANGE. See above for valid time ranges.
+#' @param digest Filter runs with a matching source code digest.
+#' @param running (bool) Filter runs that are still running.
+#' @param completed (bool) Filter completed runs.
+#' @param error (bool) Filter runs that exited with an error.
+#' @param terminated (bool) Filter runs terminated by the user.
+#' @param pending (bool) Filter pending runs.
+#' @param staged (bool) Filter staged runs.
+#' @param remote Run the operation remotely.
+#' @keywords internal
 guild_select_cli <-
 function (..., all = NA, min = NULL, max = NULL, short_id = NA,
 attr = NULL, path = NA, dir = NA, filter = NULL, operation = NULL,
 label = NULL, unlabeled = NA, tag = NULL, comment = NULL,
 marked = NA, unmarked = NA, started = NULL, digest = NULL,
 running = NA, completed = NA, error = NA, terminated = NA,
-pending = NA, staged = NA)
+pending = NA, staged = NA, remote = NULL)
 {
 as_cli_args(as.list.environment(environment()), ...)
 }

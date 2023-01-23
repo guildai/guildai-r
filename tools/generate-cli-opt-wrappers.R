@@ -139,6 +139,7 @@ gen_wrapper_text <- function(command, passes_on_to = NULL, omit = NULL) {
     fn_name
     roxy_desc
     roxy_params
+    "@keywords internal"
   })
 
   frmls <- c(alist(... = ), deframe(select(opts, name, default)))

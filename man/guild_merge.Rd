@@ -12,22 +12,22 @@ guild_merge(run = NULL, ...)
 \item{...}{
   Arguments passed on to \code{\link[=guild_merge_cli]{guild_merge_cli}}
   \describe{
-    \item{\code{filter}}{Filter runs using a filter expression. See Filter by Expression above for details..}
+    \item{\code{filter}}{Filter runs using a filter expression. See Filter by Expression above for details.}
     \item{\code{operation}}{Filter runs with operations matching \code{VAL}.}
     \item{\code{label}}{Filter runs with labels matching VAL. To show unlabeled runs, use \code{unlabeled}.}
-    \item{\code{unlabeled}}{(bool) Filter only runs without labels.}
+    \item{\code{unlabeled}}{(bool) Filter runs without labels.}
     \item{\code{tag}}{Filter runs with TAG.}
     \item{\code{comment}}{Filter runs with comments matching VAL.}
-    \item{\code{marked}}{(bool) Filter only marked runs.}
-    \item{\code{unmarked}}{(bool) Filter only unmarked runs.}
-    \item{\code{started}}{Filter only runs started within RANGE. See above for valid time ranges.}
-    \item{\code{digest}}{Filter only runs with a matching source code digest.}
-    \item{\code{running}}{(bool) Filter only runs that are still running.}
-    \item{\code{completed}}{(bool) Filter only completed runs.}
-    \item{\code{error}}{(bool) Filter only runs that exited with an error.}
-    \item{\code{terminated}}{(bool) Filter only runs terminated by the user.}
-    \item{\code{pending}}{(bool) Filter only pending runs.}
-    \item{\code{staged}}{(bool) Filter only staged runs.}
+    \item{\code{marked}}{(bool) Filter marked runs.}
+    \item{\code{unmarked}}{(bool) Filter unmarked runs.}
+    \item{\code{started}}{Filter runs started within RANGE. See above for valid time ranges.}
+    \item{\code{digest}}{Filter runs with a matching source code digest.}
+    \item{\code{running}}{(bool) Filter runs that are still running.}
+    \item{\code{completed}}{(bool) Filter completed runs.}
+    \item{\code{error}}{(bool) Filter runs that exited with an error.}
+    \item{\code{terminated}}{(bool) Filter runs terminated by the user.}
+    \item{\code{pending}}{(bool) Filter pending runs.}
+    \item{\code{staged}}{(bool) Filter staged runs.}
     \item{\code{target_dir}}{Directory to merge run files to (required if project directory cannot be determined for the run).}
     \item{\code{sourcecode}}{(bool) Only copy run source code. Implies use of \code{skip_deps}. Cannot be used with \code{skip_sourcecode}.}
     \item{\code{all}}{(bool) Copy all run files. May be used with \code{skip_sourcecode}, \code{skip_deps}, and \code{exclude} to copy all but the skipped/excluded files.}

@@ -43,37 +43,37 @@ guild_view_cli(
 
 \item{logging}{(bool) Log requests.}
 
-\item{filter}{Filter runs using a filter expression. See Filter by Expression above for details..}
+\item{filter}{Filter runs using a filter expression. See Filter by Expression above for details.}
 
 \item{operation}{Filter runs with operations matching \code{VAL}.}
 
 \item{label}{Filter runs with labels matching VAL. To show unlabeled runs, use \code{unlabeled}.}
 
-\item{unlabeled}{(bool) Filter only runs without labels.}
+\item{unlabeled}{(bool) Filter runs without labels.}
 
 \item{tag}{Filter runs with TAG.}
 
 \item{comment}{Filter runs with comments matching VAL.}
 
-\item{marked}{(bool) Filter only marked runs.}
+\item{marked}{(bool) Filter marked runs.}
 
-\item{unmarked}{(bool) Filter only unmarked runs.}
+\item{unmarked}{(bool) Filter unmarked runs.}
 
-\item{started}{Filter only runs started within RANGE. See above for valid time ranges.}
+\item{started}{Filter runs started within RANGE. See above for valid time ranges.}
 
-\item{digest}{Filter only runs with a matching source code digest.}
+\item{digest}{Filter runs with a matching source code digest.}
 
-\item{running}{(bool) Filter only runs that are still running.}
+\item{running}{(bool) Filter runs that are still running.}
 
-\item{completed}{(bool) Filter only completed runs.}
+\item{completed}{(bool) Filter completed runs.}
 
-\item{error}{(bool) Filter only runs that exited with an error.}
+\item{error}{(bool) Filter runs that exited with an error.}
 
-\item{terminated}{(bool) Filter only runs terminated by the user.}
+\item{terminated}{(bool) Filter runs terminated by the user.}
 
-\item{pending}{(bool) Filter only pending runs.}
+\item{pending}{(bool) Filter pending runs.}
 
-\item{staged}{(bool) Filter only staged runs.}
+\item{staged}{(bool) Filter staged runs.}
 }
 \description{
 Features include:
@@ -271,3 +271,4 @@ example, a run index of \code{1} is the latest run that matches the
 status filters.
 }
 }
+\keyword{internal}

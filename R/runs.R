@@ -1,9 +1,9 @@
 
 
-#' list guild runs
+#' Get runs information
 #'
 #' Returns a dataframe with information about the guild runs stored in guild
-#' home. Guild home is determined either by consulting env var
+#' home. Guild home is determined either by consulting the env var
 #' `Sys.getenv("GUILD_HOME")`, or if unset, by looking for a `.guild`
 #' directory, starting from the current working directory and walking up
 #' parent directories up to `~` or `/`.
@@ -556,19 +556,29 @@ edit_comment <- function() {
 
 #' Resolve run ids
 #'
-#' `guild` supports a rich syntax for runs selection throughout the api. The
-#' same selection syntax is shared by the `ls_*` and `runs_*` families of
+#' This is a equivalent to `runs_info(...)$id`, implemented more
+#' efficiently.
+#'
+#' guild supports a rich syntax for runs selection throughout the api.
+#' The same selection syntax is shared by the `runs_*` family of
 #' functions: `runs_info()`, `runs_scalars()`, `runs_comment()`,
 #' `runs_label()`, `runs_mark()`, `runs_tag()`
 #' `runs_delete()`,`runs_purge()`, `runs_restore()`, `runs_export()`,
 #' `runs_import()`.
 #'
-#' @param runs a runs selection. If a data.frame, the columns `id` or `run`
-#'   are used as the run id. Otherwise, the argument is coerced to character
-#'   vector, and passed on to `guild` as a runs filter selection. Wrap the
-#'   string in `I()` to avoid quoting the argument for the shell.
+#' @param runs a runs selection. If a data.frame, the columns `id` or
+#'   `run` are used as the run id. Otherwise, the arguments are
+#'   transformed into a character vector of cli arguments, and passed on
+#'   to `guild` as a runs filter selection. Wrap the string in `I()` to
+#'   avoid quoting the argument for the shell.
 #' @param ... Other arguments passed on to `guild`
-#' @param all Return all matching runs, not just the latest.
+#' @param all Return all matching runs. If `FALSE`, it returns the
+#'   singly most recent run matching the selection criteria.
+#'
+#' @note You can call `Sys.setenv(GUILD_DEBUG_R = 1)` to see what system
+#'   calls to the `guild` executable are made. This is useful when
+#'   looking to understand how R arguments are transformed into a cli
+#'   system call.
 #'
 #' @return A character vector of run ids.
 #' @export
@@ -588,8 +598,8 @@ edit_comment <- function() {
 #'
 #' # resolve_run_ids() uses the same selection rules and syntax as runs_info()
 #' stopifnot(identical(
-#'   resolve_run_ids(1),
-#'   runs_info(1)$id
+#'   resolve_run_ids(),
+#'   runs_info()$id
 #' ))
 #' }
 resolve_run_ids <- function(runs = NULL, ..., all = TRUE) {
@@ -606,7 +616,7 @@ resolve_run_ids <- function(runs = NULL, ..., all = TRUE) {
 maybe_extract_run_ids <- function(x) {
   if (is.list(x))
     if(!is.null(id <- x[["id"]] %||% x[["run"]]))
-      return(id)
+      return(unique(id))
   x
 }
 
