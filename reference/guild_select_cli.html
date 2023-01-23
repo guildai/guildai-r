@@ -91,7 +91,8 @@ run:</p>
 <span>  error <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  terminated <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  pending <span class="op">=</span> <span class="cn">NA</span>,</span>
-<span>  staged <span class="op">=</span> <span class="cn">NA</span></span>
+<span>  staged <span class="op">=</span> <span class="cn">NA</span>,</span>
+<span>  remote <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -130,7 +131,7 @@ run:</p>
 
 
 <dt>filter</dt>
-<dd><p>Filter runs using a filter expression. See Filter by Expression above for details..</p></dd>
+<dd><p>Filter runs using a filter expression. See Filter by Expression above for details.</p></dd>
 
 
 <dt>operation</dt>
@@ -142,7 +143,7 @@ run:</p>
 
 
 <dt>unlabeled</dt>
-<dd><p>(bool) Filter only runs without labels.</p></dd>
+<dd><p>(bool) Filter runs without labels.</p></dd>
 
 
 <dt>tag</dt>
@@ -154,43 +155,47 @@ run:</p>
 
 
 <dt>marked</dt>
-<dd><p>(bool) Filter only marked runs.</p></dd>
+<dd><p>(bool) Filter marked runs.</p></dd>
 
 
 <dt>unmarked</dt>
-<dd><p>(bool) Filter only unmarked runs.</p></dd>
+<dd><p>(bool) Filter unmarked runs.</p></dd>
 
 
 <dt>started</dt>
-<dd><p>Filter only runs started within RANGE. See above for valid time ranges.</p></dd>
+<dd><p>Filter runs started within RANGE. See above for valid time ranges.</p></dd>
 
 
 <dt>digest</dt>
-<dd><p>Filter only runs with a matching source code digest.</p></dd>
+<dd><p>Filter runs with a matching source code digest.</p></dd>
 
 
 <dt>running</dt>
-<dd><p>(bool) Filter only runs that are still running.</p></dd>
+<dd><p>(bool) Filter runs that are still running.</p></dd>
 
 
 <dt>completed</dt>
-<dd><p>(bool) Filter only completed runs.</p></dd>
+<dd><p>(bool) Filter completed runs.</p></dd>
 
 
 <dt>error</dt>
-<dd><p>(bool) Filter only runs that exited with an error.</p></dd>
+<dd><p>(bool) Filter runs that exited with an error.</p></dd>
 
 
 <dt>terminated</dt>
-<dd><p>(bool) Filter only runs terminated by the user.</p></dd>
+<dd><p>(bool) Filter runs terminated by the user.</p></dd>
 
 
 <dt>pending</dt>
-<dd><p>(bool) Filter only pending runs.</p></dd>
+<dd><p>(bool) Filter pending runs.</p></dd>
 
 
 <dt>staged</dt>
-<dd><p>(bool) Filter only staged runs.</p></dd>
+<dd><p>(bool) Filter staged runs.</p></dd>
+
+
+<dt>remote</dt>
+<dd><p>Run the operation remotely.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -367,6 +372,15 @@ terminated or error status.</p>
 <p>Status filters are applied before <code>RUN</code> indexes are resolved. For
 example, a run index of <code>1</code> is the latest run that matches the
 status filters.</p>
+</div>
+
+<div class="section">
+<h3 id="select-remote-rnus">Select remote rnus<a class="anchor" aria-label="anchor" href="#select-remote-rnus"></a></h3>
+
+
+<p>To apply <code>select</code> to remote runs, specify <code>remote REMOTE</code>. Use
+<code>guild remotes</code> to list available remotes.</p>
+<p>For information on configuring remotes, see <code>guild remotes help</code>.</p>
 </div>
 
     </div>
