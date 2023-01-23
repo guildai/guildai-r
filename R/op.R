@@ -16,7 +16,7 @@ r_script_guild_data <- function(r_script_path) {
 
   r_script_path <- normalizePath(r_script_path, winslash = "/")
   # we need to convert this to a relative path to the guild cwd/project root.
-  # for now we assume that the sourcecode.root == cwd() and sourcecode.dest == "."
+  # for now we assume that the sourcecode.root == getwd() and sourcecode.dest == "."
   # TODO: make sure the deparsed call in the exec string contains a relative path
   # to the script in the RUN_DIR, if user supplied non-default 'root' or 'dest' or
   # launched from not the project dir.
@@ -37,21 +37,21 @@ r_script_guild_data <- function(r_script_path) {
     "echo" = TRUE
   )
 
-  # if (is_windows()) {
-  #   # need winslashs in file paths
-  #   for (potential_path in list("name",
-  #                               "flags-dest",
-  #                               c("sourcecode", "root"),
-  #                               c("sourcecode", "dest"))) {
-  #     path <- tryCatch(data[[potential_path]], error = function(e) NULL)
-  #     if (!is_string(path))
-  #       next
-  #
-  #     data[[potential_path]] <-
-  #       gsub("/", "\\", data[[potential_path]], fixed = TRUE)
-  #   }
-  # }
+  if (is_windows()) {
+    # need / as the path.sep in file paths that will be passed through
+    # the cmdline. guild parses the cmdline using posix conventions,
+    # even on windows.
+    for (potential_path in list("name", "flags-dest",
+                                c("sourcecode", "root"),
+                                c("sourcecode", "dest"))) {
+      path <- tryCatch(data[[potential_path]], error = function(e) NULL)
+      if (!is_string(path))
+        next
 
+      data[[potential_path]] <-
+        gsub("\\", "/", data[[potential_path]], fixed = TRUE)
+    }
+  }
 
   is_anno <- startsWith(trimws(text, "left"), "#|")
   if (is_anno[1] || startsWith(text[1], "#!/") && is_anno[2]) {
