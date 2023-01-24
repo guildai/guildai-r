@@ -63,9 +63,9 @@ guildai::install_guild()
 # Launch a Run
 
 Guild AI can be used with any machine learning framework, or no
-framework at all. [See here](examples) for examples demonstrating how to
-use guild with common machine learning frameworks, including xgboost,
-tensorFlow and keras, torch, and tidymodels.
+framework at all. The Examples section in the top navbar shows how you
+can use guild with common machine learning frameworks like xgboost,
+tensorflow and keras, torch, mlr3 and tidymodels.
 
 In this introductory example, we'll start by showing guild with no
 framework at all, on a very simple (and somewhat contrived) example.
@@ -459,16 +459,8 @@ guild_run("train.R",
           max_trials = 5)
 ```
 
-You can launch an optimizer multiple times, and it will automatically
-pick up where it left off, using results from all previous runs to
-select the flag values for the next run.
-
-```{r}
-guild_run("train.R",
-          optimizer = "bayesian",
-          minimize = "rmse",
-          max_trials = 5)
-```
+See [here](https://my.guild.ai/t/optimizers-reference/43) for
+documentation on the optimizers built-in to guild.
 
 # Managing runs
 
