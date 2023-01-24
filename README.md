@@ -1,9 +1,5 @@
 # R interface to Guild AI
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-# guildai
-
 <!-- badges: start -->
 
 <div>
@@ -14,7 +10,16 @@ R-CMD-check
 
 </div>
 
-<!-- badges: end -->
+<!-- badges: end   -->
+
+|                                                           |
+|:---------------------------------------------------------:|
+| ![](vignettes-src/logos/guild-logo-dark.png){width="50%"} |
+
+|                                                                        |                                                             |                                                          |
+|:----------------------------------------------------------------------:|:-----------------------------------------------------------:|:--------------------------------------------------------:|
+| ![](vignettes-src/logos/TF_FullColor_Stacked.svg){style="width:100%;"} | ![](vignettes-src/logos/tidymodels.png){style="width:65%;"} |  ![](vignettes-src/logos/torch.png){style="width:70%;"}  |
+|      ![](vignettes-src/logos/keras-logo.png){style="width:80%;"}       |    ![](vignettes-src/logos/mlr3.png){style="width:70%;"}    | ![](vignettes-src/logos/xgboost.png){style="width:90%;"} |
 
 <!-- a nice screenshot image here-->
 
@@ -45,9 +50,8 @@ remotes::install_github("t-kalinowski/guildai-r")
 guildai::install_guild()
 ```
 
-Guild AI can be used with any machine learning framework, or even no
+Guild AI can be used with any machine learning framework, or no
 framework at all.
 
 [Get
 Started](https://t-kalinowski.github.io/guildai-r/articles/guildai.html)
-
