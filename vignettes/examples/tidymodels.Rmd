@@ -1,17 +1,21 @@
-example_tidymodels
-================
+---
+keep-yaml: true
+title: Tidymodels with Guild AI
+toc-title: Table of contents
+---
 
 Here is an example showing how to use *guildai* with tidymodels in R.
 
 If this is your first exposure to *guildai*, we recommend starting with
-the framework agnostic “Getting Started” guide. This example assumes
+the framework agnostic "Getting Started" guide. This example assumes
 familiarity with guild concepts like *flags* and *scalars*.
 
-We’ll start with an example R script, named “train-tidymodels.R”, that
-trains, evaluates, and saves an tidymodels model using the “Ames
-Housing” dataset. Here is what it looks like:
+We'll start with an example R script, named "train-tidymodels.R", that
+trains, evaluates, and saves an tidymodels model using the "Ames
+Housing" dataset. Here is what it looks like:
 
-``` r
+::: {.cell file="train-tidymodels.R"}
+``` {.r .cell-code}
 library(tidymodels)
 library(butcher)
 library(bestNormalize)
@@ -129,19 +133,22 @@ save(ames_fit, val_results, file = ".RData",
 
 session_info()
 ```
+:::
 
 A few things to note about the script:
 
-- There is no ‘guildai’ specific configuration in the script code. It’s
-  a regular R script, that you can safely `source()` or work with
-  interactively at the REPL.
-- We declare some constraints on the flag values we’ve defined.
-- At the end of the run, we save the model. This file artifacts will be
-  stored as part of the run, enabling us to restore a trained model.
+-   There is no 'guildai' specific configuration in the script code.
+    It's a regular R script, that you can safely `source()` or work with
+    interactively at the REPL.
+-   We declare some constraints on the flag values we've defined.
+-   At the end of the run, we save the model. This file artifacts will
+    be stored as part of the run, enabling us to restore a trained
+    model.
 
 With our script defined, we can launch a guild run and view it:
 
-``` r
+::: cell
+``` {.r .cell-code}
 library(guildai)
 guild_run("train-tidymodels.R")
 ## > library(tidymodels)
@@ -159,7 +166,7 @@ guild_run("train-tidymodels.R")
 ## ✖ dplyr::filter()  masks stats::filter()
 ## ✖ dplyr::lag()     masks stats::lag()
 ## ✖ recipes::step()  masks stats::step()
-## • Dig deeper into tidy modeling with R at https://www.tmwr.org
+## • Learn how to get started at https://www.tidymodels.org/start/
 ## > library(butcher)
 ## > library(bestNormalize)
 ## > library(sessioninfo)
@@ -217,6 +224,8 @@ guild_run("train-tidymodels.R")
 ## +   add_model(glmn_spec) %>%
 ## +   add_recipe(ames_rec)
 ## > ames_fit <- fit(ames_wflow, data = ames_train)
+## Warning in object$object : partial match of 'object' to 'objects'
+## Warning in object$object : partial match of 'object' to 'objects'
 ## > ames_fit
 ## ══ Workflow [trained] ══════════════════════════════════════════════════════════
 ## Preprocessor: Recipe
@@ -233,56 +242,58 @@ guild_run("train-tidymodels.R")
 ## • step_spline_natural()
 ## 
 ## ── Model ───────────────────────────────────────────────────────────────────────
+## Warning in seq.default(along = x$df) :
+##   partial argument match of 'along' to 'along.with'
 ## 
 ## Call:  glmnet::glmnet(x = maybe_matrix(x), y = y, family = "gaussian",      alpha = ~mix_val) 
 ## 
 ##      Df  %Dev           Lambda
-## 1     0  0.00 0.12535972519700
-## 2     1  8.80 0.11422311271600
-## 3     1 16.11 0.10407584619400
-## 4     4 24.77 0.09483003486350
-## 5     4 33.66 0.08640559592880
-## 6     4 41.04 0.07872956093020
-## 7     4 47.16 0.07173544372500
-## 8     4 52.25 0.06536266461560
-## 9     5 56.74 0.05955602563820
-## 10    5 60.48 0.05426523246380
-## 11    5 63.58 0.04944445877300
-## 12    5 66.16 0.04505194933020
-## 13    5 68.30 0.04104965832010
-## 14    5 70.08 0.03740291981250
-## 15    7 71.75 0.03408014750320
-## 16    7 73.17 0.03105256112780
-## 17    8 74.42 0.02829393718160
-## 18    9 75.59 0.02578038178380
-## 19    9 76.57 0.02349012371980
-## 20   10 77.40 0.02140332587000
-## 21   12 78.20 0.01950191338980
-## 22   13 78.95 0.01776941715380
-## 23   15 79.67 0.01619083110840
-## 24   19 80.46 0.01475248229650
-## 25   20 81.17 0.01344191242880
-## 26   22 81.78 0.01224776997610
-## 27   23 82.32 0.01115971184770
-## 28   24 82.78 0.01016831380460
-## 29   25 83.17 0.00926498883127
-## 30   28 83.54 0.00844191275888
-## 31   33 83.96 0.00769195649626
-## 32   36 84.37 0.00700862428106
-## 33   38 84.77 0.00638599741651
-## 34   40 85.14 0.00581868300657
-## 35   44 85.48 0.00530176724523
-## 36   47 85.80 0.00483077285545
-## 37   52 86.14 0.00440162030914
-## 38   55 86.46 0.00401059249225
-## 39   56 86.73 0.00365430250889
-## 40   60 86.97 0.00332966434568
-## 41   67 87.24 0.00303386614215
-## 42   73 87.48 0.00276434583577
-## 43   75 87.70 0.00251876897057
-## 44   80 87.90 0.00229500847725
-## 45   83 88.07 0.00209112624944
-## 46   92 88.24 0.00190535635682
+## 1     0  0.00 0.12518364563700
+## 2     2  9.64 0.11406267558000
+## 3     2 19.39 0.10392966185100
+## 4     3 27.84 0.09469683713430
+## 5     4 36.50 0.08628423111870
+## 6     4 43.76 0.07861897783540
+## 7     5 49.83 0.07163468452750
+## 8     5 55.14 0.06527085658750
+## 9     5 59.54 0.05947237358230
+## 10    5 63.19 0.05418901182600
+## 11    5 66.23 0.04937500936660
+## 12    6 68.76 0.04498866961770
+## 13    6 70.86 0.04099200020280
+## 14    6 72.61 0.03735038388350
+## 15    7 74.26 0.03403227872120
+## 16    7 75.65 0.03100894487650
+## 17    8 76.88 0.02825419567790
+## 18    8 77.91 0.02574417080570
+## 19    8 78.77 0.02345712962530
+## 20    8 79.48 0.02137326287990
+## 21   10 80.09 0.01947452111280
+## 22   12 80.72 0.01774445833120
+## 23   13 81.38 0.01616808955880
+## 24   14 82.01 0.01473176104350
+## 25   17 82.66 0.01342303199490
+## 26   17 83.22 0.01223056682790
+## 27   23 83.75 0.01114403697970
+## 28   26 84.30 0.01015403144870
+## 29   26 84.76 0.00925197528049
+## 30   30 85.17 0.00843005529609
+## 31   33 85.66 0.00768115241779
+## 32   34 86.09 0.00699878000714
+## 33   36 86.47 0.00637702768075
+## 34   39 86.80 0.00581051011742
+## 35   44 87.14 0.00529432041302
+## 36   46 87.46 0.00482398757929
+## 37   50 87.78 0.00439543781821
+## 38   53 88.11 0.00400495923677
+## 39   56 88.40 0.00364916969631
+## 40   60 88.67 0.00332498751802
+## 41   64 88.90 0.00302960479097
+## 42   66 89.12 0.00276046305128
+## 43   69 89.32 0.00251523112196
+## 44   81 89.51 0.00229178492135
+## 45   87 89.70 0.00208818906536
+## 46   90 89.88 0.00190268010409
 ## 
 ## ...
 ## and 54 more lines.
@@ -295,10 +306,16 @@ guild_run("train-tidymodels.R")
 ## +   glmnet_fit %>%
 ## +   coef(s = pen_val) %>%
 ## +   apply(2, function(x) sum(x != 0))
+## Warning in seq.default(along = s) :
+##   partial argument match of 'along' to 'along.with'
 ## > glmnet_fit %>% autoplot(best_penalty = pen_val)
 ## > # Validation set results ----------------------------------------------
 ## > 
 ## > ames_pred <- augment(ames_fit, ames_val)
+## Warning in object$object : partial match of 'object' to 'objects'
+## Warning in object$object : partial match of 'object' to 'objects'
+## Warning in seq.default(along = s) :
+##   partial argument match of 'along' to 'along.with'
 ## > ames_pred %>%
 ## +   ggplot(aes(Sale_Price, .pred)) +
 ## +   geom_abline(col = "green", lty = 2) +
@@ -307,11 +324,11 @@ guild_run("train-tidymodels.R")
 ## +   labs(x = "Observed (log-10)", y = "Predicted (log-10)")
 ## > val_results <- ames_pred %>% metrics(Sale_Price, .pred)
 ## > cat('validation_rmse:', val_results$.estimate[1], "\n")
-## validation_rmse: 0.0561993545849468 
+## validation_rmse: 0.072934713351508 
 ## > cat('validation_R2:', val_results$.estimate[2], "\n")
-## validation_R2: 0.898652871924685 
+## validation_R2: 0.84700967677576 
 ## > cat('num_predictors:', glmnet_pred, "\n")
-## num_predictors: 129 
+## num_predictors: 125 
 ## > # Save object ---------------------------------------------------------
 ## > 
 ## > # butcher the objects to make their install sizes smaller
@@ -324,7 +341,7 @@ guild_run("train-tidymodels.R")
 ## > session_info()
 ## ─ Session info ───────────────────────────────────────────────────────────────
 ##  setting  value
-##  version  R version 4.2.2 Patched (2022-11-10 r83330)
+##  version  R version 4.2.1 (2022-06-23)
 ##  os       Ubuntu 20.04.5 LTS
 ##  system   x86_64, linux-gnu
 ##  ui       X11
@@ -337,114 +354,116 @@ guild_run("train-tidymodels.R")
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
 ##  package       * version    date (UTC) lib source
-##  assertthat      0.2.1      2019-03-21 [1] CRAN (R 4.2.0)
-##  backports       1.4.1      2021-12-13 [1] CRAN (R 4.2.0)
-##  bestNormalize * 1.8.3      2022-06-13 [1] CRAN (R 4.2.2)
-##  broom         * 1.0.2      2022-12-15 [1] CRAN (R 4.2.2)
-##  butcher       * 0.3.1      2022-12-14 [1] CRAN (R 4.2.2)
-##  cachem          1.0.6      2021-08-19 [1] CRAN (R 4.2.0)
-##  class           7.3-21     2023-01-23 [1] CRAN (R 4.2.2)
-##  cli             3.6.0      2023-01-09 [1] CRAN (R 4.2.2)
-##  codetools       0.2-18     2020-11-04 [4] CRAN (R 4.0.3)
-##  colorspace      2.1-0      2023-01-23 [1] CRAN (R 4.2.2)
+##  assertthat      0.2.1      2019-03-21 [1] CRAN (R 4.2.1)
+##  backports       1.4.1      2021-12-13 [1] CRAN (R 4.2.1)
+##  bestNormalize * 1.8.3      2022-06-13 [1] CRAN (R 4.2.1)
+##  broom         * 1.0.2      2022-12-15 [1] CRAN (R 4.2.1)
+##  butcher       * 0.3.1      2022-12-14 [1] CRAN (R 4.2.1)
+##  cachem          1.0.6      2021-08-19 [1] CRAN (R 4.2.1)
+##  class           7.3-20     2022-01-16 [2] CRAN (R 4.2.1)
+##  cli             3.6.0      2023-01-09 [1] CRAN (R 4.2.1)
+##  codetools       0.2-18     2020-11-04 [2] CRAN (R 4.2.1)
+##  colorspace      2.0-3      2022-02-21 [1] CRAN (R 4.2.1)
 ##  conflicted      1.1.0      2021-11-26 [1] CRAN (R 4.2.1)
 ##  DBI             1.1.3      2022-06-18 [1] CRAN (R 4.2.1)
-##  dials         * 1.1.0      2022-11-04 [1] CRAN (R 4.2.2)
+##  dials         * 1.1.0      2022-11-04 [1] CRAN (R 4.2.1)
 ##  DiceDesign      1.9        2021-02-13 [1] CRAN (R 4.2.1)
-##  digest          0.6.31     2022-12-11 [1] CRAN (R 4.2.2)
-##  doParallel      1.0.17     2022-02-07 [1] CRAN (R 4.2.2)
-##  doRNG           1.8.6      2023-01-16 [1] CRAN (R 4.2.2)
-##  dplyr         * 1.0.10     2022-09-01 [1] RSPM (R 4.2.0)
-##  ellipsis        0.3.2      2021-04-29 [1] CRAN (R 4.2.0)
-##  fansi           1.0.4      2023-01-22 [1] CRAN (R 4.2.2)
+##  digest          0.6.31     2022-12-11 [1] CRAN (R 4.2.1)
+##  doParallel      1.0.17     2022-02-07 [1] CRAN (R 4.2.1)
+##  doRNG           1.8.6      2023-01-16 [1] CRAN (R 4.2.1)
+##  dplyr         * 1.0.10     2022-09-01 [1] CRAN (R 4.2.1)
+##  ellipsis        0.3.2      2021-04-29 [1] CRAN (R 4.2.1)
+##  fansi           1.0.3      2022-03-24 [1] CRAN (R 4.2.1)
 ##  farver          2.1.1      2022-07-06 [1] CRAN (R 4.2.1)
-##  fastmap         1.1.0      2021-01-25 [1] CRAN (R 4.2.0)
+##  fastmap         1.1.0      2021-01-25 [1] CRAN (R 4.2.1)
 ##  foreach         1.5.2      2022-02-02 [1] CRAN (R 4.2.1)
-##  furrr           0.3.1      2022-08-15 [1] RSPM (R 4.2.0)
-##  future          1.30.0     2022-12-16 [1] CRAN (R 4.2.2)
-##  future.apply    1.10.0     2022-11-05 [1] CRAN (R 4.2.2)
-##  generics        0.1.3      2022-07-05 [1] CRAN (R 4.2.0)
-##  ggplot2       * 3.4.0      2022-11-04 [1] CRAN (R 4.2.2)
-##  ggrepel         0.9.2      2022-11-06 [1] CRAN (R 4.2.2)
-##  glmnet          4.1-6      2022-11-27 [1] CRAN (R 4.2.2)
-##  globals         0.16.2     2022-11-21 [1] CRAN (R 4.2.2)
-##  glue            1.6.2      2022-02-24 [1] CRAN (R 4.2.0)
-##  gower           1.0.1      2022-12-22 [1] CRAN (R 4.2.2)
+##  furrr           0.3.1      2022-08-15 [1] CRAN (R 4.2.1)
+##  future          1.30.0     2022-12-16 [1] CRAN (R 4.2.1)
+##  future.apply    1.10.0     2022-11-05 [1] CRAN (R 4.2.1)
+##  generics        0.1.3      2022-07-05 [1] CRAN (R 4.2.1)
+##  ggplot2       * 3.4.0      2022-11-04 [1] CRAN (R 4.2.1)
+##  ggrepel         0.9.2      2022-11-06 [1] CRAN (R 4.2.1)
+##  glmnet          4.1-6      2022-11-27 [1] CRAN (R 4.2.1)
+##  globals         0.16.2     2022-11-21 [1] CRAN (R 4.2.1)
+##  glue            1.6.2      2022-02-24 [1] CRAN (R 4.2.1)
+##  gower           1.0.1      2022-12-22 [1] CRAN (R 4.2.1)
 ##  GPfit           1.0-8      2019-02-08 [1] CRAN (R 4.2.1)
-##  gtable          0.3.1      2022-09-01 [1] RSPM (R 4.2.0)
+##  gtable          0.3.1      2022-09-01 [1] CRAN (R 4.2.1)
 ##  guildai         0.0.0.9001 2023-01-23 [1] local
 ##  hardhat         1.2.0      2022-06-30 [1] CRAN (R 4.2.1)
-##  infer         * 1.0.4      2022-12-02 [1] CRAN (R 4.2.2)
+##  infer         * 1.0.4      2022-12-02 [1] CRAN (R 4.2.1)
 ##  ipred           0.9-13     2022-06-02 [1] CRAN (R 4.2.1)
 ##  iterators       1.0.14     2022-02-05 [1] CRAN (R 4.2.1)
-##  jsonlite        1.8.4      2022-12-06 [1] CRAN (R 4.2.2)
-##  labeling        0.4.2      2020-10-20 [1] CRAN (R 4.2.0)
-##  lattice         0.20-45    2021-09-22 [4] CRAN (R 4.2.0)
-##  lava            1.7.1      2023-01-06 [1] CRAN (R 4.2.2)
-##  lhs             1.1.6      2022-12-17 [1] CRAN (R 4.2.2)
-##  lifecycle       1.0.3      2022-10-07 [1] CRAN (R 4.2.2)
-##  listenv         0.9.0      2022-12-16 [1] CRAN (R 4.2.2)
-##  lubridate       1.9.0      2022-11-06 [1] CRAN (R 4.2.2)
-##  magrittr        2.0.3      2022-03-30 [1] CRAN (R 4.2.0)
-##  MASS            7.3-58.2   2023-01-23 [1] CRAN (R 4.2.2)
-##  Matrix          1.5-3      2022-11-11 [1] CRAN (R 4.2.2)
-##  memoise         2.0.1      2021-11-26 [1] CRAN (R 4.2.0)
-##  modeldata     * 1.0.1      2022-09-06 [1] RSPM (R 4.2.0)
-##  munsell         0.5.0      2018-06-12 [1] CRAN (R 4.2.0)
-##  nnet            7.3-18     2022-09-28 [4] CRAN (R 4.2.1)
-##  nortest         1.0-4      2015-07-30 [1] CRAN (R 4.2.2)
-##  parallelly      1.34.0     2023-01-13 [1] CRAN (R 4.2.2)
-##  parsnip       * 1.0.3      2022-11-11 [1] CRAN (R 4.2.2)
-##  pillar          1.8.1      2022-08-19 [1] RSPM (R 4.2.0)
-##  pkgconfig       2.0.3      2019-09-22 [1] CRAN (R 4.2.0)
+##  jsonlite        1.8.4      2022-12-06 [1] CRAN (R 4.2.1)
+##  labeling        0.4.2      2020-10-20 [1] CRAN (R 4.2.1)
+##  lattice         0.20-45    2021-09-22 [2] CRAN (R 4.2.1)
+##  lava            1.7.1      2023-01-06 [1] CRAN (R 4.2.1)
+##  lhs             1.1.6      2022-12-17 [1] CRAN (R 4.2.1)
+##  lifecycle       1.0.3      2022-10-07 [1] CRAN (R 4.2.1)
+##  listenv         0.9.0      2022-12-16 [1] CRAN (R 4.2.1)
+##  lubridate       1.9.0      2022-11-06 [1] CRAN (R 4.2.1)
+##  magrittr        2.0.3      2022-03-30 [1] CRAN (R 4.2.1)
+##  MASS            7.3-58.1   2022-08-03 [2] CRAN (R 4.2.1)
+##  Matrix          1.5-3      2022-11-11 [2] CRAN (R 4.2.1)
+##  memoise         2.0.1      2021-11-26 [1] CRAN (R 4.2.1)
+##  modeldata     * 1.0.1      2022-09-06 [1] CRAN (R 4.2.1)
+##  munsell         0.5.0      2018-06-12 [1] CRAN (R 4.2.1)
+##  nnet            7.3-18     2022-09-28 [2] CRAN (R 4.2.1)
+##  nortest         1.0-4      2015-07-30 [1] CRAN (R 4.2.1)
+##  parallelly      1.34.0     2023-01-13 [1] CRAN (R 4.2.1)
+##  parsnip       * 1.0.3      2022-11-11 [1] CRAN (R 4.2.1)
+##  pillar          1.8.1      2022-08-19 [1] CRAN (R 4.2.1)
+##  pkgconfig       2.0.3      2019-09-22 [1] CRAN (R 4.2.1)
 ##  prodlim         2019.11.13 2019-11-17 [1] CRAN (R 4.2.1)
-##  purrr         * 1.0.1      2023-01-10 [1] CRAN (R 4.2.2)
-##  R6              2.5.1      2021-08-19 [1] CRAN (R 4.2.0)
-##  Rcpp            1.0.10     2023-01-22 [1] CRAN (R 4.2.2)
-##  recipes       * 1.0.4      2023-01-11 [1] CRAN (R 4.2.2)
+##  purrr         * 1.0.1      2023-01-10 [1] CRAN (R 4.2.1)
+##  R6              2.5.1      2021-08-19 [1] CRAN (R 4.2.1)
+##  Rcpp            1.0.9      2022-07-08 [1] CRAN (R 4.2.1)
+##  recipes       * 1.0.4      2023-01-11 [1] CRAN (R 4.2.1)
 ##  rlang           1.0.6      2022-09-24 [1] CRAN (R 4.2.1)
-##  rngtools        1.5.2      2021-09-20 [1] CRAN (R 4.2.2)
-##  rpart           4.1.19     2022-10-21 [4] CRAN (R 4.2.1)
-##  rsample       * 1.1.1      2022-12-07 [1] CRAN (R 4.2.2)
-##  rstudioapi      0.14       2022-08-22 [1] RSPM (R 4.2.0)
-##  scales        * 1.2.1      2022-08-20 [1] RSPM (R 4.2.0)
-##  sessioninfo   * 1.2.2      2021-12-06 [1] CRAN (R 4.2.0)
-##  shape           1.4.6      2021-05-19 [1] CRAN (R 4.2.2)
-##  splines2        0.4.7      2023-01-14 [1] CRAN (R 4.2.2)
-##  survival        3.5-0      2023-01-09 [1] CRAN (R 4.2.2)
+##  rngtools        1.5.2      2021-09-20 [1] CRAN (R 4.2.1)
+##  rpart           4.1.19     2022-10-21 [2] CRAN (R 4.2.1)
+##  rsample       * 1.1.1      2022-12-07 [1] CRAN (R 4.2.1)
+##  rstudioapi      0.14       2022-08-22 [1] CRAN (R 4.2.1)
+##  scales        * 1.2.1      2022-08-20 [1] CRAN (R 4.2.1)
+##  sessioninfo   * 1.2.2      2021-12-06 [1] CRAN (R 4.2.1)
+##  shape           1.4.6      2021-05-19 [1] CRAN (R 4.2.1)
+##  splines2        0.4.7      2023-01-14 [1] CRAN (R 4.2.1)
+##  survival        3.5-0      2023-01-09 [2] CRAN (R 4.2.1)
 ##  tibble        * 3.1.8      2022-07-22 [1] CRAN (R 4.2.1)
-##  tidymodels    * 1.0.0      2022-07-13 [1] CRAN (R 4.2.2)
-##  tidyr         * 1.2.1      2022-09-08 [1] RSPM (R 4.2.0)
-##  tidyselect      1.2.0      2022-10-10 [1] CRAN (R 4.2.2)
-##  timechange      0.2.0      2023-01-11 [1] CRAN (R 4.2.2)
-##  timeDate        4022.108   2023-01-07 [1] CRAN (R 4.2.2)
-##  tune          * 1.0.1      2022-10-09 [1] CRAN (R 4.2.2)
-##  utf8            1.2.2      2021-07-24 [1] CRAN (R 4.2.0)
-##  vctrs           0.5.2      2023-01-23 [1] CRAN (R 4.2.2)
-##  withr           2.5.0      2022-03-03 [1] CRAN (R 4.2.0)
-##  workflows     * 1.1.2      2022-11-16 [1] CRAN (R 4.2.2)
+##  tidymodels    * 1.0.0      2022-07-13 [1] CRAN (R 4.2.1)
+##  tidyr         * 1.2.1      2022-09-08 [1] CRAN (R 4.2.1)
+##  tidyselect      1.2.0      2022-10-10 [1] CRAN (R 4.2.1)
+##  timechange      0.2.0      2023-01-11 [1] CRAN (R 4.2.1)
+##  timeDate        4022.108   2023-01-07 [1] CRAN (R 4.2.1)
+##  tune          * 1.0.1      2022-10-09 [1] CRAN (R 4.2.1)
+##  utf8            1.2.2      2021-07-24 [1] CRAN (R 4.2.1)
+##  vctrs           0.5.1      2022-11-16 [1] CRAN (R 4.2.1)
+##  withr           2.5.0      2022-03-03 [1] CRAN (R 4.2.1)
+##  workflows     * 1.1.2      2022-11-16 [1] CRAN (R 4.2.1)
 ##  workflowsets  * 1.0.0      2022-07-12 [1] CRAN (R 4.2.1)
-##  yaml            2.3.6      2022-10-18 [1] CRAN (R 4.2.2)
-##  yardstick     * 1.1.0      2022-09-07 [1] RSPM (R 4.2.0)
+##  yaml            2.3.6      2022-10-18 [1] CRAN (R 4.2.1)
+##  yardstick     * 1.1.0      2022-09-07 [1] CRAN (R 4.2.1)
 ## 
-##  [1] /home/tomasz/R/x86_64-pc-linux-gnu-library/4.2
-##  [2] /usr/local/lib/R/site-library
-##  [3] /usr/lib/R/site-library
-##  [4] /usr/lib/R/library
+##  [1] /home/tomasz/opt/R-4.2.1/lib/R/site-library
+##  [2] /home/tomasz/opt/R-4.2.1/lib/R/library
 ## 
 ## ──────────────────────────────────────────────────────────────────────────────
 ```
+:::
 
-``` r
+::: cell
+``` {.r .cell-code}
 guild_view()
 ```
+:::
 
 We can use the flags and flag constraints to run an optimizer. We could
 use one of the guildai built-in optimizers, or manually define a grid
 using tidymodels functions, like this:
 
-``` r
-# Use existing tidymodels code to generate a space-filling design for 
+::: {.cell paged.print="false"}
+``` {.r .cell-code}
+# Use existing tidymodels code to generate a space-filling design for
 # new hyperparameter combinations
 library(tidymodels)
 ## ── Attaching packages ────────────────────────────────────── tidymodels 1.0.0 ──
@@ -461,7 +480,7 @@ library(tidymodels)
 ## ✖ dplyr::filter()  masks stats::filter()
 ## ✖ dplyr::lag()     masks stats::lag()
 ## ✖ recipes::step()  masks stats::step()
-## • Learn how to get started at https://www.tidymodels.org/start/
+## • Dig deeper into tidy modeling with R at https://www.tmwr.org
 params <- parameters(list(
   pen_val = penalty(),
   mix_val = mixture(),
@@ -502,46 +521,52 @@ guild_run(
   echo = c(FALSE, FALSE) # ignore stdout *and* stderr
 )
 ```
+:::
 
 Find the best run:
 
-``` r
+::: {.cell paged.print="false"}
+``` {.r .cell-code}
 runs <- runs_info(operation = "train-tidymodels.R")
 
 runs$scalars
 ## # A tibble: 20 × 3
 ##    num_predictors validation_R2 validation_rmse
 ##             <dbl>         <dbl>           <dbl>
-##  1            202         0.913          0.0524
-##  2            202         0.913          0.0524
-##  3            201         0.913          0.0524
-##  4             21         0.854          0.0722
-##  5            203         0.913          0.0524
-##  6             13         0.837          0.0828
-##  7            157         0.909          0.0538
-##  8             46         0.844          0.106 
-##  9            200         0.913          0.0524
-## 10            201         0.913          0.0524
-## 11            203         0.913          0.0524
-## 12             11         0.823          0.106 
-## 13            201         0.913          0.0524
-## 14            200         0.913          0.0525
-## 15            153         0.906          0.0545
-## 16            192         0.912          0.0528
-## 17            201         0.913          0.0524
-## 18            122         0.902          0.0557
-## 19            201         0.913          0.0524
-## 20            129         0.899          0.0562
+##  1            199         0.841          0.0747
+##  2            204         0.845          0.0723
+##  3            203         0.854          0.0691
+##  4             21         0.840          0.0779
+##  5            195         0.869          0.0639
+##  6             12         0.791          0.0922
+##  7            170         0.866          0.0643
+##  8             46         0.815          0.105 
+##  9            198         0.805          0.0796
+## 10            203         0.839          0.0727
+## 11            199         0.883          0.0594
+## 12             11         0.772          0.121 
+## 13            203         0.877          0.0638
+## 14            199         0.886          0.0619
+## 15            143         0.880          0.0643
+## 16            192         0.866          0.0626
+## 17            209         0.871          0.0646
+## 18            123         0.825          0.0772
+## 19            200         0.808          0.0811
+## 20            125         0.847          0.0729
 ```
+:::
 
-``` r
+::: {.cell paged.print="false"}
+``` {.r .cell-code}
 best_run <- runs %>%
   slice_min(scalars$validation_rmse)
 ```
+:::
 
 Recover the fitted model and validation from the best run:
 
-``` r
+::: {.cell paged.print="false"}
+``` {.r .cell-code}
 best_run_saved_objects <- new.env(parent = emptyenv())
 load(file.path(best_run$dir, ".RData"),
      envir = best_run_saved_objects)
@@ -565,66 +590,67 @@ best_run_saved_objects$ames_fit
 ##   [[ suppressing 100 column names 's0', 's1', 's2' ... ]]
 ## $a0
 ##       s0       s1       s2       s3       s4       s5       s6       s7 
-## 5.219560 5.219402 5.204409 5.191433 4.941419 4.677170 4.429533 4.037658 
+## 5.221977 5.219038 5.206302 5.063893 4.831120 4.496724 4.132204 3.793672 
 ##       s8       s9      s10      s11      s12      s13      s14      s15 
-## 3.679212 3.351839 3.052347 2.772268 2.510521 2.271069 2.051970 1.872130 
+## 3.480007 3.189700 2.921091 2.665900 2.424669 2.200835 2.017582 1.869450 
 ##      s16      s17      s18      s19      s20      s21      s22      s23 
-## 1.737822 1.613909 1.520761 1.444882 1.385542 1.360029 1.360590 1.359964 
+## 1.732038 1.605971 1.490381 1.391229 1.303487 1.263113 1.258430 1.251945 
 ##      s24      s25      s26      s27      s28      s29      s30      s31 
-## 1.387505 1.434026 1.488644 1.544930 1.594191 1.639752 1.696366 1.754713 
+## 1.248986 1.252991 1.259436 1.280399 1.295894 1.307214 1.330520 1.369533 
 ##      s32      s33      s34      s35      s36      s37      s38      s39 
-## 1.797060 1.844627 1.878776 1.904262 1.929492 1.943194 1.949938 1.963763 
+## 1.399861 1.424377 1.438443 1.452286 1.458205 1.459068 1.464233 1.467904 
 ##      s40      s41      s42      s43      s44      s45      s46      s47 
-## 1.969654 1.969357 1.990941 2.008258 2.037429 2.192656 2.331031 2.430598 
+## 1.474059 1.475048 1.474604 1.481347 1.633967 1.865457 2.078415 2.291629 
 ##      s48      s49      s50      s51      s52      s53      s54      s55 
-## 2.486961 2.529560 2.554333 2.585407 2.628523 2.669917 2.720750 2.759295 
+## 2.483996 2.659209 2.809554 2.963159 3.098229 3.211739 3.345793 3.490232 
 ##      s56      s57      s58      s59      s60      s61      s62      s63 
-## 2.792739 2.791743 2.737438 2.671843 2.621647 2.577222 2.544303 2.499335 
+## 3.623644 3.756166 3.891477 4.021465 4.151451 4.276857 4.385500 4.483382 
 ##      s64      s65      s66      s67      s68      s69      s70      s71 
-## 2.462005 2.437079 2.392139 2.357070 2.306923 2.212131 2.165220 2.133427 
+## 4.570927 4.667317 4.756276 4.844513 4.928317 5.001113 5.069161 5.163413 
 ##      s72      s73      s74      s75      s76      s77      s78      s79 
-## 2.103888 2.083553 2.063308 2.036491 2.033137 2.035188 2.036075 2.040302 
+## 5.225653 5.297274 5.345470 5.385847 5.425880 5.455914 5.487505 5.524146 
 ##      s80      s81      s82      s83      s84      s85      s86      s87 
-## 2.043580 2.045383 2.041333 2.036916 2.031269 2.025870 2.021380 2.019988 
+## 5.552352 5.581117 5.610014 5.634489 5.656176 5.677039 5.695473 5.712509 
 ##      s88      s89      s90      s91      s92      s93      s94      s95 
-## 2.020666 2.019776 2.016737 2.013778 2.010606 2.007068 2.004109 2.001393 
+## 5.728882 5.739164 5.756507 5.773788 5.784120 5.793478 5.802923 5.813058 
 ##      s96      s97      s98      s99 
-## 1.999298 1.997274 1.995230 1.993928 
+## 5.819573 5.825663 5.831184 5.836182 
 ## 
 ## $beta
 ## 215 x 100 sparse Matrix of class "dgCMatrix"
-##                                                                            
-## Lot_Frontage                                     . .            .          
-## Lot_Area                                         . .            .          
-## Year_Built                                       . .            .          
-## Year_Remod_Add                                   . .            .          
-## Mas_Vnr_Area                                     . .            .          
-## BsmtFin_SF_1                                     . .            .          
-## BsmtFin_SF_2                                     . .            .          
-## Bsmt_Unf_SF                                      . .            .          
-## Total_Bsmt_SF                                    . .            .          
-## First_Flr_SF                                     . .            .          
-## Second_Flr_SF                                    . .            .          
-## Gr_Liv_Area                                      . 1.049967e-02 0.017136848
-## Bsmt_Full_Bath                                   . .            .          
-## Bsmt_Half_Bath                                   . .            .          
-## Full_Bath                                        . .            .          
-## Half_Bath                                        . .            .          
-## Bedroom_AbvGr                                    . .            .          
-## Kitchen_AbvGr                                    . .            .          
-## TotRms_AbvGrd                                    . .            .          
+##                                                                         
+## Lot_Frontage                                     . .          .         
+## Lot_Area                                         . .          .         
+## Year_Built                                       . .          .         
+## Year_Remod_Add                                   . .          .         
+## Mas_Vnr_Area                                     . .          .         
+## BsmtFin_SF_1                                     . .          .         
+## BsmtFin_SF_2                                     . .          .         
+## Bsmt_Unf_SF                                      . .          .         
+## Total_Bsmt_SF                                    . .          .         
+## First_Flr_SF                                     . .          .         
+## Second_Flr_SF                                    . .          .         
+## Gr_Liv_Area                                      . 0.00761501 0.01331084
+## Bsmt_Full_Bath                                   . .          .         
+## Bsmt_Half_Bath                                   . .          .         
+## Full_Bath                                        . .          .         
+## Half_Bath                                        . .          .         
+## Bedroom_AbvGr                                    . .          .         
+## Kitchen_AbvGr                                    . .          .         
+## TotRms_AbvGrd                                    . .          .         
 ## 
 ## ...
-## and 10853 more lines.
+## and 18631 more lines.
 
 best_run_saved_objects$val_results
 ## # A tibble: 3 × 3
 ##   .metric .estimator .estimate
 ##   <chr>   <chr>          <dbl>
-## 1 rmse    standard      0.0524
-## 2 rsq     standard      0.913 
-## 3 mae     standard      0.0375
+## 1 rmse    standard      0.0594
+## 2 rsq     standard      0.883 
+## 3 mae     standard      0.0407
 ```
+:::
 
 For reproducability, (or preparing to deploy a model) it can be helpful
 to know some additional run metadata, like the starting random seed or a
@@ -633,35 +659,39 @@ information is all stored under the `RUN_DIR/.guild` directory.
 
 To recover the seed:
 
-``` r
+::: cell
+``` {.r .cell-code}
 run <- best_run
 seed <- yaml::read_yaml(file.path(run$dir, ".guild/attrs/random_seed"))
 seed
-## [1] 143180283
+## [1] 193566307
 set.seed(seed) # restore the starting seed.
 ```
+:::
 
 To access the log of R loaded packages:
 
-``` r
+::: cell
+``` {.r .cell-code}
 packages_loaded <- yaml::read_yaml(
   file.path(run$dir, ".guild/attrs/r_packages_loaded"))
 str(packages_loaded, list.len = 5)
 ## List of 100
 ##  $ guildai      :List of 2
-##   ..$ path   : chr "/home/tomasz/R/x86_64-pc-linux-gnu-library/4.2/guildai"
+##   ..$ path   : chr "/home/tomasz/opt/R-4.2.1/lib/R/site-library/guildai"
 ##   ..$ version: chr "0.0.0.9001"
 ##  $ grDevices    :List of 2
-##   ..$ path   : chr "/usr/lib/R/library/grDevices"
-##   ..$ version: chr "4.2.2"
+##   ..$ path   : chr "/home/tomasz/opt/R-4.2.1/lib/R/library/grDevices"
+##   ..$ version: chr "4.2.1"
 ##  $ fansi        :List of 2
-##   ..$ path   : chr "/home/tomasz/R/x86_64-pc-linux-gnu-library/4.2/fansi"
-##   ..$ version: chr "1.0.4"
+##   ..$ path   : chr "/home/tomasz/opt/R-4.2.1/lib/R/site-library/fansi"
+##   ..$ version: chr "1.0.3"
 ##  $ assertthat   :List of 2
-##   ..$ path   : chr "/home/tomasz/R/x86_64-pc-linux-gnu-library/4.2/assertthat"
+##   ..$ path   : chr "/home/tomasz/opt/R-4.2.1/lib/R/site-library/assertthat"
 ##   ..$ version: chr "0.2.1"
 ##  $ utf8         :List of 2
-##   ..$ path   : chr "/home/tomasz/R/x86_64-pc-linux-gnu-library/4.2/utf8"
+##   ..$ path   : chr "/home/tomasz/opt/R-4.2.1/lib/R/site-library/utf8"
 ##   ..$ version: chr "1.2.2"
 ##   [list output truncated]
 ```
+:::

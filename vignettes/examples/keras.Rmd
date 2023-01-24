@@ -1,18 +1,22 @@
-example_keras
-================
+---
+keep-yaml: true
+title: Keras with Guild AI
+toc-title: Table of contents
+---
 
 Here is an example showing how to use *guildai* with TensorFlow and
 Keras in R.
 
 If this is your first exposure to *guildai*, we recommend starting with
-the framework agnostic “Getting Started” guide. This example assumes
+the framework agnostic "Getting Started" guide. This example assumes
 familiarity with guild concepts like *flags* and *scalars*.
 
-We’ll start with an example R script, named “train.R”, that trains,
+We'll start with an example R script, named "train.R", that trains,
 evaluates, and saves a Keras model using the fashion mnist dataset. Here
 is what it looks like:
 
-``` r
+::: {.cell file="train-keras.R"}
+``` {.r .cell-code}
 library(tensorflow)
 library(keras)
 use_virtualenv("r-tensorflow")
@@ -79,26 +83,28 @@ cat('test_accuracy:', score$accuracy, "\n")
 save_model_tf(model, "model.keras")
 saveRDS(history, "history.rds")
 ```
+:::
 
 A few things to note about the script:
 
-- There is no ‘guildai’ specific configuration anywhere in the script.
-  It’s a regular R script, that you would normally `source()`.
-- Flags like `batch_size`, `epochs`, and `units` are can be defined
-  anywhere in the script. We take advantage of this by defining flags
-  close to their point of use.
-- `callback_tensorboard()` in the list of callbacks provided to the
-  `fit()` call will result in tfevent records being written during
-  training. Guild will automatically parse these logs for scalars.
-- In addition to the tensorboard logs, we are also directly printing two
-  scalars named `test_loss` and `test_accuracy` to stdout.
-- At the end of the run, we save the model and training history. These
-  file artifacts will be stored as part of the run, enabling us to
-  restore a trained model.
+-   There is no 'guildai' specific configuration anywhere in the script.
+    It's a regular R script, that you would normally `source()`.
+-   Flags like `batch_size`, `epochs`, and `units` are can be defined
+    anywhere in the script. We take advantage of this by defining flags
+    close to their point of use.
+-   `callback_tensorboard()` in the list of callbacks provided to the
+    `fit()` call will result in tfevent records being written during
+    training. Guild will automatically parse these logs for scalars.
+-   In addition to the tensorboard logs, we are also directly printing
+    two scalars named `test_loss` and `test_accuracy` to stdout.
+-   At the end of the run, we save the model and training history. These
+    file artifacts will be stored as part of the run, enabling us to
+    restore a trained model.
 
 With our script defined, we can launch a guild run:
 
-``` r
+::: cell
+``` {.r .cell-code}
 library(guildai)
 guild_run("train-keras.R")
 ## > library(tensorflow)
@@ -150,26 +156,26 @@ guild_run("train-keras.R")
 ## +       callbacks = list(callback_tensorboard()),
 ## +       verbose = 2)
 ## Epoch 1/10
-## WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0019s vs `on_train_batch_end` time: 0.0049s). Check your callbacks.
-## 1500/1500 - 4s - loss: 0.5326 - accuracy: 0.8170 - val_loss: 0.4381 - val_accuracy: 0.8476 - 4s/epoch - 3ms/step
+## WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0010s vs `on_train_batch_end` time: 0.0021s). Check your callbacks.
+## 1500/1500 - 4s - loss: 0.5378 - accuracy: 0.8131 - val_loss: 0.4236 - val_accuracy: 0.8518 - 4s/epoch - 2ms/step
 ## Epoch 2/10
-## 1500/1500 - 3s - loss: 0.4070 - accuracy: 0.8548 - val_loss: 0.4061 - val_accuracy: 0.8588 - 3s/epoch - 2ms/step
+## 1500/1500 - 2s - loss: 0.4052 - accuracy: 0.8561 - val_loss: 0.4377 - val_accuracy: 0.8414 - 2s/epoch - 2ms/step
 ## Epoch 3/10
-## 1500/1500 - 3s - loss: 0.3638 - accuracy: 0.8700 - val_loss: 0.3824 - val_accuracy: 0.8643 - 3s/epoch - 2ms/step
+## 1500/1500 - 3s - loss: 0.3684 - accuracy: 0.8656 - val_loss: 0.4097 - val_accuracy: 0.8498 - 3s/epoch - 2ms/step
 ## Epoch 4/10
-## 1500/1500 - 2s - loss: 0.3413 - accuracy: 0.8771 - val_loss: 0.3512 - val_accuracy: 0.8742 - 2s/epoch - 2ms/step
+## 1500/1500 - 2s - loss: 0.3409 - accuracy: 0.8759 - val_loss: 0.3717 - val_accuracy: 0.8698 - 2s/epoch - 2ms/step
 ## Epoch 5/10
-## 1500/1500 - 3s - loss: 0.3234 - accuracy: 0.8814 - val_loss: 0.3615 - val_accuracy: 0.8708 - 3s/epoch - 2ms/step
+## 1500/1500 - 3s - loss: 0.3242 - accuracy: 0.8821 - val_loss: 0.3571 - val_accuracy: 0.8733 - 3s/epoch - 2ms/step
 ## Epoch 6/10
-## 1500/1500 - 4s - loss: 0.3087 - accuracy: 0.8856 - val_loss: 0.3392 - val_accuracy: 0.8787 - 4s/epoch - 3ms/step
+## 1500/1500 - 3s - loss: 0.3094 - accuracy: 0.8874 - val_loss: 0.3373 - val_accuracy: 0.8781 - 3s/epoch - 2ms/step
 ## Epoch 7/10
-## 1500/1500 - 3s - loss: 0.2958 - accuracy: 0.8914 - val_loss: 0.3629 - val_accuracy: 0.8721 - 3s/epoch - 2ms/step
+## 1500/1500 - 3s - loss: 0.2959 - accuracy: 0.8907 - val_loss: 0.3491 - val_accuracy: 0.8761 - 3s/epoch - 2ms/step
 ## Epoch 8/10
-## 1500/1500 - 3s - loss: 0.2829 - accuracy: 0.8956 - val_loss: 0.3445 - val_accuracy: 0.8765 - 3s/epoch - 2ms/step
+## 1500/1500 - 3s - loss: 0.2858 - accuracy: 0.8965 - val_loss: 0.3387 - val_accuracy: 0.8804 - 3s/epoch - 2ms/step
 ## Epoch 9/10
-## 1500/1500 - 3s - loss: 0.2726 - accuracy: 0.8998 - val_loss: 0.3572 - val_accuracy: 0.8708 - 3s/epoch - 2ms/step
+## 1500/1500 - 3s - loss: 0.2772 - accuracy: 0.8990 - val_loss: 0.3420 - val_accuracy: 0.8802 - 3s/epoch - 2ms/step
 ## Epoch 10/10
-## 1500/1500 - 3s - loss: 0.2656 - accuracy: 0.9018 - val_loss: 0.3453 - val_accuracy: 0.8790 - 3s/epoch - 2ms/step
+## 1500/1500 - 2s - loss: 0.2685 - accuracy: 0.9014 - val_loss: 0.3446 - val_accuracy: 0.8766 - 2s/epoch - 2ms/step
 ## > plot(history)
 ## > # Evaluate model ------------------------------------------------------
 ## > 
@@ -178,18 +184,20 @@ guild_run("train-keras.R")
 ## +            verbose = 0) %>%
 ## +   as.list()
 ## > cat('test_loss:', score$loss, "\n")
-## test_loss: 0.366027534008026 
+## test_loss: 0.362261235713959 
 ## > cat('test_accuracy:', score$accuracy, "\n")
-## test_accuracy: 0.868799984455109 
+## test_accuracy: 0.86870002746582 
 ## > # Save model ----------------------------------------------------------
 ## > 
 ## > save_model_tf(model, "model.keras")
 ## > saveRDS(history, "history.rds")
 ```
+:::
 
 Inspecting the run flags and scalars:
 
-``` r
+::: {.cell paged.print="false"}
+``` {.r .cell-code}
 run <- runs_info(1)
 str(run$flags)
 ## tibble [1 × 4] (S3: tbl_df/tbl/data.frame)
@@ -200,21 +208,23 @@ str(run$flags)
 str(run$scalars)
 ## tibble [1 × 4] (S3: tbl_df/tbl/data.frame)
 ##  $ test_accuracy: num 0.869
-##  $ test_loss    : num 0.366
+##  $ test_loss    : num 0.362
 ##  $ train        : tibble [1 × 2] (S3: tbl_df/tbl/data.frame)
-##   ..$ epoch_accuracy: num 0.902
-##   ..$ epoch_loss    : num 0.266
+##   ..$ epoch_accuracy: num 0.901
+##   ..$ epoch_loss    : num 0.269
 ##  $ validation   : tibble [1 × 4] (S3: tbl_df/tbl/data.frame)
-##   ..$ epoch_accuracy                   : num 0.879
+##   ..$ epoch_accuracy                   : num 0.877
 ##   ..$ epoch_loss                       : num 0.345
 ##   ..$ evaluation_accuracy_vs_iterations: num 0.869
-##   ..$ evaluation_loss_vs_iterations    : num 0.366
+##   ..$ evaluation_loss_vs_iterations    : num 0.362
 ```
+:::
 
 `runs_info()` returns the last value for each scalar. The full history
 of scalars emitted is available with `runs_scalars()`.
 
-``` r
+::: {.cell paged.print="false"}
+``` {.r .cell-code}
 all_scalars <- runs_scalars(1)
 
 all_scalars |>
@@ -222,22 +232,24 @@ all_scalars |>
 ## # A tibble: 64 × 5
 ##    run                              path       tag            value  step
 ##    <chr>                            <chr>      <chr>          <dbl> <dbl>
-##  1 27be6d49aa384099aa325d0e25f1c1b5 <NA>       test_loss      0.366     0
-##  2 27be6d49aa384099aa325d0e25f1c1b5 <NA>       test_accuracy  0.869     0
-##  3 27be6d49aa384099aa325d0e25f1c1b5 validation epoch_loss     0.438     0
-##  4 27be6d49aa384099aa325d0e25f1c1b5 validation epoch_accuracy 0.848     0
-##  5 27be6d49aa384099aa325d0e25f1c1b5 train      epoch_loss     0.533     0
-##  6 27be6d49aa384099aa325d0e25f1c1b5 train      epoch_accuracy 0.817     0
-##  7 27be6d49aa384099aa325d0e25f1c1b5 validation epoch_loss     0.406     1
-##  8 27be6d49aa384099aa325d0e25f1c1b5 validation epoch_accuracy 0.859     1
-##  9 27be6d49aa384099aa325d0e25f1c1b5 train      epoch_loss     0.407     1
-## 10 27be6d49aa384099aa325d0e25f1c1b5 train      epoch_accuracy 0.855     1
+##  1 a43263718f57425fa10401f73db43693 <NA>       test_loss      0.362     0
+##  2 a43263718f57425fa10401f73db43693 <NA>       test_accuracy  0.869     0
+##  3 a43263718f57425fa10401f73db43693 validation epoch_loss     0.424     0
+##  4 a43263718f57425fa10401f73db43693 validation epoch_accuracy 0.852     0
+##  5 a43263718f57425fa10401f73db43693 train      epoch_loss     0.538     0
+##  6 a43263718f57425fa10401f73db43693 train      epoch_accuracy 0.813     0
+##  7 a43263718f57425fa10401f73db43693 validation epoch_loss     0.438     1
+##  8 a43263718f57425fa10401f73db43693 validation epoch_accuracy 0.841     1
+##  9 a43263718f57425fa10401f73db43693 train      epoch_loss     0.405     1
+## 10 a43263718f57425fa10401f73db43693 train      epoch_accuracy 0.856     1
 ## # … with 54 more rows
 ```
+:::
 
 We can plot scalars vs step for the full training history:
 
-``` r
+::: cell
+``` {.r .cell-code}
 library(dplyr)
 ## 
 ## Attaching package: 'dplyr'
@@ -250,20 +262,24 @@ library(dplyr)
 library(ggplot2)
 
 all_scalars %>%
-  filter(tag %in% c("epoch_accuracy", "epoch_loss")) %>% 
-  mutate(tag = forcats::fct_rev(tag)) %>% 
-  ggplot(aes(x = step, y = value, color = path)) + 
+  filter(tag %in% c("epoch_accuracy", "epoch_loss")) %>%
+  mutate(tag = forcats::fct_rev(tag)) %>%
+  ggplot(aes(x = step, y = value, color = path)) +
   facet_grid(rows = vars(tag), switch = 'y', scales = 'free_y') +
   geom_point() + geom_smooth(se = FALSE)
 ## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'
 ```
 
-![](keras_files/figure-commonmark/unnamed-chunk-6-1.png)
+::: cell-output-display
+![](keras_files/figure-markdown/unnamed-chunk-6-1.png)
+:::
+:::
 
 We can compare this to the `history` object from `fit()` we saved in the
 run. It is indeed the same.
 
-``` r
+::: cell
+``` {.r .cell-code}
 list.files(run$dir)
 ## [1] "history.rds"   "logs"          "model.keras"   "plots"        
 ## [5] "train-keras.R"
@@ -273,12 +289,16 @@ library(keras) # to load the plot.keras_training_history() method
 plot(history)
 ```
 
-![](keras_files/figure-commonmark/unnamed-chunk-7-1.png)
+::: cell-output-display
+![](keras_files/figure-markdown/unnamed-chunk-7-1.png)
+:::
+:::
 
 Finally, we can load the model trained during the run by accessing the
 saved files directly.
 
-``` r
+::: cell
+``` {.r .cell-code}
 model <- load_model_tf(file.path(run$dir, "model.keras"))
 model
 ## Model: "sequential"
@@ -294,3 +314,4 @@ model
 ## Non-trainable params: 0
 ## ________________________________________________________________________________
 ```
+:::

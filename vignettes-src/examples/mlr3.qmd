@@ -1,5 +1,5 @@
 ---
-title: "example_tidymodels"
+title: "mlr3 with Guild AI"
 ---
 
 ```{r, include = FALSE}
@@ -70,6 +70,6 @@ Retrieve run results:
 
 ```{r, paged.print = FALSE}
 library(dplyr, warn.conflicts = FALSE)
-runs_info() %>% 
-  select(flags, scalars) 
+runs_info() %>%
+  select(flags, scalars)
 ```

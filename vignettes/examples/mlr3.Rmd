@@ -1,17 +1,21 @@
-example_tidymodels
-================
+---
+keep-yaml: true
+title: mlr3 with Guild AI
+toc-title: Table of contents
+---
 
 Here is an example showing how to use *guildai* with ml3r in R.
 
 If this is your first exposure to *guildai*, we recommend starting with
-the framework agnostic “Getting Started” guide. This example assumes
+the framework agnostic "Getting Started" guide. This example assumes
 familiarity with guild concepts like *flags* and *scalars*.
 
-We’ll start with an example R script, named “train-mlr3.R”, that trains,
-evaluates, and saves an tidymodels model using the “Palmer Penguins”
+We'll start with an example R script, named "train-mlr3.R", that trains,
+evaluates, and saves an tidymodels model using the "Palmer Penguins"
 dataset. Here is what it looks like:
 
-``` r
+::: {.cell file="train-mlr3.R"}
+``` {.r .cell-code}
 library(mlr3)
 
 # create learning task
@@ -43,18 +47,20 @@ writeLines(sprintf(
   "%s: %f",
   names(score), score[[1]]))
 ```
+:::
 
 A few things to note about the script:
 
-- There is no ‘guildai’ specific configuration in the script code. It’s
-  a regular R script, that you can safely `source()` or work with
-  interactively at the REPL.
-- We define one hyperparameter flag: `cp`
-- At the end of the run, we print metric scalars.
+-   There is no 'guildai' specific configuration in the script code.
+    It's a regular R script, that you can safely `source()` or work with
+    interactively at the REPL.
+-   We define one hyperparameter flag: `cp`
+-   At the end of the run, we print metric scalars.
 
 With our script defined, we can launch a guild run and view it:
 
-``` r
+::: cell
+``` {.r .cell-code}
 library(guildai)
 guild_run("train-mlr3.R")
 ## > library(mlr3)
@@ -92,25 +98,31 @@ guild_run("train-mlr3.R")
 ## +   names(score), score[[1]]))
 ## classif.acc: 0.965116
 ```
+:::
 
-``` r
+::: cell
+``` {.r .cell-code}
 guild_view()
 ```
+:::
 
 Launch a batch of runs with different flag values:
 
-``` r
+::: cell
+``` {.r .cell-code}
 guild_run("train-mlr3.R", echo = FALSE, flags = list(
   cp = c(0.01, 0.05, 0.1)
 ))
 ```
+:::
 
 Retrieve run results:
 
-``` r
+::: {.cell paged.print="false"}
+``` {.r .cell-code}
 library(dplyr, warn.conflicts = FALSE)
-runs_info() %>% 
-  select(flags, scalars) 
+runs_info() %>%
+  select(flags, scalars)
 ## # A tibble: 4 × 2
 ##   flags$cp scalars$classif.acc
 ##      <dbl>               <dbl>
@@ -119,3 +131,4 @@ runs_info() %>%
 ## 3     0.01               0.965
 ## 4     0.01               0.965
 ```
+:::

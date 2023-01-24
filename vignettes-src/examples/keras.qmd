@@ -1,5 +1,5 @@
 ---
-title: "example_keras"
+title: "Keras with Guild AI"
 ---
 
 ```{r, include = FALSE}
@@ -91,9 +91,9 @@ library(dplyr)
 library(ggplot2)
 
 all_scalars %>%
-  filter(tag %in% c("epoch_accuracy", "epoch_loss")) %>% 
-  mutate(tag = forcats::fct_rev(tag)) %>% 
-  ggplot(aes(x = step, y = value, color = path)) + 
+  filter(tag %in% c("epoch_accuracy", "epoch_loss")) %>%
+  mutate(tag = forcats::fct_rev(tag)) %>%
+  ggplot(aes(x = step, y = value, color = path)) +
   facet_grid(rows = vars(tag), switch = 'y', scales = 'free_y') +
   geom_point() + geom_smooth(se = FALSE)
 ```

@@ -1,5 +1,5 @@
 ---
-title: "example_tidymodels"
+title: "Tidymodels with Guild AI"
 ---
 
 ```{r, include = FALSE}
@@ -65,7 +65,7 @@ use one of the guildai built-in optimizers, or manually define a grid
 using tidymodels functions, like this:
 
 ```{r, paged.print = FALSE}
-# Use existing tidymodels code to generate a space-filling design for 
+# Use existing tidymodels code to generate a space-filling design for
 # new hyperparameter combinations
 library(tidymodels)
 params <- parameters(list(

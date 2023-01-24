@@ -1,19 +1,23 @@
-example_xgboost
-================
+---
+keep-yaml: true
+title: XGBoost with Guild AI
+toc-title: Table of contents
+---
 
 Here is an example showing how to use *guildai* with xgboost in R.
 
 If this is your first exposure to *guildai*, we recommend starting with
-the framework agnostic “Getting Started” guide. This example assumes
+the framework agnostic "Getting Started" guide. This example assumes
 familiarity with guild concepts like *flags* and *scalars*.
 
-We’ll start with an example R script, named “train-xgboost.R”, that
-trains, evaluates, and saves an xgboost model using the “agaricus”
+We'll start with an example R script, named "train-xgboost.R", that
+trains, evaluates, and saves an xgboost model using the "agaricus"
 dataset. The script is adapted from the [XGBoost R
 Tutorial](https://xgboost.readthedocs.io/en/stable/R-package/xgboostPresentation.html).
 Here is what it looks like:
 
-``` r
+::: {.cell file="train-xgboost.R"}
+``` {.r .cell-code}
 #| output-scalars:
 #|   - step: '\[(\step)]'
 #|   - '(\key):(\value)'
@@ -47,22 +51,24 @@ bst <- xgb.train(
 # save model to binary local file
 xgb.save(bst, "xgboost.model")
 ```
+:::
 
 A few things to note about the script:
 
-- There is no ‘guildai’ specific configuration in the script code. It’s
-  a regular R script, that you can safely `source()` or work with
-  interactively at the REPL.
-- We declare two custom `output-scalars` patterns in the scripts comment
-  frontmatter. This informs guild how to parse the default xgboost
-  stdout output and extract scalar values from it.
-- At the end of the run, we save the model to the current working
-  directory. This file artifacts will be stored as part of the run,
-  enabling us to later recover the trained model.
+-   There is no 'guildai' specific configuration in the script code.
+    It's a regular R script, that you can safely `source()` or work with
+    interactively at the REPL.
+-   We declare two custom `output-scalars` patterns in the scripts
+    comment frontmatter. This informs guild how to parse the default
+    xgboost stdout output and extract scalar values from it.
+-   At the end of the run, we save the model to the current working
+    directory. This file artifacts will be stored as part of the run,
+    enabling us to later recover the trained model.
 
 With our script defined, we can launch a guild run:
 
-``` r
+::: cell
+``` {.r .cell-code}
 library(guildai)
 guild_run("train-xgboost.R")
 ## > #| output-scalars:
@@ -114,10 +120,12 @@ guild_run("train-xgboost.R")
 ## > xgb.save(bst, "xgboost.model")
 ## [1] TRUE
 ```
+:::
 
 Inspecting the run flags and scalars:
 
-``` r
+::: {.cell paged.print="false"}
+``` {.r .cell-code}
 run <- runs_info(1)
 str(run$flags)
 ## tibble [1 × 2] (S3: tbl_df/tbl/data.frame)
@@ -130,48 +138,56 @@ str(run$scalars)
 ##  $ train-error  : num 0.002
 ##  $ train-logloss: num 0.0582
 ```
+:::
 
 `runs_info()` returns the last value for each scalar. The full history
 of scalars emitted is available with `runs_scalars()`.
 
-``` r
+::: {.cell paged.print="false"}
+``` {.r .cell-code}
 scalars <- runs_scalars(1)
 scalars
 ## # A tibble: 80 × 5
 ##    run                              path  tag            value  step
 ##    <chr>                            <chr> <chr>          <dbl> <dbl>
-##  1 7c35e6870ec145fb8a748f0b9efe3304 <NA>  test-error    0.0428     1
-##  2 7c35e6870ec145fb8a748f0b9efe3304 <NA>  test-logloss  0.543      1
-##  3 7c35e6870ec145fb8a748f0b9efe3304 <NA>  train-error   0.0465     1
-##  4 7c35e6870ec145fb8a748f0b9efe3304 <NA>  train-logloss 0.545      1
-##  5 7c35e6870ec145fb8a748f0b9efe3304 <NA>  test-error    0.0403     2
-##  6 7c35e6870ec145fb8a748f0b9efe3304 <NA>  test-logloss  0.440      2
-##  7 7c35e6870ec145fb8a748f0b9efe3304 <NA>  train-error   0.0416     2
-##  8 7c35e6870ec145fb8a748f0b9efe3304 <NA>  train-logloss 0.442      2
-##  9 7c35e6870ec145fb8a748f0b9efe3304 <NA>  test-error    0.0248     3
-## 10 7c35e6870ec145fb8a748f0b9efe3304 <NA>  test-logloss  0.368      3
+##  1 3d5df8a345364a319ba95509cb798adc <NA>  test-error    0.0428     1
+##  2 3d5df8a345364a319ba95509cb798adc <NA>  test-logloss  0.543      1
+##  3 3d5df8a345364a319ba95509cb798adc <NA>  train-error   0.0465     1
+##  4 3d5df8a345364a319ba95509cb798adc <NA>  train-logloss 0.545      1
+##  5 3d5df8a345364a319ba95509cb798adc <NA>  test-error    0.0403     2
+##  6 3d5df8a345364a319ba95509cb798adc <NA>  test-logloss  0.440      2
+##  7 3d5df8a345364a319ba95509cb798adc <NA>  train-error   0.0416     2
+##  8 3d5df8a345364a319ba95509cb798adc <NA>  train-logloss 0.442      2
+##  9 3d5df8a345364a319ba95509cb798adc <NA>  test-error    0.0248     3
+## 10 3d5df8a345364a319ba95509cb798adc <NA>  test-logloss  0.368      3
 ## # … with 70 more rows
 ```
+:::
 
-``` r
+::: cell
+``` {.r .cell-code}
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 
 scalars %>%
-  select(-path) %>% 
-  tidyr::separate(tag, c("data", "metric")) %>% 
+  select(-path) %>%
+  tidyr::separate(tag, c("data", "metric")) %>%
   ggplot(aes(x = step, y = value, color = data)) +
   facet_grid(rows = vars(metric), switch = 'y', scales = 'free_y') +
   geom_point() + geom_smooth(se = FALSE)
 ```
 
-![](xgboost_files/figure-commonmark/unnamed-chunk-6-1.png)
+::: cell-output-display
+![](xgboost_files/figure-markdown/unnamed-chunk-6-1.png)
+:::
+:::
 
 Finally, we can load the model trained during the run by accessing the
 saved file from the `run$dir`.
 
-``` r
+::: cell
+``` {.r .cell-code}
 model <- xgboost::xgb.load(file.path(run$dir, "xgboost.model"))
 model
 ## ##### xgb.Booster
@@ -180,3 +196,4 @@ model
 ##   niter
 ## niter: 19
 ```
+:::

@@ -1,5 +1,5 @@
 ---
-title: "guildai"
+title: "Introduction to Guild AI for R"
 ---
 
 ```{r, include = FALSE}
@@ -73,7 +73,7 @@ framework at all, on a very simple (and somewhat contrived) example.
 Say we have an R script named `"train.R"` where we are fitting a
 smoother line, like so:
 
-```{r, echo = FALSE, filename="train.R"}
+```{r, echo = FALSE}
 writeLines(con = "train.R", text =
 'model <- loess(dist ~ speed, data = cars)
 
@@ -503,13 +503,13 @@ guild_run("train.R", echo = FALSE, flags = list(
 library(dplyr, warn.conflicts = FALSE)
 library(ggplot2)
 
-runs <- runs_info() 
+runs <- runs_info()
 
 runs
 
 runs <- runs %>%
-  # filter out runs that didn't print 'rmse: <numeric>' 
-  filter(!is.na(scalars$rmse)) %>% 
+  # filter out runs that didn't print 'rmse: <numeric>'
+  filter(!is.na(scalars$rmse)) %>%
   # filter out runs where the flag `span` was over 1.5
   filter(flags$span <= 1.5)
 

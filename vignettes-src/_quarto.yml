@@ -3,5 +3,6 @@ project:
   output-dir: ../vignettes
 
 format:
-  gfm:
+  markdown:
     output-ext: Rmd
+    keep-yaml: true

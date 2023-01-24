@@ -1,5 +1,5 @@
 ---
-title: "example_xgboost"
+title: "XGBoost with Guild AI"
 ---
 
 ```{r, include = FALSE}
@@ -82,8 +82,8 @@ library(tidyr)
 library(ggplot2)
 
 scalars %>%
-  select(-path) %>% 
-  tidyr::separate(tag, c("data", "metric")) %>% 
+  select(-path) %>%
+  tidyr::separate(tag, c("data", "metric")) %>%
   ggplot(aes(x = step, y = value, color = data)) +
   facet_grid(rows = vars(metric), switch = 'y', scales = 'free_y') +
   geom_point() + geom_smooth(se = FALSE)
