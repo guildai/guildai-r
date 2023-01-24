@@ -2,28 +2,19 @@
 
 <!-- badges: start -->
 
-<div>
+[![R-CMD-check](https://github.com/t-kalinowski/guildai-r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/t-kalinowski/guildai-r/actions/workflows/R-CMD-check.yaml)
 
-[![](https://github.com/t-kalinowski/guildai-r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/t-kalinowski/guildai-r/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
 
-R-CMD-check
-
-</div>
-
-<!-- badges: end   -->
 
 <p align="center">
-
-<img src="vignettes-src/logos/guild-logo-dark.png" width="50%"/>
-
-|                                                                        |                                                             |                                                          |
-|:----------------------------------------------------------------------:|:-----------------------------------------------------------:|:--------------------------------------------------------:|
-| <img src="vignettes-src/logos/TF_FullColor_Stacked.svg" width="100%"/> | <img src="vignettes-src/logos/tidymodels.png" width="30%"/> |  <img src="vignettes-src/logos/torch.png" width="33%"/>  |
-|      <img src="vignettes-src/logos/keras-logo.png" width="100%"/>      |    <img src="vignettes-src/logos/mlr3.png" width="32%"/>    | <img src="vignettes-src/logos/xgboost.png" width="30%"/> |
-
+  <img src="vignettes/logos/guild-logo-dark.png" width="50%">
 </p>
 
-<!-- a nice screenshot image here-->
+| <img src="vignettes/logos/TF_FullColor_Stacked.svg" width="100%"/> | <img src="vignettes/logos/tidymodels.png" width="30%"/> |  <img src="vignettes/logos/torch.png" width="33%"/>  |
+|:------------------------------------------------------------------:|:-------------------------------------------------------:|:----------------------------------------------------:|
+|      <img src="vignettes/logos/keras-logo.png" width="100%"/>      |    <img src="vignettes/logos/mlr3.png" width="32%"/>    | <img src="vignettes/logos/xgboost.png" width="30%"/> |
+
 
 *guildai* provides a suite of tools for tracking, visualizing, and
 managing machine learning experiments. The {guildai} R package is a
