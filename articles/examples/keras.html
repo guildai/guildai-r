@@ -6,12 +6,12 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="guildai">
-<title> • guildai</title>
+<title>Keras with Guild AI • guildai</title>
 <script src="../../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
 <script src="../../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../../pkgdown.js"></script><meta property="og:title" content="">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../../pkgdown.js"></script><meta property="og:title" content="Keras with Guild AI">
 <meta property="og:description" content="guildai">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -74,7 +74,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1></h1>
+      <img src="" class="logo" alt=""><h1>Keras with Guild AI</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/t-kalinowski/guildai-r/blob/HEAD/vignettes/examples/keras.Rmd" class="external-link"><code>vignettes/examples/keras.Rmd</code></a></small>
@@ -83,9 +83,6 @@
 
     
     
-<div class="section level2">
-<h2 id="example_keras">example_keras<a class="anchor" aria-label="anchor" href="#example_keras"></a>
-</h2>
 <p>Here is an example showing how to use <em>guildai</em> with
 TensorFlow and Keras in R.</p>
 <p>If this is your first exposure to <em>guildai</em>, we recommend
@@ -95,6 +92,7 @@ example assumes familiarity with guild concepts like <em>flags</em> and
 <p>We’ll start with an example R script, named “train.R”, that trains,
 evaluates, and saves a Keras model using the fashion mnist dataset. Here
 is what it looks like:</p>
+<div class="cell" file="train-keras.R">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rstudio/tensorflow" class="external-link">tensorflow</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tensorflow.rstudio.com/" class="external-link">keras</a></span><span class="op">)</span></span>
@@ -161,6 +159,7 @@ is what it looks like:</p>
 <span></span>
 <span><span class="fu">save_model_tf</span><span class="op">(</span><span class="va">model</span>, <span class="st">"model.keras"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS</a></span><span class="op">(</span><span class="va">history</span>, <span class="st">"history.rds"</span><span class="op">)</span></span></code></pre></div>
+</div>
 <p>A few things to note about the script:</p>
 <ul>
 <li>There is no ‘guildai’ specific configuration anywhere in the script.
@@ -182,6 +181,7 @@ file artifacts will be stored as part of the run, enabling us to restore
 a trained model.</li>
 </ul>
 <p>With our script defined, we can launch a guild run:</p>
+<div class="cell">
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://t-kalinowski.github.io/guildai-r/">guildai</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="../../reference/guild_run.html">guild_run</a></span><span class="op">(</span><span class="st">"train-keras.R"</span><span class="op">)</span></span>
@@ -234,26 +234,26 @@ a trained model.</li>
 <span><span class="co">## +       callbacks = list(callback_tensorboard()),</span></span>
 <span><span class="co">## +       verbose = 2)</span></span>
 <span><span class="co">## Epoch 1/10</span></span>
-<span><span class="co">## WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0019s vs `on_train_batch_end` time: 0.0049s). Check your callbacks.</span></span>
-<span><span class="co">## 1500/1500 - 4s - loss: 0.5326 - accuracy: 0.8170 - val_loss: 0.4381 - val_accuracy: 0.8476 - 4s/epoch - 3ms/step</span></span>
+<span><span class="co">## WARNING:tensorflow:Callback method `on_train_batch_end` is slow compared to the batch time (batch time: 0.0010s vs `on_train_batch_end` time: 0.0021s). Check your callbacks.</span></span>
+<span><span class="co">## 1500/1500 - 4s - loss: 0.5378 - accuracy: 0.8131 - val_loss: 0.4236 - val_accuracy: 0.8518 - 4s/epoch - 2ms/step</span></span>
 <span><span class="co">## Epoch 2/10</span></span>
-<span><span class="co">## 1500/1500 - 3s - loss: 0.4070 - accuracy: 0.8548 - val_loss: 0.4061 - val_accuracy: 0.8588 - 3s/epoch - 2ms/step</span></span>
+<span><span class="co">## 1500/1500 - 2s - loss: 0.4052 - accuracy: 0.8561 - val_loss: 0.4377 - val_accuracy: 0.8414 - 2s/epoch - 2ms/step</span></span>
 <span><span class="co">## Epoch 3/10</span></span>
-<span><span class="co">## 1500/1500 - 3s - loss: 0.3638 - accuracy: 0.8700 - val_loss: 0.3824 - val_accuracy: 0.8643 - 3s/epoch - 2ms/step</span></span>
+<span><span class="co">## 1500/1500 - 3s - loss: 0.3684 - accuracy: 0.8656 - val_loss: 0.4097 - val_accuracy: 0.8498 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">## Epoch 4/10</span></span>
-<span><span class="co">## 1500/1500 - 2s - loss: 0.3413 - accuracy: 0.8771 - val_loss: 0.3512 - val_accuracy: 0.8742 - 2s/epoch - 2ms/step</span></span>
+<span><span class="co">## 1500/1500 - 2s - loss: 0.3409 - accuracy: 0.8759 - val_loss: 0.3717 - val_accuracy: 0.8698 - 2s/epoch - 2ms/step</span></span>
 <span><span class="co">## Epoch 5/10</span></span>
-<span><span class="co">## 1500/1500 - 3s - loss: 0.3234 - accuracy: 0.8814 - val_loss: 0.3615 - val_accuracy: 0.8708 - 3s/epoch - 2ms/step</span></span>
+<span><span class="co">## 1500/1500 - 3s - loss: 0.3242 - accuracy: 0.8821 - val_loss: 0.3571 - val_accuracy: 0.8733 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">## Epoch 6/10</span></span>
-<span><span class="co">## 1500/1500 - 4s - loss: 0.3087 - accuracy: 0.8856 - val_loss: 0.3392 - val_accuracy: 0.8787 - 4s/epoch - 3ms/step</span></span>
+<span><span class="co">## 1500/1500 - 3s - loss: 0.3094 - accuracy: 0.8874 - val_loss: 0.3373 - val_accuracy: 0.8781 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">## Epoch 7/10</span></span>
-<span><span class="co">## 1500/1500 - 3s - loss: 0.2958 - accuracy: 0.8914 - val_loss: 0.3629 - val_accuracy: 0.8721 - 3s/epoch - 2ms/step</span></span>
+<span><span class="co">## 1500/1500 - 3s - loss: 0.2959 - accuracy: 0.8907 - val_loss: 0.3491 - val_accuracy: 0.8761 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">## Epoch 8/10</span></span>
-<span><span class="co">## 1500/1500 - 3s - loss: 0.2829 - accuracy: 0.8956 - val_loss: 0.3445 - val_accuracy: 0.8765 - 3s/epoch - 2ms/step</span></span>
+<span><span class="co">## 1500/1500 - 3s - loss: 0.2858 - accuracy: 0.8965 - val_loss: 0.3387 - val_accuracy: 0.8804 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">## Epoch 9/10</span></span>
-<span><span class="co">## 1500/1500 - 3s - loss: 0.2726 - accuracy: 0.8998 - val_loss: 0.3572 - val_accuracy: 0.8708 - 3s/epoch - 2ms/step</span></span>
+<span><span class="co">## 1500/1500 - 3s - loss: 0.2772 - accuracy: 0.8990 - val_loss: 0.3420 - val_accuracy: 0.8802 - 3s/epoch - 2ms/step</span></span>
 <span><span class="co">## Epoch 10/10</span></span>
-<span><span class="co">## 1500/1500 - 3s - loss: 0.2656 - accuracy: 0.9018 - val_loss: 0.3453 - val_accuracy: 0.8790 - 3s/epoch - 2ms/step</span></span>
+<span><span class="co">## 1500/1500 - 2s - loss: 0.2685 - accuracy: 0.9014 - val_loss: 0.3446 - val_accuracy: 0.8766 - 2s/epoch - 2ms/step</span></span>
 <span><span class="co">## &gt; plot(history)</span></span>
 <span><span class="co">## &gt; # Evaluate model ------------------------------------------------------</span></span>
 <span><span class="co">## &gt; </span></span>
@@ -262,14 +262,16 @@ a trained model.</li>
 <span><span class="co">## +            verbose = 0) %&gt;%</span></span>
 <span><span class="co">## +   as.list()</span></span>
 <span><span class="co">## &gt; cat('test_loss:', score$loss, "\n")</span></span>
-<span><span class="co">## test_loss: 0.366027534008026 </span></span>
+<span><span class="co">## test_loss: 0.362261235713959 </span></span>
 <span><span class="co">## &gt; cat('test_accuracy:', score$accuracy, "\n")</span></span>
-<span><span class="co">## test_accuracy: 0.868799984455109 </span></span>
+<span><span class="co">## test_accuracy: 0.86870002746582 </span></span>
 <span><span class="co">## &gt; # Save model ----------------------------------------------------------</span></span>
 <span><span class="co">## &gt; </span></span>
 <span><span class="co">## &gt; save_model_tf(model, "model.keras")</span></span>
 <span><span class="co">## &gt; saveRDS(history, "history.rds")</span></span></code></pre></div>
+</div>
 <p>Inspecting the run flags and scalars:</p>
+<div class="cell" paged.print="false">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">run</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/runs_info.html">runs_info</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">run</span><span class="op">$</span><span class="va">flags</span><span class="op">)</span></span>
@@ -281,18 +283,20 @@ a trained model.</li>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">run</span><span class="op">$</span><span class="va">scalars</span><span class="op">)</span></span>
 <span><span class="co">## tibble [1 × 4] (S3: tbl_df/tbl/data.frame)</span></span>
 <span><span class="co">##  $ test_accuracy: num 0.869</span></span>
-<span><span class="co">##  $ test_loss    : num 0.366</span></span>
+<span><span class="co">##  $ test_loss    : num 0.362</span></span>
 <span><span class="co">##  $ train        : tibble [1 × 2] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co">##   ..$ epoch_accuracy: num 0.902</span></span>
-<span><span class="co">##   ..$ epoch_loss    : num 0.266</span></span>
+<span><span class="co">##   ..$ epoch_accuracy: num 0.901</span></span>
+<span><span class="co">##   ..$ epoch_loss    : num 0.269</span></span>
 <span><span class="co">##  $ validation   : tibble [1 × 4] (S3: tbl_df/tbl/data.frame)</span></span>
-<span><span class="co">##   ..$ epoch_accuracy                   : num 0.879</span></span>
+<span><span class="co">##   ..$ epoch_accuracy                   : num 0.877</span></span>
 <span><span class="co">##   ..$ epoch_loss                       : num 0.345</span></span>
 <span><span class="co">##   ..$ evaluation_accuracy_vs_iterations: num 0.869</span></span>
-<span><span class="co">##   ..$ evaluation_loss_vs_iterations    : num 0.366</span></span></code></pre></div>
+<span><span class="co">##   ..$ evaluation_loss_vs_iterations    : num 0.362</span></span></code></pre></div>
+</div>
 <p><code><a href="../../reference/runs_info.html">runs_info()</a></code> returns the last value for each scalar. The
 full history of scalars emitted is available with
 <code><a href="../../reference/runs_scalars.html">runs_scalars()</a></code>.</p>
+<div class="cell" paged.print="false">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">all_scalars</span> <span class="op">&lt;-</span> <span class="fu"><a href="../../reference/runs_scalars.html">runs_scalars</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
 <span></span>
@@ -301,18 +305,20 @@ full history of scalars emitted is available with
 <span><span class="co">## # A tibble: 64 × 5</span></span>
 <span><span class="co">##    run                              path       tag            value  step</span></span>
 <span><span class="co">##    &lt;chr&gt;                            &lt;chr&gt;      &lt;chr&gt;          &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">##  1 27be6d49aa384099aa325d0e25f1c1b5 &lt;NA&gt;       test_loss      0.366     0</span></span>
-<span><span class="co">##  2 27be6d49aa384099aa325d0e25f1c1b5 &lt;NA&gt;       test_accuracy  0.869     0</span></span>
-<span><span class="co">##  3 27be6d49aa384099aa325d0e25f1c1b5 validation epoch_loss     0.438     0</span></span>
-<span><span class="co">##  4 27be6d49aa384099aa325d0e25f1c1b5 validation epoch_accuracy 0.848     0</span></span>
-<span><span class="co">##  5 27be6d49aa384099aa325d0e25f1c1b5 train      epoch_loss     0.533     0</span></span>
-<span><span class="co">##  6 27be6d49aa384099aa325d0e25f1c1b5 train      epoch_accuracy 0.817     0</span></span>
-<span><span class="co">##  7 27be6d49aa384099aa325d0e25f1c1b5 validation epoch_loss     0.406     1</span></span>
-<span><span class="co">##  8 27be6d49aa384099aa325d0e25f1c1b5 validation epoch_accuracy 0.859     1</span></span>
-<span><span class="co">##  9 27be6d49aa384099aa325d0e25f1c1b5 train      epoch_loss     0.407     1</span></span>
-<span><span class="co">## 10 27be6d49aa384099aa325d0e25f1c1b5 train      epoch_accuracy 0.855     1</span></span>
+<span><span class="co">##  1 a43263718f57425fa10401f73db43693 &lt;NA&gt;       test_loss      0.362     0</span></span>
+<span><span class="co">##  2 a43263718f57425fa10401f73db43693 &lt;NA&gt;       test_accuracy  0.869     0</span></span>
+<span><span class="co">##  3 a43263718f57425fa10401f73db43693 validation epoch_loss     0.424     0</span></span>
+<span><span class="co">##  4 a43263718f57425fa10401f73db43693 validation epoch_accuracy 0.852     0</span></span>
+<span><span class="co">##  5 a43263718f57425fa10401f73db43693 train      epoch_loss     0.538     0</span></span>
+<span><span class="co">##  6 a43263718f57425fa10401f73db43693 train      epoch_accuracy 0.813     0</span></span>
+<span><span class="co">##  7 a43263718f57425fa10401f73db43693 validation epoch_loss     0.438     1</span></span>
+<span><span class="co">##  8 a43263718f57425fa10401f73db43693 validation epoch_accuracy 0.841     1</span></span>
+<span><span class="co">##  9 a43263718f57425fa10401f73db43693 train      epoch_loss     0.405     1</span></span>
+<span><span class="co">## 10 a43263718f57425fa10401f73db43693 train      epoch_accuracy 0.856     1</span></span>
 <span><span class="co">## # … with 54 more rows</span></span></code></pre></div>
+</div>
 <p>We can plot scalars vs step for the full training history:</p>
+<div class="cell">
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="co">## </span></span>
@@ -326,15 +332,19 @@ full history of scalars emitted is available with
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">all_scalars</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">tag</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"epoch_accuracy"</span>, <span class="st">"epoch_loss"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>tag <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu">fct_rev</span><span class="op">(</span><span class="va">tag</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">step</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">path</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">tag</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"epoch_accuracy"</span>, <span class="st">"epoch_loss"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>tag <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu">fct_rev</span><span class="op">(</span><span class="va">tag</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">step</span>, y <span class="op">=</span> <span class="va">value</span>, color <span class="op">=</span> <span class="va">path</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">facet_grid</span><span class="op">(</span>rows <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/vars.html" class="external-link">vars</a></span><span class="op">(</span><span class="va">tag</span><span class="op">)</span>, switch <span class="op">=</span> <span class="st">'y'</span>, scales <span class="op">=</span> <span class="st">'free_y'</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_smooth</span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">## `geom_smooth()` using method = 'loess' and formula = 'y ~ x'</span></span></code></pre></div>
-<p><img src="keras_files/figure-commonmark/unnamed-chunk-6-1.png"></p>
+<div class="cell-output-display">
+<p><img src="keras_files/figure-markdown/unnamed-chunk-6-1.png"></p>
+</div>
+</div>
 <p>We can compare this to the <code>history</code> object from
 <code>fit()</code> we saved in the run. It is indeed the same.</p>
+<div class="cell">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">run</span><span class="op">$</span><span class="va">dir</span><span class="op">)</span></span>
 <span><span class="co">## [1] "history.rds"   "logs"          "model.keras"   "plots"        </span></span>
@@ -343,9 +353,13 @@ full history of scalars emitted is available with
 <span><span class="va">history</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">run</span><span class="op">$</span><span class="va">dir</span>, <span class="st">"history.rds"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tensorflow.rstudio.com/" class="external-link">keras</a></span><span class="op">)</span> <span class="co"># to load the plot.keras_training_history() method</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">history</span><span class="op">)</span></span></code></pre></div>
-<p><img src="keras_files/figure-commonmark/unnamed-chunk-7-1.png"></p>
+<div class="cell-output-display">
+<p><img src="keras_files/figure-markdown/unnamed-chunk-7-1.png"></p>
+</div>
+</div>
 <p>Finally, we can load the model trained during the run by accessing
 the saved files directly.</p>
+<div class="cell">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">load_model_tf</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">run</span><span class="op">$</span><span class="va">dir</span>, <span class="st">"model.keras"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">model</span></span>
