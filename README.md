@@ -12,14 +12,16 @@ R-CMD-check
 
 <!-- badges: end   -->
 
-|                                                           |
-|:---------------------------------------------------------:|
-| ![](vignettes-src/logos/guild-logo-dark.png){width="50%"} |
+<p align="center">
+
+<img src="vignettes-src/logos/guild-logo-dark.png" width="50%"/>
 
 |                                                                        |                                                             |                                                          |
 |:----------------------------------------------------------------------:|:-----------------------------------------------------------:|:--------------------------------------------------------:|
-| ![](vignettes-src/logos/TF_FullColor_Stacked.svg){style="width:100%;"} | ![](vignettes-src/logos/tidymodels.png){style="width:65%;"} |  ![](vignettes-src/logos/torch.png){style="width:70%;"}  |
-|      ![](vignettes-src/logos/keras-logo.png){style="width:80%;"}       |    ![](vignettes-src/logos/mlr3.png){style="width:70%;"}    | ![](vignettes-src/logos/xgboost.png){style="width:90%;"} |
+| <img src="vignettes-src/logos/TF_FullColor_Stacked.svg" width="100%"/> | <img src="vignettes-src/logos/tidymodels.png" width="30%"/> |  <img src="vignettes-src/logos/torch.png" width="33%"/>  |
+|      <img src="vignettes-src/logos/keras-logo.png" width="100%"/>      |    <img src="vignettes-src/logos/mlr3.png" width="32%"/>    | <img src="vignettes-src/logos/xgboost.png" width="30%"/> |
+
+</p>
 
 <!-- a nice screenshot image here-->
 
