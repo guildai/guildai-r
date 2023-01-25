@@ -1,96 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/404.html</loc>
+    <loc>https://guildai.github.io/guildai-r/404.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/articles/examples/keras.html</loc>
+    <loc>https://guildai.github.io/guildai-r/articles/examples/keras.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/articles/examples/mlr3.html</loc>
+    <loc>https://guildai.github.io/guildai-r/articles/examples/mlr3.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/articles/examples/tidymodels.html</loc>
+    <loc>https://guildai.github.io/guildai-r/articles/examples/tidymodels.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/articles/examples/xgboost.html</loc>
+    <loc>https://guildai.github.io/guildai-r/articles/examples/xgboost.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/articles/guildai.html</loc>
+    <loc>https://guildai.github.io/guildai-r/articles/guildai.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/articles/index.html</loc>
+    <loc>https://guildai.github.io/guildai-r/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/authors.html</loc>
+    <loc>https://guildai.github.io/guildai-r/authors.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/index.html</loc>
+    <loc>https://guildai.github.io/guildai-r/index.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/dot-view_runs_diff.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/dot-view_runs_diff.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/guild_api_runs_cli.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/guild_api_runs_cli.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/guild_merge.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/guild_merge.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/guild_merge_cli.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/guild_merge_cli.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/guild_run.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/guild_run.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/guild_run_cli.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/guild_run_cli.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/guild_select_cli.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/guild_select_cli.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/guild_view.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/guild_view.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/guild_view_cli.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/guild_view_cli.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/index.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/install_guild.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/install_guild.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/install_guild_cli.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/install_guild_cli.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/is_run_active.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/is_run_active.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/resolve_run_ids.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/resolve_run_ids.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/runs_delete.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/runs_delete.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/runs_export.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/runs_export.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/runs_info.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/runs_info.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/runs_label.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/runs_label.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/runs_scalars.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/runs_scalars.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/view_run_report.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/view_run_report.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/view_runs_diff.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/view_runs_diff.html</loc>
   </url>
   <url>
-    <loc>https://t-kalinowski.github.io/guildai-r/reference/write_run_attr.html</loc>
+    <loc>https://guildai.github.io/guildai-r/reference/write_run_attr.html</loc>
   </url>
 </urlset>
