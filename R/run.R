@@ -4,8 +4,6 @@ do_guild_run <-
 function(file = "train.R", flags_dest = file, echo = TRUE,
          prune_on_success = TRUE) {
 
-  fix_flags_yaml(".guild/attrs/flags")
-
   if (is_r_file(flags_dest)) {
     modify_r_file_flags(flags_dest, read_yaml(".guild/attrs/flags"),
                         overwrite = TRUE)
@@ -364,28 +362,4 @@ write_run_attr <- function(name, data, ..., append = FALSE) {
   data <- encode_yaml(data, ...)
   cat(data, file = file, sep = "\n", append = append)
   invisible(data)
-}
-
-
-
-fix_flags_yaml <- function(file) {
-  # guild core / python 'yaml' module doesn't quote some keys correctly
-  # esp, 'n', 'y', which need to be quoted to not be interpreted as bools.
-  # flags.yml is guaranteed to be a mapping where all keys are strings, so we
-  # modify the file to make sure all keys are single quoted.
-  # This probably falls flat on its face if there is an escaped ":" in
-  # the key, or the key spans multiple lines, but those are probably not valid
-  # flag keys anyway.
-  # Also, guild core / python 'yaml' module does not correctly
-  # write a final trailing newline,
-  # which causes R's yaml::read_yaml() to emit a warning.
-  txt <- readLines(file)
-  first_char <- substr(txt, 1L, 1L)
-  if (identical(first_char[[1]], "{"))
-    return() # it's either json or an empty mapping '{}', do nothing
-  key_needs_quoting <- !(first_char %in% c("'", " ", ""))
-  txt[key_needs_quoting] <- paste0("'",  txt[key_needs_quoting])
-  txt[key_needs_quoting] <- sub(": ", "': ", txt[key_needs_quoting],
-                                fixed = TRUE)
-  writeLines(txt, file)
 }
