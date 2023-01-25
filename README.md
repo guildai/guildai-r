@@ -8,12 +8,12 @@
 
 
 <p align="center">
-  <img src="vignettes/logos/guild-logo-dark.png" width="50%">
+  <img src="man/figures/logos/guild-logo-dark.png" width="50%">
 </p>
 
-| <img src="vignettes/logos/TF_FullColor_Stacked.svg" width="100%"/> | <img src="vignettes/logos/tidymodels.png" width="30%"/> |  <img src="vignettes/logos/torch.png" width="33%"/>  |
-|:------------------------------------------------------------------:|:-------------------------------------------------------:|:----------------------------------------------------:|
-|      <img src="vignettes/logos/keras-logo.png" width="100%"/>      |    <img src="vignettes/logos/mlr3.png" width="32%"/>    | <img src="vignettes/logos/xgboost.png" width="30%"/> |
+| <img src="man/figures/logos/TF_FullColor_Stacked.svg" width="100%"/> | <img src="man/figures/logos/tidymodels.png" width="30%"/> |  <img src="man/figures/logos/torch.png" width="33%"/>  |
+|:--------------------------------------------------------------------:|:---------------------------------------------------------:|:------------------------------------------------------:|
+|      <img src="man/figures/logos/keras-logo.png" width="100%"/>      |    <img src="man/figures/logos/mlr3.png" width="35%"/>    | <img src="man/figures/logos/xgboost.png" width="40%"/> |
 
 
 *guildai* provides a suite of tools for tracking, visualizing, and
