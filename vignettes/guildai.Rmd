@@ -96,7 +96,7 @@ runs.
 guild_view()
 ```
 
-![](guild-view-screenshot.png)
+![](images/guild-view-screenshot.png)
 
 ## In R
 
@@ -114,15 +114,15 @@ tibble::glimpse(run)
 ## $ flags       <tibble[,0]> <tbl_df[1 x 0]>
 ## $ scalars     <tibble[,0]> <tbl_df[1 x 0]>
 ## $ operation   <chr> "train.R"
-## $ started     <dttm> 2023-01-24 09:58:26
-## $ stopped     <dttm> 2023-01-24 09:58:27
+## $ started     <dttm> 2023-01-24 21:23:58
+## $ stopped     <dttm> 2023-01-24 21:23:59
 ## $ comments    <list> [<tbl_df[0 x 4]>]
 ## $ status      <chr> "completed"
 ## $ exit_status <int> 0
 ## $ deps        <list> []
-## $ project_dir <chr> "/tmp/RtmpgY2PXn/guildai-intro-sample-project-3607b553e734…
-## $ dir         <chr> "/tmp/RtmpgY2PXn/guildai-intro-sample-project-3607b553e73…
-## $ id          <chr> "909c40d44ca04b64ad22c1ea12e336f3"
+## $ project_dir <chr> "/tmp/RtmpzirAbr/guildai-intro-sample-project-73ae206d330e"
+## $ dir         <chr> "/tmp/RtmpzirAbr/guildai-intro-sample-project-73ae206d330e…
+## $ id          <chr> "5a96a84b10eb4487beaea4ee720f0b08"
 ```
 :::
 
@@ -157,7 +157,7 @@ frequently useful for reproducability.
 ::: cell
 ``` {.r .cell-code}
 fs::dir_tree(run$dir[1], all = TRUE)
-## /tmp/RtmpgY2PXn/guildai-intro-sample-project-3607b553e7341/.guild/runs/909c40d44ca04b64ad22c1ea12e336f3
+## /tmp/RtmpzirAbr/guildai-intro-sample-project-73ae206d330e/.guild/runs/5a96a84b10eb4487beaea4ee720f0b08
 ## ├── .guild
 ## │   ├── attrs
 ## │   │   ├── cmd
@@ -537,20 +537,20 @@ guild_run("train.R",
           minimize = "rmse",
           max_trials = 5)
 ## INFO: [guild] Random start for optimization (1 of 3)
-## INFO: [guild] Running trial 29a6fe32176c4fc5bfd75317020a3205: train.R (family=symmetric, span=0.75)
-## rmse: 14.8273317139021 
+## INFO: [guild] Running trial 49b6befcb62f40c2be2c9518c0bf585a: train.R (family=gaussian, span=0.75)
+## rmse: 14.3970247057306 
 ## INFO: [guild] Random start for optimization (2 of 3)
-## INFO: [guild] Running trial bf8fd5878dd44bba95c7169a2cdef6b2: train.R (family=gaussian, span=0.4684096541239863)
-## rmse: 13.4371638129709 
+## INFO: [guild] Running trial f94aacfb6dc2410cadfae3102e1d7061: train.R (family=symmetric, span=1.0529223408343051)
+## rmse: 14.8566141121218 
 ## INFO: [guild] Random start for optimization (3 of 3)
-## INFO: [guild] Running trial 2b401bbf49c547a3b2046249a8e24e92: train.R (family=symmetric, span=0.6182663589125834)
-## rmse: 14.5992509778312 
+## INFO: [guild] Running trial 8d7d31b7ac844205835bbdbd16648b1f: train.R (family=gaussian, span=0.624545853823467)
+## rmse: 14.2754077059686 
 ## INFO: [guild] Found 3 previous trial(s) for use in optimization
-## INFO: [guild] Running trial f4f12b99942840c3a102aee0c9f27341: train.R (family=gaussian, span=0.3)
+## INFO: [guild] Running trial c2f4e55def704bd6b79e1ba91dd8f230: train.R (family=gaussian, span=0.3)
 ## rmse: 12.3620973783366 
 ## INFO: [guild] Found 4 previous trial(s) for use in optimization
-## INFO: [guild] Running trial 421b855e88ae4d649e699a9f72c58c10: train.R (family=gaussian, span=3.0)
-## rmse: 14.6929214549524
+## INFO: [guild] Running trial 1faaa574929e4c6a83996574f4a386d4: train.R (family=symmetric, span=3.0)
+## rmse: 15.0532143004737
 ```
 :::
 
@@ -599,16 +599,16 @@ runs
 ## # A tibble: 21 × 15
 ##    label                tags  marked flags…¹ scala…² opera…³ started            
 ##    <chr>                <lis> <lgl>  <chr>     <dbl> <chr>   <dttm>             
-##  1 family=gaussian spa… <chr> FALSE  gaussi…    14.6 train.R 2023-01-24 09:58:53
-##  2 family=gaussian spa… <chr> FALSE  gaussi…    14.6 train.R 2023-01-24 09:58:52
-##  3 family=gaussian spa… <chr> FALSE  gaussi…    14.5 train.R 2023-01-24 09:58:51
-##  4 family=gaussian spa… <chr> FALSE  gaussi…    14.2 train.R 2023-01-24 09:58:51
-##  5 family=gaussian spa… <chr> FALSE  gaussi…    12.4 train.R 2023-01-24 09:58:50
-##  6 family=symmetric sp… <chr> FALSE  symmet…    15.0 train.R 2023-01-24 09:58:50
-##  7 family=symmetric sp… <chr> FALSE  symmet…    14.9 train.R 2023-01-24 09:58:49
-##  8 family=symmetric sp… <chr> FALSE  symmet…    14.8 train.R 2023-01-24 09:58:48
-##  9 family=symmetric sp… <chr> FALSE  symmet…    14.6 train.R 2023-01-24 09:58:48
-## 10 family=symmetric sp… <chr> FALSE  symmet…    12.6 train.R 2023-01-24 09:58:47
+##  1 family=gaussian spa… <chr> FALSE  gaussi…    14.6 train.R 2023-01-24 21:24:19
+##  2 family=gaussian spa… <chr> FALSE  gaussi…    14.6 train.R 2023-01-24 21:24:19
+##  3 family=gaussian spa… <chr> FALSE  gaussi…    14.5 train.R 2023-01-24 21:24:18
+##  4 family=gaussian spa… <chr> FALSE  gaussi…    14.2 train.R 2023-01-24 21:24:18
+##  5 family=gaussian spa… <chr> FALSE  gaussi…    12.4 train.R 2023-01-24 21:24:17
+##  6 family=symmetric sp… <chr> FALSE  symmet…    15.0 train.R 2023-01-24 21:24:16
+##  7 family=symmetric sp… <chr> FALSE  symmet…    14.9 train.R 2023-01-24 21:24:16
+##  8 family=symmetric sp… <chr> FALSE  symmet…    14.8 train.R 2023-01-24 21:24:15
+##  9 family=symmetric sp… <chr> FALSE  symmet…    14.6 train.R 2023-01-24 21:24:15
+## 10 family=symmetric sp… <chr> FALSE  symmet…    12.6 train.R 2023-01-24 21:24:14
 ## # … with 11 more rows, 10 more variables: flags$span <dbl>, scalars$mse <dbl>,
 ## #   stopped <dttm>, comments <list>, status <chr>, exit_status <int>,
 ## #   deps <list>, project_dir <chr>, dir <chr>, id <chr>, and abbreviated
@@ -646,22 +646,22 @@ tibble::glimpse(best_run)
 ## $ flags       <tibble[,2]> <tbl_df[2 x 2]>
 ## $ scalars     <tibble[,2]> <tbl_df[2 x 2]>
 ## $ operation   <chr> "train.R", "train.R"
-## $ started     <dttm> 2023-01-24 09:58:50, 2023-01-24 09:58:42
-## $ stopped     <dttm> 2023-01-24 09:58:51, 2023-01-24 09:58:43
+## $ started     <dttm> 2023-01-24 21:24:17, 2023-01-24 21:24:11
+## $ stopped     <dttm> 2023-01-24 21:24:18, 2023-01-24 21:24:11
 ## $ comments    <list> [<tbl_df[0 x 4]>], [<tbl_df[0 x 4]>]
 ## $ status      <chr> "completed", "completed"
 ## $ exit_status <int> 0, 0
 ## $ deps        <list> [], []
-## $ project_dir <chr> "/tmp/RtmpgY2PXn/guildai-intro-sample-project-3607b553e734…
-## $ dir         <chr> "/tmp/RtmpgY2PXn/guildai-intro-sample-project-3607b553e73…
-## $ id          <chr> "77117445380b4d92bbb1e7c629121a58", "f4f12b99942840c3a102a…
+## $ project_dir <chr> "/tmp/RtmpzirAbr/guildai-intro-sample-project-73ae206d330e…
+## $ dir         <chr> "/tmp/RtmpzirAbr/guildai-intro-sample-project-73ae206d330…
+## $ id          <chr> "c7aeb706c124407a9f5b55d7133c4308", "c2f4e55def704bd6b79e1…
 
 best_run |>
   runs_tag("best") |>
   runs_export("./best-runs")
 ## Modified tags for 2 run(s)
-## Copying 77117445380b4d92bbb1e7c629121a58
-## Copying f4f12b99942840c3a102aee0c9f27341
+## Copying c7aeb706c124407a9f5b55d7133c4308
+## Copying c2f4e55def704bd6b79e1ba91dd8f230
 ## Exported 2 run(s) to ./best-runs
 ```
 :::

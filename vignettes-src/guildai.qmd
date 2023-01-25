@@ -117,7 +117,7 @@ runs.
 guild_view()
 ```
 
-![](guild-view-screenshot.png)
+![](images/guild-view-screenshot.png)
 
 ## In R
 
