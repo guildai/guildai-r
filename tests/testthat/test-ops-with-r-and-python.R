@@ -63,6 +63,7 @@ test_that("VIRTUAL_ENV and other python cruft doesn't interfere with guild", {
   python <- Sys.which("python")
   if(!nzchar(python)) python <- Sys.which("python3")
   system2(python, c("-m", "venv", "my-venv"))
+  file.create("my-venv/.guild-nocopy")
 
   # "activate" the venv.
   bin_path <- if(is_windows()) "my-venv/Scripts" else "my-venv/bin"
