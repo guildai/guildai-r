@@ -56,7 +56,7 @@ directly to customize the installation.
 # install.packages("guildai")
 if(!requireNamespace("remotes"))
   install.packages("remotes", repos = "https://cran.rstudio.com")
-remotes::install_github("t-kalinowski/guildai-r")
+remotes::install_github("guildai/guildai-r")
 guildai::install_guild()
 ```
 

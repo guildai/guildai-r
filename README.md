@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/t-kalinowski/guildai-r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/t-kalinowski/guildai-r/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/guildai/guildai-r/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/guildai/guildai-r/actions/workflows/R-CMD-check.yaml)
 
 <!-- badges: end -->
 
@@ -39,7 +39,7 @@ directly to customize the installation.
 # install.packages("guildai")
 if(!requireNamespace("remotes"))
   install.packages("remotes", repos = "https://cran.rstudio.com")
-remotes::install_github("t-kalinowski/guildai-r")
+remotes::install_github("guildai/guildai-r")
 guildai::install_guild()
 ```
 
@@ -47,4 +47,4 @@ Guild AI can be used with any machine learning framework, or no
 framework at all.
 
 [Get
-Started](https://t-kalinowski.github.io/guildai-r/articles/guildai.html)
+Started](https://guildai.github.io/guildai-r/articles/guildai.html)

@@ -7,9 +7,9 @@ Authors@R: c(
          email = "tomasz@posit.co"),
   person("Posit, PBC", role = c("cph", "fnd")))
 Description: R interface to guildai.
-URL: https://t-kalinowski.github.io/guildai-r/,
-    https://github.com/t-kalinowski/guildai-r
-BugReports: https://github.com/t-kalinowski/guildai-r/issues
+URL: https://guildai.github.io/guildai-r/,
+    https://github.com/guildai/guildai-r
+BugReports: https://github.com/guildai/guildai-r/issues
 License: Apache License 2.0
 SystemRequirements: Python (>= 3.6.0)
 Imports:
