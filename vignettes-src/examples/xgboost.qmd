@@ -68,13 +68,58 @@ str(run$flags)
 str(run$scalars)
 ```
 
-`runs_info()` returns the last value for each scalar. The full history
-of scalars emitted is available with `runs_scalars()`.
+`runs_info()` returns the last value observed for each scalar name.
+
+The full history of scalars observed is available with `runs_scalars()`.
 
 ```{r, paged.print = FALSE}
 scalars <- runs_scalars(1)
 scalars
 ```
+
+The rich dataset returned by `runs_scalars()` is made possible via the
+`output-scalars` field we provided in the frontmatter. It contains two
+items:
+
+``` verbatim
+output-scalars:
+  - step: '\[(\step)]'
+  - '(\key):(\value)'
+```
+
+The first entry, `step: '\[(\step)]'`, tells guild the output scalar
+named `step` is wrapped in brackets `[` and `]`. (Guild applies the
+supplied pattern as a regular expression, so we must escape the opening
+bracket with a backslash, `\[`, since we want a literal match.). `step`
+is a reserved output-scalar name with special meaning, it is an integer
+value that enables a run to have multiple recordings of other output
+scalars.
+
+All scalars are always associated with a `step` value, and for a given
+`step`, only one value for each output-scalar name is reported. (Note
+the `step` column in the dataframe returned by `runs_scalars()`). If
+guild encounters multiple values for an output-scalar name within a
+`step`, only the last encountered value is reported. If no `step` value
+is encountered, then all scalars are assigned the default `step` value
+of 0.
+
+The second entry, `'(\key):(\value)'` tells guild that the other scalars
+names and values are separated by a single colon, without spaces. The
+pattern is applied multiple times per line.
+
+The two entries combined inform guild how to parse output lines that
+look like this.
+
+``` verbatim
+[1]  train-error:0.046522  train-logloss:0.544737  test-error:0.042831  test-logloss:0.543282
+[2]  train-error:0.041609  train-logloss:0.441820  test-error:0.040348  test-logloss:0.440453
+[3]  train-error:0.023338  train-logloss:0.367894  test-error:0.024829  test-logloss:0.367593
+```
+
+An incrementing `step` scalar is commonly used to demarcate epochs
+during training. This enables viewing history of metrics during a
+training run, either within TensorBoard (accessible via `guild_view()`),
+or with custom code in R, like this:
 
 ```{r, message = FALSE}
 library(dplyr)
