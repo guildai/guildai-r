@@ -209,8 +209,9 @@ enabling us to later recover the trained model.</li>
 <span><span class="co">##  $ train-error  : num 0.002</span></span>
 <span><span class="co">##  $ train-logloss: num 0.0582</span></span></code></pre></div>
 </div>
-<p><code><a href="../../reference/runs_info.html">runs_info()</a></code> returns the last value for each scalar. The
-full history of scalars emitted is available with
+<p><code><a href="../../reference/runs_info.html">runs_info()</a></code> returns the last value observed for each
+scalar name.</p>
+<p>The full history of scalars observed is available with
 <code><a href="../../reference/runs_scalars.html">runs_scalars()</a></code>.</p>
 <div class="cell" paged.print="false">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -219,20 +220,54 @@ full history of scalars emitted is available with
 <span><span class="co">## # A tibble: 80 × 5</span></span>
 <span><span class="co">##    run                              path  tag            value  step</span></span>
 <span><span class="co">##    &lt;chr&gt;                            &lt;chr&gt; &lt;chr&gt;          &lt;dbl&gt; &lt;dbl&gt;</span></span>
-<span><span class="co">##  1 3d5df8a345364a319ba95509cb798adc &lt;NA&gt;  test-error    0.0428     1</span></span>
-<span><span class="co">##  2 3d5df8a345364a319ba95509cb798adc &lt;NA&gt;  test-logloss  0.543      1</span></span>
-<span><span class="co">##  3 3d5df8a345364a319ba95509cb798adc &lt;NA&gt;  train-error   0.0465     1</span></span>
-<span><span class="co">##  4 3d5df8a345364a319ba95509cb798adc &lt;NA&gt;  train-logloss 0.545      1</span></span>
-<span><span class="co">##  5 3d5df8a345364a319ba95509cb798adc &lt;NA&gt;  test-error    0.0403     2</span></span>
-<span><span class="co">##  6 3d5df8a345364a319ba95509cb798adc &lt;NA&gt;  test-logloss  0.440      2</span></span>
-<span><span class="co">##  7 3d5df8a345364a319ba95509cb798adc &lt;NA&gt;  train-error   0.0416     2</span></span>
-<span><span class="co">##  8 3d5df8a345364a319ba95509cb798adc &lt;NA&gt;  train-logloss 0.442      2</span></span>
-<span><span class="co">##  9 3d5df8a345364a319ba95509cb798adc &lt;NA&gt;  test-error    0.0248     3</span></span>
-<span><span class="co">## 10 3d5df8a345364a319ba95509cb798adc &lt;NA&gt;  test-logloss  0.368      3</span></span>
+<span><span class="co">##  1 e23826e8dcec439eba25171f42eaca1f &lt;NA&gt;  test-error    0.0428     1</span></span>
+<span><span class="co">##  2 e23826e8dcec439eba25171f42eaca1f &lt;NA&gt;  test-logloss  0.543      1</span></span>
+<span><span class="co">##  3 e23826e8dcec439eba25171f42eaca1f &lt;NA&gt;  train-error   0.0465     1</span></span>
+<span><span class="co">##  4 e23826e8dcec439eba25171f42eaca1f &lt;NA&gt;  train-logloss 0.545      1</span></span>
+<span><span class="co">##  5 e23826e8dcec439eba25171f42eaca1f &lt;NA&gt;  test-error    0.0403     2</span></span>
+<span><span class="co">##  6 e23826e8dcec439eba25171f42eaca1f &lt;NA&gt;  test-logloss  0.440      2</span></span>
+<span><span class="co">##  7 e23826e8dcec439eba25171f42eaca1f &lt;NA&gt;  train-error   0.0416     2</span></span>
+<span><span class="co">##  8 e23826e8dcec439eba25171f42eaca1f &lt;NA&gt;  train-logloss 0.442      2</span></span>
+<span><span class="co">##  9 e23826e8dcec439eba25171f42eaca1f &lt;NA&gt;  test-error    0.0248     3</span></span>
+<span><span class="co">## 10 e23826e8dcec439eba25171f42eaca1f &lt;NA&gt;  test-logloss  0.368      3</span></span>
 <span><span class="co">## # … with 70 more rows</span></span></code></pre></div>
 </div>
+<p>The rich dataset returned by <code><a href="../../reference/runs_scalars.html">runs_scalars()</a></code> is made
+possible via the <code>output-scalars</code> field we provided in the
+frontmatter. It contains two items:</p>
+<pre class="verbatim"><code>output-scalars:
+  - step: '\[(\step)]'
+  - '(\key):(\value)'</code></pre>
+<p>The first entry, <code>step: '\[(\step)]'</code>, tells guild the
+output scalar named <code>step</code> is wrapped in brackets
+<code>[</code> and <code>]</code>. (Guild applies the supplied pattern
+as a regular expression, so we must escape the opening bracket with a
+backslash, <code>\[</code>, since we want a literal match.).
+<code>step</code> is a reserved output-scalar name with special meaning,
+it is an integer value that enables a run to have multiple recordings of
+other output scalars.</p>
+<p>All scalars are always associated with a <code>step</code> value, and
+for a given <code>step</code>, only one value for each output-scalar
+name is reported. (Note the <code>step</code> column in the dataframe
+returned by <code><a href="../../reference/runs_scalars.html">runs_scalars()</a></code>). If guild encounters multiple
+values for an output-scalar name within a <code>step</code>, only the
+last encountered value is reported. If no <code>step</code> value is
+encountered, then all scalars are assigned the default <code>step</code>
+value of 0.</p>
+<p>The second entry, <code>'(\key):(\value)'</code> tells guild that the
+other scalars names and values are separated by a single colon, without
+spaces. The pattern is applied multiple times per line.</p>
+<p>The two entries combined inform guild how to parse output lines that
+look like this.</p>
+<pre class="verbatim"><code>[1]  train-error:0.046522  train-logloss:0.544737  test-error:0.042831  test-logloss:0.543282
+[2]  train-error:0.041609  train-logloss:0.441820  test-error:0.040348  test-logloss:0.440453
+[3]  train-error:0.023338  train-logloss:0.367894  test-error:0.024829  test-logloss:0.367593</code></pre>
+<p>An incrementing <code>step</code> scalar is commonly used to
+demarcate epochs during training. This enables viewing history of
+metrics during a training run, either within TensorBoard (accessible via
+<code><a href="../../reference/guild_view.html">guild_view()</a></code>), or with custom code in R, like this:</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org" class="external-link">tidyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
@@ -250,7 +285,7 @@ full history of scalars emitted is available with
 <p>Finally, we can load the model trained during the run by accessing
 the saved file from the <code>run$dir</code>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">xgboost</span><span class="fu">::</span><span class="fu">xgb.load</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">run</span><span class="op">$</span><span class="va">dir</span>, <span class="st">"xgboost.model"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">model</span></span>
 <span><span class="co">## ##### xgb.Booster</span></span>
