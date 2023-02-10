@@ -13,14 +13,14 @@ guild_run(
 )
 }
 \arguments{
-\item{opspec}{typically a path to an R script, but could be any scalar
+\item{opspec}{typically a path to an R script, but could be any
 string that guild recognizes as a valid operation.}
 
 \item{flags}{flag values for the run(s).
 \itemize{
 \item A named list or vector like \code{c(noise = .3, dropout = .4)}. Lists with
-vectors of length greater than 1 are automatically expanded into a grid
-of combinations for a batch of runs. For example, \verb{list(noise = c(.2,   .3), dropout = c(.4, .5)} expands to a batch of 4 runs.
+vectors of length greater than 1 are automatically expanded into a
+grid of combinations for a batch of runs. For example, \verb{list(noise   = c(.2, .3), dropout = c(.4, .5)} expands to a batch of 4 runs.
 \item A dataframe of flags for a batch of runs, one row per run.
 \item A scalar string like \code{"noise=.3 dropout=.4"}. Any flags specification
 accepted at the terminal is valid here as well.
@@ -76,16 +76,17 @@ accepted at the terminal is valid here as well.
   }}
 
 \item{echo}{whether output from the run is shown in the current R
-console. Note, this has no effect on whether expressions are echoed in
-the guild run stdout log. To disable echoing of expression in the run
-logs, specify \verb{#| echo: false} in the run script frontmatter.}
+console. Note, this has no effect on whether expressions are echoed
+in the guild run stdout log. To disable echoing of expression in
+the run logs, specify \verb{#| echo: false} in the run script
+frontmatter.}
 
 \item{as_job}{Run the operation as an RStudio background job. This is
 ignored outside of the RStudio IDE.}
 }
 \value{
-the return value from \code{system2()}, invisibly. This function is
-primarily called for its side effect.
+The return value from \code{system2()}, invisibly. This function
+is primarily called for its side effect.
 }
 \description{
 Launch a guild run

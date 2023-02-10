@@ -448,15 +448,39 @@ runs_restore <- function(runs = NULL, ...) {
 
 #' Annotate runs
 #'
+#' @details Annotation types and their recommended uses:
+#'
+#' * __labels__: short, single line descriptions tailored for readability,
+#'   not programmatic consumption. Labels are presented prominently in
+#'   `guild_view()` and other run views.
+#'
+#' * __tags__: short single-token strings. Tags can be used for organizing, grouping,
+#'   and filtering runs.
+#'
+#' * __comments__: longer (potentially multi-paragraph) descriptions of the
+#'   run. Guild stores and presents run comments as a log entries,
+#'   complete with timestamp and user info.
+#'
+#' * __marks__: A boolean attribute of a run (a run can be marked or unmarked).
+#'   Marked runs are primarily used to declare a run as the preferred
+#'   source for resolving an operation dependency. If a operation
+#'   declares a dependency on another operation, and one of the
+#'   dependent operation runs is marked, the marked run is used rather
+#'   than the latest run for resolving the dependency. Marks can also be
+#'   a convenient mechanism for ad-hoc filtering operations, but in
+#'   general, tags are preferred over marks for this.
+#'
 #' @param runs a runs selection
 #' @param label,comment a string
 #' @param add,remove a character vector of tags to add or remove
-#' @param delete integer vector, which comment(s) to delete, corresponding to
-#'   the row number(s) in the dataframe found at `runs_info()$comments`.
+#' @param delete integer vector, which comment(s) to delete,
+#'   corresponding to the row number(s) in the dataframe found at
+#'   `runs_info()$comments`.
 #' @param clear bool, whether to clear the existing tags/comments/label.
 #' @param ...  passed on to `guild`. Pass `"--help"` to see all options.
 #'
-#' @note `runs_comment()` will open up an editor if `comment` is not supplied.
+#' @note `runs_comment()` will open up an editor if `comment` is not
+#'   supplied.
 #'
 #' @export
 #' @examples

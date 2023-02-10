@@ -112,14 +112,14 @@ NA_if_FALSE <- function(x) {
 
 #' Launch a guild run
 #'
-#' @param opspec typically a path to an R script, but could be any scalar
+#' @param opspec typically a path to an R script, but could be any
 #'   string that guild recognizes as a valid operation.
 #' @param flags flag values for the run(s).
 #'
 #'   - A named list or vector like `c(noise = .3, dropout = .4)`. Lists with
-#'   vectors of length greater than 1 are automatically expanded into a grid
-#'   of combinations for a batch of runs. For example, `list(noise = c(.2,
-#'   .3), dropout = c(.4, .5)` expands to a batch of 4 runs.
+#'   vectors of length greater than 1 are automatically expanded into a
+#'   grid of combinations for a batch of runs. For example, `list(noise
+#'   = c(.2, .3), dropout = c(.4, .5)` expands to a batch of 4 runs.
 #'
 #'   - A dataframe of flags for a batch of runs, one row per run.
 #'
@@ -127,9 +127,10 @@ NA_if_FALSE <- function(x) {
 #'   accepted at the terminal is valid here as well.
 #'
 #' @param echo whether output from the run is shown in the current R
-#'   console. Note, this has no effect on whether expressions are echoed in
-#'   the guild run stdout log. To disable echoing of expression in the run
-#'   logs, specify `#| echo: false` in the run script frontmatter.
+#'   console. Note, this has no effect on whether expressions are echoed
+#'   in the guild run stdout log. To disable echoing of expression in
+#'   the run logs, specify `#| echo: false` in the run script
+#'   frontmatter.
 #'
 #' @param as_job Run the operation as an RStudio background job. This is
 #'   ignored outside of the RStudio IDE.
@@ -137,8 +138,8 @@ NA_if_FALSE <- function(x) {
 #' @param ... passed on to `guild run`
 #' @inheritDotParams guild_run_cli
 #'
-#' @return the return value from `system2()`, invisibly. This function is
-#'   primarily called for its side effect.
+#' @return The return value from `system2()`, invisibly. This function
+#'   is primarily called for its side effect.
 #' @export
 guild_run <-
 function(opspec = "train.R",
