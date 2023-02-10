@@ -42,8 +42,8 @@ not programmatic consumption. Labels are presented prominently in
 \item \strong{tags}: short single-token strings. Tags can be used for organizing, grouping,
 and filtering runs.
 \item \strong{comments}: longer (potentially multi-paragraph) descriptions of the
-run. Guild stores and presents run comments as a log entries,
-complete with timestamp and user info.
+run. Guild stores and presents run comments as log entries,
+complete with timestamps and author info.
 \item \strong{marks}: A boolean attribute of a run (a run can be marked or unmarked).
 Marked runs are primarily used to declare a run as the preferred
 source for resolving an operation dependency. If a operation

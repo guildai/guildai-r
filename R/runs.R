@@ -458,8 +458,8 @@ runs_restore <- function(runs = NULL, ...) {
 #'   and filtering runs.
 #'
 #' * __comments__: longer (potentially multi-paragraph) descriptions of the
-#'   run. Guild stores and presents run comments as a log entries,
-#'   complete with timestamp and user info.
+#'   run. Guild stores and presents run comments as log entries,
+#'   complete with timestamps and author info.
 #'
 #' * __marks__: A boolean attribute of a run (a run can be marked or unmarked).
 #'   Marked runs are primarily used to declare a run as the preferred
