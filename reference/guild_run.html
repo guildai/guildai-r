@@ -72,14 +72,14 @@
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>opspec</dt>
-<dd><p>typically a path to an R script, but could be any scalar
+<dd><p>typically a path to an R script, but could be any
 string that guild recognizes as a valid operation.</p></dd>
 
 
 <dt>flags</dt>
 <dd><p>flag values for the run(s).</p><ul><li><p>A named list or vector like <code>c(noise = .3, dropout = .4)</code>. Lists with
-vectors of length greater than 1 are automatically expanded into a grid
-of combinations for a batch of runs. For example, <code>list(noise = c(.2,   .3), dropout = c(.4, .5)</code> expands to a batch of 4 runs.</p></li>
+vectors of length greater than 1 are automatically expanded into a
+grid of combinations for a batch of runs. For example, <code>list(noise   = c(.2, .3), dropout = c(.4, .5)</code> expands to a batch of 4 runs.</p></li>
 <li><p>A dataframe of flags for a batch of runs, one row per run.</p></li>
 <li><p>A scalar string like <code>"noise=.3 dropout=.4"</code>. Any flags specification
 accepted at the terminal is valid here as well.</p></li>
@@ -225,9 +225,10 @@ accepted at the terminal is valid here as well.</p></li>
 
 <dt>echo</dt>
 <dd><p>whether output from the run is shown in the current R
-console. Note, this has no effect on whether expressions are echoed in
-the guild run stdout log. To disable echoing of expression in the run
-logs, specify <code>#| echo: false</code> in the run script frontmatter.</p></dd>
+console. Note, this has no effect on whether expressions are echoed
+in the guild run stdout log. To disable echoing of expression in
+the run logs, specify <code>#| echo: false</code> in the run script
+frontmatter.</p></dd>
 
 
 <dt>as_job</dt>
@@ -239,8 +240,8 @@ ignored outside of the RStudio IDE.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>the return value from <code><a href="https://rdrr.io/r/base/system2.html" class="external-link">system2()</a></code>, invisibly. This function is
-primarily called for its side effect.</p>
+<p>The return value from <code><a href="https://rdrr.io/r/base/system2.html" class="external-link">system2()</a></code>, invisibly. This function
+is primarily called for its side effect.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

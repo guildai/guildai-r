@@ -92,13 +92,34 @@
 
 
 <dt>delete</dt>
-<dd><p>integer vector, which comment(s) to delete, corresponding to
-the row number(s) in the dataframe found at <code>runs_info()$comments</code>.</p></dd>
+<dd><p>integer vector, which comment(s) to delete,
+corresponding to the row number(s) in the dataframe found at
+<code>runs_info()$comments</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>Annotation types and their recommended uses:</p><ul><li><p><strong>labels</strong>: short, single line descriptions tailored for readability,
+not programmatic consumption. Labels are presented prominently in
+<code><a href="guild_view.html">guild_view()</a></code> and other run views.</p></li>
+<li><p><strong>tags</strong>: short single-token strings. Tags can be used for organizing, grouping,
+and filtering runs.</p></li>
+<li><p><strong>comments</strong>: longer (potentially multi-paragraph) descriptions of the
+run. Guild stores and presents run comments as a log entries,
+complete with timestamp and user info.</p></li>
+<li><p><strong>marks</strong>: A boolean attribute of a run (a run can be marked or unmarked).
+Marked runs are primarily used to declare a run as the preferred
+source for resolving an operation dependency. If a operation
+declares a dependency on another operation, and one of the
+dependent operation runs is marked, the marked run is used rather
+than the latest run for resolving the dependency. Marks can also be
+a convenient mechanism for ad-hoc filtering operations, but in
+general, tags are preferred over marks for this.</p></li>
+</ul></div>
+    <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p><code>runs_comment()</code> will open up an editor if <code>comment</code> is not supplied.</p>
+    <p><code>runs_comment()</code> will open up an editor if <code>comment</code> is not
+supplied.</p>
     </div>
 
     <div class="section level2">
