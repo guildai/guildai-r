@@ -24,6 +24,17 @@ ns$system2t <- function(command, args, ..., stdout = "", stderr = "", echo_cmd) 
   invisible(out)
 }
 options(guildai.run_as_job = FALSE)
+
+rlang::check_installed(c(
+  "tidymodels", "butcher", "bestNormalize", "sessioninfo",
+  "glmnet", "splines2"))
+
+# tidymodels emits warnings about this
+options(
+  warnPartialMatchArgs = NULL,
+  warnPartialMatchAttr = NULL,
+  warnPartialMatchDollar = NULL
+)
 ```
 
 Here is an example showing how to use *guildai* with tidymodels in R.
