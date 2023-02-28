@@ -4,7 +4,7 @@
 \alias{install_guild}
 \title{Install guildai core}
 \usage{
-install_guild(guildai = "dev", python = find_python())
+install_guild(guildai = "guildai", python = find_python())
 }
 \arguments{
 \item{guildai}{Character vector of arguments passed directly to \verb{pip install}. To install the release version of guildai, this can be

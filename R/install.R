@@ -73,7 +73,7 @@ find_python_from_registry <- function() {
 #' ## Install local development version:
 #' # install_guild(c("-e", "~/guild/guildai"))
 install_guild <-
-  function(guildai = "dev",
+  function(guildai = "guildai",
            python = find_python()) {
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL),
                         mustWork = FALSE)
