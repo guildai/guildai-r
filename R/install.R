@@ -75,6 +75,10 @@ find_python_from_registry <- function() {
 install_guild <-
   function(guildai = "guildai",
            python = find_python()) {
+
+  # force args before unlinking, incase forcing them causes an error
+  force(guildai); force(python)
+
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL),
                         mustWork = FALSE)
   unlink(venv, recursive = TRUE, force = TRUE)
