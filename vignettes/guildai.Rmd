@@ -14,7 +14,7 @@ successor to the *tfruns* package.
 -   Track the hyperparameters, metrics, output, and source code of every
     training run.
 
--   Compare hyperparmaeters and metrics across runs to find the best
+-   Compare hyperparameters and metrics across runs to find the best
     performing model.
 
 -   No changes to source code required.
@@ -38,8 +38,8 @@ guildai::install_guild()
 
 Guild AI can be used with any machine learning framework, or no
 framework at all. The Examples section in the top navbar shows how you
-can use guild with common machine learning frameworks like xgboost,
-tensorflow and keras, torch, mlr3 and tidymodels.
+can use guild with common machine learning frameworks like XGBoost,
+TensorFlow and Keras, Torch, mlr3 and Tidymodels.
 
 In this introductory example, we'll start by showing guild with no
 framework at all, on a very simple (and somewhat contrived) example.
@@ -114,15 +114,15 @@ tibble::glimpse(run)
 ## $ flags       <tibble[,0]> <tbl_df[1 x 0]>
 ## $ scalars     <tibble[,0]> <tbl_df[1 x 0]>
 ## $ operation   <chr> "train.R"
-## $ started     <dttm> 2023-01-24 21:23:58
-## $ stopped     <dttm> 2023-01-24 21:23:59
+## $ started     <dttm> 2023-02-28 11:08:37
+## $ stopped     <dttm> 2023-02-28 11:08:37
 ## $ comments    <list> [<tbl_df[0 x 4]>]
 ## $ status      <chr> "completed"
 ## $ exit_status <int> 0
 ## $ deps        <list> []
-## $ project_dir <chr> "/tmp/RtmpzirAbr/guildai-intro-sample-project-73ae206d330e"
-## $ dir         <chr> "/tmp/RtmpzirAbr/guildai-intro-sample-project-73ae206d330e…
-## $ id          <chr> "5a96a84b10eb4487beaea4ee720f0b08"
+## $ project_dir <chr> "/tmp/RtmpA9r0F6/guildai-intro-sample-project-4acc12bdedaa"
+## $ dir         <chr> "/tmp/RtmpA9r0F6/guildai-intro-sample-project-4acc12bdedaa…
+## $ id          <chr> "ffb3ea427301412b9347194a9e66bed1"
 ```
 :::
 
@@ -152,12 +152,12 @@ directory also contains additional metadata about the runs that guild
 recorded under the ".guild" folder. There you'll find plain text (yaml)
 files with information like the starting random seed, environment
 variables, information about the package versions, and other metadata
-frequently useful for reproducability.
+frequently useful for reproducibility.
 
 ::: cell
 ``` {.r .cell-code}
 fs::dir_tree(run$dir[1], all = TRUE)
-## /tmp/RtmpzirAbr/guildai-intro-sample-project-73ae206d330e/.guild/runs/5a96a84b10eb4487beaea4ee720f0b08
+## /tmp/RtmpA9r0F6/guildai-intro-sample-project-4acc12bdedaa/.guild/runs/ffb3ea427301412b9347194a9e66bed1
 ## ├── .guild
 ## │   ├── attrs
 ## │   │   ├── cmd
@@ -191,7 +191,7 @@ fs::dir_tree(run$dir[1], all = TRUE)
 
 # Flags
 
-Flags are a form of run inputs, or paramaterization. `guild_run()` can
+Flags are a form of run inputs, or parameterization. `guild_run()` can
 modify flags when launching runs, and `guild_view()` and `runs_info()`
 make it easy to compare flags across runs. Any scalar literal assigned
 at the top level of a run script is automatically identified as a
@@ -235,7 +235,7 @@ is persistent, and will be visible when inspecting the snapshot of run
 sources captured, e.g., with `guild_view()` (or `guild diff`, or
 inspecting in the filesystem).
 
-The flags interface is useful for experimentation and hyperparamater
+The flags interface is useful for experimentation and hyperparameter
 optimization. At it's simplest, you can iterate over the set of flag
 values you want and pass them to separate calls of `guild_run()`:
 
@@ -498,9 +498,9 @@ model <- loess(dist ~ speed, data = cars,
 # Hyperparameter Optimization
 
 The combination of flags with constraints and scalars make it possible
-to use a hyperparamater optimizer with guild. Here, *flags* are the
-hyperamaters, *flag constraints* define the hyperparameter search space,
-and a *scalar* is the objective to minimize or maximize.
+to use a hyperparameter optimizer with guild. Here, *flags* are the
+hyperparameters, *flag constraints* define the hyperparameter search
+space, and a *scalar* is the objective to minimize or maximize.
 
 To illustrate, here is an example run R script:
 
@@ -537,20 +537,20 @@ guild_run("train.R",
           minimize = "rmse",
           max_trials = 5)
 ## INFO: [guild] Random start for optimization (1 of 3)
-## INFO: [guild] Running trial 49b6befcb62f40c2be2c9518c0bf585a: train.R (family=gaussian, span=0.75)
+## INFO: [guild] Running trial d459fbb729ea449c909aa63ca82f8768: train.R (family=gaussian, span=0.75)
 ## rmse: 14.3970247057306 
 ## INFO: [guild] Random start for optimization (2 of 3)
-## INFO: [guild] Running trial f94aacfb6dc2410cadfae3102e1d7061: train.R (family=symmetric, span=1.0529223408343051)
-## rmse: 14.8566141121218 
+## INFO: [guild] Running trial 2eb6d34b54fd4a92b8f581cf0a9b05a1: train.R (family=symmetric, span=0.9547426502497127)
+## rmse: 14.8061751269351 
 ## INFO: [guild] Random start for optimization (3 of 3)
-## INFO: [guild] Running trial 8d7d31b7ac844205835bbdbd16648b1f: train.R (family=gaussian, span=0.624545853823467)
-## rmse: 14.2754077059686 
+## INFO: [guild] Running trial 7368411050e34130b1ea801631c3a13b: train.R (family=gaussian, span=2.641665759567874)
+## rmse: 14.6885174763122 
 ## INFO: [guild] Found 3 previous trial(s) for use in optimization
-## INFO: [guild] Running trial c2f4e55def704bd6b79e1ba91dd8f230: train.R (family=gaussian, span=0.3)
+## INFO: [guild] Running trial 3d6b88fd3df743488debcb18e9e18327: train.R (family=gaussian, span=0.3)
 ## rmse: 12.3620973783366 
 ## INFO: [guild] Found 4 previous trial(s) for use in optimization
-## INFO: [guild] Running trial 1faaa574929e4c6a83996574f4a386d4: train.R (family=symmetric, span=3.0)
-## rmse: 15.0532143004737
+## INFO: [guild] Running trial 15a2f795dafd44cbb5ede55f8b12dfa8: train.R (family=symmetric, span=0.3)
+## rmse: 12.5758081076474
 ```
 :::
 
@@ -599,16 +599,16 @@ runs
 ## # A tibble: 21 × 15
 ##    label                tags  marked flags…¹ scala…² opera…³ started            
 ##    <chr>                <lis> <lgl>  <chr>     <dbl> <chr>   <dttm>             
-##  1 family=gaussian spa… <chr> FALSE  gaussi…    14.6 train.R 2023-01-24 21:24:19
-##  2 family=gaussian spa… <chr> FALSE  gaussi…    14.6 train.R 2023-01-24 21:24:19
-##  3 family=gaussian spa… <chr> FALSE  gaussi…    14.5 train.R 2023-01-24 21:24:18
-##  4 family=gaussian spa… <chr> FALSE  gaussi…    14.2 train.R 2023-01-24 21:24:18
-##  5 family=gaussian spa… <chr> FALSE  gaussi…    12.4 train.R 2023-01-24 21:24:17
-##  6 family=symmetric sp… <chr> FALSE  symmet…    15.0 train.R 2023-01-24 21:24:16
-##  7 family=symmetric sp… <chr> FALSE  symmet…    14.9 train.R 2023-01-24 21:24:16
-##  8 family=symmetric sp… <chr> FALSE  symmet…    14.8 train.R 2023-01-24 21:24:15
-##  9 family=symmetric sp… <chr> FALSE  symmet…    14.6 train.R 2023-01-24 21:24:15
-## 10 family=symmetric sp… <chr> FALSE  symmet…    12.6 train.R 2023-01-24 21:24:14
+##  1 family=gaussian spa… <chr> FALSE  gaussi…    14.6 train.R 2023-02-28 11:08:56
+##  2 family=gaussian spa… <chr> FALSE  gaussi…    14.6 train.R 2023-02-28 11:08:56
+##  3 family=gaussian spa… <chr> FALSE  gaussi…    14.5 train.R 2023-02-28 11:08:55
+##  4 family=gaussian spa… <chr> FALSE  gaussi…    14.2 train.R 2023-02-28 11:08:55
+##  5 family=gaussian spa… <chr> FALSE  gaussi…    12.4 train.R 2023-02-28 11:08:54
+##  6 family=symmetric sp… <chr> FALSE  symmet…    15.0 train.R 2023-02-28 11:08:54
+##  7 family=symmetric sp… <chr> FALSE  symmet…    14.9 train.R 2023-02-28 11:08:53
+##  8 family=symmetric sp… <chr> FALSE  symmet…    14.8 train.R 2023-02-28 11:08:52
+##  9 family=symmetric sp… <chr> FALSE  symmet…    14.6 train.R 2023-02-28 11:08:52
+## 10 family=symmetric sp… <chr> FALSE  symmet…    12.6 train.R 2023-02-28 11:08:51
 ## # … with 11 more rows, 10 more variables: flags$span <dbl>, scalars$mse <dbl>,
 ## #   stopped <dttm>, comments <list>, status <chr>, exit_status <int>,
 ## #   deps <list>, project_dir <chr>, dir <chr>, id <chr>, and abbreviated
@@ -646,22 +646,22 @@ tibble::glimpse(best_run)
 ## $ flags       <tibble[,2]> <tbl_df[2 x 2]>
 ## $ scalars     <tibble[,2]> <tbl_df[2 x 2]>
 ## $ operation   <chr> "train.R", "train.R"
-## $ started     <dttm> 2023-01-24 21:24:17, 2023-01-24 21:24:11
-## $ stopped     <dttm> 2023-01-24 21:24:18, 2023-01-24 21:24:11
+## $ started     <dttm> 2023-02-28 11:08:54, 2023-02-28 11:08:49
+## $ stopped     <dttm> 2023-02-28 11:08:55, 2023-02-28 11:08:49
 ## $ comments    <list> [<tbl_df[0 x 4]>], [<tbl_df[0 x 4]>]
 ## $ status      <chr> "completed", "completed"
 ## $ exit_status <int> 0, 0
 ## $ deps        <list> [], []
-## $ project_dir <chr> "/tmp/RtmpzirAbr/guildai-intro-sample-project-73ae206d330e…
-## $ dir         <chr> "/tmp/RtmpzirAbr/guildai-intro-sample-project-73ae206d330…
-## $ id          <chr> "c7aeb706c124407a9f5b55d7133c4308", "c2f4e55def704bd6b79e1…
+## $ project_dir <chr> "/tmp/RtmpA9r0F6/guildai-intro-sample-project-4acc12bdedaa…
+## $ dir         <chr> "/tmp/RtmpA9r0F6/guildai-intro-sample-project-4acc12bdeda…
+## $ id          <chr> "cea87b68b6aa42218b8f1182d652e28c", "3d6b88fd3df743488debc…
 
 best_run |>
   runs_tag("best") |>
   runs_export("./best-runs")
 ## Modified tags for 2 run(s)
-## Copying c7aeb706c124407a9f5b55d7133c4308
-## Copying c2f4e55def704bd6b79e1ba91dd8f230
+## Copying cea87b68b6aa42218b8f1182d652e28c
+## Copying 3d6b88fd3df743488debcb18e9e18327
 ## Exported 2 run(s) to ./best-runs
 ```
 :::
@@ -707,7 +707,7 @@ command line options from R.
     shell conventions:
     -   `_` in a argument name is converted to `-`, and a `--` prefix is
         automatically added, so `batch_comment = "foo"` becomes
-        `--batch_comment 'foo'`.
+        `--batch-comment 'foo'`.
     -   boolean values are understood to be switches, so
         `running = TRUE` is translated to `--running`,
         while`running = FALSE` is translated to`--not-running`.
@@ -748,7 +748,7 @@ Specifically three addins are provided:
 -   Launch `guild_view()`.
 -   View `runs_info()` in the interactive table viewer.
 
-It's recomended that the action for "Launch `guild_run()`" be assigned
+It's recommended that the action for "Launch `guild_run()`" be assigned
 to keyboard shortcut Ctrl/Cmd + Alt + Enter.
 
 ### Background Training

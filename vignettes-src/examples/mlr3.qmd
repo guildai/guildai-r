@@ -24,6 +24,8 @@ ns$system2t <- function(command, args, ..., stdout = "", stderr = "", echo_cmd) 
   invisible(out)
 }
 options(guildai.run_as_job = FALSE)
+
+rlang::check_installed("mlr3")
 ```
 
 Here is an example showing how to use *guildai* with ml3r in R.
