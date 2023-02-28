@@ -1,7 +1,7 @@
 Package: guildai
 Type: Package
 Title: Track Machine Learning Experiments
-Version: 0.0.0.9001
+Version: 0.0.1
 Authors@R: c(
   person("Tomasz", "Kalinowski", role = c("aut", "cph", "cre"),
          email = "tomasz@posit.co"),
