@@ -35,7 +35,7 @@ jobs:
 
       - if: runner.os == 'macOS'
         # remove conflicting `guild` executable.
-        run: brew unlink guile
+        run: brew unlink guile || true
 
       - uses: actions/checkout@v3
 
