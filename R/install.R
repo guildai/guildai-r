@@ -182,6 +182,10 @@ install_guild <-
 find_guild <- function() {
   if (file.exists(guild <- Sys.which("guild")))
     return(normalizePath(as.vector(guild)))
+  find_r_guildai_guild()
+}
+
+find_r_guildai_guild <- function() {
   if (is_windows())
     if (file.exists(guild <-
                     file.path(rappdirs::user_data_dir("r-guildai", NULL),
@@ -218,7 +222,7 @@ function(dest = "~/bin",
   if(!dir.exists(dest))
     dir.create(dest)
 
-  guild_exe <- find_guild()
+  guild_exe <- find_r_guildai_guild()
   link <- file.path(dest, basename(guild_exe))
   unlink(link)
   message("Creating symlink: '", link, "' -> '", guild_exe, "'")
