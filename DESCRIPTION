@@ -1,12 +1,20 @@
 Package: guildai
 Type: Package
-Title: R interface to guildai
+Title: Track Machine Learning Experiments
 Version: 0.0.0.9001
 Authors@R: c(
   person("Tomasz", "Kalinowski", role = c("aut", "cph", "cre"),
          email = "tomasz@posit.co"),
   person("Posit, PBC", role = c("cph", "fnd")))
-Description: R interface to guildai.
+Description: 'Guild AI' is an open-source tool for managing machine learning
+    experiments. It's for scientists, engineers, and researchers who want to
+    run scripts, compare results, measure progress, and automate machine
+    learning workflow. 'Guild AI' is a light weight, external tool that
+    works with any framework and doesn't require changes to your code. Users
+    can easily record experiment metadata, track model changes, manage
+    experiment artifacts, tune hyperparameters, and share results. 'Guild
+    AI' combines features from Git, SQLite, and Make to provide a lab
+    notebook for machine learning.
 URL: https://guildai.github.io/guildai-r/,
     https://github.com/guildai/guildai-r
 BugReports: https://github.com/guildai/guildai-r/issues
