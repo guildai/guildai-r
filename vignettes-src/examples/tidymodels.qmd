@@ -112,7 +112,7 @@ best_run_saved_objects$ames_fit
 best_run_saved_objects$val_results
 ```
 
-For reproducability, (or preparing to deploy a model) it can be helpful
+For reproducibility, (or preparing to deploy a model) it can be helpful
 to know some additional run metadata, like the starting random seed or a
 log of which R packages were loaded during the R session. This
 information is all stored under the `RUN_DIR/.guild` directory.

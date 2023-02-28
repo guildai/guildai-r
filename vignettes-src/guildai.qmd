@@ -40,7 +40,7 @@ successor to the *tfruns* package.
 -   Track the hyperparameters, metrics, output, and source code of every
     training run.
 
--   Compare hyperparmaeters and metrics across runs to find the best
+-   Compare hyperparameters and metrics across runs to find the best
     performing model.
 
 -   No changes to source code required.
@@ -64,8 +64,8 @@ guildai::install_guild()
 
 Guild AI can be used with any machine learning framework, or no
 framework at all. The Examples section in the top navbar shows how you
-can use guild with common machine learning frameworks like xgboost,
-tensorflow and keras, torch, mlr3 and tidymodels.
+can use guild with common machine learning frameworks like XGBoost,
+TensorFlow and Keras, Torch, mlr3 and Tidymodels.
 
 In this introductory example, we'll start by showing guild with no
 framework at all, on a very simple (and somewhat contrived) example.
@@ -152,7 +152,7 @@ directory also contains additional metadata about the runs that guild
 recorded under the ".guild" folder. There you'll find plain text (yaml)
 files with information like the starting random seed, environment
 variables, information about the package versions, and other metadata
-frequently useful for reproducability.
+frequently useful for reproducibility.
 
 ```{r}
 fs::dir_tree(run$dir[1], all = TRUE)
@@ -160,7 +160,7 @@ fs::dir_tree(run$dir[1], all = TRUE)
 
 # Flags
 
-Flags are a form of run inputs, or paramaterization. `guild_run()` can
+Flags are a form of run inputs, or parameterization. `guild_run()` can
 modify flags when launching runs, and `guild_view()` and `runs_info()`
 make it easy to compare flags across runs. Any scalar literal assigned
 at the top level of a run script is automatically identified as a
@@ -202,7 +202,7 @@ is persistent, and will be visible when inspecting the snapshot of run
 sources captured, e.g., with `guild_view()` (or `guild diff`, or
 inspecting in the filesystem).
 
-The flags interface is useful for experimentation and hyperparamater
+The flags interface is useful for experimentation and hyperparameter
 optimization. At it's simplest, you can iterate over the set of flag
 values you want and pass them to separate calls of `guild_run()`:
 
@@ -420,9 +420,9 @@ model <- loess(dist ~ speed, data = cars,
 # Hyperparameter Optimization
 
 The combination of flags with constraints and scalars make it possible
-to use a hyperparamater optimizer with guild. Here, *flags* are the
-hyperamaters, *flag constraints* define the hyperparameter search space,
-and a *scalar* is the objective to minimize or maximize.
+to use a hyperparameter optimizer with guild. Here, *flags* are the
+hyperparameters, *flag constraints* define the hyperparameter search
+space, and a *scalar* is the objective to minimize or maximize.
 
 To illustrate, here is an example run R script:
 
@@ -568,7 +568,7 @@ command line options from R.
     shell conventions:
     -   `_` in a argument name is converted to `-`, and a `--` prefix is
         automatically added, so `batch_comment = "foo"` becomes
-        `--batch_comment 'foo'`.
+        `--batch-comment 'foo'`.
     -   boolean values are understood to be switches, so
         `running = TRUE` is translated to `--running`,
         while`running = FALSE` is translated to`--not-running`.
@@ -609,7 +609,7 @@ Specifically three addins are provided:
 -   Launch `guild_view()`.
 -   View `runs_info()` in the interactive table viewer.
 
-It's recomended that the action for "Launch `guild_run()`" be assigned
+It's recommended that the action for "Launch `guild_run()`" be assigned
 to keyboard shortcut Ctrl/Cmd + Alt + Enter.
 
 ### Background Training
