@@ -9,4 +9,5 @@
 library(testthat)
 library(guildai)
 
-test_check("guildai")
+if (identical(Sys.getenv("NOT_CRAN"), "true"))
+  test_check("guildai")
