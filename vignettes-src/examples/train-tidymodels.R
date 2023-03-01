@@ -2,6 +2,7 @@ library(tidymodels)
 library(butcher)
 library(bestNormalize)
 library(sessioninfo)
+set.seed(1234)
 
 # Boilerplate options -------------------------------------------------
 tidymodels_prefer()
