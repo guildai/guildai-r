@@ -7,16 +7,28 @@ guild <- function(command = NULL, ...,
 
   args <- as_cli_args(I(command %||% character()), ...)
 
-  if(Sys.getenv("GUILD_DEBUG_ATTACH") == "1")
+  if (Sys.getenv("GUILD_DEBUG_ATTACH") == "1")
     args <- c("-D", "5678", args)
 
-  exec <- if(wait) system2t else processx::process$new
-  exec(find_guild(), args, env = env, stdout = stdout, stderr = stderr,
-       echo_cmd = Sys.getenv("GUILD_DEBUG_R") == "1")
-  # exec <- if(wait) processx::run else processx::process$new
-  # invisible(exec(find_guild(), args,
-  #                echo = TRUE, echo_cmd = TRUE,
-  #                env = env, stdout = stdout, stderr = stderr))
+  exec <- if (wait) system2t else processx::process$new
+  res <- exec(find_guild(), args,
+              env = env,
+              stdout = stdout, stderr = stderr,
+              echo_cmd = Sys.getenv("GUILD_DEBUG_R") == "1")
+
+  if (is.integer(res)) {
+    # common case of stdout == "" and wait = TRUE,
+    # system2() returns process return code.
+    # promote process errors to R errors
+    if (res != 0L)
+      stop(simpleError(paste("guild error code:", res),
+                       sys.call(-1L)))
+    else
+      return(invisible())
+  }
+
+
+  res # processx::process handle, stdout json blob, etc.
 }
 
 
