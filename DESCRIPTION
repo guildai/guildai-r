@@ -17,7 +17,8 @@ Description: 'Guild AI' is an open-source tool for managing machine learning
     from 'Git', 'SQLite', and 'Make' to provide a lab notebook for machine
     learning.
 URL: https://guildai.github.io/guildai-r/,
-    https://github.com/guildai/guildai-r
+    https://github.com/guildai/guildai-r,
+    https://my.guild.ai/
 BugReports: https://github.com/guildai/guildai-r/issues
 License: Apache License 2.0
 SystemRequirements: Python (>= 3.6.0)
