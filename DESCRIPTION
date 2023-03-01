@@ -9,12 +9,13 @@ Authors@R: c(
 Description: 'Guild AI' is an open-source tool for managing machine learning
     experiments. It's for scientists, engineers, and researchers who want to
     run scripts, compare results, measure progress, and automate machine
-    learning workflow. 'Guild AI' is a light weight, external tool that
-    works with any framework and doesn't require changes to your code. Users
-    can easily record experiment metadata, track model changes, manage
-    experiment artifacts, tune hyperparameters, and share results. 'Guild
-    AI' combines features from Git, SQLite, and Make to provide a lab
-    notebook for machine learning.
+    learning workflow. 'Guild AI' is a light weight, external tool that runs
+    locally. It works with any framework, doesn't require any changes to
+    your code, or access to any web services. Users can easily record
+    experiment metadata, track model changes, manage experiment artifacts,
+    tune hyperparameters, and share results. 'Guild AI' combines features
+    from 'Git', 'SQLite', and 'Make' to provide a lab notebook for machine
+    learning.
 URL: https://guildai.github.io/guildai-r/,
     https://github.com/guildai/guildai-r
 BugReports: https://github.com/guildai/guildai-r/issues
