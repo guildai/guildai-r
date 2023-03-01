@@ -40,7 +40,7 @@ looking to understand how R arguments are transformed into a cli
 system call.
 }
 \examples{
-if(FALSE) {
+\dontrun{
 resolve_run_ids() # returns all run ids.
 resolve_run_ids(1) # last run
 resolve_run_ids(1:2) # last 2 runs

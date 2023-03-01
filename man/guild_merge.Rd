@@ -41,11 +41,15 @@ guild_merge(run = NULL, ...)
     \item{\code{no_replace}}{(bool) Fail if any target file would be replaced, even if that file is committed to the project VCS. Cannot be used with \code{replace}.}
   }}
 }
+\value{
+\code{NULL}, invisibly. This function is called for its
+side effect.
+}
 \description{
 Copy run files into the current project working directory
 }
 \examples{
-if(FALSE) {
+\dontrun{
 guild_merge("--help")
 runs_scalars() \%>\%
   dplyr::slice_max("epoch_acc") \%>\%

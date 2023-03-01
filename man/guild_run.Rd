@@ -85,8 +85,8 @@ frontmatter.}
 ignored outside of the RStudio IDE.}
 }
 \value{
-The return value from \code{system2()}, invisibly. This function
-is primarily called for its side effect.
+\code{NULL}, invisibly. This function is called for its
+side effect.
 }
 \description{
 Launch a guild run

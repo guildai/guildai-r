@@ -152,7 +152,7 @@
 #' @param deleted (bool) Show deleted runs.
 #' @param include_batch (bool) Include batch runs.
 #'
-#' @return a dataframe of runs
+#' @return A dataframe (tibble) of runs
 #' @export
 #' @importFrom jsonlite parse_json
 #' @importFrom rlang %|%
@@ -160,7 +160,6 @@
 #' @importFrom dplyr bind_rows bind_cols
 #' @examples
 #' \dontrun{
-#' if(FALSE) {
 #' withr::with_package("dplyr", {
 #'
 #' runs_info() # get the full set of runs
@@ -193,7 +192,6 @@
 #'   runs_export("./my-best-runs")
 #'
 #' })
-#' }
 #' }
 runs_info <-
 function(runs = NULL, ...,
@@ -341,7 +339,7 @@ function(runs = NULL, ...,
 #' @param runs a runs selection
 #' @param ... passed on go `guild`
 #'
-#' @return a tibble with runs scalars
+#' @return A dataframe (tibble) of runs
 #' @export
 #' @examples
 #' \dontrun{
@@ -377,7 +375,7 @@ runs_scalars <- function(runs = NULL, ...) {
 #'   `FALSE`, (the default), run resources in the run directory will be
 #'   symlinks to a guild managed storage location.
 #'
-#' @return NULL, invisibly
+#' @return The value supplied to the `runs` argument, invisibly.
 #' @export
 runs_export <- function(runs = NULL, location, ...,
                         move = FALSE, copy_resources = FALSE) {
@@ -423,6 +421,8 @@ runs_import <- function(runs = NULL, location, ...,
 #'
 #' @note To see deleted runs, do `guildai:::guild("runs list --deleted")`
 #'   (`runs_info("--deleted")` supported soon)
+#'
+#' @return The value supplied to the `runs` argument, invisibly.
 #'
 #' @export
 runs_delete <- function(runs = NULL, ...) {
@@ -484,8 +484,7 @@ runs_restore <- function(runs = NULL, ...) {
 #'
 #' @export
 #' @examples
-#' if(FALSE) {
-#'
+#' \dontrun{
 #' runs_info(1) %>% runs_tag(clear = TRUE)
 #' runs_info(1) %>% runs_tag("foo")
 #' runs_info(1)$tags
@@ -605,7 +604,7 @@ edit_comment <- function() {
 #' @export
 #'
 #' @examples
-#' if(FALSE) {
+#' \dontrun{
 #' resolve_run_ids() # returns all run ids.
 #' resolve_run_ids(1) # last run
 #' resolve_run_ids(1:2) # last 2 runs

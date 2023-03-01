@@ -32,14 +32,20 @@ in the python library where it will be used, E.g., with \verb{pip install guilda
 or \code{reticulate::py_install()}.
 }
 \examples{
+\dontrun{
 ## Install release version:
-# install_guild("guildai", python = reticulate::install_python())
+# path_to_python <- reticulate::install_python() # path to python executable
+install_guild("guildai", python = path_to_python)
 
 ## Install development version
-# install_guild(
-#   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
-#   python = reticulate::install_python("3.10:latest"))
+install_guild(guildai = "dev", python = path_to_python)
+
+## Install development version from URL
+ install_guild(
+   guildai = "https://api.github.com/repos/guildai/guildai/tarball/HEAD",
+   python = path_to_python)
 
 ## Install local development version:
-# install_guild(c("-e", "~/guild/guildai"))
+install_guild(c("-e", "~/guild/guildai"))
+}
 }

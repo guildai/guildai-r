@@ -23,7 +23,7 @@ runs_import(runs = NULL, location, ..., move = FALSE, copy_resources = FALSE)
 symlinks to a guild managed storage location.}
 }
 \value{
-NULL, invisibly
+The value supplied to the \code{runs} argument, invisibly.
 }
 \description{
 Move or copy runs

@@ -31,12 +31,15 @@ guild_view(
 }
 \value{
 The url where the Guild View application can be accessed.
+
+The url where the View application can be accessed,
+invisibly.
 }
 \description{
 Launch Guild Viewer
 }
 \examples{
-if(FALSE) {
+\dontrun{
   guild_view()
 
   # see all supported options

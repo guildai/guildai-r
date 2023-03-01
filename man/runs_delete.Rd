@@ -17,6 +17,9 @@ runs_restore(runs = NULL, ...)
 
 \item{...}{passed on to \code{guild}}
 }
+\value{
+The value supplied to the \code{runs} argument, invisibly.
+}
 \description{
 Delete runs
 }

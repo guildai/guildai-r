@@ -70,7 +70,7 @@ only included if any part of its full operation name matches the value.}
 \item{include_batch}{(bool) Include batch runs.}
 }
 \value{
-a dataframe of runs
+A dataframe (tibble) of runs
 }
 \description{
 Returns a dataframe with information about the guild runs stored in guild
@@ -205,7 +205,6 @@ that matches the status filters.
 }
 \examples{
 \dontrun{
-if(FALSE) {
 withr::with_package("dplyr", {
 
 runs_info() # get the full set of runs
@@ -238,6 +237,5 @@ runs \%>\%
   runs_export("./my-best-runs")
 
 })
-}
 }
 }

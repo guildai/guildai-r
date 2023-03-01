@@ -12,7 +12,7 @@ runs_scalars(runs = NULL, ...)
 \item{...}{passed on go \code{guild}}
 }
 \value{
-a tibble with runs scalars
+A dataframe (tibble) of runs
 }
 \description{
 Get full set of runs scalars

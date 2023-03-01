@@ -150,8 +150,8 @@ NA_if_FALSE <- function(x) {
 #' @param ... passed on to `guild run`
 #' @inheritDotParams guild_run_cli
 #'
-#' @return The return value from `system2()`, invisibly. This function
-#'   is primarily called for its side effect.
+#' @return `NULL`, invisibly. This function is called for its
+#'   side effect.
 #' @export
 guild_run <-
 function(opspec = "train.R",
@@ -210,9 +210,11 @@ function(opspec = "train.R",
 #' @param stop Stop the existing Guild View application.
 #'
 #' @return The url where the Guild View application can be accessed.
+#' @return The url where the View application can be accessed,
+#'   invisibly.
 #' @export
 #' @examples
-#' if(FALSE) {
+#' \dontrun{
 #'   guild_view()
 #'
 #'   # see all supported options
@@ -262,9 +264,11 @@ guild_view <- function(runs = NULL,
 #' @inheritDotParams guild_merge_cli
 #'
 #' @export
+#' @return `NULL`, invisibly. This function is called for its
+#'   side effect.
 #'
 #' @examples
-#' if(FALSE) {
+#' \dontrun{
 #' guild_merge("--help")
 #' runs_scalars() %>%
 #'   dplyr::slice_max("epoch_acc") %>%

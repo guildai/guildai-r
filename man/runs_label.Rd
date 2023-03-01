@@ -59,8 +59,7 @@ general, tags are preferred over marks for this.
 supplied.
 }
 \examples{
-if(FALSE) {
-
+\dontrun{
 runs_info(1) \%>\% runs_tag(clear = TRUE)
 runs_info(1) \%>\% runs_tag("foo")
 runs_info(1)$tags
