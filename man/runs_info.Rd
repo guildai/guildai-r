@@ -231,10 +231,12 @@ runs$id \%>\%
   runs_scalars()
 
 # export the best run
+best_runs_dir <- tempfile()
+dir.create(best_runs_dir)
 runs \%>\%
   slice_max(scalars$test_accuracy) \%>\%
   runs_tag("best") \%>\%
-  runs_export("./my-best-runs")
+  runs_export(best_runs_dir)
 
 })
 }

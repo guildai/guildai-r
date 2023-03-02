@@ -34,6 +34,9 @@ or \code{reticulate::py_install()}.
 \examples{
 \dontrun{
 ## Install release version:
+install_guild()
+
+## Install release version using a specific python
 # path_to_python <- reticulate::install_python() # path to python executable
 install_guild("guildai", python = path_to_python)
 

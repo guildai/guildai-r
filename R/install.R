@@ -64,6 +64,9 @@ find_python_from_registry <- function() {
 #' @examples
 #' \dontrun{
 #' ## Install release version:
+#' install_guild()
+#'
+#' ## Install release version using a specific python
 #' # path_to_python <- reticulate::install_python() # path to python executable
 #' install_guild("guildai", python = path_to_python)
 #'
@@ -82,7 +85,7 @@ install_guild <-
   function(guildai = "guildai",
            python = find_python()) {
 
-  # force args before unlinking, incase forcing them causes an error
+  # force args before unlinking, in case forcing them causes an error
   force(guildai); force(python)
 
   venv <- normalizePath(rappdirs::user_data_dir("r-guildai", NULL),
@@ -125,7 +128,7 @@ install_guild <-
     system2(python, c("-I", "-c",
                       shQuote("import sys; [print(p) for p in sys.path]")),
             stdout = TRUE)
-  python._pth <- sprintf("%s._pth",sub("\\.exe$", "", python))
+  python._pth <- sprintf("%s._pth", sub("\\.exe$", "", python))
   message("Writing: ", python._pth)
   writeLines(isolated_sys_path, python._pth)
 
@@ -206,7 +209,6 @@ find_r_guildai_guild <- function() {
     return(normalizePath(as.vector(guild)))
   install_guild()
 }
-
 
 
 #' Install guild for usage in the Terminal
