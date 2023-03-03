@@ -30,6 +30,9 @@ runs_comment(runs = NULL, comment = NULL, ..., delete = NULL, clear = FALSE)
 corresponding to the row number(s) in the dataframe found at
 \code{runs_info()$comments}.}
 }
+\value{
+The value supplied to the \code{runs} argument, invisibly.
+}
 \description{
 Annotate runs
 }

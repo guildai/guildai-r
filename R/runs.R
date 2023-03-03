@@ -484,6 +484,7 @@ runs_restore <- function(runs = NULL, ...) {
 #' @note `runs_comment()` will open up an editor if `comment` is not
 #'   supplied.
 #'
+#' @return The value supplied to the `runs` argument, invisibly.
 #' @export
 #' @examples
 #' \dontrun{
