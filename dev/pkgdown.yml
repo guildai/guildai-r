@@ -1,0 +1,14 @@
+pandoc: 2.19.2
+pkgdown: 2.0.7
+pkgdown_sha: ~
+articles:
+  keras: examples/keras.html
+  mlr3: examples/mlr3.html
+  tidymodels: examples/tidymodels.html
+  xgboost: examples/xgboost.html
+  guildai: guildai.html
+last_built: 2023-03-07T21:14Z
+urls:
+  reference: https://guildai.github.io/guildai-r/reference
+  article: https://guildai.github.io/guildai-r/articles
+
