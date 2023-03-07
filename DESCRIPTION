@@ -9,7 +9,7 @@ Authors@R: c(
 Description: 'Guild AI' is an open-source tool for managing machine learning
     experiments. It's for scientists, engineers, and researchers who want to
     run scripts, compare results, measure progress, and automate machine
-    learning workflow. 'Guild AI' is a light weight, external tool that runs
+    learning workflows. 'Guild AI' is a light weight, external tool that runs
     locally. It works with any framework, doesn't require any changes to
     your code, or access to any web services. Users can easily record
     experiment metadata, track model changes, manage experiment artifacts,
