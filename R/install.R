@@ -79,7 +79,10 @@ find_python_from_registry <- function() {
 #'    python = path_to_python)
 #'
 #' ## Install local development version:
-#' install_guild(c("-e", "~/guild/guildai"))
+#' path <- path.expand("~/github/guildai/guildai")
+#' dir.create(path, recursive = TRUE, showWarnings = FALSE)
+#' system(paste("git clone https://github.com/guildai/guildai.git/", path))
+#' install_guild(c("-e", path))
 #' }
 install_guild <-
   function(guildai = "guildai",
