@@ -104,12 +104,13 @@ browser_viewer <- function(viewer_dir, browser = utils::browseURL) {
 #' @keywords internal
 #'
 #' @return path to the generated html, invisibly
-.view_runs_diff <- function(
+view_runs_diff <- function(
     runs = "1:2",
     output_dir = file.path(tempdir(), paste(ids, collapse = "-")),
     template = system.file("templates/compare-runs.qmd", package = "guildai"),
     viewer = getOption("guildai.viewer"),
-    ...)
+    ...,
+    include_dotguild = FALSE)
 {
   ids <- resolve_run_ids(runs)
   stopifnot(length(ids) == 2)
@@ -127,11 +128,15 @@ browser_viewer <- function(viewer_dir, browser = utils::browseURL) {
 
   quarto::quarto_render(
     input = basename(template),
-    execute_params = list(run_id_1 = ids[1], run_id_2 = ids[2]),
+    execute_params = list(run_id_1 = ids[1], run_id_2 = ids[2],
+                          include_dotguild = include_dotguild),
+    quiet = TRUE,
     ...)
 
   html <- sprintf("%s.html", tools::file_path_sans_ext(basename(template)))
-  view_page(normalizePath(html), getOption("guildai.viewer"))
+  html <- normalizePath(html)
+  view_page(html, getOption("guildai.viewer"))
+  # cat(html)
   invisible(html)
 }
 

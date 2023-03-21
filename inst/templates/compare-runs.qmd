@@ -2,14 +2,15 @@
 title: "Run report"
 editor: visual
 execute:
-  keep-md: true
+  keep-md: false
 format:
   html:
     anchor-sections: false
-    # standalone: true
+    standalone: true
 params:
   run_id_1: ~
   run_id_2: ~
+  include_dotguild: FALSE
 ---
 
 ```{r, echo = FALSE}
@@ -33,6 +34,12 @@ all_files <- unique(unlist(
   lapply(c(run1$dir, run2$dir), list.files,
     recursive = TRUE, all.files = TRUE, no.. = TRUE)
 ))
+
+include_dotguild <- yaml::yaml.load(params$include_dotguild)
+
+if(!isTRUE(as.logical(include_dotguild))) {
+  all_files <- all_files[!startsWith(all_files, ".guild/")]
+}
 ```
 
 ```{r}

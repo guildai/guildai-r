@@ -19,7 +19,7 @@
 #' @keywords internal
 #'
 #' @return path to the generated html, invisibly
-view_runs_diff <-
+view_runs_diff2 <-
   function(runs = 1:2,
            ...,
            output_html = tempfile("guild-diff-", fileext = ".html"),
