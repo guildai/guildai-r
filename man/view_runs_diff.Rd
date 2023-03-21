@@ -9,7 +9,8 @@ view_runs_diff(
   output_dir = file.path(tempdir(), paste(ids, collapse = "-")),
   template = system.file("templates/compare-runs.qmd", package = "guildai"),
   viewer = getOption("guildai.viewer"),
-  ...
+  ...,
+  include_dotguild = FALSE
 )
 }
 \arguments{
@@ -24,6 +25,9 @@ to an internal page viewer if available, otherwise to the R session
 default web browser, \code{utils::browseURL()}).}
 
 \item{...}{passed on to \code{quarto::quarto_render()}}
+
+\item{include_dotguild}{whether the \code{".guild"} directory should be included
+in the diff view.}
 }
 \value{
 path to the generated html, invisibly

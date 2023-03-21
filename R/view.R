@@ -100,6 +100,8 @@ browser_viewer <- function(viewer_dir, browser = utils::browseURL) {
 #'   to an internal page viewer if available, otherwise to the R session
 #'   default web browser, `utils::browseURL()`).
 #' @param ... passed on to `quarto::quarto_render()`
+#' @param include_dotguild whether the `".guild"` directory should be included
+#'   in the diff view.
 #'
 #' @keywords internal
 #'
