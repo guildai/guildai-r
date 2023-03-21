@@ -25,9 +25,6 @@
     <loc>https://guildai.github.io/guildai-r/dev/index.html</loc>
   </url>
   <url>
-    <loc>https://guildai.github.io/guildai-r/dev/reference/dot-view_runs_diff.html</loc>
-  </url>
-  <url>
     <loc>https://guildai.github.io/guildai-r/dev/reference/guild_api_runs_cli.html</loc>
   </url>
   <url>
@@ -86,6 +83,9 @@
   </url>
   <url>
     <loc>https://guildai.github.io/guildai-r/dev/reference/view_runs_diff.html</loc>
+  </url>
+  <url>
+    <loc>https://guildai.github.io/guildai-r/dev/reference/view_runs_diff2.html</loc>
   </url>
   <url>
     <loc>https://guildai.github.io/guildai-r/dev/reference/write_run_attr.html</loc>
