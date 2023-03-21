@@ -4,9 +4,8 @@ title: Introduction to Guild AI for R
 toc-title: Table of contents
 ---
 
-```{=html}
 <!-- TODO a nice screenshot image here-->
-```
+
 *guildai* provides a suite of tools for tracking, visualizing, and
 managing machine learning experiments. The *guildai* R package is a
 successor to the *tfruns* package.
@@ -26,11 +25,10 @@ Core](https://guild.ai/). The R package will automatically download and
 install Guild AI Core on first use, or you can call `install_guild()`
 directly to customize the installation.
 
+To install the release version:
+
 ``` r
-# install.packages("guildai")
-if(!requireNamespace("remotes"))
-  install.packages("remotes", repos = "https://cran.rstudio.com")
-remotes::install_github("guildai/guildai-r")
+install.packages("guildai")
 guildai::install_guild()
 ```
 
@@ -761,5 +759,5 @@ background jobs. To disable this feature, set
 
 # Learn More
 
-See https://my.guild.ai/t/guild-ai-documentation/64 for more
+See <https://my.guild.ai/t/guild-ai-documentation/64> for more
 information.

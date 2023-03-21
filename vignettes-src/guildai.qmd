@@ -52,11 +52,10 @@ Core](https://guild.ai/). The R package will automatically download and
 install Guild AI Core on first use, or you can call `install_guild()`
 directly to customize the installation.
 
+To install the release version:
+
 ``` r
-# install.packages("guildai")
-if(!requireNamespace("remotes"))
-  install.packages("remotes", repos = "https://cran.rstudio.com")
-remotes::install_github("guildai/guildai-r")
+install.packages("guildai")
 guildai::install_guild()
 ```
 
